@@ -10,6 +10,7 @@ interface WishlistState {
   has: (slug: string) => boolean;
   remove: (slug: string) => void;
   clear: () => void;
+  addMany: (slugs: string[]) => void;
 }
 
 export const useWishlist = create<WishlistState>()(
@@ -26,6 +27,13 @@ export const useWishlist = create<WishlistState>()(
       has: (slug) => get().slugs.includes(slug),
       remove: (slug) => set({ slugs: get().slugs.filter((s) => s !== slug) }),
       clear: () => set({ slugs: [] }),
+      addMany: (incoming) => {
+        const clean = incoming.filter((s) => typeof s === 'string' && /^[a-z0-9-]{1,80}$/.test(s));
+        if (clean.length === 0) return;
+        const merged = [...get().slugs];
+        for (const slug of clean) if (!merged.includes(slug)) merged.push(slug);
+        set({ slugs: merged.slice(0, 100) });
+      },
     }),
     {
       name: 'ecom-casa-wishlist',

@@ -14,6 +14,7 @@ import { TrackProductView } from '@/components/product/track-product-view';
 import { StickyAddToCart } from '@/components/product/sticky-add-to-cart';
 import { formatPrice } from '@/lib/format';
 import { COMPANY } from '@/lib/company';
+import type { ReviewDTO } from '@/lib/reviews-data';
 import type { Product } from '@/types';
 import { ChevronRight, Package, Info } from 'lucide-react';
 
@@ -119,6 +120,29 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       return false;
     }
   });
+
+  // Approved customer reviews from the DB (real submissions, newest first)
+  let dbReviews: ReviewDTO[] = [];
+  try {
+    const rows = await db.review.findMany({
+      where: { productSlug: slug, status: 'APPROVED' },
+      orderBy: { createdAt: 'desc' },
+      take: 20,
+    });
+    dbReviews = rows.map((r) => ({
+      id: r.id,
+      author: r.author,
+      country: r.country,
+      rating: r.rating,
+      title: r.title,
+      body: r.body,
+      verified: r.verified,
+      createdAt: r.createdAt.toISOString(),
+      source: 'customer' as const,
+    }));
+  } catch {
+    dbReviews = [];
+  }
 
   return (
     <div className="container-ecom py-8 lg:py-12">
@@ -309,7 +333,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       )}
 
       {/* Reviews */}
-      <ReviewsSection slug={product.slug} rating={product.rating} reviewCount={product.reviewCount} />
+      <ReviewsSection
+        slug={product.slug}
+        rating={product.rating}
+        reviewCount={product.reviewCount}
+        dbReviews={dbReviews}
+      />
 
       {/* Recently viewed (client, localStorage) */}
       <RecentlyViewed excludeSlug={product.slug} />

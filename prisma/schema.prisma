@@ -59,6 +59,21 @@ model Product {
   updatedAt DateTime @updatedAt
 }
 
+model Review {
+  id          String   @id @default(cuid())
+  productSlug String
+  author      String
+  country     String   @default("")
+  rating      Int // 1..5
+  title       String   @default("")
+  body        String
+  verified    Boolean  @default(false) // true only if an Order exists with this email — for now always false
+  status      String   @default("APPROVED") // APPROVED | PENDING | REJECTED (demo store auto-approves, but keep the scaffold)
+  createdAt   DateTime @default(now())
+
+  @@index([productSlug, status])
+}
+
 model Category {
   id       String @id @default(cuid())
   slug     String

@@ -17,6 +17,8 @@ import {
   ShieldCheck,
   Globe,
   Gem,
+  Star,
+  PackageCheck,
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
@@ -135,15 +137,16 @@ export function SiteHeader() {
                 );
               })()}
             </span>
+            {/* Static trust trio — distinct from the rotating messages to avoid duplication */}
             <span className="hidden h-3 w-px bg-white/20 lg:block" aria-hidden />
             <span className="hidden items-center gap-1.5 whitespace-nowrap lg:flex">
-              <RotateCcw className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
-              14-day returns
+              <Star className="h-3.5 w-3.5 shrink-0 fill-[#e0a03c] text-[#e0a03c]" strokeWidth={1.5} />
+              Rated 4.8 by customers
             </span>
             <span className="hidden h-3 w-px bg-white/20 xl:block" aria-hidden />
             <span className="hidden items-center gap-1.5 whitespace-nowrap xl:flex">
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
-              Secure payments
+              <PackageCheck className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
+              Dispatched within 24h
             </span>
           </div>
           <nav aria-label="Utility" className="flex shrink-0 items-center gap-4">

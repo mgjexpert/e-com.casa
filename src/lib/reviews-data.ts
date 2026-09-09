@@ -16,6 +16,22 @@ export interface DemoReview {
   verifiedBuyer: boolean;
 }
 
+/**
+ * Normalised review shape used across the reviews UI.
+ * `source` distinguishes real DB submissions from demo sample content.
+ */
+export interface ReviewDTO {
+  id: string;
+  author: string;
+  country: string;
+  rating: number;
+  title: string;
+  body: string;
+  verified: boolean;
+  createdAt: string; // ISO date string
+  source: 'customer' | 'demo';
+}
+
 const AUTHORS = [
   'Sofia M.', 'Lukas B.', 'Camille R.', 'Pedro A.', 'Emma v.d.B.', 'Marco G.',
   'Ingrid H.', 'Tomás C.', 'Anna K.', 'Julien P.', 'Marta L.', 'Nils S.',

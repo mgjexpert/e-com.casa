@@ -1,55 +1,164 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { MessageCircle, X, Mail, ChevronRight, Minus } from 'lucide-react';
+import {
+  MessageCircle,
+  X,
+  Mail,
+  SendHorizontal,
+  RotateCcw,
+  Sparkles,
+} from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
+import { formatPrice } from '@/lib/format';
+import type { Product } from '@/types';
 
-type Topic = {
-  label: string;
-  reply: string;
-  links?: { label: string; href: string }[];
-};
+// ============================================================
+// E-com.casa Concierge — AI shopping assistant (live, /api/chat)
+// Suggestions reference real catalogue products, rendered as
+// mini cards fetched from /api/products/[slug].
+// ============================================================
 
-const TOPICS: Topic[] = [
-  {
-    label: 'Order support',
-    reply: 'For anything about an order, the fastest route is your order page — have your order number ready (it looks like EC-XXXXXX).',
-    links: [
-      { label: 'My orders', href: '/account/orders' },
-      { label: 'Email orders@e-com.casa', href: 'mailto:orders@e-com.casa' },
-    ],
-  },
-  {
-    label: 'Product question',
-    reply: 'Every product page lists materials, dimensions and care. Anything else — write us and a human replies within one working day.',
-    links: [{ label: 'Email support@e-com.casa', href: 'mailto:support@e-com.casa' }],
-  },
-  {
-    label: 'Delivery',
-    reply: 'Free standard shipping across Europe. Standard delivery takes 3–5 working days; express 1–2. Full details on the shipping page.',
-    links: [{ label: 'Shipping information', href: '/shipping' }],
-  },
-  {
-    label: 'Returns',
-    reply: 'You have 14 days to change your mind on most items. The returns page walks you through all six steps.',
-    links: [{ label: 'How to return', href: '/returns' }],
-  },
-  {
-    label: 'Product recommendations',
-    reply: 'Happy to help you choose. Tell us the room, the style and the budget — email hello@e-com.casa and we will send a shortlist.',
-    links: [{ label: 'Browse best sellers', href: '/shop?sort=best' }],
-  },
-  {
-    label: 'Other',
-    reply: 'We are here to help. Email support@e-com.casa and we will get back to you within one working day.',
-    links: [{ label: 'Contact page', href: '/contact' }],
-  },
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+  suggestions?: string[];
+  isError?: boolean;
+}
+
+const QUICK_QUESTIONS = [
+  'Recommend something for a small balcony',
+  'How long does delivery take?',
+  'What is your return policy?',
+  'Best gift under €60?',
 ];
+
+// Fetched-product cache shared across opens (module scope)
+const productCache = new Map<string, Product>();
+
+function uid() {
+  return `${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+}
+
+function timeLabel() {
+  return new Date().toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
 
 export function ChatWidget() {
   const [open, setOpen] = useState(false);
-  const [active, setActive] = useState<Topic | null>(null);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [input, setInput] = useState('');
+  const [pending, setPending] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const listRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  // Focus input when the panel opens
+  if (open && !pending && messages.length === 0) {
+    // render-time no-op keeps layout stable; focus handled in effect below
+  }
+
+  useEffect(() => {
+    if (open) inputRef.current?.focus();
+  }, [open]);
+
+  // Auto-scroll to the newest message
+  const lastMessage = messages[messages.length - 1];
+  const lastId = lastMessage?.id;
+  useEffect(() => {
+    listRef.current?.scrollTo({ top: listRef.current.scrollHeight, behavior: 'smooth' });
+  }, [lastId, pending, products]);
+
+  // Fetch products referenced by suggestions (missing ones only)
+  const suggestionKey = messages
+    .flatMap((m) => m.suggestions ?? [])
+    .filter((s) => !productCache.has(s))
+    .join(',');
+
+  useEffect(() => {
+    if (!suggestionKey) return;
+    let cancelled = false;
+    const slugs = suggestionKey.split(',').filter(Boolean);
+    Promise.all(
+      slugs.map((slug) =>
+        fetch(`/api/products/${slug}`)
+          .then((r) => (r.ok ? r.json() : null))
+          .then((d) => (d?.product ? (d.product as Product) : null))
+          .catch(() => null)
+      )
+    ).then((results) => {
+      const found = results.filter((p): p is Product => Boolean(p));
+      found.forEach((p) => productCache.set(p.slug, p));
+      if (!cancelled && found.length > 0) setProducts((prev) => [...prev, ...found]);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [suggestionKey]);
+
+  const send = async (text: string) => {
+    const content = text.trim();
+    if (!content || pending) return;
+
+    const userMessage: ChatMessage = { id: uid(), role: 'user', content };
+    const nextMessages = [...messages, userMessage];
+    setMessages(nextMessages);
+    setInput('');
+    setPending(true);
+
+    try {
+      const res = await fetch('/api/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          messages: nextMessages.map(({ role, content: c }) => ({ role, content: c })),
+        }),
+      });
+      const data = await res.json().catch(() => null);
+
+      if (!res.ok || !data?.reply) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            id: uid(),
+            role: 'assistant',
+            content:
+              data?.error ??
+              'Sorry — something went wrong on our side. Please try again, or email support@e-com.casa.',
+            isError: true,
+          },
+        ]);
+      } else {
+        setMessages((prev) => [
+          ...prev,
+          { id: uid(), role: 'assistant', content: data.reply, suggestions: data.suggestions ?? [] },
+        ]);
+      }
+    } catch {
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: uid(),
+          role: 'assistant',
+          content: 'The connection dropped. Please try again, or email support@e-com.casa — we reply within one working day.',
+          isError: true,
+        },
+      ]);
+    } finally {
+      setPending(false);
+      inputRef.current?.focus();
+    }
+  };
+
+  const productFor = (slug: string) => products.find((p) => p.slug === slug) ?? productCache.get(slug);
+
+  const resetChat = () => {
+    setMessages([]);
+    setPending(false);
+    setInput('');
+  };
 
   return (
     <>
@@ -74,82 +183,188 @@ export function ChatWidget() {
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             role="dialog"
             aria-label="E-com.casa Concierge chat"
-            className="fixed bottom-[84px] right-5 z-[60] w-[min(92vw,360px)] overflow-hidden rounded-xl border border-border bg-background shadow-[0_20px_60px_rgba(33,30,27,0.22)] md:right-6"
+            className="fixed bottom-[84px] right-5 z-[60] flex max-h-[min(72vh,620px)] w-[min(92vw,380px)] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-[0_20px_60px_rgba(33,30,27,0.22)] md:right-6"
           >
             {/* Header */}
-            <div className="bg-ink px-5 py-4">
-              <p className="font-display text-[17px] font-medium text-white">E-com.casa Concierge</p>
+            <div className="shrink-0 bg-ink px-5 py-4">
+              <div className="flex items-center justify-between gap-2">
+                <p className="font-display text-[17px] font-medium text-white">E-com.casa Concierge</p>
+                {messages.length > 0 && (
+                  <button
+                    type="button"
+                    onClick={resetChat}
+                    className="flex items-center gap-1 rounded-md px-2 py-1 text-[11.5px] text-[#a7ada0] transition-colors hover:bg-white/10 hover:text-white"
+                    aria-label="Start a new conversation"
+                  >
+                    <RotateCcw className="h-3 w-3" strokeWidth={1.75} /> New chat
+                  </button>
+                )}
+              </div>
               <p className="mt-0.5 flex items-center gap-1.5 text-[12px] text-[#a7ada0]">
-                <span className="h-1.5 w-1.5 rounded-full bg-[#7da87b]" aria-hidden />
-                Hello. How can we help?
+                <span className="relative flex h-1.5 w-1.5" aria-hidden>
+                  <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7da87b] opacity-60" />
+                  <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7da87b]" />
+                </span>
+                Online — styling advice, orders & delivery
               </p>
             </div>
 
-            {/* Body */}
-            <div className="max-h-[380px] overflow-y-auto thin-scrollbar p-4">
-              {!active ? (
-                <div className="space-y-2">
-                  <p className="mb-3 text-[13px] text-muted-foreground">Choose a topic to get started:</p>
-                  {TOPICS.map((t) => (
-                    <button
-                      key={t.label}
-                      type="button"
-                      onClick={() => setActive(t)}
-                      className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-4 py-3 text-left text-[13.5px] font-medium transition-colors hover:border-ring hover:bg-accent"
-                    >
-                      {t.label}
-                      <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                    </button>
-                  ))}
+            {/* Messages */}
+            <div
+              ref={listRef}
+              role="log"
+              aria-live="polite"
+              aria-label="Conversation"
+              className="thin-scrollbar min-h-[220px] flex-1 space-y-4 overflow-y-auto p-4"
+            >
+              {messages.length === 0 ? (
+                <div className="py-1">
+                  <div className="rounded-lg rounded-tl-none bg-muted/70 px-4 py-3 text-[13.5px] leading-relaxed text-foreground">
+                    Hello — I&apos;m the E-com.casa concierge. Ask me about pieces, spaces, delivery or your
+                    order, and I&apos;ll point you the right way.
+                  </div>
+                  <p className="mb-2 mt-4 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                    <Sparkles className="h-3 w-3 text-[#e0a03c]" strokeWidth={1.75} /> Try asking
+                  </p>
+                  <div className="flex flex-col gap-2">
+                    {QUICK_QUESTIONS.map((q) => (
+                      <button
+                        key={q}
+                        type="button"
+                        disabled={pending}
+                        onClick={() => send(q)}
+                        className="flex min-h-[44px] items-center justify-between rounded-lg border border-border bg-card px-4 py-2.5 text-left text-[13px] font-medium transition-colors hover:border-ring hover:bg-accent disabled:opacity-50"
+                      >
+                        {q}
+                        <SendHorizontal className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
+                      </button>
+                    ))}
+                  </div>
                 </div>
               ) : (
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => setActive(null)}
-                    className="mb-3 flex items-center gap-1 text-[12.5px] font-medium text-olive hover:underline"
+                messages.map((m) => (
+                  <motion.div
+                    key={m.id}
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25 }}
                   >
-                    <Minus className="h-3.5 w-3.5" /> All topics
-                  </button>
-                  <div className="rounded-lg rounded-tl-none bg-muted/70 px-4 py-3 text-[13.5px] leading-relaxed text-foreground">
-                    {active.reply}
-                  </div>
-                  {active.links && (
-                    <div className="mt-3 space-y-1.5">
-                      {active.links.map((l) =>
-                        l.href.startsWith('mailto:') ? (
-                          <a
-                            key={l.href}
-                            href={l.href}
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-[13px] font-medium text-olive hover:underline"
-                          >
-                            <Mail className="h-3.5 w-3.5" /> {l.label}
-                          </a>
-                        ) : (
-                          <Link
-                            key={l.href}
-                            href={l.href}
-                            onClick={() => setOpen(false)}
-                            className="flex items-center gap-2 rounded-md px-2 py-1.5 text-[13px] font-medium text-olive hover:underline"
-                          >
-                            <ChevronRight className="h-3.5 w-3.5" /> {l.label}
-                          </Link>
-                        )
-                      )}
+                    <div className={m.role === 'user' ? 'flex justify-end' : 'flex justify-start'}>
+                      <div
+                        className={
+                          m.role === 'user'
+                            ? 'max-w-[85%] rounded-xl rounded-br-sm bg-ink px-4 py-2.5 text-[13.5px] leading-relaxed text-cream'
+                            : m.isError
+                              ? 'max-w-[90%] rounded-xl rounded-bl-sm border border-terracotta/30 bg-terracotta/5 px-4 py-2.5 text-[13.5px] leading-relaxed text-foreground'
+                              : 'max-w-[90%] rounded-xl rounded-bl-sm bg-muted/70 px-4 py-2.5 text-[13.5px] leading-relaxed text-foreground'
+                        }
+                      >
+                        {m.content}
+                      </div>
                     </div>
-                  )}
+                    {/* Product suggestion mini-cards */}
+                    {m.role === 'assistant' && m.suggestions && m.suggestions.length > 0 && (
+                      <div className="mt-2 space-y-2">
+                        {m.suggestions.map((slug) => {
+                          const p = productFor(slug);
+                          if (!p) {
+                            return (
+                              <div
+                                key={slug}
+                                className="flex h-[68px] animate-pulse items-center gap-3 rounded-lg border border-border bg-card px-3"
+                                aria-label="Loading product"
+                              >
+                                <div className="h-11 w-11 rounded-md bg-muted" />
+                                <div className="flex-1 space-y-1.5">
+                                  <div className="h-3 w-3/5 rounded bg-muted" />
+                                  <div className="h-3 w-1/4 rounded bg-muted" />
+                                </div>
+                              </div>
+                            );
+                          }
+                          return (
+                            <Link
+                              key={slug}
+                              href={`/product/${p.slug}`}
+                              onClick={() => setOpen(false)}
+                              className="group flex items-center gap-3 rounded-lg border border-border bg-card p-2.5 pr-3.5 transition-all hover:border-ring hover:shadow-[0_4px_16px_rgba(33,30,27,0.08)]"
+                            >
+                              <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
+                                <img src={p.image} alt="" className="h-full w-full object-cover" loading="lazy" />
+                              </span>
+                              <span className="min-w-0 flex-1">
+                                <span className="block truncate text-[13px] font-medium leading-tight group-hover:underline">
+                                  {p.name}
+                                </span>
+                                <span className="mt-0.5 block text-[12px] text-olive">{formatPrice(p.price)}</span>
+                              </span>
+                              <span className="shrink-0 rounded-full bg-cream px-2.5 py-1 text-[11px] font-semibold text-olive transition-colors group-hover:bg-olive group-hover:text-cream">
+                                View
+                              </span>
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </motion.div>
+                ))
+              )}
+
+              {/* Typing indicator */}
+              {pending && (
+                <div className="flex justify-start" aria-label="Concierge is typing">
+                  <div className="flex items-center gap-1.5 rounded-xl rounded-bl-sm bg-muted/70 px-4 py-3.5">
+                    {[0, 1, 2].map((i) => (
+                      <span
+                        key={i}
+                        className="h-1.5 w-1.5 animate-bounce rounded-full bg-olive/70"
+                        style={{ animationDelay: `${i * 150}ms`, animationDuration: '0.9s' }}
+                      />
+                    ))}
+                  </div>
                 </div>
               )}
             </div>
 
+            {/* Input */}
+            <form
+              className="shrink-0 border-t border-border bg-background p-3"
+              onSubmit={(e) => {
+                e.preventDefault();
+                send(input);
+              }}
+            >
+              <div className="flex items-end gap-2">
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Ask about products, delivery, orders…"
+                  aria-label="Message the concierge"
+                  maxLength={500}
+                  disabled={pending}
+                  className="h-11 min-w-0 flex-1 rounded-full border border-input bg-muted/50 px-4 text-[13.5px] outline-none transition-all placeholder:text-muted-foreground focus:border-ring focus:bg-background focus:ring-2 focus:ring-ring/20 disabled:opacity-60"
+                />
+                <button
+                  type="submit"
+                  disabled={pending || !input.trim()}
+                  aria-label="Send message"
+                  className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-cream transition-all hover:bg-olive disabled:opacity-40"
+                >
+                  <SendHorizontal className="h-4 w-4" strokeWidth={1.75} />
+                </button>
+              </div>
+            </form>
+
             {/* Footer */}
-            <div className="border-t border-border bg-muted/40 px-5 py-3">
-              <p className="text-[11.5px] leading-relaxed text-muted-foreground">
-                No live agents right now — write us at{' '}
+            <div className="shrink-0 border-t border-border bg-muted/40 px-5 py-2.5">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">
+                AI assistant — answers may not be perfect. For anything binding, email{' '}
                 <a href="mailto:support@e-com.casa" className="underline underline-offset-2 hover:text-foreground">
+                  <Mail className="mr-0.5 inline h-3 w-3" strokeWidth={1.75} />
                   support@e-com.casa
-                </a>{' '}
-                and we reply within one working day.
+                </a>
               </p>
             </div>
           </motion.div>
