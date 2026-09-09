@@ -71,6 +71,8 @@ export interface Order {
   total: string;
   promoCode: string | null;
   itemsJson: string;
+  giftWrap: boolean;
+  notes: string | null;
   status: string;
   paymentStatus: string;
   createdAt: string;

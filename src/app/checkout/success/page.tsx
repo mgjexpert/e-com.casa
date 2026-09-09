@@ -2,10 +2,11 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
-import { CheckCircle2, Package, Mail, Truck } from 'lucide-react';
+import { CheckCircle2, Gift, Package, Mail, Truck, StickyNote } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { db } from '@/lib/db';
 import { formatPrice, formatDate } from '@/lib/format';
+import { GIFT_WRAP_PRICE } from '@/lib/constants';
 import type { Order } from '@/types';
 
 export const metadata: Metadata = {
@@ -63,7 +64,14 @@ async function OrderContent({ orderNumber }: { orderNumber: string }) {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Order number</p>
-            <p className="font-display mt-1 text-[20px] font-medium">{order.orderNumber}</p>
+            <p className="font-display mt-1 flex items-center gap-2 text-[20px] font-medium">
+              {order.orderNumber}
+              {order.giftWrap && (
+                <span className="inline-flex items-center gap-1 rounded-full bg-terracotta/10 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.1em] text-terracotta">
+                  <Gift className="h-3 w-3" strokeWidth={2} /> Gift
+                </span>
+              )}
+            </p>
           </div>
           <div className="text-right">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">Placed</p>
@@ -103,6 +111,14 @@ async function OrderContent({ orderNumber }: { orderNumber: string }) {
             <dt className="text-muted-foreground">Shipping ({order.shippingMethod})</dt>
             <dd>{parseFloat(order.shipping) === 0 ? 'Free' : formatPrice(order.shipping)}</dd>
           </div>
+          {order.giftWrap && (
+            <div className="flex justify-between text-terracotta">
+              <dt className="flex items-center gap-1.5">
+                <Gift className="h-3.5 w-3.5" strokeWidth={1.5} /> Gift wrap
+              </dt>
+              <dd>+{formatPrice(GIFT_WRAP_PRICE)}</dd>
+            </div>
+          )}
           <div className="flex justify-between text-[16px] font-semibold">
             <dt>Total (VAT incl.)</dt>
             <dd>{formatPrice(order.total)}</dd>
@@ -131,6 +147,16 @@ async function OrderContent({ orderNumber }: { orderNumber: string }) {
               ({order.shippingMethod === 'express' ? '1–2' : '3–5'} working days).
             </p>
           </div>
+          {order.notes && (
+            <div className="sm:col-span-2">
+              <p className="flex items-center gap-1.5 font-semibold">
+                <StickyNote className="h-3.5 w-3.5 text-terracotta" /> Your delivery note
+              </p>
+              <p className="mt-1.5 whitespace-pre-line rounded-md border border-border/70 bg-background px-3 py-2 text-muted-foreground">
+                {order.notes}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

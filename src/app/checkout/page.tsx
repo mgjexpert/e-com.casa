@@ -4,17 +4,25 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { CreditCard, Lock, LoaderCircle, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { CreditCard, Gift, Lock, LoaderCircle, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Separator } from '@/components/ui/separator';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { formatPrice, toNumber, money } from '@/lib/format';
-import { COUNTRIES, FREE_SHIPPING_THRESHOLD, SHIPPING_OPTIONS, PROMO_CODES } from '@/lib/constants';
+import {
+  COUNTRIES,
+  FREE_SHIPPING_THRESHOLD,
+  SHIPPING_OPTIONS,
+  PROMO_CODES,
+  GIFT_WRAP_PRICE,
+  ORDER_NOTES_MAX,
+} from '@/lib/constants';
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -34,6 +42,8 @@ export default function CheckoutPage() {
     phone: '',
     shippingMethod: 'standard' as 'standard' | 'express',
     paymentMethod: 'card' as 'card' | 'paypal',
+    giftWrap: false,
+    notes: '',
     marketingOptIn: false,
     termsAccepted: false,
   });
@@ -45,7 +55,8 @@ export default function CheckoutPage() {
   const discount = promo ? (subtotal * promo.value) / 100 : 0;
   const option = SHIPPING_OPTIONS.find((o) => o.id === form.shippingMethod) ?? SHIPPING_OPTIONS[0];
   const shipping = option.id === 'standard' && subtotal - discount >= FREE_SHIPPING_THRESHOLD ? 0 : option.price;
-  const total = Math.max(0, subtotal - discount + shipping);
+  const giftWrapFee = form.giftWrap ? GIFT_WRAP_PRICE : 0;
+  const total = Math.max(0, subtotal - discount + shipping + giftWrapFee);
 
   const set = (key: keyof typeof form, value: string | boolean) => setForm((f) => ({ ...f, [key]: value }));
 
@@ -76,6 +87,8 @@ export default function CheckoutPage() {
           phone: form.phone || null,
           shippingMethod: form.shippingMethod,
           paymentMethod: form.paymentMethod,
+          giftWrap: form.giftWrap,
+          notes: form.notes.trim() || null,
           promoCode: cart.promoCode,
           items: cart.lines.map((l) => ({ slug: l.slug, quantity: l.quantity })),
         }),
@@ -224,6 +237,67 @@ export default function CheckoutPage() {
                 );
               })}
             </RadioGroup>
+
+            {/* Gift wrap */}
+            <div
+              className={
+                form.giftWrap
+                  ? 'mt-4 rounded-md border border-terracotta/40 bg-terracotta/5 transition-colors'
+                  : 'mt-4 rounded-md border border-border bg-background/50 transition-colors'
+              }
+            >
+              <Label
+                htmlFor="co-giftwrap"
+                className="flex cursor-pointer items-start justify-between gap-3 px-4 py-3.5"
+              >
+                <span className="flex items-start gap-3">
+                  <Checkbox
+                    id="co-giftwrap"
+                    checked={form.giftWrap}
+                    onCheckedChange={(v) => set('giftWrap', v === true)}
+                    className="mt-0.5"
+                  />
+                  <span>
+                    <span className="flex items-center gap-1.5 text-[13.5px] font-medium">
+                      <Gift
+                        className={form.giftWrap ? 'h-4 w-4 text-terracotta' : 'h-4 w-4 text-muted-foreground'}
+                        strokeWidth={1.5}
+                      />
+                      Add gift wrapping
+                    </span>
+                    <span className="mt-0.5 block text-[12px] leading-relaxed text-muted-foreground">
+                      Recycled kraft paper, linen ribbon and a hand-written card — wrapped by our studio team.
+                    </span>
+                  </span>
+                </span>
+                <span className="shrink-0 text-[13.5px] font-semibold">+{formatPrice(GIFT_WRAP_PRICE)}</span>
+              </Label>
+            </div>
+
+            {/* Delivery notes / gift message */}
+            <div className="mt-4">
+              <Label htmlFor="co-notes" className="text-[12.5px] font-medium">
+                Delivery notes{' '}
+                <span className="font-normal text-muted-foreground">(optional)</span>
+              </Label>
+              <Textarea
+                id="co-notes"
+                value={form.notes}
+                onChange={(e) => set('notes', e.target.value.slice(0, ORDER_NOTES_MAX))}
+                rows={3}
+                maxLength={ORDER_NOTES_MAX}
+                placeholder="Gift message for the card, buzzer code, safe place to leave the parcel…"
+                className="mt-1.5 min-h-[84px] rounded-md bg-background"
+                aria-describedby="co-notes-counter"
+              />
+              <p
+                id="co-notes-counter"
+                className="mt-1 text-right text-[11px] tabular-nums text-muted-foreground"
+                aria-hidden
+              >
+                {form.notes.length}/{ORDER_NOTES_MAX}
+              </p>
+            </div>
           </section>
 
           {/* Payment */}
@@ -323,6 +397,14 @@ export default function CheckoutPage() {
                 <dt className="text-muted-foreground">Shipping ({option.name.toLowerCase()})</dt>
                 <dd className="font-medium">{shipping === 0 ? <span className="text-olive">Free</span> : formatPrice(shipping)}</dd>
               </div>
+              {form.giftWrap && (
+                <div className="flex justify-between text-terracotta">
+                  <dt className="flex items-center gap-1.5">
+                    <Gift className="h-3.5 w-3.5" strokeWidth={1.5} /> Gift wrap
+                  </dt>
+                  <dd className="font-medium">+{formatPrice(GIFT_WRAP_PRICE)}</dd>
+                </div>
+              )}
               <div className="flex justify-between">
                 <dt className="text-muted-foreground">VAT</dt>
                 <dd className="text-muted-foreground">Included in prices</dd>

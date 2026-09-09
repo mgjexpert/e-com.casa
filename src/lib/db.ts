@@ -5,7 +5,7 @@ import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
-  prismaSchemaModels?: string
+  prismaSchemaFingerprint?: string
 }
 
 function createPrismaClient(ClientClass: typeof PrismaClient) {
@@ -15,15 +15,16 @@ function createPrismaClient(ClientClass: typeof PrismaClient) {
 }
 
 /**
- * Read the model names from the *generated* Prisma client on disk
+ * Read the *generated* Prisma client schema on disk
  * (node_modules/.prisma/client/schema.prisma) without loading the module.
+ * The full source is used as the fingerprint so ANY schema change — new model,
+ * new field or changed field type — invalidates a cached client, not just new
+ * model names.
  */
-function generatedSchemaModels(): string | null {
+function generatedSchemaFingerprint(): string | null {
   try {
     const file = path.join(process.cwd(), 'node_modules', '.prisma', 'client', 'schema.prisma');
-    const source = fs.readFileSync(file, 'utf8');
-    const names = [...source.matchAll(/^model\s+(\w+)/gm)].map((m) => m[1]).sort().join(',');
-    return names || null;
+    return fs.readFileSync(file, 'utf8') || null;
   } catch {
     return null;
   }
@@ -53,9 +54,9 @@ function loadFreshClientClass(): typeof PrismaClient | null {
 }
 
 const cachedClient = globalForPrisma.prisma;
-const schemaModels = generatedSchemaModels();
+const schemaFingerprint = generatedSchemaFingerprint();
 const isStale = Boolean(
-  cachedClient && schemaModels && globalForPrisma.prismaSchemaModels !== schemaModels,
+  cachedClient && schemaFingerprint && globalForPrisma.prismaSchemaFingerprint !== schemaFingerprint,
 );
 
 let db: PrismaClient;
@@ -72,5 +73,5 @@ export { db };
 
 if (process.env.NODE_ENV !== 'production') {
   globalForPrisma.prisma = db;
-  if (schemaModels) globalForPrisma.prismaSchemaModels = schemaModels;
+  if (schemaFingerprint) globalForPrisma.prismaSchemaFingerprint = schemaFingerprint;
 }

@@ -134,6 +134,16 @@
     background: #e5ddcd;
     color: #211e1b;
   }
+  /* Warm autofill — prevents Chrome's default yellow clashing with the palette */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill {
+    -webkit-text-fill-color: #211e1b;
+    -webkit-box-shadow: 0 0 0 1000px #fbf9f4 inset;
+    caret-color: #211e1b;
+    transition: background-color 9999s ease-out;
+  }
 }
 
 @layer utilities {

@@ -1,7 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import { SHIPPING_OPTIONS, FREE_SHIPPING_THRESHOLD, PROMO_CODES } from '@/lib/constants';
+import {
+  SHIPPING_OPTIONS,
+  FREE_SHIPPING_THRESHOLD,
+  PROMO_CODES,
+  GIFT_WRAP_PRICE,
+  ORDER_NOTES_MAX,
+} from '@/lib/constants';
 
 export const dynamic = 'force-dynamic';
 
@@ -23,8 +29,20 @@ const createOrderSchema = z.object({
   shippingMethod: z.enum(['standard', 'express']),
   paymentMethod: z.enum(['card', 'paypal']).default('card'),
   promoCode: z.string().max(40).optional().nullable(),
+  giftWrap: z.boolean().default(false),
+  notes: z.string().max(ORDER_NOTES_MAX).optional().nullable(),
   items: z.array(orderItemSchema).min(1),
 });
+
+/** Strip HTML tags and control characters — notes are plain text. */
+function sanitizeNotes(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  return value
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/[\u0000-\u0008\u000B\u000C\u000E-\u001F\u007F]/g, '')
+    .trim()
+    .slice(0, ORDER_NOTES_MAX);
+}
 
 function generateOrderNumber(): string {
   const random = Math.floor(100000 + Math.random() * 900000);
@@ -79,7 +97,9 @@ export async function POST(req: NextRequest) {
     // Shipping
     const option = SHIPPING_OPTIONS.find((o) => o.id === data.shippingMethod) ?? SHIPPING_OPTIONS[0];
     const shippingCost = subtotal - discount >= FREE_SHIPPING_THRESHOLD && option.id === 'standard' ? 0 : option.price;
-    const total = subtotal - discount + shippingCost;
+    // Gift wrap is a flat service fee — never discounted by promos
+    const giftWrapFee = data.giftWrap ? GIFT_WRAP_PRICE : 0;
+    const total = subtotal - discount + shippingCost + giftWrapFee;
 
     const order = await db.order.create({
       data: {
@@ -102,6 +122,8 @@ export async function POST(req: NextRequest) {
         total: total.toFixed(2),
         promoCode: appliedPromo,
         itemsJson: JSON.stringify(lineItems),
+        giftWrap: data.giftWrap,
+        notes: sanitizeNotes(data.notes) || null,
         status: 'CONFIRMED',
         paymentStatus: 'PAID', // mock — Stripe integration point
       },

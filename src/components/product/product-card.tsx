@@ -114,12 +114,20 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {product.subtitle && (
             <p className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">{product.subtitle}</p>
           )}
-          <div className="mt-1.5 flex items-baseline gap-2">
+          <div className="mt-1.5 flex flex-wrap items-baseline gap-2">
             <span className="text-[14px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
             {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
-              <span className="text-[12px] text-muted-foreground line-through">
-                {formatPrice(product.comparePrice)}
-              </span>
+              <>
+                <span className="text-[12px] text-muted-foreground line-through">
+                  {formatPrice(product.comparePrice)}
+                </span>
+                <span
+                  className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta"
+                  aria-label={`Save ${Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)} percent`}
+                >
+                  −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
+                </span>
+              </>
             )}
           </div>
           <div className="mt-1.5 flex items-center gap-1.5">

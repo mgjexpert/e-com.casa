@@ -28,6 +28,38 @@ interface ChatMessage {
   isError?: boolean;
 }
 
+// Session persistence — conversation survives navigation & reloads within the
+// same tab (sessionStorage). Error bubbles are never persisted.
+const STORAGE_KEY = 'ecom-concierge-session-v1';
+const MAX_STORED = 30;
+
+interface StoredChat {
+  messages: ChatMessage[];
+  savedAt: number;
+}
+
+function loadStoredChat(): { messages: ChatMessage[]; restoredAt: number } | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = window.sessionStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as StoredChat;
+    if (!Array.isArray(parsed.messages)) return null;
+    const messages = parsed.messages
+      .filter(
+        (m) =>
+          m &&
+          (m.role === 'user' || m.role === 'assistant') &&
+          typeof m.content === 'string' &&
+          !m.isError
+      )
+      .slice(-MAX_STORED);
+    return messages.length > 0 ? { messages, restoredAt: Date.now() } : null;
+  } catch {
+    return null;
+  }
+}
+
 const QUICK_QUESTIONS = [
   'Recommend something for a small balcony',
   'How long does delivery take?',
@@ -52,13 +84,38 @@ export function ChatWidget() {
   const [input, setInput] = useState('');
   const [pending, setPending] = useState(false);
   const [products, setProducts] = useState<Product[]>([]);
+  const [hydrated, setHydrated] = useState(false);
+  const [restoredNotice, setRestoredNotice] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Focus input when the panel opens
-  if (open && !pending && messages.length === 0) {
-    // render-time no-op keeps layout stable; focus handled in effect below
-  }
+  // Restore the conversation once per tab (after mount, SSR-safe)
+  useEffect(() => {
+    const stored = loadStoredChat();
+    if (stored) {
+      setMessages(stored.messages);
+      setRestoredNotice(true);
+    }
+    setHydrated(true);
+  }, []);
+
+  // Persist on every change (after hydration to avoid wiping on first render)
+  useEffect(() => {
+    if (!hydrated) return;
+    try {
+      if (messages.length === 0) {
+        window.sessionStorage.removeItem(STORAGE_KEY);
+      } else {
+        const persistable = messages.filter((m) => !m.isError).slice(-MAX_STORED);
+        window.sessionStorage.setItem(
+          STORAGE_KEY,
+          JSON.stringify({ messages: persistable, savedAt: Date.now() } satisfies StoredChat)
+        );
+      }
+    } catch {
+      // Quota/full storage — persistence is best-effort
+    }
+  }, [messages, hydrated]);
 
   useEffect(() => {
     if (open) inputRef.current?.focus();
@@ -158,6 +215,7 @@ export function ChatWidget() {
     setMessages([]);
     setPending(false);
     setInput('');
+    setRestoredNotice(false);
   };
 
   return (
@@ -167,11 +225,23 @@ export function ChatWidget() {
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        aria-label={open ? 'Close chat' : 'Need help? Open chat'}
+        aria-label={
+          open
+            ? 'Close chat'
+            : messages.length > 0
+              ? 'Continue your conversation — open chat'
+              : 'Need help? Open chat'
+        }
         className="fixed bottom-5 right-5 z-[60] flex h-13 w-13 items-center justify-center rounded-full bg-ink text-cream shadow-[0_8px_24px_rgba(29,33,30,0.35)] transition-transform hover:scale-105 md:bottom-6 md:right-6"
         style={{ height: 52, width: 52 }}
       >
         {open ? <X className="h-5 w-5" /> : <MessageCircle className="h-5.5 w-5.5" strokeWidth={1.6} />}
+        {!open && messages.length > 0 && (
+          <span
+            aria-hidden
+            className="absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full border-2 border-background bg-terracotta"
+          />
+        )}
       </button>
 
       <AnimatePresence>
@@ -217,6 +287,22 @@ export function ChatWidget() {
               aria-label="Conversation"
               className="thin-scrollbar min-h-[220px] flex-1 space-y-4 overflow-y-auto p-4"
             >
+              {/* Restored-conversation notice */}
+              {restoredNotice && messages.length > 0 && (
+                <div className="sticky top-0 z-10 -mx-1 flex items-center justify-between gap-2 rounded-full border border-border bg-background/95 px-3.5 py-1.5 backdrop-blur">
+                  <p className="text-[11px] font-medium text-muted-foreground">
+                    Picked up where you left off
+                  </p>
+                  <button
+                    type="button"
+                    onClick={resetChat}
+                    className="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold text-terracotta underline-offset-2 hover:underline"
+                  >
+                    Start fresh
+                  </button>
+                </div>
+              )}
+
               {messages.length === 0 ? (
                 <div className="py-1">
                   <div className="rounded-lg rounded-tl-none bg-muted/70 px-4 py-3 text-[13.5px] leading-relaxed text-foreground">

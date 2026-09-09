@@ -51,6 +51,10 @@ export const PROMO_CODES: Record<string, { type: 'percent'; value: number; label
   HOME5: { type: 'percent', value: 5, label: '5% off your order' },
 };
 
+// Gift wrap service — flat fee added at checkout (never discounted by promos)
+export const GIFT_WRAP_PRICE = 3.9; // EUR
+export const ORDER_NOTES_MAX = 500;
+
 export const LANGUAGES = [
   { code: 'EN', label: 'English' },
   { code: 'PT', label: 'Português' },

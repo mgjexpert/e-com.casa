@@ -2,7 +2,7 @@
 
 import { useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { CheckCircle2, Loader2 } from 'lucide-react';
+import { BadgeCheck, CheckCircle2, Loader2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -23,7 +23,7 @@ const AUTHOR_MAX = 40;
 const TITLE_MAX = 80;
 const COUNTRY_MAX = 40;
 
-type FieldErrors = Partial<Record<'rating' | 'title' | 'body' | 'author' | 'country', string>>;
+type FieldErrors = Partial<Record<'rating' | 'title' | 'body' | 'author' | 'country' | 'email', string>>;
 
 interface ReviewFormProps {
   slug: string;
@@ -33,7 +33,7 @@ interface ReviewFormProps {
   onSubmitted: (review: ReviewDTO) => void;
 }
 
-const EMPTY_FIELDS = { rating: 0, title: '', body: '', author: '', country: '' };
+const EMPTY_FIELDS = { rating: 0, title: '', body: '', author: '', country: '', email: '' };
 
 export function ReviewForm({ slug, open, onOpenChange, onSubmitted }: ReviewFormProps) {
   const [fields, setFields] = useState(EMPTY_FIELDS);
@@ -75,6 +75,10 @@ export function ReviewForm({ slug, open, onOpenChange, onSubmitted }: ReviewForm
     }
     if (fields.title.trim().length > TITLE_MAX) errors.title = `Title must be ${TITLE_MAX} characters or fewer.`;
     if (fields.country.trim().length > COUNTRY_MAX) errors.country = `Country must be ${COUNTRY_MAX} characters or fewer.`;
+    const email = fields.email.trim();
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email)) {
+      errors.email = 'Please enter a valid email address, or leave the field empty.';
+    }
     return errors;
   };
 
@@ -102,6 +106,7 @@ export function ReviewForm({ slug, open, onOpenChange, onSubmitted }: ReviewForm
           rating: fields.rating,
           title: fields.title.trim(),
           body: fields.body.trim(),
+          email: fields.email.trim() || undefined,
         }),
       });
       const data = (await res.json().catch(() => ({}))) as {
@@ -165,6 +170,12 @@ export function ReviewForm({ slug, open, onOpenChange, onSubmitted }: ReviewForm
               <p className="mt-2 max-w-[36ch] text-[13.5px] leading-relaxed text-muted-foreground">
                 It has been added to the customer reviews for this product and is visible to everyone.
               </p>
+              {success.verified && (
+                <p className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-olive/10 px-3.5 py-1.5 text-[12px] font-semibold text-olive">
+                  <BadgeCheck className="h-3.5 w-3.5" strokeWidth={2} />
+                  Your purchase was confirmed — marked as Verified buyer
+                </p>
+              )}
               <Button
                 onClick={() => handleOpenChange(false)}
                 className="mt-6 h-11 min-w-[160px] rounded-md bg-primary font-medium hover:bg-primary/90"
@@ -359,6 +370,40 @@ export function ReviewForm({ slug, open, onOpenChange, onSubmitted }: ReviewForm
                       <p className="mt-1.5 text-[12.5px] text-terracotta">{fieldErrors.country}</p>
                     )}
                   </div>
+                </div>
+
+                {/* Email — optional, powers verified-buyer badge */}
+                <div>
+                  <Label htmlFor="review-email" className="text-[12px] font-semibold uppercase tracking-[0.1em] text-muted-foreground">
+                    Email used at checkout{' '}
+                    <span className="font-normal normal-case tracking-normal">(optional)</span>
+                  </Label>
+                  <Input
+                    id="review-email"
+                    type="email"
+                    value={fields.email}
+                    onChange={(e) => setField('email', e.target.value.slice(0, 120))}
+                    maxLength={120}
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className={cn(
+                      'mt-1.5 min-h-11 rounded-md border-border bg-card',
+                      fieldErrors.email && 'border-terracotta focus-visible:ring-terracotta/30',
+                    )}
+                    aria-invalid={Boolean(fieldErrors.email)}
+                    aria-describedby={fieldErrors.email ? 'review-email-error' : 'review-email-hint'}
+                  />
+                  {fieldErrors.email ? (
+                    <p id="review-email-error" className="mt-1.5 text-[12.5px] text-terracotta">
+                      {fieldErrors.email}
+                    </p>
+                  ) : (
+                    <p id="review-email-hint" className="mt-1.5 flex items-start gap-1.5 text-[11.5px] leading-relaxed text-muted-foreground">
+                      <BadgeCheck className="mt-0.5 h-3 w-3 shrink-0 text-olive" strokeWidth={2} />
+                      Used only to confirm your purchase — never shown publicly. Reviews matching an order
+                      earn the Verified buyer badge.
+                    </p>
+                  )}
                 </div>
 
                 {/* General error */}
