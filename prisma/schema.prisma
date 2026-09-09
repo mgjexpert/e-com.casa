@@ -215,13 +215,19 @@ model ResearchRun {
   completedAt  DateTime?
   status       String    @default("RUNNING") // RUNNING | COMPLETED | FAILED
   mode         String    @default("import") // import | dry-run
+  engine       String    @default("v2") // v1 | v2
   sourceCount  Int       @default(0)
+  sourcesAttempted  Int  @default(0)
+  sourcesSuccessful Int  @default(0)
   pagesVisited Int       @default(0)
+  productPagesVisited Int @default(0)
   productsDiscovered Int @default(0)
+  productsParsed     Int @default(0)
   productsNormalized Int @default(0)
   productsRejected   Int @default(0)
   productsImported   Int @default(0)
   errorsJson   String    @default("[]")
+  configJson   String?   // bounded config snapshot of this run
   notes        String?
 }
 
@@ -229,8 +235,10 @@ model ResearchProduct {
   id             String   @id @default(cuid())
   researchRunId  String
   sourceId       String?
+  pageId         String?  // ResearchPage that produced this record
 
   sourceUrl      String
+  canonicalUrl   String?
   sourceProductId String?
   sourceProductName String
   sourceBrand    String?
@@ -242,10 +250,14 @@ model ResearchProduct {
   sourcePrice    String?
   sourceCurrency String?
   sourceSalePrice String?
+  rawPriceText   String?
+  observedAt     DateTime?
 
   sourceAvailability String?
 
   sourceSku  String?
+  sourceMpn  String?
+  sourceEan  String?
   sourceGtin String?
 
   sourceDescription String?
@@ -264,6 +276,20 @@ model ResearchProduct {
   researchScore      Int?    // 0..100
   scoreBreakdownJson String? // JSON per-criterion scores
 
+  // V2 deep-extraction fields
+  extractionMethod    String? // dominant extraction layer
+  extractionConfidence Int?   // 0..100
+  completenessScore   Int?    // 0..100
+  qualityScore        Int?    // 0..100
+  imageCount          Int     @default(0)
+  variantCount        Int     @default(0)
+  duplicateGroupId    String?
+  duplicateConfidence Float?
+  duplicateKind       String? // EXACT_DUPLICATE | LIKELY_DUPLICATE | VARIANT | RELATED | UNIQUE
+  selectionRank       Int?
+  generatedSku        String? // stable EC-XXX-### mapping for idempotent import
+  countryFitJson      String? // merchandising fit per market (LOW/MEDIUM/HIGH)
+
   status String @default("DISCOVERED") // DISCOVERED | PARSED | NORMALIZED | DUPLICATE | REJECTED | SELECTED | IMPORTED | BLOCKED
 
   createdAt DateTime @default(now())
@@ -272,4 +298,103 @@ model ResearchProduct {
   @@index([researchRunId])
   @@index([status])
   @@index([productFingerprint])
+}
+
+// ---- V2 deep-extraction research layer (internal ONLY, never public) ----
+
+model ResearchPage {
+  id            String   @id @default(cuid())
+  researchRunId String
+  sourceKey     String
+  url           String
+  canonicalUrl  String?
+  pageType      String   @default("OTHER") // PRODUCT | CATEGORY | COLLECTION | EDITORIAL | BLOG | BRAND | SEARCH | SITEMAP | OTHER
+  httpStatus    Int?
+  contentType   String?
+  title         String?
+  contentHash   String?
+  bytes         Int?
+  fetchedAt     DateTime @default(now())
+  errorJson     String?
+
+  @@unique([researchRunId, url])
+  @@index([researchRunId])
+  @@index([pageType])
+}
+
+model ResearchVariant {
+  id                String @id @default(cuid())
+  researchProductId String
+  sourceVariantId   String?
+  name              String
+  optionsJson       String?
+  sku               String?
+  price             String?
+  currency          String?
+  availability      String?
+  attributesJson    String?
+  imageUrlsJson     String?
+
+  @@index([researchProductId])
+}
+
+model ResearchImage {
+  id                String @id @default(cuid())
+  researchProductId String?
+  sourceKey         String
+  sourceUrl         String
+  normalizedUrl     String?
+  position          Int    @default(0)
+  type              String? // primary | gallery | zoom | variant | thumbnail
+  status            String @default("DISCOVERED") // DISCOVERED | VALIDATED | DOWNLOADED | FAILED | REJECTED
+  mimeType          String?
+  width             Int?
+  height            Int?
+  fileSize          Int?
+  sha256            String?
+  localPath         String?
+  downloadedAt      DateTime?
+  errorJson         String?
+
+  @@index([researchProductId])
+  @@index([status])
+}
+
+model ResearchAttribute {
+  id                String @id @default(cuid())
+  researchProductId String
+  fieldKey          String
+  sourceValue       String
+  normalizedKey     String?
+  normalizedValue   String?
+  confidence        Float  @default(0.8)
+
+  @@index([researchProductId])
+}
+
+model ResearchEvidence {
+  id                String   @id @default(cuid())
+  researchProductId String
+  field             String
+  value             String
+  sourceUrl         String
+  method            String // json-ld | microdata | embedded-json | opengraph | meta | html | source-parser | text-fallback
+  selector          String?
+  confidence        Float    @default(0.8)
+  createdAt         DateTime @default(now())
+
+  @@index([researchProductId])
+}
+
+model ResearchError {
+  id             String   @id @default(cuid())
+  researchRunId  String
+  sourceKey      String?
+  url            String?
+  stage          String // discovery | fetch | extract | validate | dedupe | import
+  errorType      String
+  message        String
+  createdAt      DateTime @default(now())
+
+  @@index([researchRunId])
 }

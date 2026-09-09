@@ -103,17 +103,20 @@ function buildWhere(query: ProductQuery): Record<string, unknown> {
   if (query.colour) where.color = { contains: query.colour };
   if (query.availability) where.availability = query.availability;
   if (query.q) {
+    // case-insensitive full-text-ish search across merchandising fields
+    const qi = { contains: query.q, mode: 'insensitive' as const };
     where.OR = [
-      { name: { contains: query.q } },
-      { description: { contains: query.q } },
-      { shortDescription: { contains: query.q } },
-      { subtitle: { contains: query.q } },
-      { categorySlug: { contains: query.q } },
-      { subcategorySlugs: { contains: query.q } },
-      { styleSlugs: { contains: query.q } },
-      { spaceSlugs: { contains: query.q } },
-      { collectionSlugs: { contains: query.q } },
-      { materials: { contains: query.q } },
+      { name: qi },
+      { description: qi },
+      { shortDescription: qi },
+      { subtitle: qi },
+      { categorySlug: qi },
+      { subcategorySlugs: qi },
+      { styleSlugs: qi },
+      { spaceSlugs: qi },
+      { collectionSlugs: qi },
+      { materials: qi },
+      { color: qi },
     ];
   }
   const min = query.minPrice;

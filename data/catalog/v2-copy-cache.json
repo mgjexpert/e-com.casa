@@ -1,0 +1,1208 @@
+{
+  "lighting|linen|||living-room,bedroom|e|||tomar. bentwood pleated floor lamp, beech wood - white / us plug,tomar. bentwood pleated floor lamp, beech wood - white / uk plug,tomar. bentwood pleated floor lamp, beech wood - white / au plug,tomar. bentwood pleated floor lamp, beech wood - white / eu plug": {
+    "name": "Bentwood Pleated Floor Lamp",
+    "shortDescription": "Linen shade with beech wood base for living room or bedroom.",
+    "description": "The Bentwood Pleated Floor Lamp features a linen shade and beech wood base. Available in white or beige with plug options for US, UK, AU, and EU markets.",
+    "generator": "llm"
+  },
+  "wall-panels|wood||240 × 64 × 2 cm|living-room,bedroom||||maresia. acoustic slat wall panel, felt-backed - midnight blue,maresia. acoustic slat wall panel, felt-backed - white slats / gray felt,maresia. acoustic slat wall panel, felt-backed - white slats / white felt,maresia. acoustic slat wall panel, felt-backed - dusty gray": {
+    "name": "Wood Acoustic Slat Wall Panel",
+    "shortDescription": "Elegant wood slats with felt backing for acoustic enhancement.",
+    "description": "Wood wall panel measuring 240 × 64 × 2 cm, designed for living rooms and bedrooms. Available in multiple color combinations including Midnight Blue, White with Gray or White felt, Dusty Gray, and Matte Black.",
+    "generator": "llm"
+  },
+  "lighting|iron|||home-office|e|||braga. retractable arm table lamp, clip mount - black / 100v-120v,braga. retractable arm table lamp, clip mount - black / 220v-240v,braga. retractable arm table lamp, clip mount - white / 100v-120v,braga. retractable arm table lamp, clip mount - white / 220v-240v": {
+    "name": "Retractable Arm Clip Lamp",
+    "shortDescription": "Adjustable lighting solution for home offices with clip mount.",
+    "description": "This iron lighting piece features a retractable arm and convenient clip mount for home office spaces. Available in black, white, and red with voltage options of 100V-120V or 220V-240V.",
+    "generator": "llm"
+  },
+  "kitchen-dining|stoneware|black||kitchen,dining||||flow teapot - black,flow teapot - off-white speckle,variant": {
+    "name": "Stoneware Teapot",
+    "shortDescription": "A sleek black stoneware teapot for kitchen and dining spaces.",
+    "description": "This stoneware teapot in black is designed for both kitchen and dining areas. Available in multiple color variants to complement your table setting.",
+    "generator": "llm"
+  },
+  "wall-panels|walnut|walnut|90 × 30 cm|living-room,bedroom||||âncora. plank wood wall panel, cherry or walnut - cherry,âncora. plank wood wall panel, cherry or walnut - walnut,cherry,walnut": {
+    "name": "Walnut Wood Wall Panel",
+    "shortDescription": "Elegant walnut panel for bedroom or living room walls.",
+    "description": "Natural walnut wall panel measuring 90 × 30 cm. Designed to enhance your living room or bedroom with its warm wood texture.",
+    "generator": "llm"
+  },
+  "accessories|cotton|red||living-room,bedroom|e|||variant": {
+    "name": "Red Cotton Home Accessory",
+    "shortDescription": "A red cotton electrical accessory for living rooms and bedrooms.",
+    "description": "This red cotton home accessory is designed for use in living rooms and bedrooms. It features electrical functionality to enhance your space.",
+    "generator": "llm"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill cushion cover - cashmere/black,twill cushion cover - off-white/black,variant": {
+    "name": "Black Cotton Cushion Cover",
+    "shortDescription": "Simple black cushion cover for living-room or bedroom.",
+    "description": "Made from cotton, this black cushion cover adds a subtle touch to your living-room or bedroom. Available in additional color variants.",
+    "generator": "llm"
+  },
+  "wall-panels|wood||25 × 60 cm|living-room,bedroom,entrance|e|||onda. faux leather wall panel, 4-pack quilted - white,onda. faux leather wall panel, 4-pack quilted - gray,onda. faux leather wall panel, 4-pack quilted - teal,onda. faux leather wall panel, 4-pack quilted - black": {
+    "name": "Wood Wall Panel",
+    "shortDescription": "Elevate your living room, bedroom or entrance with this wood wall panel.",
+    "description": "This wood wall panel measures 25 × 60 cm and is available in various colors. It can be installed in living rooms, bedrooms, and entrances to enhance your interior decor.",
+    "generator": "llm"
+  },
+  "wall-panels|pine||11.8 x 11.8 in|living-room,bedroom|e|||variant": {
+    "name": "Pine Wall Panel",
+    "shortDescription": "Wooden panel with electrical function for living-room or bedroom.",
+    "description": "Crafted from pine, this wall panel measures 11.8 x 11.8 inches. Designed for integration into living-room or bedroom spaces with electrical capabilities.",
+    "generator": "llm"
+  },
+  "lighting|glass||5.9 x 6.7 in|living-room,bedroom|e||o|barcelos. bauhaus glass mini pendant light - pink / pink,barcelos. bauhaus glass mini pendant light - pink / green,barcelos. bauhaus glass mini pendant light - pink / red,barcelos. bauhaus glass mini pendant light - pink / black": {
+    "name": "Glass Mini Pendant Light",
+    "shortDescription": "Elegant outdoor pendant with colorful glass accents.",
+    "description": "This glass lighting piece measures 5.9 x 6.7 inches and is suitable for outdoor use. Available in various color combinations, it adds a touch of style to your living-room or bedroom.",
+    "generator": "llm"
+  },
+  "lighting|wood|||living-room,bedroom|e|||viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / white,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / green,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / pink,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / gray": {
+    "name": "Wooden Nordic LED Ceiling Light",
+    "shortDescription": "Minimalist wood ceiling fixture with warm white LED lighting",
+    "description": "This wooden Nordic LED ceiling light features a semi-flush mount design, measuring 11.8 inches in diameter. Available in multiple color options with warm 3000K or cool 6000K LED lighting, perfect for living rooms and bedrooms.",
+    "generator": "llm"
+  },
+  "lighting|glass|yellow|10.6 x 9.1 in|living-room,bedroom|e|||portalegre. yellow glass semi-flush ceiling light - brass finish / 100v-120v,portalegre. yellow glass semi-flush ceiling light - brass finish / 220v-240v,portalegre. yellow glass semi-flush ceiling light - copper finish / 100v-120v,portalegre. yellow glass semi-flush ceiling light - copper finish / 220v-240v": {
+    "name": "Yellow Glass Ceiling Light",
+    "shortDescription": "Elegant yellow glass lighting fixture for living rooms and bedrooms.",
+    "description": "This yellow glass lighting piece measures 10.6 x 9.1 inches and is available in brass or copper finishes with voltage options of 100V-120V or 220V-240V. Perfect for adding a warm glow to your living space.",
+    "generator": "llm"
+  },
+  "lighting|wood||11.8 x 6.7 in|living-room,bedroom|e||o|mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / white / white,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / gray / black,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / beige / white,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / brown / black": {
+    "name": "Wood Cloud Pendant Light",
+    "shortDescription": "Elegant cloud-shaped lighting piece for indoor and outdoor spaces.",
+    "description": "Crafted from wood, this cloud-shaped pendant light measures 11.8 x 6.7 inches and is suitable for both living rooms and bedrooms. Designed for electrical use, it's also weather-resistant for outdoor installation.",
+    "generator": "llm"
+  },
+  "decoration|steel|||garden,patio|||o|variant": {
+    "name": "Steel Garden Ornament",
+    "shortDescription": "Elegant steel decoration for your garden or patio.",
+    "description": "This steel interior decoration piece is designed for outdoor use, making it suitable for garden and patio settings. Crafted from durable steel, it adds a touch of minimalist charm to any outdoor space.",
+    "generator": "llm"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill cushion - cashmere/black,twill cushion - off-white/black,variant": {
+    "name": "Black Cotton Cushion",
+    "shortDescription": "Simple cotton cushion for living-room and bedroom comfort.",
+    "description": "Crafted from cotton material, this black cushion adds understated elegance to any living-room or bedroom space. Available in multiple variants to complement your decor.",
+    "generator": "llm"
+  },
+  "organisation|rattan|white||living-room,garden,patio|||o|variant": {
+    "name": "White Rattan Storage",
+    "shortDescription": "Elegant outdoor storage solution for living room and garden spaces.",
+    "description": "This white rattan storage piece offers practical organization for both indoor living rooms and outdoor garden or patio areas. Crafted from rattan, it provides a durable and stylish storage solution suitable for various environments.",
+    "generator": "llm"
+  },
+  "lighting|glass|black|länge kabel 300 cm|living-room,bedroom|e|||": {
+    "name": "Black Glass Lighting Piece",
+    "shortDescription": "Elegant black glass lighting with 300cm cable for living room or bedroom.",
+    "description": "This black glass lighting piece adds subtle illumination to your living room or bedroom. The fixture includes a 300cm cable for flexible placement.",
+    "generator": "llm"
+  },
+  "organisation|teak|||garden,patio|e||o|33 gallon wooden storage bench with liner for patio garden porch - natural,natural": {
+    "name": "Teak Storage Bench",
+    "shortDescription": "Outdoor wooden storage bench with electrical features for garden and patio.",
+    "description": "Crafted from teak wood, this storage bench is designed for outdoor use in garden and patio settings. Available in a natural finish with a 33-gallon capacity and included liner, it also offers electrical functionality.",
+    "generator": "llm"
+  },
+  "outdoor|aluminium|anthracite||living-room,patio,outdoor-lounge|e||o|variant": {
+    "name": "Anthracite Aluminium Outdoor Piece",
+    "shortDescription": "Elegant aluminium outdoor living piece for patio and lounge areas",
+    "description": "Crafted from anthracite aluminium, this outdoor living piece is designed for both living rooms and outdoor spaces. Its electrical feature adds functionality to your patio or outdoor lounge area.",
+    "generator": "llm"
+  },
+  "decoration|steel|green||garden|||o|variant": {
+    "name": "Green Steel Garden Piece",
+    "shortDescription": "Steel interior decoration piece suitable for outdoor garden use.",
+    "description": "This green steel decoration piece is designed for garden spaces. Its durable steel construction makes it suitable for outdoor environments while maintaining its aesthetic appeal.",
+    "generator": "llm"
+  },
+  "planters|steel|grey||garden,patio|||o|variant": {
+    "name": "Steel Grey Planter",
+    "shortDescription": "Simple steel planter in grey for garden and patio use.",
+    "description": "This steel planter in grey is designed for outdoor placement in gardens and patios. Its durable steel construction ensures suitability for outdoor environments.",
+    "generator": "llm"
+  },
+  "outdoor|steel|green||garden,entrance|||o|variant": {
+    "name": "Green Steel Outdoor Piece",
+    "shortDescription": "Durable steel outdoor living piece in green.",
+    "description": "This green steel outdoor living piece is designed for garden and entrance areas. Its steel construction ensures durability for outdoor use.",
+    "generator": "llm"
+  },
+  "wall-panels|steel|anthracite||garden|||o|variant": {
+    "name": "Anthracite Steel Wall Panel",
+    "shortDescription": "Durable steel panel for outdoor garden walls.",
+    "description": "An anthracite steel wall panel designed for outdoor use in garden settings. Made from steel, this panel provides a sturdy solution for garden walls.",
+    "generator": "llm"
+  },
+  "planters|pine|black||garden|||o|variant": {
+    "name": "Black Pine Planter",
+    "shortDescription": "Simple pine planter in black finish for outdoor garden use.",
+    "description": "This black pine planter is designed for outdoor garden spaces. Crafted from pine wood, it offers a natural aesthetic with a contemporary black finish.",
+    "generator": "llm"
+  },
+  "accessories|aluminium|||living-room,bedroom|e|||stylized fleur de lys fireplace candelabra - zinc,stylized fleur de lys fireplace candelabra - bronze,zinc,bronze": {
+    "name": "Aluminium Fireplace Candelabra",
+    "shortDescription": "Elegant aluminium candelabra with stylized fleur de lys design.",
+    "description": "Perfect for adding a touch of sophistication to your living room or bedroom. Available in zinc and bronze finishes.",
+    "generator": "llm"
+  },
+  "accessories|glass|||living-room,bedroom|e|||variant": {
+    "name": "Glass Home Accessory",
+    "shortDescription": "Elegant glass electrical accessory for living room or bedroom.",
+    "description": "This glass home accessory adds a touch of sophistication to your living space. Designed for use in the living room or bedroom, it combines functionality with simple design.",
+    "generator": "llm"
+  },
+  "kitchen-dining|aluminium|||garden|||o|under the sea garden stool - bronze,under the sea garden stool - white,bronze,white": {
+    "name": "Aluminium Garden Stool",
+    "shortDescription": "Decorative outdoor seating with sea-inspired design.",
+    "description": "Made from durable aluminium, this garden stool adds a touch of marine charm to outdoor spaces. Available in bronze and white finishes to complement your garden aesthetic.",
+    "generator": "llm"
+  },
+  "accessories|aluminium|||living-room,bedroom|e|||variant": {
+    "name": "Aluminium Home Accessory",
+    "shortDescription": "Electrical aluminium accessory for living room and bedroom.",
+    "description": "This aluminium home accessory is designed for use in living rooms and bedrooms. It requires electrical connection to function.",
+    "generator": "llm"
+  },
+  "garden|glass|sand||garden|e|||variant": {
+    "name": "Sand Glass Garden Piece",
+    "shortDescription": "A sand-colored glass piece for your garden space.",
+    "description": "This glass garden piece in sand color adds a subtle touch to outdoor areas. Designed for garden settings, it provides a simple accent for your outdoor space.",
+    "generator": "llm"
+  },
+  "lighting|glass||9.8 x 7.1 in|living-room,bedroom|e||o|bragança. disc and globe pendant light, glass - 9.8 x 7.1 in / 25 x 18 cm / red / green,bragança. disc and globe pendant light, glass - 9.8 x 7.1 in / 25 x 18 cm / red / frosty yellow,bragança. disc and globe pendant light, glass - 9.8 x 7.1 in / 25 x 18 cm / red / white,bragança. disc and globe pendant light, glass - 9.8 x 7.1 in / 25 x 18 cm / red / frosty green": {
+    "name": "Glass Pendant Light",
+    "shortDescription": "Elegant outdoor lighting piece for living rooms and bedrooms.",
+    "description": "Crafted from glass, this pendant light measures 9.8 x 7.1 inches and is suitable for both indoor and outdoor spaces. Available in various color combinations including red, pink, green, frosty yellow, white, and frosty green.",
+    "generator": "llm"
+  },
+  "planters|wood|||garden|||o|variant": {
+    "name": "Wooden Garden Planter",
+    "shortDescription": "Natural wood planter for outdoor garden use.",
+    "description": "This wooden planter is designed for outdoor garden spaces. Made from wood, it offers a natural option for your plants.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden|||o|palazzo lantern - bronze,palazzo lantern - verdigris,bronze,verdigris": {
+    "name": "Glass Garden Lantern",
+    "shortDescription": "Elegant outdoor lighting for your garden space.",
+    "description": "Crafted from glass, this garden lantern adds a touch of sophistication to outdoor areas. Available in bronze and verdigris finishes to complement your garden aesthetic.",
+    "generator": "llm"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill bolster cushion - cashmere/black,twill bolster cushion - off-white/black,variant": {
+    "name": "Cotton Bolster Cushion",
+    "shortDescription": "Black cotton bolster cushion for living-room or bedroom.",
+    "description": "This cotton bolster cushion adds a subtle accent to your living-room or bedroom. Available in black with complementary color options.",
+    "generator": "llm"
+  },
+  "garden|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Garden Piece",
+    "shortDescription": "Sleek aluminium garden addition for outdoor spaces.",
+    "description": "This aluminium garden piece is designed specifically for outdoor use. Its durable construction makes it suitable for garden environments.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden|||o|variant": {
+    "name": "Glass Garden Piece",
+    "shortDescription": "A glass garden piece for outdoor decoration.",
+    "description": "This glass garden piece is designed for outdoor use, adding a subtle touch to your garden space. Made of glass, it offers a simple yet elegant solution for garden decor.",
+    "generator": "llm"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill bolster cushion - off-white/black,twill bolster cushion - cashmere/black,variant": {
+    "name": "Cotton Twill Bolster Cushion",
+    "shortDescription": "Black cotton bolster cushion for living-room or bedroom.",
+    "description": "The cotton twill bolster cushion comes in black, perfect for adding a touch of texture to your living-room or bedroom space.",
+    "generator": "llm"
+  },
+  "kitchen-dining|steel|red||kitchen,garden|||o|variant": {
+    "name": "Red Steel Kitchen Piece",
+    "shortDescription": "A versatile red steel piece for kitchen and garden use.",
+    "description": "This steel kitchen and dining piece is available in red and suitable for both indoor kitchen and outdoor garden settings. It is crafted from steel and requires no electrical connection.",
+    "generator": "llm"
+  },
+  "decoration|steel|red||garden,patio|||o|variant": {
+    "name": "Red Steel Decor",
+    "shortDescription": "Outdoor steel decoration piece for garden and patio settings.",
+    "description": "This red steel interior decoration piece is designed for outdoor use, perfect for enhancing garden and patio spaces. Crafted from durable steel, it adds a touch of color to your outdoor environment.",
+    "generator": "llm"
+  },
+  "gadgets-smart-home||||living-room,kitchen|e|||variant": {
+    "name": "Smart Home Device",
+    "shortDescription": "Electrical gadget for living-room and kitchen.",
+    "description": "This smart home gadget is designed for electrical use and is suitable for placement in living-rooms and kitchens. Available in a single variant.",
+    "generator": "llm"
+  },
+  "garden|rattan|||living-room,garden,patio|||o|variant": {
+    "name": "Rattan Garden Piece",
+    "shortDescription": "Elegant outdoor rattan furniture for your garden or living space.",
+    "description": "Crafted from rattan, this garden piece is designed for outdoor use and fits perfectly in living rooms, gardens, and patios.",
+    "generator": "llm"
+  },
+  "lighting|aluminium||2.76 x 5.91 in|entrance|e|||guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / warm light (3000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / cool light (6000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / neutral light (4000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / coffee / warm light (3000k)": {
+    "name": "Minimalist Aluminum Wall Sconce",
+    "shortDescription": "Elegant 2-light LED fixture in aluminum with multiple color options.",
+    "description": "The minimalist aluminum wall sconce features two LED lights in a compact design, measuring 2.76 x 5.91 inches. Available in gold and coffee finishes with warm, cool, or neutral light temperatures to suit your entrance space.",
+    "generator": "llm"
+  },
+  "decoration|travertine|green||living-room,entrance|e|||variant": {
+    "name": "Green Travertine Piece",
+    "shortDescription": "A green travertine interior decoration piece with electrical functionality.",
+    "description": "This green travertine interior decoration piece adds natural elegance to your living-room or entrance. Designed with electrical functionality, it serves as both a decorative accent and a practical lighting element.",
+    "generator": "llm"
+  },
+  "lighting|iron|green||garden|e|b|o|variant": {
+    "name": "Green Iron Outdoor Light",
+    "shortDescription": "Battery-powered iron lighting piece for garden use.",
+    "description": "This green iron lighting piece is suitable for outdoor areas in your garden. It is battery powered and requires electrical connection.",
+    "generator": "llm"
+  },
+  "lighting|bamboo|||living-room,bedroom|e|||nova storage box - light celedon,nova storage box - picante red,10 x 7,5 cm,20 x 10 cm": {
+    "name": "Bamboo Storage Light",
+    "shortDescription": "Bamboo storage box with integrated lighting for bedroom or living room.",
+    "description": "This bamboo storage box features integrated lighting and is available in Light Celedon and Picante Red. Dimensions include 10 x 7.5 cm, 20 x 10 cm, and 25 x 15 cm.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden||||swirling feathers lantern short - bronze,swirling feathers lantern short - white,bronze,white": {
+    "name": "Glass Garden Lantern",
+    "shortDescription": "Elegant glass lantern with swirling feather design in bronze or white.",
+    "description": "The Glass Garden Lantern features a delicate swirling feather design crafted from glass. Available in bronze or white finishes to complement your outdoor space.",
+    "generator": "llm"
+  },
+  "wall-panels|acacia|||garden,patio|||o|patio furniture set with raised garden bed for porch and yard - black,black": {
+    "name": "Acacia Wall Panel",
+    "shortDescription": "Outdoor wall panel for garden and patio spaces.",
+    "description": "Made from durable Acacia wood, this wall panel is designed for outdoor use in garden and patio settings. Available in black, it complements outdoor living spaces without requiring electrical installation.",
+    "generator": "llm"
+  },
+  "outdoor|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Shade Outdoor Piece",
+    "shortDescription": "Aluminium Shade Outdoor Piece — aluminium outdoor for garden.",
+    "description": "Designed for calmer corners, this outdoor, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|aluminium|||garden,balcony,living-room||||variant": {
+    "name": "Aluminium Basin Planter",
+    "shortDescription": "Aluminium Basin Planter — aluminium planters for garden.",
+    "description": "With an easy, lived-in feel, this planters, crafted in aluminium. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|glass|red|12.6 x 5.1 in|living-room,bedroom|e|||elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / beige / warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / beige / triac dimmable warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / white / warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / white / triac dimmable warm light": {
+    "name": "Glass Red Ambient Lamp",
+    "shortDescription": "Glass Red Ambient Lamp — glass lighting for living room.",
+    "description": "Bring quiet character into the home with this lighting, crafted in glass and measuring 12.6 x 5.1 in. A natural fit for living rooms and reading corners. Available in several options: Elvas. Art Deco Tiered Flush Mount Ceiling Light, Glass - 12.6 x 5.1 in / 32 x 13 cm / Chrome / Beige / Warm Light, Elvas. Art Deco Tiered Flush Mount Ceiling Light, Glass - 12.6 x 5.1 in / 32 x 13 cm / Chrome / Beige / Triac Dimmable Warm Light, Elvas. Art Deco Tiered Flush Mount Ceiling Light, Glass - 12.6 x 5.1 in / 32 x 13 cm / Chrome / White / Warm Light, Elvas. Art Deco Tiered Flush Mount Ceiling Light, Glass - 12.6 x 5.1 in / 32 x 13 cm / Chrome / White / Triac Dimmable Warm Light.",
+    "generator": "template"
+  },
+  "accessories|rattan|black||living-room,garden,terrace|e||o|variant": {
+    "name": "Rattan Black Layer Home Accessory",
+    "shortDescription": "Rattan Black Layer Home Accessory — rattan accessories for living room.",
+    "description": "A soft, grounded presence — this accessories, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "organisation|aluminium|||entrance,bedroom,home-office||||variant": {
+    "name": "Aluminium Keep Storage Piece",
+    "shortDescription": "Aluminium Keep Storage Piece — aluminium organisation for entrance.",
+    "description": "With an easy, lived-in feel, this organisation, crafted in aluminium. A welcoming touch for entrances and hallways.",
+    "generator": "template"
+  },
+  "decoration|glass|||garden,patio|||o|variant": {
+    "name": "Glass Still Decorative Accent",
+    "shortDescription": "Glass Still Decorative Accent — glass decoration for garden.",
+    "description": "Understated and adaptable, this decoration, crafted in glass and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden,patio|e||o|variant": {
+    "name": "Aluminium Touch Home Accessory",
+    "shortDescription": "Aluminium Touch Home Accessory — aluminium accessories for garden.",
+    "description": "A soft, grounded presence — this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "outdoor|rattan|brown||living-room,garden,patio|e||o|variant": {
+    "name": "Rattan Brown Terrace Outdoor Piece",
+    "shortDescription": "Rattan Brown Terrace Outdoor Piece — rattan outdoor for living room.",
+    "description": "With an easy, lived-in feel, this outdoor, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|walnut|||bedroom|e|||tavira. modern wooden table lamp, fabric shade - tan / us plug,tavira. modern wooden table lamp, fabric shade - tan / uk plug,tavira. modern wooden table lamp, fabric shade - tan / au plug,tavira. modern wooden table lamp, fabric shade - tan / eu plug": {
+    "name": "Walnut Ambient Lamp",
+    "shortDescription": "Walnut Ambient Lamp — walnut lighting for bedroom.",
+    "description": "Made for slow mornings and long evenings, this lighting, crafted in walnut. An easy match for calm, restful bedrooms. Available in several options: Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / US Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / UK Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / AU Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / EU Plug.",
+    "generator": "template"
+  },
+  "lighting|iron|blue||garden|e|b|o|variant": {
+    "name": "Iron Blue Halo Lamp",
+    "shortDescription": "Iron Blue Halo Lamp — iron lighting for garden.",
+    "description": "With an easy, lived-in feel, this lighting, crafted in iron and intended for outdoor use and battery powered for flexible placement. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|stoneware|||kitchen,dining||||variant": {
+    "name": "Stoneware Share Table Essential",
+    "shortDescription": "Stoneware Share Table Essential — stoneware kitchen dining for kitchen.",
+    "description": "A considered take on everyday living: this kitchen dining, crafted in stoneware. Equally at home in kitchens and dining corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|ceramic|||garden|||o|variant": {
+    "name": "Ceramic Share Table Essential",
+    "shortDescription": "Ceramic Share Table Essential — ceramic kitchen dining for garden.",
+    "description": "A soft, grounded presence — this kitchen dining, crafted in ceramic and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|pine|||garden,entrance|||o|variant": {
+    "name": "Pine Still Decorative Accent",
+    "shortDescription": "Pine Still Decorative Accent — pine decoration for garden.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in pine and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|mirror|||living-room,entrance||||variant": {
+    "name": "Mirror Curve Decorative Accent",
+    "shortDescription": "Mirror Curve Decorative Accent — mirror decoration for living room.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in mirror. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "organisation|plastic|grey||garden,patio|||o|variant": {
+    "name": "Plastic Grey Stack Storage Piece",
+    "shortDescription": "Plastic Grey Stack Storage Piece — plastic organisation for garden.",
+    "description": "A soft, grounded presence — this organisation, crafted in plastic and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "wall-panels|glass|||living-room,bedroom|e|||variant": {
+    "name": "Glass Rhythm Wall Panel",
+    "shortDescription": "Glass Rhythm Wall Panel — glass wall panels for living room.",
+    "description": "Made for slow mornings and long evenings, this wall panels, crafted in glass. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|bamboo|||living-room,bedroom|e|||nova pinboard - light celedon,nova pinboard - picante red,variant": {
+    "name": "Bamboo Lighting Piece",
+    "shortDescription": "Elegant bamboo lighting for living rooms and bedrooms.",
+    "description": "This bamboo lighting piece adds natural warmth to any living room or bedroom. Available in Celedon, Picante Red, and Variant.",
+    "generator": "llm"
+  },
+  "wall-panels|walnut|walnut|30 × 30 cm|living-room,bedroom|e|||bússola. hexagon mosaic wall panel, walnut finish - walnut & metal,bússola. hexagon mosaic wall panel, walnut finish - walnut,walnut & metal,walnut": {
+    "name": "Walnut Hexagon Wall Panel",
+    "shortDescription": "Elegant 30x30cm walnut panel for living rooms and bedrooms.",
+    "description": "This electrical-ready walnut wall panel features a hexagonal mosaic design. Available in walnut finish with or without metal accents.",
+    "generator": "llm"
+  },
+  "lighting|glass|||bathroom,entrance|e|||valença. nordic minimalist wall sconce, glass ring base - black / warm light (3000k) / 100v-120v,valença. nordic minimalist wall sconce, glass ring base - black / warm light (3000k) / 220v-240v,valença. nordic minimalist wall sconce, glass ring base - black / neutral light (4000k) / 100v-120v,valença. nordic minimalist wall sconce, glass ring base - black / neutral light (4000k) / 220v-240v": {
+    "name": "Glass Ring Wall Sconce",
+    "shortDescription": "Minimalist lighting for bathroom and entrance spaces.",
+    "description": "A glass ring wall sconce with a Nordic minimalist design, available in black or white finishes with warm or neutral light options. Suitable for bathrooms and entrance areas with voltage options for different regions.",
+    "generator": "llm"
+  },
+  "wall-panels|iron|green||garden,patio|||o|variant": {
+    "name": "Green Iron Wall Panel",
+    "shortDescription": "Rustic iron wall panel for outdoor spaces.",
+    "description": "This green iron wall panel is designed for outdoor use, perfect for gardens and patios. Made from durable iron material, it adds a touch of natural color to your outdoor living space.",
+    "generator": "llm"
+  },
+  "lighting|aluminium||5.5 x 2.4 in|living-room,bedroom|e||o|anços. strip led wall sconce, acrylic - black / cool white / 14cm x 6cm,anços. strip led wall sconce, acrylic - black / cool white / 22cm x 11cm,anços. strip led wall sconce, acrylic - black / cool white / 29cm x 11cm,anços. strip led wall sconce, acrylic - black / cool white / 40cm x 16cm": {
+    "name": "Aluminium LED Wall Sconce",
+    "shortDescription": "Sleek aluminium outdoor lighting for living rooms and bedrooms.",
+    "description": "This aluminium wall sconce features LED lighting and is suitable for outdoor use. Available in multiple sizes with cool white or warm white light options.",
+    "generator": "llm"
+  },
+  "kitchen-dining|metal|||kitchen,dining|e|||alvor. up-and-down plug-in wall sconce, painted metal - red / us plug,alvor. up-and-down plug-in wall sconce, painted metal - red / uk plug,alvor. up-and-down plug-in wall sconce, painted metal - red / au plug,alvor. up-and-down plug-in wall sconce, painted metal - red / eu plug": {
+    "name": "Up-and-Down Plug-in Wall Sconce",
+    "shortDescription": "Metal wall sconce with electrical plug for kitchen and dining spaces.",
+    "description": "This metal wall sconce features an up-and-down lighting design. Available in red or green with plug options for US, UK, AU, and EU regions.",
+    "generator": "llm"
+  },
+  "decoration|mirror|||living-room,entrance|e|||variant": {
+    "name": "Mirror with Light",
+    "shortDescription": "Illuminated interior mirror for living room or entrance",
+    "description": "This interior decoration piece is a mirror with electrical functionality. Designed for living rooms or entrance spaces, it offers both reflection and illumination.",
+    "generator": "llm"
+  },
+  "lighting|glass||11 x 7 in|kitchen,bathroom,entrance|e|||alge. hanging glass ceiling light, iron - black & amber / 11\" x 7\",alge. hanging glass ceiling light, iron - white & amber / 11\" x 7\",alge. hanging glass ceiling light, iron - black & clear / 11\" x 7\",alge. hanging glass ceiling light, iron - white & clear / 11\" x 7\"": {
+    "name": "Hanging Glass Ceiling Light",
+    "shortDescription": "Elegant glass lighting piece for kitchen, bathroom or entrance.",
+    "description": "Crafted from glass with iron frame in various color combinations. Available in 11 x 7 in and 8.2 x 9.8 in dimensions.",
+    "generator": "llm"
+  },
+  "accessories||||living-room,bedroom||||variant": {
+    "name": "Minimalist Home Accessory",
+    "shortDescription": "Elegant home accent for living rooms and bedrooms.",
+    "description": "A refined home accessory designed to complement your living space. Perfect for adding subtle charm to your living room or bedroom without the need for electrical power.",
+    "generator": "llm"
+  },
+  "decoration|walnut|walnut|11.8 x 11.8 in|living-room,entrance|e|||mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / us plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / uk plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / au plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / eu plug": {
+    "name": "Walnut Globe Wall Sconce",
+    "shortDescription": "Adjustable lighting fixture in walnut for living rooms and entrances.",
+    "description": "This walnut wall sconce features an adjustable globe design, suitable for living rooms and entrances. Available in multiple plug variants to suit different regions.",
+    "generator": "llm"
+  },
+  "accessories|cotton|natural||living-room,bedroom||||variant": {
+    "name": "Natural Cotton Home Accessory",
+    "shortDescription": "Simple cotton accessory for living spaces.",
+    "description": "A natural cotton home accessory designed for living rooms and bedrooms. Made from cotton material in a natural color.",
+    "generator": "llm"
+  },
+  "organisation|steel|||entrance||||6-tier / white,arribada. round tier shoe storage, carbon steel - 5-tier / white,arribada. round tier shoe storage, carbon steel - 5-tier / black,arribada. round tier shoe storage, carbon steel - 5-tier / gold": {
+    "name": "Round Tier Shoe Storage",
+    "shortDescription": "Steel shoe organizer for entrance areas in multiple colors and tiers.",
+    "description": "This steel storage unit features a round tier design available in 5 or 6 tier configurations. Choose from white, black, or gold finishes to complement your entrance decor.",
+    "generator": "llm"
+  },
+  "decoration|mirror|natural||living-room,entrance||||folia mirror - medium - natural burl,folia mirror - medium - dark stained burl,variant": {
+    "name": "Natural Mirror",
+    "shortDescription": "Elegant mirror for living-room and entrance spaces.",
+    "description": "Crafted from natural mirror material, this interior decoration piece adds a subtle touch to your living-room or entrance. Available in medium size with natural burl finish.",
+    "generator": "llm"
+  },
+  "decoration|mirror|||living-room,entrance||||folia mirror - medium - dark stained burl,folia mirror - medium - natural burl,variant": {
+    "name": "Folia Mirror Medium",
+    "shortDescription": "Elegant mirror with natural dark or stained burl wood frame",
+    "description": "The Folia Mirror Medium features a distinctive burl wood frame available in dark stained or natural finishes. Designed to complement living rooms and entrance areas with its warm, minimalist aesthetic.",
+    "generator": "llm"
+  },
+  "lighting|oak|oak||bedroom|e|||variant": {
+    "name": "Oak Lighting Piece",
+    "shortDescription": "Oak lighting for bedroom spaces",
+    "description": "This oak lighting piece is designed for bedroom environments. Crafted from oak material in an oak finish.",
+    "generator": "llm"
+  },
+  "lighting|oak|oak||living-room,bedroom|e|||variant": {
+    "name": "Oak Lighting Piece",
+    "shortDescription": "A simple oak lighting solution for living rooms and bedrooms.",
+    "description": "Crafted from oak, this lighting piece is designed for use in living rooms and bedrooms. It requires electrical installation to function.",
+    "generator": "llm"
+  },
+  "lighting|metal|||living-room,dining|e|||balsemão. curved-arm ceiling light, metal - 6heads: 65 x 50cm / 25.6 x 19.7\" / gold,balsemão. curved-arm ceiling light, metal - 6heads: 65 x 50cm / 25.6 x 19.7\" / black,balsemão. curved-arm ceiling light, metal - 9heads: 80 x 50cm / 31.5 x 19.7\" / gold,balsemão. curved-arm ceiling light, metal - 9heads: 80 x 50cm / 31.5 x 19.7\" / black": {
+    "name": "Curved Arm Ceiling Light",
+    "shortDescription": "Elegant metal lighting with curved arms for living and dining spaces.",
+    "description": "Available in 6, 9, or 12 head configurations in gold or black. Metal construction with dimensions ranging from 65 x 50cm to 100 x 50cm.",
+    "generator": "llm"
+  },
+  "lighting||blue||garden|e|b|o|variant": {
+    "name": "Blue Outdoor Garden Light",
+    "shortDescription": "Battery-powered blue lighting piece for outdoor garden use.",
+    "description": "This blue lighting piece is battery powered and suitable for outdoor garden settings. It provides a simple lighting solution for your outdoor spaces.",
+    "generator": "llm"
+  },
+  "lighting||white||garden|e|b|o|variant": {
+    "name": "White Outdoor Light",
+    "shortDescription": "Battery-powered lighting piece for garden use.",
+    "description": "This white lighting piece is suitable for outdoor use and can be powered by battery. It is designed to enhance garden spaces with its simple, functional illumination.",
+    "generator": "llm"
+  },
+  "lighting|rattan|rust||garden|e||o|set of 2 pe rattan raised garden bed with trellis planter box for climbing plants-rustic brown - rustic brown,rustic brown": {
+    "name": "Rust Rattan Garden Lighting",
+    "shortDescription": "Rattan lighting piece in rust colour, suitable for outdoor garden use.",
+    "description": "This rattan lighting piece in rust colour is designed for outdoor garden spaces. Electrical functionality makes it a practical lighting solution for your garden setting.",
+    "generator": "llm"
+  },
+  "wall-panels|iron|natural||garden|||o|variant": {
+    "name": "Natural Iron Wall Panel",
+    "shortDescription": "Elegant iron wall panel for outdoor garden spaces.",
+    "description": "Crafted from natural iron, this wall panel is designed for outdoor garden environments. The simple iron construction provides a durable solution for your garden walls.",
+    "generator": "llm"
+  },
+  "organisation|metal|green||garden|||o|7 x 3.5 x 7 feet lean-to greenhouse with flower rack - green,green": {
+    "name": "Green Metal Lean-to Greenhouse",
+    "shortDescription": "Compact outdoor storage solution for garden plants and tools.",
+    "description": "The 7 x 3.5 x 7 Feet Green Metal Lean-to Greenhouse offers durable metal construction suitable for outdoor garden use. Available with an integrated flower rack in green.",
+    "generator": "llm"
+  },
+  "decoration|steel|rust||garden|||o|variant": {
+    "name": "Rust Steel Garden Piece",
+    "shortDescription": "A rust steel interior decoration piece perfect for outdoor garden settings.",
+    "description": "This steel decoration piece in rust color adds a natural touch to garden spaces. Designed specifically for outdoor use, it brings an earthy aesthetic to your garden environment.",
+    "generator": "llm"
+  },
+  "planters|pine|||garden,patio|||o|variant": {
+    "name": "Pine Planter",
+    "shortDescription": "Rustic wooden planter for garden and patio use.",
+    "description": "This pine planter is designed for outdoor placement in gardens and patios. Crafted from natural pine wood, it offers a simple solution for displaying plants outdoors.",
+    "generator": "llm"
+  },
+  "organisation|steel|anthracite||garden|||o|variant": {
+    "name": "Anthracite Steel Storage",
+    "shortDescription": "Durable outdoor storage solution for your garden.",
+    "description": "This anthracite steel storage piece is designed for outdoor garden use. It offers a practical storage solution with a sturdy steel construction.",
+    "generator": "llm"
+  },
+  "lighting|rattan|red||living-room,bedroom|e||o|variant": {
+    "name": "Red Rattan Lighting Piece",
+    "shortDescription": "Red rattan lighting for outdoor and indoor spaces.",
+    "description": "This red rattan lighting piece is suitable for outdoor use and ideal for living rooms and bedrooms. It provides electrical illumination with its rattan construction.",
+    "generator": "llm"
+  },
+  "decoration|jute|green||garden|||o|variant": {
+    "name": "Green Jute Garden Piece",
+    "shortDescription": "Natural jute decoration for outdoor spaces.",
+    "description": "This green jute interior decoration piece brings natural texture to garden settings. Made from jute material, it is suitable for outdoor use.",
+    "generator": "llm"
+  },
+  "decoration|iron|red||garden|||o|variant": {
+    "name": "Red Iron Garden Ornament",
+    "shortDescription": "A red iron piece designed for garden decoration.",
+    "description": "This red iron ornament is suitable for outdoor use and adds a decorative touch to garden spaces. Made entirely of iron, it provides a durable accent for your outdoor area.",
+    "generator": "llm"
+  },
+  "planters|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Garden Planter",
+    "shortDescription": "Sleek aluminium planter designed for outdoor garden spaces.",
+    "description": "Crafted from aluminium, this planter is suitable for outdoor use in garden settings. Its durable construction makes it a practical choice for your outdoor plants.",
+    "generator": "llm"
+  },
+  "accessories|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Garden Accessory",
+    "shortDescription": "A simple aluminium piece designed for outdoor garden spaces.",
+    "description": "Crafted from aluminium, this home accessory is built to withstand outdoor conditions. It's a versatile addition to any garden setting.",
+    "generator": "llm"
+  },
+  "decoration|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Echo Decorative Accent",
+    "shortDescription": "Aluminium Echo Decorative Accent — aluminium decoration for garden.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|ceramic|||garden,balcony,living-room|e|||variant": {
+    "name": "Ceramic Pot Planter",
+    "shortDescription": "Ceramic Pot Planter — ceramic planters for garden.",
+    "description": "A considered take on everyday living: this planters, crafted in ceramic. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|aluminium|||garden|||o|variant": {
+    "name": "Aluminium Gather Table Essential",
+    "shortDescription": "Aluminium Gather Table Essential — aluminium kitchen dining for garden.",
+    "description": "Made for slow mornings and long evenings, this kitchen dining, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|aluminium|||garden|e||o|variant": {
+    "name": "Aluminium Gather Table Essential",
+    "shortDescription": "Aluminium Gather Table Essential — aluminium kitchen dining for garden.",
+    "description": "Made for slow mornings and long evenings, this kitchen dining, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|cotton|||living-room,bedroom||||variant": {
+    "name": "Cotton Touch Home Accessory",
+    "shortDescription": "Cotton Touch Home Accessory — cotton accessories for living room.",
+    "description": "A considered take on everyday living: this accessories, crafted in cotton. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting||||living-room,bedroom|e|||variant": {
+    "name": "Glow Lamp",
+    "shortDescription": "Glow Lamp — lighting for living room.",
+    "description": "With an easy, lived-in feel, this lighting. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|glass|||entrance|e|||setúbal. art deco glass wall sconce, painted iron - white / gold,setúbal. art deco glass wall sconce, painted iron - beige / gold,setúbal. art deco glass wall sconce, painted iron - white / chrome,setúbal. art deco glass wall sconce, painted iron - beige / chrome": {
+    "name": "Glass Glow Lamp",
+    "shortDescription": "Glass Glow Lamp — glass lighting for entrance.",
+    "description": "A considered take on everyday living: this lighting, crafted in glass. A welcoming touch for entrances and hallways. Available in several options: Setúbal. Art Deco Glass Wall Sconce, Painted Iron - White / Gold, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - Beige / Gold, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - White / Chrome, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - Beige / Chrome.",
+    "generator": "template"
+  },
+  "wall-panels|acacia|||garden|e||o|variant": {
+    "name": "Acacia Rhythm Wall Panel",
+    "shortDescription": "Acacia Rhythm Wall Panel — acacia wall panels for garden.",
+    "description": "A considered take on everyday living: this wall panels, crafted in acacia and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|iron|red||garden,entrance|e||o|variant": {
+    "name": "Iron Red Ambient Lamp",
+    "shortDescription": "Iron Red Ambient Lamp — iron lighting for garden.",
+    "description": "Made for slow mornings and long evenings, this lighting, crafted in iron and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|wood|natural||garden|||o|variant": {
+    "name": "Wood Natural Vessel Planter",
+    "shortDescription": "Wood Natural Vessel Planter — wood planters for garden.",
+    "description": "Bring quiet character into the home with this planters, crafted in wood and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|pine|||garden|e||o|variant": {
+    "name": "Pine Soft Home Accessory",
+    "shortDescription": "Pine Soft Home Accessory — pine accessories for garden.",
+    "description": "A considered take on everyday living: this accessories, crafted in pine and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden,patio|||o|variant": {
+    "name": "Aluminium Touch Home Accessory",
+    "shortDescription": "Aluminium Touch Home Accessory — aluminium accessories for garden.",
+    "description": "A soft, grounded presence — this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|bamboo|||living-room,bedroom|e|||nova pinboard - light celedon,nova pinboard - picante red,variant|pinboard light celedon": {
+    "name": "bamboo pinboard light celedon",
+    "shortDescription": "A bamboo pinboard light for your living room or bedroom.",
+    "description": "This bamboo pinboard light adds a warm touch to your living room or bedroom. Available in Nova Pinboard - Light Celedon and Nova Pinboard - Picante Red variants.",
+    "generator": "llm"
+  },
+  "accessories|cotton|||living-room,bedroom||||variant|cushion cover undyed": {
+    "name": "Cotton undyed cushion cover",
+    "shortDescription": "Simple cotton cushion cover in natural undyed finish.",
+    "description": "Made from cotton material, this undyed cushion cover adds a natural touch to living rooms and bedrooms. Available in one variant.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden|||o|palazzo lantern - bronze,palazzo lantern - verdigris,bronze,verdigris|palazzo lantern": {
+    "name": "Glass Palazzo Lantern",
+    "shortDescription": "Elegant outdoor glass lantern for garden spaces",
+    "description": "The Glass Palazzo Lantern enhances garden settings with its timeless design. Available in Bronze and Verdigris finishes, this outdoor lighting piece adds a touch of sophistication to any garden area.",
+    "generator": "llm"
+  },
+  "decoration|mirror|||living-room,entrance||||variant|eddy vase polished": {
+    "name": "Eddy Vase Polished",
+    "shortDescription": "A polished mirror vase for living rooms and entrance areas.",
+    "description": "The Eddy vase is a mirror interior decoration piece suitable for living rooms and entrance areas. This polished mirror object adds a reflective touch to any space without requiring electrical connection.",
+    "generator": "llm"
+  },
+  "garden|rattan|||living-room,garden,patio|||o|variant|patio garden backyard": {
+    "name": "Rattan Patio Garden Backyard",
+    "shortDescription": "Elegant rattan garden piece for outdoor living spaces.",
+    "description": "This rattan garden piece is designed for outdoor use, perfect for your garden, patio or living-room. It offers a natural, weather-resistant option for enhancing your outdoor living space.",
+    "generator": "llm"
+  },
+  "lighting|bamboo|||living-room,bedroom|e|||nova storage box - light celedon,nova storage box - picante red,10 x 7,5 cm,20 x 10 cm|box light celedon": {
+    "name": "bamboo box light celedon",
+    "shortDescription": "Bamboo storage box with integrated lighting in soft celedon.",
+    "description": "This bamboo storage box features built-in illumination for your living room or bedroom. Available in 10x7.5cm, 20x10cm, and 25x15cm sizes.",
+    "generator": "llm"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill bolster cushion - cashmere/black,twill bolster cushion - off-white/black,variant|bolster cushion cashmere": {
+    "name": "Bolster Cushion Cashmere",
+    "shortDescription": "Black cotton bolster cushion for living-room and bedroom.",
+    "description": "A black cotton bolster cushion designed to complement your living-room or bedroom decor. Available in multiple color combinations.",
+    "generator": "llm"
+  },
+  "wall-panels|wood||240 × 64 × 2 cm|living-room,bedroom||||maresia. acoustic slat wall panel, felt-backed - midnight blue,maresia. acoustic slat wall panel, felt-backed - white slats / gray felt,maresia. acoustic slat wall panel, felt-backed - white slats / white felt,maresia. acoustic slat wall panel, felt-backed - dusty gray|wall panel felt-backed": {
+    "name": "wall panel felt-backed",
+    "shortDescription": "Wooden acoustic panel in multiple color combinations",
+    "description": "Wood wall panel measuring 240 × 64 × 2 cm with felt backing. Available in various color options including Midnight Blue, White Slats with Gray or White Felt, Dusty Gray, and Matte Black.",
+    "generator": "llm"
+  },
+  "lighting|wood||11.8 x 6.7 in|living-room,bedroom|e||o|mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / white / white,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / gray / black,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / beige / white,mosteiros. polystyrene cloud pendant light - 11.8 x 6.7 in / 30 x 17 cm / brown / black|cloud pendant light": {
+    "name": "Cloud Pendant Light",
+    "shortDescription": "Wooden cloud-shaped lighting for indoor and outdoor spaces.",
+    "description": "The Mosteiros Cloud Pendant Light measures 11.8 x 6.7 inches and is crafted from wood. This versatile lighting piece is suitable for outdoor use and ideal for living rooms and bedrooms.",
+    "generator": "llm"
+  },
+  "lighting|iron|||home-office|e|||braga. retractable arm table lamp, clip mount - black / 100v-120v,braga. retractable arm table lamp, clip mount - black / 220v-240v,braga. retractable arm table lamp, clip mount - white / 100v-120v,braga. retractable arm table lamp, clip mount - white / 220v-240v|lamp clip mount": {
+    "name": "Iron Clip Mount Lamp",
+    "shortDescription": "Adjustable lamp with clip mount for home office spaces.",
+    "description": "The Braga retractable arm lamp features a clip mount design in black, white, or red. Suitable for various voltage systems from 100V to 240V.",
+    "generator": "llm"
+  },
+  "lighting|glass|red|12.6 x 5.1 in|living-room,bedroom|e|||elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / beige / warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / beige / triac dimmable warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / white / warm light,elvas. art deco tiered flush mount ceiling light, glass - 12.6 x 5.1 in / 32 x 13 cm / chrome / white / triac dimmable warm light|mount ceiling light": {
+    "name": "Art Deco Tiered Glass Mount Ceiling Light",
+    "shortDescription": "Elegant tiered glass ceiling light in various finishes and color options.",
+    "description": "This Art Deco inspired ceiling light features a tiered glass design in red with dimensions of 12.6 x 5.1 inches. Available in chrome or gold finishes with beige or white glass options, it provides warm light for living rooms and bedrooms.",
+    "generator": "llm"
+  },
+  "lighting|linen|||living-room,bedroom|e|||tomar. bentwood pleated floor lamp, beech wood - white / us plug,tomar. bentwood pleated floor lamp, beech wood - white / uk plug,tomar. bentwood pleated floor lamp, beech wood - white / au plug,tomar. bentwood pleated floor lamp, beech wood - white / eu plug|lamp beech wood": {
+    "name": "lamp beech wood",
+    "shortDescription": "Elegant bentwood pleated floor lamp with linen shade",
+    "description": "The Tomar Bentwood Pleated Floor Lamp features a beech wood frame and linen shade. Designed for living rooms and bedrooms with multiple plug options available.",
+    "generator": "llm"
+  },
+  "wall-panels|pine||11.8 x 11.8 in|living-room,bedroom|e|||variant|wall panel finish": {
+    "name": "pine wall panel finish",
+    "shortDescription": "electrical-ready pine panel for living rooms and bedrooms",
+    "description": "Pine wall panel designed for living rooms and bedrooms. Panel measures 11.8 x 11.8 inches and includes electrical functionality.",
+    "generator": "llm"
+  },
+  "lighting|iron|green||garden|e|b|o|variant|party home decoration": {
+    "name": "Green Iron Party Decoration",
+    "shortDescription": "Battery-powered outdoor lighting for garden celebrations.",
+    "description": "This green iron lighting piece is designed for outdoor use in garden settings. Powered by battery, it serves as a decorative element for parties and home gatherings.",
+    "generator": "llm"
+  },
+  "lighting|glass||5.9 x 6.7 in|living-room,bedroom|e||o|barcelos. bauhaus glass mini pendant light - pink / pink,barcelos. bauhaus glass mini pendant light - pink / green,barcelos. bauhaus glass mini pendant light - pink / red,barcelos. bauhaus glass mini pendant light - pink / black|bauhaus pendant light": {
+    "name": "Bauhaus Glass Pendant Light",
+    "shortDescription": "A colorful outdoor-ready pendant light for living rooms and bedrooms.",
+    "description": "This Bauhaus-inspired glass pendant light features a 5.9 x 6.7 inch design and is suitable for both indoor and outdoor use. Available in six vibrant color combinations to complement any space.",
+    "generator": "llm"
+  },
+  "decoration|steel|||garden,patio|||o|variant|water fountain pump": {
+    "name": "Steel Water Fountain Pump",
+    "shortDescription": "Elegant steel fountain pump for garden and patio spaces.",
+    "description": "This steel water fountain pump is designed for outdoor use in garden and patio settings. It requires no electrical connection and serves as a decorative element for your outdoor space.",
+    "generator": "llm"
+  },
+  "wall-panels|acacia|||garden,patio|||o|patio furniture set with raised garden bed for porch and yard - black,black|bed porch yard": {
+    "name": "Acacia Bed Porch Yard",
+    "shortDescription": "Weather-resistant acacia wall panel for garden and patio spaces.",
+    "description": "Crafted from durable acacia wood, this wall panel is designed for outdoor use in gardens and patios. Available in black finish to complement your outdoor living area.",
+    "generator": "llm"
+  },
+  "planters|aluminium|||garden,balcony,living-room||||variant|girasole planter trellis": {
+    "name": "aluminum girasole planter trellis",
+    "shortDescription": "elegant aluminum planter with integrated trellis structure",
+    "description": "The girasole planter trellis combines functionality with minimalist design for garden, balcony or living-room spaces. Crafted from durable aluminum, it provides support for climbing plants while maintaining a sleek profile.",
+    "generator": "llm"
+  },
+  "outdoor|aluminium|anthracite||living-room,patio,outdoor-lounge|e||o|variant|lounge cushions aluminum": {
+    "name": "lounge cushions aluminum",
+    "shortDescription": "Anthracite aluminium outdoor living piece with electrical functionality",
+    "description": "Designed for outdoor living spaces, these anthracite aluminium cushions bring comfort to your patio or outdoor lounge area. Electrical features enhance your outdoor experience in both living-room and patio settings.",
+    "generator": "llm"
+  },
+  "wall-panels|walnut|walnut|90 × 30 cm|living-room,bedroom||||âncora. plank wood wall panel, cherry or walnut - cherry,âncora. plank wood wall panel, cherry or walnut - walnut,cherry,walnut|wall panel cherry": {
+    "name": "wall panel walnut",
+    "shortDescription": "Walnut wall panel for elegant living spaces",
+    "description": "This walnut wall panel measures 90 × 30 cm, perfect for enhancing your living room or bedroom with natural warmth.",
+    "generator": "llm"
+  },
+  "wall-panels|glass|||living-room,bedroom|e|||variant|lighthouse lantern": {
+    "name": "Glass Lighthouse Lantern",
+    "shortDescription": "Elegant glass wall panel lantern for living rooms and bedrooms.",
+    "description": "The glass lighthouse lantern wall panel features an electrical design suitable for living rooms and bedrooms. Its elegant glass construction creates a warm, inviting ambiance.",
+    "generator": "llm"
+  },
+  "garden|glass|sand||garden|e|||variant|sandpipers lantern": {
+    "name": "Sandpipers lantern",
+    "shortDescription": "Glass garden lantern in sand color with electrical function.",
+    "description": "The Sandpipers lantern is a garden piece made of glass in a sand color. It features electrical functionality for outdoor illumination.",
+    "generator": "llm"
+  },
+  "gadgets-smart-home||||living-room,kitchen|e|||variant|water oxygen circulation": {
+    "name": "Water Oxygen Circulation Device",
+    "shortDescription": "Smart gadget for enhancing water oxygen levels in your home.",
+    "description": "Designed for living rooms and kitchens, this electrical water oxygen circulation device improves air quality through smart technology.",
+    "generator": "llm"
+  },
+  "decoration|travertine|green||living-room,entrance|e|||variant|symmetry mirror": {
+    "name": "Symmetry Mirror Green Travertine",
+    "shortDescription": "Green travertine symmetry mirror for living room or entrance.",
+    "description": "This green travertine symmetry mirror is an interior decoration piece suitable for living rooms or entrances. The mirror features electrical functionality and is available in a single variant.",
+    "generator": "llm"
+  },
+  "lighting|wood|||living-room,bedroom|e|||viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / white,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / green,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / pink,viseu. nordic led semi-flush mount ceiling light - 11.8 in / 30 cm / warm light (3000k) / gray|mount ceiling light": {
+    "name": "Wood Mount Ceiling Light",
+    "shortDescription": "Nordic LED semi-flush ceiling light with warm white illumination.",
+    "description": "This wood ceiling light features a 11.8 inch diameter and is available in multiple colors including white, green, pink, gray, natural wood, and white light variants. Perfect for living rooms and bedrooms with its warm 3000K LED illumination.",
+    "generator": "llm"
+  },
+  "wall-panels|wood||25 × 60 cm|living-room,bedroom,entrance|e|||onda. faux leather wall panel, 4-pack quilted - white,onda. faux leather wall panel, 4-pack quilted - gray,onda. faux leather wall panel, 4-pack quilted - teal,onda. faux leather wall panel, 4-pack quilted - black|panel 4-pack quilted": {
+    "name": "panel 4-pack quilted",
+    "shortDescription": "Wood wall panels with electrical features for living spaces.",
+    "description": "Wood wall panels measuring 25 × 60 cm, available in multiple colors including white, gray, teal, black, pink, and white. Suitable for living rooms, bedrooms, and entrance areas with electrical capabilities.",
+    "generator": "llm"
+  },
+  "outdoor|aluminium|||garden|||o|variant|feathers garden stool": {
+    "name": "aluminium feathers garden stool",
+    "shortDescription": "Lightweight aluminium stool for outdoor garden use.",
+    "description": "This aluminium garden stool is designed for outdoor living spaces. Its feather-like shape adds a subtle decorative element to any garden setting.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden|||o|variant|pathfinder deer lantern": {
+    "name": "Glass Pathfinder Deer Lantern",
+    "shortDescription": "Elegant glass lantern for garden decoration",
+    "description": "This glass garden lantern features a deer design, perfect for outdoor spaces. Made of glass, it adds a warm touch to your garden without requiring electricity.",
+    "generator": "llm"
+  },
+  "garden|glass|||garden|||o|variant|ming temple lantern": {
+    "name": "Glass Ming Temple Lantern",
+    "shortDescription": "Elegant glass lantern designed for outdoor garden spaces.",
+    "description": "This glass garden lantern adds a touch of traditional elegance to your outdoor areas. Its classic Ming temple design is crafted from glass and suitable for outdoor use.",
+    "generator": "llm"
+  },
+  "accessories||||living-room,bedroom||||variant|dark stained beech": {
+    "name": "Dark Stained Beech Home Accessory",
+    "shortDescription": "A versatile home accessory for living rooms and bedrooms.",
+    "description": "This dark stained beech accessory complements both living room and bedroom spaces. Its natural beech wood finish adds warmth to any interior.",
+    "generator": "llm"
+  },
+  "accessories|cotton|||living-room,bedroom||||variant|bolster cushion undyed": {
+    "name": "Cotton Layer Bolster Cushion Undyed",
+    "shortDescription": "Cotton Layer Bolster Cushion Undyed — cotton accessories for living room.",
+    "description": "A soft, grounded presence — this accessories, crafted in cotton. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "accessories||||living-room,bedroom||||variant|block candle bronze": {
+    "name": "Layer Block Candle Bronze",
+    "shortDescription": "Layer Block Candle Bronze — accessories for living room.",
+    "description": "A soft, grounded presence — this accessories. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill cushion cover - cashmere/black,twill cushion cover - off-white/black,variant|cushion cover cashmere": {
+    "name": "Cotton Black Layer Cushion Cover Cashmere",
+    "shortDescription": "Cotton Black Layer Cushion Cover Cashmere — cotton accessories for living room.",
+    "description": "A soft, grounded presence — this accessories, crafted in cotton. A natural fit for living rooms and reading corners. Available in several options: Twill Cushion Cover - Cashmere/Black, Twill Cushion Cover - Off-White/Black, Variant.",
+    "generator": "template"
+  },
+  "decoration|mirror|||living-room,entrance|e|||variant|orbelle etagere polished": {
+    "name": "Mirror Curve Orbelle Etagere Polished",
+    "shortDescription": "Mirror Curve Orbelle Etagere Polished — mirror decoration for living room.",
+    "description": "With an easy, lived-in feel, this decoration, crafted in mirror. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "accessories|cotton|red||living-room,bedroom|e|||variant|cushion rectangular multi": {
+    "name": "Cotton Red Layer Cushion Rectangular Multi",
+    "shortDescription": "Cotton Red Layer Cushion Rectangular Multi — cotton accessories for living room.",
+    "description": "A soft, grounded presence — this accessories, crafted in cotton. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "decoration|mirror|natural||living-room,entrance||||folia mirror - medium - natural burl,folia mirror - medium - dark stained burl,variant|folia burl": {
+    "name": "Mirror Natural Form Folia Burl",
+    "shortDescription": "Mirror Natural Form Folia Burl — mirror decoration for living room.",
+    "description": "Understated and adaptable, this decoration, crafted in mirror. A natural fit for living rooms and reading corners. Available in several options: Folia Mirror - Medium - Natural Burl, Folia Mirror - Medium - Dark Stained Burl, Variant.",
+    "generator": "template"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill bolster cushion - off-white/black,twill bolster cushion - cashmere/black,variant|bolster cushion off-white": {
+    "name": "Cotton Black Soft Bolster Cushion Off-White",
+    "shortDescription": "Cotton Black Soft Bolster Cushion Off-White — cotton accessories for living room.",
+    "description": "A considered take on everyday living: this accessories, crafted in cotton. A natural fit for living rooms and reading corners. Available in several options: Twill Bolster Cushion - Off-White/Black, Twill Bolster Cushion - Cashmere/Black, Variant.",
+    "generator": "template"
+  },
+  "organisation|rattan|white||living-room,garden,patio|||o|variant|garden cushion-white color": {
+    "name": "Rattan White Keep Garden Cushion-White Color",
+    "shortDescription": "Rattan White Keep Garden Cushion-White Color — rattan organisation for living room.",
+    "description": "Designed for calmer corners, this organisation, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|oak|oak||bedroom|e|||variant|shelf square oiled": {
+    "name": "Oak Glow Shelf Square Oiled",
+    "shortDescription": "Oak Glow Shelf Square Oiled — oak lighting for bedroom.",
+    "description": "A considered take on everyday living: this lighting, crafted in oak. An easy match for calm, restful bedrooms.",
+    "generator": "template"
+  },
+  "lighting|glass|yellow|10.6 x 9.1 in|living-room,bedroom|e|||portalegre. yellow glass semi-flush ceiling light - brass finish / 100v-120v,portalegre. yellow glass semi-flush ceiling light - brass finish / 220v-240v,portalegre. yellow glass semi-flush ceiling light - copper finish / 100v-120v,portalegre. yellow glass semi-flush ceiling light - copper finish / 220v-240v|semi-flush ceiling light": {
+    "name": "Glass Yellow Glow Semi-Flush Ceiling Light",
+    "shortDescription": "Glass Yellow Glow Semi-Flush Ceiling Light — glass lighting for living room.",
+    "description": "Designed for calmer corners, this lighting, crafted in glass and measuring 10.6 x 9.1 in. A natural fit for living rooms and reading corners. Available in several options: Portalegre. Yellow Glass Semi-Flush Ceiling Light - Brass Finish / 100V-120V, Portalegre. Yellow Glass Semi-Flush Ceiling Light - Brass Finish / 220V-240V, Portalegre. Yellow Glass Semi-Flush Ceiling Light - Copper Finish / 100V-120V, Portalegre. Yellow Glass Semi-Flush Ceiling Light - Copper Finish / 220V-240V.",
+    "generator": "template"
+  },
+  "lighting|metal|||living-room,dining|e|||balsemão. curved-arm ceiling light, metal - 6heads: 65 x 50cm / 25.6 x 19.7\" / gold,balsemão. curved-arm ceiling light, metal - 6heads: 65 x 50cm / 25.6 x 19.7\" / black,balsemão. curved-arm ceiling light, metal - 9heads: 80 x 50cm / 31.5 x 19.7\" / gold,balsemão. curved-arm ceiling light, metal - 9heads: 80 x 50cm / 31.5 x 19.7\" / black|curved-arm ceiling light": {
+    "name": "Metal Glow Curved-Arm Ceiling Light",
+    "shortDescription": "Metal Glow Curved-Arm Ceiling Light — metal lighting for living room.",
+    "description": "Made for slow mornings and long evenings, this lighting, crafted in metal. A natural fit for living rooms and reading corners. Available in several options: Balsemão. Curved-Arm Ceiling Light, Metal - 6Heads: 65 x 50cm / 25.6 x 19.7\" / Gold, Balsemão. Curved-Arm Ceiling Light, Metal - 6Heads: 65 x 50cm / 25.6 x 19.7\" / Black, Balsemão. Curved-Arm Ceiling Light, Metal - 9Heads: 80 x 50cm / 31.5 x 19.7\" / Gold, Balsemão. Curved-Arm Ceiling Light, Metal - 9Heads: 80 x 50cm / 31.5 x 19.7\" / Black.",
+    "generator": "template"
+  },
+  "lighting|glass|||bathroom,entrance|e|||valença. nordic minimalist wall sconce, glass ring base - black / warm light (3000k) / 100v-120v,valença. nordic minimalist wall sconce, glass ring base - black / warm light (3000k) / 220v-240v,valença. nordic minimalist wall sconce, glass ring base - black / neutral light (4000k) / 100v-120v,valença. nordic minimalist wall sconce, glass ring base - black / neutral light (4000k) / 220v-240v|sconce ring base": {
+    "name": "Glass Halo Sconce Ring Base",
+    "shortDescription": "Glass Halo Sconce Ring Base — glass lighting for bathroom.",
+    "description": "A considered take on everyday living: this lighting, crafted in glass. Suited to bright, well-ventilated spaces. Available in several options: Valença. Nordic Minimalist Wall Sconce, Glass Ring Base - Black / Warm Light (3000K) / 100V-120V, Valença. Nordic Minimalist Wall Sconce, Glass Ring Base - Black / Warm Light (3000K) / 220V-240V, Valença. Nordic Minimalist Wall Sconce, Glass Ring Base - Black / Neutral Light (4000K) / 100V-120V, Valença. Nordic Minimalist Wall Sconce, Glass Ring Base - Black / Neutral Light (4000K) / 220V-240V.",
+    "generator": "template"
+  },
+  "lighting|aluminium||5.5 x 2.4 in|living-room,bedroom|e||o|anços. strip led wall sconce, acrylic - black / cool white / 14cm x 6cm,anços. strip led wall sconce, acrylic - black / cool white / 22cm x 11cm,anços. strip led wall sconce, acrylic - black / cool white / 29cm x 11cm,anços. strip led wall sconce, acrylic - black / cool white / 40cm x 16cm|wall sconce acrylic": {
+    "name": "Aluminium Ambient Wall Sconce Acrylic",
+    "shortDescription": "Aluminium Ambient Wall Sconce Acrylic — aluminium lighting for living room.",
+    "description": "Bring quiet character into the home with this lighting, crafted in aluminium and measuring 5.5 x 2.4 in and intended for outdoor use. A natural fit for living rooms and reading corners. Available in several options: Anços. Strip LED Wall Sconce, Acrylic - Black / Cool White / 14cm X 6cm, Anços. Strip LED Wall Sconce, Acrylic - Black / Cool White / 22cm X 11cm, Anços. Strip LED Wall Sconce, Acrylic - Black / Cool White / 29cm X 11cm, Anços. Strip LED Wall Sconce, Acrylic - Black / Cool White / 40cm X 16cm.",
+    "generator": "template"
+  },
+  "outdoor|steel|green||garden,entrance|||o|variant|x150 x70 galvanized": {
+    "name": "Steel Green Terrace X150 X70 Galvanized",
+    "shortDescription": "Steel Green Terrace X150 X70 Galvanized — steel outdoor for garden.",
+    "description": "A soft, grounded presence — this outdoor, crafted in steel and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "wall-panels|steel|anthracite||garden|||o|variant|galvanized x32 x60": {
+    "name": "Steel Anthracite Texture Galvanized X32 X60",
+    "shortDescription": "Steel Anthracite Texture Galvanized X32 X60 — steel wall panels for garden.",
+    "description": "With an easy, lived-in feel, this wall panels, crafted in steel and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "organisation|steel|||entrance||||6-tier / white,arribada. round tier shoe storage, carbon steel - 5-tier / white,arribada. round tier shoe storage, carbon steel - 5-tier / black,arribada. round tier shoe storage, carbon steel - 5-tier / gold|shoe storage carbon": {
+    "name": "Steel Keep Shoe Storage Carbon",
+    "shortDescription": "Steel Keep Shoe Storage Carbon — steel organisation for entrance.",
+    "description": "Designed for calmer corners, this organisation, crafted in steel. A welcoming touch for entrances and hallways. Available in several options: 6-Tier / White, Arribada. Round Tier Shoe Storage, Carbon Steel - 5-Tier / White, Arribada. Round Tier Shoe Storage, Carbon Steel - 5-Tier / Black, Arribada. Round Tier Shoe Storage, Carbon Steel - 5-Tier / Gold.",
+    "generator": "template"
+  },
+  "lighting||blue||garden|e|b|o|variant|firefly lawn lamps": {
+    "name": "Blue Glow Firefly Lawn Lamps",
+    "shortDescription": "Blue Glow Firefly Lawn Lamps — lighting for garden.",
+    "description": "Made for slow mornings and long evenings, this lighting, intended for outdoor use and battery powered for flexible placement. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|rattan|rust||garden|e||o|set of 2 pe rattan raised garden bed with trellis planter box for climbing plants-rustic brown - rustic brown,rustic brown|climbing plants-rustic brown": {
+    "name": "Rattan Rust Halo Climbing Plants-Rustic Brown",
+    "shortDescription": "Rattan Rust Halo Climbing Plants-Rustic Brown — rattan lighting for garden.",
+    "description": "With an easy, lived-in feel, this lighting, crafted in rattan and intended for outdoor use. Made for gardens, patios and quiet outdoor corners. Available in several options: Set of 2 PE Rattan Raised Garden Bed with Trellis Planter Box for Climbing Plants-Rustic Brown - RUSTIC BROWN, RUSTIC BROWN.",
+    "generator": "template"
+  },
+  "wall-panels|iron|natural||garden|||o|variant|box legs-natural color": {
+    "name": "Iron Natural Texture Box Legs-Natural Color",
+    "shortDescription": "Iron Natural Texture Box Legs-Natural Color — iron wall panels for garden.",
+    "description": "Made for slow mornings and long evenings, this wall panels, crafted in iron and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "organisation|metal|green||garden|||o|7 x 3.5 x 7 feet lean-to greenhouse with flower rack - green,green|greenhouse flower rack": {
+    "name": "Metal Green Tidy Greenhouse Flower Rack",
+    "shortDescription": "Metal Green Tidy Greenhouse Flower Rack — metal organisation for garden.",
+    "description": "With an easy, lived-in feel, this organisation, crafted in metal and intended for outdoor use. Made for gardens, patios and quiet outdoor corners. Available in several options: 7 x 3.5 x 7 Feet Lean-to Greenhouse with Flower Rack - GREEN, GREEN.",
+    "generator": "template"
+  },
+  "planters|pine|||garden,patio|||o|variant|pcs impregnated wood": {
+    "name": "Pine Basin Pcs Impregnated Wood",
+    "shortDescription": "Pine Basin Pcs Impregnated Wood — pine planters for garden.",
+    "description": "Designed for calmer corners, this planters, crafted in pine and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "wall-panels|iron|green||garden,patio|||o|variant|blue yellow brown": {
+    "name": "Iron Green Relief Blue Yellow Brown",
+    "shortDescription": "Iron Green Relief Blue Yellow Brown — iron wall panels for garden.",
+    "description": "With an easy, lived-in feel, this wall panels, crafted in iron and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|wood|natural||garden|||o|variant|planter 70-inch 31-inch": {
+    "name": "Wood Natural Planter Planter 70-Inch 31-Inch",
+    "shortDescription": "Wood Natural Planter Planter 70-Inch 31-Inch — wood planters for garden.",
+    "description": "Bring quiet character into the home with this planters, crafted in wood and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden|||o|variant|tête garden sculpture": {
+    "name": "Aluminium Layer TêTe Garden Sculpture",
+    "shortDescription": "Aluminium Layer TêTe Garden Sculpture — aluminium accessories for garden.",
+    "description": "With an easy, lived-in feel, this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|aluminium|||garden|||o|variant|stool accent table": {
+    "name": "Aluminium Form Stool Accent Table",
+    "shortDescription": "Aluminium Form Stool Accent Table — aluminium decoration for garden.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "garden|aluminium|||garden|||o|variant|night garden edging": {
+    "name": "Aluminium Glow Night Garden Edging",
+    "shortDescription": "Aluminium Glow Night Garden Edging — aluminium garden for garden.",
+    "description": "A soft, grounded presence — this garden, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|ceramic|||garden,balcony,living-room|e|||variant|vase last chance": {
+    "name": "Ceramic Planter Vase Last Chance",
+    "shortDescription": "Ceramic Planter Vase Last Chance — ceramic planters for garden.",
+    "description": "Bring quiet character into the home with this planters, crafted in ceramic. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|aluminium|||garden|||o|variant|bird feeder planter": {
+    "name": "Aluminium Basin Bird Feeder Planter",
+    "shortDescription": "Aluminium Basin Bird Feeder Planter — aluminium planters for garden.",
+    "description": "Made for slow mornings and long evenings, this planters, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "outdoor|aluminium|||garden|||o|variant|sea garden stool": {
+    "name": "Aluminium Terrace Sea Garden Stool",
+    "shortDescription": "Aluminium Terrace Sea Garden Stool — aluminium outdoor for garden.",
+    "description": "A considered take on everyday living: this outdoor, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|mirror|||living-room,entrance||||variant|hummingbird blossoms vanity": {
+    "name": "Mirror Form Hummingbird Blossoms Vanity",
+    "shortDescription": "Mirror Form Hummingbird Blossoms Vanity — mirror decoration for living room.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in mirror. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|aluminium||2.76 x 5.91 in|entrance|e|||guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / warm light (3000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / cool light (6000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / gold / neutral light (4000k),guarda. minimalist aluminum 2-light led wall sconce - 2.76 x 5.91 in / 7 x 15 cm / coffee / warm light (3000k)|led wall sconce": {
+    "name": "Aluminium Ambient Led Wall Sconce",
+    "shortDescription": "Aluminium Ambient Led Wall Sconce — aluminium lighting for entrance.",
+    "description": "Made for slow mornings and long evenings, this lighting, crafted in aluminium and measuring 2.76 x 5.91 in. A welcoming touch for entrances and hallways. Available in several options: Guarda. Minimalist Aluminum 2-Light LED Wall Sconce - 2.76 x 5.91 in / 7 x 15 cm / Gold / Warm Light (3000K), Guarda. Minimalist Aluminum 2-Light LED Wall Sconce - 2.76 x 5.91 in / 7 x 15 cm / Gold / Cool Light (6000K), Guarda. Minimalist Aluminum 2-Light LED Wall Sconce - 2.76 x 5.91 in / 7 x 15 cm / Gold / Neutral Light (4000K), Guarda. Minimalist Aluminum 2-Light LED Wall Sconce - 2.76 x 5.91 in / 7 x 15 cm / Coffee / Warm Light (3000K).",
+    "generator": "template"
+  },
+  "garden|glass|||garden||||swirling feathers lantern short - bronze,swirling feathers lantern short - white,bronze,white|feathers lantern short": {
+    "name": "Glass Bloom Feathers Lantern Short",
+    "shortDescription": "Glass Bloom Feathers Lantern Short — glass garden for garden.",
+    "description": "Bring quiet character into the home with this garden, crafted in glass. Made for gardens, patios and quiet outdoor corners. Available in several options: Swirling Feathers Lantern Short - Bronze, Swirling Feathers Lantern Short - White, Bronze, White.",
+    "generator": "template"
+  },
+  "accessories|cotton|black||living-room,bedroom||||twill cushion - cashmere/black,twill cushion - off-white/black,variant|twill cushion cashmere": {
+    "name": "Cotton Black Soft Twill Cushion Cashmere",
+    "shortDescription": "Cotton Black Soft Twill Cushion Cashmere — cotton accessories for living room.",
+    "description": "A soft, grounded presence — this accessories, crafted in cotton. A natural fit for living rooms and reading corners. Available in several options: Twill Cushion - Cashmere/Black, Twill Cushion - Off-White/Black, Variant.",
+    "generator": "template"
+  },
+  "kitchen-dining|metal|||kitchen,dining|e|||alvor. up-and-down plug-in wall sconce, painted metal - red / us plug,alvor. up-and-down plug-in wall sconce, painted metal - red / uk plug,alvor. up-and-down plug-in wall sconce, painted metal - red / au plug,alvor. up-and-down plug-in wall sconce, painted metal - red / eu plug|wall sconce painted": {
+    "name": "Metal Gather Wall Sconce Painted",
+    "shortDescription": "Metal Gather Wall Sconce Painted — metal kitchen dining for kitchen.",
+    "description": "A considered take on everyday living: this kitchen dining, crafted in metal. Equally at home in kitchens and dining corners. Available in several options: Alvor. Up-and-Down Plug-in Wall Sconce, Painted Metal - Red / US Plug, Alvor. Up-and-Down Plug-in Wall Sconce, Painted Metal - Red / UK Plug, Alvor. Up-and-Down Plug-in Wall Sconce, Painted Metal - Red / AU Plug, Alvor. Up-and-Down Plug-in Wall Sconce, Painted Metal - Red / EU Plug.",
+    "generator": "template"
+  },
+  "kitchen-dining|aluminium|||garden|||o|under the sea garden stool - bronze,under the sea garden stool - white,bronze,white|sea garden stool": {
+    "name": "Aluminium Serve Sea Garden Stool",
+    "shortDescription": "Aluminium Serve Sea Garden Stool — aluminium kitchen dining for garden.",
+    "description": "Bring quiet character into the home with this kitchen dining, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners. Available in several options: Under The Sea Garden Stool - Bronze, Under The Sea Garden Stool - White, Bronze, White.",
+    "generator": "template"
+  },
+  "decoration|walnut|walnut|11.8 x 11.8 in|living-room,entrance|e|||mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / us plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / uk plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / au plug,mirandela. globe adjustable wall sconce, walnut accent - 11 x 15.7 in / 28 x 40 cm / eu plug|wall sconce accent": {
+    "name": "Walnut Echo Wall Sconce Accent",
+    "shortDescription": "Walnut Echo Wall Sconce Accent — walnut decoration for living room.",
+    "description": "With an easy, lived-in feel, this decoration, crafted in walnut and measuring 11.8 x 11.8 in. A natural fit for living rooms and reading corners. Available in several options: Mirandela. Globe Adjustable Wall Sconce, Walnut Accent - 11 x 15.7 in / 28 x 40 cm / US Plug, Mirandela. Globe Adjustable Wall Sconce, Walnut Accent - 11 x 15.7 in / 28 x 40 cm / UK Plug, Mirandela. Globe Adjustable Wall Sconce, Walnut Accent - 11 x 15.7 in / 28 x 40 cm / AU Plug, Mirandela. Globe Adjustable Wall Sconce, Walnut Accent - 11 x 15.7 in / 28 x 40 cm / EU Plug.",
+    "generator": "template"
+  },
+  "outdoor|rattan|brown||living-room,garden,patio|e||o|variant|lounge cushions poly": {
+    "name": "Rattan Brown Breeze Lounge Cushions Poly",
+    "shortDescription": "Rattan Brown Breeze Lounge Cushions Poly — rattan outdoor for living room.",
+    "description": "A considered take on everyday living: this outdoor, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting|glass||11 x 7 in|kitchen,bathroom,entrance|e|||alge. hanging glass ceiling light, iron - black & amber / 11\" x 7\",alge. hanging glass ceiling light, iron - white & amber / 11\" x 7\",alge. hanging glass ceiling light, iron - black & clear / 11\" x 7\",alge. hanging glass ceiling light, iron - white & clear / 11\" x 7\"|ceiling light iron": {
+    "name": "Glass Beacon Ceiling Light Iron",
+    "shortDescription": "Glass Beacon Ceiling Light Iron — glass lighting for kitchen.",
+    "description": "A soft, grounded presence — this lighting, crafted in glass and measuring 11 x 7 in. Equally at home in kitchens and dining corners. Available in several options: Alge. Hanging Glass Ceiling Light, Iron - Black & Amber / 11\" X 7\", Alge. Hanging Glass Ceiling Light, Iron - White & Amber / 11\" X 7\", Alge. Hanging Glass Ceiling Light, Iron - Black & Clear / 11\" X 7\", Alge. Hanging Glass Ceiling Light, Iron - White & Clear / 11\" X 7\".",
+    "generator": "template"
+  },
+  "lighting|walnut|||bedroom|e|||tavira. modern wooden table lamp, fabric shade - tan / us plug,tavira. modern wooden table lamp, fabric shade - tan / uk plug,tavira. modern wooden table lamp, fabric shade - tan / au plug,tavira. modern wooden table lamp, fabric shade - tan / eu plug|lamp fabric shade": {
+    "name": "Walnut Beacon Lamp Fabric Shade",
+    "shortDescription": "Walnut Beacon Lamp Fabric Shade — walnut lighting for bedroom.",
+    "description": "Made for slow mornings and long evenings, this lighting, crafted in walnut. An easy match for calm, restful bedrooms. Available in several options: Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / US Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / UK Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / AU Plug, Tavira. Modern Wooden Table Lamp, Fabric Shade - Tan / EU Plug.",
+    "generator": "template"
+  },
+  "lighting|iron|blue||garden|e|b|o|variant|party home decoration": {
+    "name": "Iron Blue Ambient Party Home Decoration",
+    "shortDescription": "Iron Blue Ambient Party Home Decoration — iron lighting for garden.",
+    "description": "A considered take on everyday living: this lighting, crafted in iron and intended for outdoor use and battery powered for flexible placement. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|mirror|||living-room,entrance||||folia mirror - medium - dark stained burl,folia mirror - medium - natural burl,variant|dark stained burl": {
+    "name": "Mirror Still Dark Stained Burl",
+    "shortDescription": "Mirror Still Dark Stained Burl — mirror decoration for living room.",
+    "description": "With an easy, lived-in feel, this decoration, crafted in mirror. A natural fit for living rooms and reading corners. Available in several options: Folia Mirror - Medium - Dark Stained Burl, Folia Mirror - Medium - Natural Burl, Variant.",
+    "generator": "template"
+  },
+  "lighting|oak|oak||living-room,bedroom|e|||variant|shelf low oiled": {
+    "name": "Oak Ambient Shelf Low Oiled",
+    "shortDescription": "Oak Ambient Shelf Low Oiled — oak lighting for living room.",
+    "description": "With an easy, lived-in feel, this lighting, crafted in oak. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "accessories|cotton|natural||living-room,bedroom||||variant|rectangular dark chocolate": {
+    "name": "Cotton Natural Layer Rectangular Dark Chocolate",
+    "shortDescription": "Cotton Natural Layer Rectangular Dark Chocolate — cotton accessories for living room.",
+    "description": "A considered take on everyday living: this accessories, crafted in cotton. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "lighting||white||garden|e|b|o|variant|falling like dew": {
+    "name": "White Ambient Falling Like Dew",
+    "shortDescription": "White Ambient Falling Like Dew — lighting for garden.",
+    "description": "Bring quiet character into the home with this lighting, intended for outdoor use and battery powered for flexible placement. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|steel|rust||garden|||o|variant|garden raised bed": {
+    "name": "Steel Rust Echo Garden Raised Bed",
+    "shortDescription": "Steel Rust Echo Garden Raised Bed — steel decoration for garden.",
+    "description": "A soft, grounded presence — this decoration, crafted in steel and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "organisation|steel|anthracite||garden|||o|variant|x38 x24 galvanized": {
+    "name": "Steel Anthracite Keep X38 X24 Galvanized",
+    "shortDescription": "Steel Anthracite Keep X38 X24 Galvanized — steel organisation for garden.",
+    "description": "Made for slow mornings and long evenings, this organisation, crafted in steel and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|rattan|red||living-room,bedroom|e||o|variant|brown color brown": {
+    "name": "Rattan Red Halo Brown Color Brown",
+    "shortDescription": "Rattan Red Halo Brown Color Brown — rattan lighting for living room.",
+    "description": "A soft, grounded presence — this lighting, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "decoration|jute|green||garden|||o|variant|house compartment holes": {
+    "name": "Jute Green Still House Compartment Holes",
+    "shortDescription": "Jute Green Still House Compartment Holes — jute decoration for garden.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in jute and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|iron|red||garden|||o|variant|wood outdoor birdhouse": {
+    "name": "Iron Red Echo Wood Outdoor Birdhouse",
+    "shortDescription": "Iron Red Echo Wood Outdoor Birdhouse — iron decoration for garden.",
+    "description": "Designed for calmer corners, this decoration, crafted in iron and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|glass|||entrance|e|||setúbal. art deco glass wall sconce, painted iron - white / gold,setúbal. art deco glass wall sconce, painted iron - beige / gold,setúbal. art deco glass wall sconce, painted iron - white / chrome,setúbal. art deco glass wall sconce, painted iron - beige / chrome|sconce painted iron": {
+    "name": "Glass Halo Sconce Painted Iron",
+    "shortDescription": "Glass Halo Sconce Painted Iron — glass lighting for entrance.",
+    "description": "A considered take on everyday living: this lighting, crafted in glass. A welcoming touch for entrances and hallways. Available in several options: Setúbal. Art Deco Glass Wall Sconce, Painted Iron - White / Gold, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - Beige / Gold, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - White / Chrome, Setúbal. Art Deco Glass Wall Sconce, Painted Iron - Beige / Chrome.",
+    "generator": "template"
+  },
+  "planters|aluminium|||garden,balcony,living-room||||variant|tropical flamingo planters": {
+    "name": "Aluminium Planter Tropical Flamingo Planters",
+    "shortDescription": "Aluminium Planter Tropical Flamingo Planters — aluminium planters for garden.",
+    "description": "A soft, grounded presence — this planters, crafted in aluminium. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|aluminium|||garden|||o|variant|staked planter candleholder": {
+    "name": "Aluminium Pot Staked Planter Candleholder",
+    "shortDescription": "Aluminium Pot Staked Planter Candleholder — aluminium planters for garden.",
+    "description": "Designed for calmer corners, this planters, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden|||o|variant|nuzzles garden sculpture": {
+    "name": "Aluminium Layer Nuzzles Garden Sculpture",
+    "shortDescription": "Aluminium Layer Nuzzles Garden Sculpture — aluminium accessories for garden.",
+    "description": "A soft, grounded presence — this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "planters|ceramic|||garden,balcony,living-room|e|||variant|vase- last chance": {
+    "name": "Ceramic Vessel Vase- Last Chance",
+    "shortDescription": "Ceramic Vessel Vase- Last Chance — ceramic planters for garden.",
+    "description": "A considered take on everyday living: this planters, crafted in ceramic. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|aluminium|||garden|||o|variant|tides garden stool": {
+    "name": "Aluminium Share Tides Garden Stool",
+    "shortDescription": "Aluminium Share Tides Garden Stool — aluminium kitchen dining for garden.",
+    "description": "A soft, grounded presence — this kitchen dining, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|aluminium|||garden|e||o|variant|abuzz garden stool": {
+    "name": "Aluminium Table Abuzz Garden Stool",
+    "shortDescription": "Aluminium Table Abuzz Garden Stool — aluminium kitchen dining for garden.",
+    "description": "With an easy, lived-in feel, this kitchen dining, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "decoration|aluminium|||garden|||o|variant|palmas garden stool": {
+    "name": "Aluminium Echo Palmas Garden Stool",
+    "shortDescription": "Aluminium Echo Palmas Garden Stool — aluminium decoration for garden.",
+    "description": "Made for slow mornings and long evenings, this decoration, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden|||o|variant|king garden sculpture": {
+    "name": "Aluminium Layer King Garden Sculpture",
+    "shortDescription": "Aluminium Layer King Garden Sculpture — aluminium accessories for garden.",
+    "description": "Designed for calmer corners, this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|aluminium|||garden|||o|variant|couple garden statue": {
+    "name": "Aluminium Layer Couple Garden Statue",
+    "shortDescription": "Aluminium Layer Couple Garden Statue — aluminium accessories for garden.",
+    "description": "Understated and adaptable, this accessories, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting||||living-room,bedroom|e|||variant|pillar candles bronze": {
+    "name": "Halo Pillar Candles Bronze",
+    "shortDescription": "Halo Pillar Candles Bronze — lighting for living room.",
+    "description": "A considered take on everyday living: this lighting. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  },
+  "organisation|steel|red||garden,patio|||o|variant|grilling canopy garden": {
+    "name": "Steel Red Tidy Grilling Canopy Garden",
+    "shortDescription": "Steel Red Tidy Grilling Canopy Garden — steel organisation for garden.",
+    "description": "A soft, grounded presence — this organisation, crafted in steel and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|pine|||garden|e||o|variant|dance garden sculpture": {
+    "name": "Pine Soft Dance Garden Sculpture",
+    "shortDescription": "Pine Soft Dance Garden Sculpture — pine accessories for garden.",
+    "description": "A considered take on everyday living: this accessories, crafted in pine and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "kitchen-dining|stoneware|||kitchen,dining||||variant|diameter last chance": {
+    "name": "Stoneware Table Diameter Last Chance",
+    "shortDescription": "Stoneware Table Diameter Last Chance — stoneware kitchen dining for kitchen.",
+    "description": "A considered take on everyday living: this kitchen dining, crafted in stoneware. Equally at home in kitchens and dining corners.",
+    "generator": "template"
+  },
+  "wall-panels|acacia|||garden|e||o|variant|x11 solid wood": {
+    "name": "Acacia Rhythm X11 Solid Wood",
+    "shortDescription": "Acacia Rhythm X11 Solid Wood — acacia wall panels for garden.",
+    "description": "Bring quiet character into the home with this wall panels, crafted in acacia and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "lighting|iron|red||garden,entrance|e||o|variant|hanging bird house": {
+    "name": "Iron Red Glow Hanging Bird House",
+    "shortDescription": "Iron Red Glow Hanging Bird House — iron lighting for garden.",
+    "description": "Designed for calmer corners, this lighting, crafted in iron and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "outdoor|aluminium|||garden|||o|variant|coco garden stool": {
+    "name": "Aluminium Shade Coco Garden Stool",
+    "shortDescription": "Aluminium Shade Coco Garden Stool — aluminium outdoor for garden.",
+    "description": "A soft, grounded presence — this outdoor, crafted in aluminium and intended for outdoor use. Made for gardens, patios and quiet outdoor corners.",
+    "generator": "template"
+  },
+  "accessories|rattan|black||living-room,garden,terrace|e||o|variant|sofa cushions poly": {
+    "name": "Rattan Black Layer Sofa Cushions Poly",
+    "shortDescription": "Rattan Black Layer Sofa Cushions Poly — rattan accessories for living room.",
+    "description": "Designed for calmer corners, this accessories, crafted in rattan and intended for outdoor use. A natural fit for living rooms and reading corners.",
+    "generator": "template"
+  }
+}
