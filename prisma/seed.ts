@@ -434,6 +434,8 @@ async function main() {
   console.log('Seeding products…');
   await db.product.deleteMany();
   for (const p of products) {
+    const imgShort = p.image.replace('/images/product-', '').replace('.jpg', '');
+    const gallery = `/images/gallery-${imgShort}-lifestyle.jpg,/images/gallery-${imgShort}-detail.jpg`;
     await db.product.create({
       data: {
         slug: p.slug,
@@ -447,7 +449,8 @@ async function main() {
         styleSlugs: p.styleSlugs,
         collectionSlugs: p.collectionSlugs ?? '',
         image: p.image,
-        hoverImage: null,
+        hoverImage: `/images/gallery-${imgShort}-lifestyle.jpg`,
+        gallery,
         badge: p.badge ?? null,
         rating: p.rating,
         reviewCount: p.reviewCount,

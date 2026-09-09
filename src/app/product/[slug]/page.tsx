@@ -1,14 +1,17 @@
 import Link from 'next/link';
-import Image from 'next/image';
 import { notFound } from 'next/navigation';
+import fs from 'fs';
+import path from 'path';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
 import { BuyBox } from '@/components/product/buy-box';
 import { ProductCard } from '@/components/product/product-card';
 import { Stars } from '@/components/product/product-card';
+import { ProductGallery } from '@/components/product/product-gallery';
 import { ReviewsSection } from '@/components/product/reviews-section';
 import { RecentlyViewed } from '@/components/product/recently-viewed';
 import { TrackProductView } from '@/components/product/track-product-view';
+import { StickyAddToCart } from '@/components/product/sticky-add-to-cart';
 import { formatPrice } from '@/lib/format';
 import { COMPANY } from '@/lib/company';
 import type { Product } from '@/types';
@@ -104,6 +107,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     safety = null;
   }
 
+  // Gallery: main + additional gallery images (deduped; only files that exist on disk)
+  const galleryCandidates = [
+    product.image,
+    ...(product.gallery ? product.gallery.split(',').map((s) => s.trim()) : []),
+  ].filter((src, i, arr) => src && arr.indexOf(src) === i);
+  const galleryImages = galleryCandidates.filter((src) => {
+    try {
+      return fs.existsSync(path.join(process.cwd(), 'public', src));
+    } catch {
+      return false;
+    }
+  });
+
   return (
     <div className="container-ecom py-8 lg:py-12">
       {/* Breadcrumbs */}
@@ -122,24 +138,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
       {/* Gallery + info */}
       <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
-          <div className="relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-muted/30">
-            <Image
-              src={product.image}
-              alt={product.name}
-              fill
-              priority
-              sizes="(max-width: 1024px) 100vw, 600px"
-              className="object-cover"
-            />
-            {product.badge && (
-              <span className="absolute left-4 top-4 rounded-full bg-ink/85 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-cream backdrop-blur">
-                {product.badge}
-              </span>
-            )}
-          </div>
-          <p className="mt-3 text-center text-[11.5px] text-muted-foreground">
-            Lifestyle photography — colours may vary slightly in person.
-          </p>
+          <ProductGallery images={galleryImages} productName={product.name} badge={product.badge} />
         </div>
 
         <div>
@@ -158,6 +157,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <div className="mt-7">
             <BuyBox product={product} />
           </div>
+          <StickyAddToCart product={product} />
 
           {/* Styles & spaces chips */}
           {(styleSlugs.length > 0 || spaceSlugs.length > 0) && (

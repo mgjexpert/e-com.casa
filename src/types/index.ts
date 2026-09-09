@@ -13,6 +13,7 @@ export interface Product {
   collectionSlugs: string;
   image: string;
   hoverImage: string | null;
+  gallery: string;
   badge: string | null;
   rating: number;
   reviewCount: number;

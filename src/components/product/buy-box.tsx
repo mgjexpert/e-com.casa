@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
+import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
@@ -16,6 +17,7 @@ export function BuyBox({ product }: { product: Product }) {
   const [qty, setQty] = useState(1);
   const add = useCart((s) => s.add);
   const wishlist = useWishlist();
+  const openCartDrawer = useCartDrawer((s) => s.open);
   const wished = wishlist.slugs.includes(product.slug);
 
   const addLine = () => {
@@ -34,7 +36,7 @@ export function BuyBox({ product }: { product: Product }) {
 
   const onAdd = () => {
     addLine();
-    toast({ title: 'Added to cart', description: `${product.name} × ${qty}` });
+    openCartDrawer();
   };
 
   const onBuyNow = () => {
@@ -107,10 +109,40 @@ export function BuyBox({ product }: { product: Product }) {
         </Button>
       </div>
 
-      <p className="mt-3 flex items-center gap-1.5 text-[12.5px] text-muted-foreground">
-        <span className="h-1.5 w-1.5 rounded-full bg-olive" aria-hidden />
-        {product.stock > 10 ? 'In stock — ready to ship' : `Only ${product.stock} left in stock`}
-      </p>
+      {/* Stock indicator with level meter */}
+      <div className="mt-3">
+        <p className="flex items-center gap-1.5 text-[12.5px]" aria-live="polite">
+          <span
+            className={cn(
+              'h-1.5 w-1.5 rounded-full',
+              product.stock <= 0 ? 'bg-terracotta' : product.stock <= 10 ? 'bg-amber-star' : 'bg-olive'
+            )}
+            aria-hidden
+          />
+          {product.stock <= 0 ? (
+            <span className="text-terracotta">Out of stock — check back soon</span>
+          ) : product.stock <= 10 ? (
+            <span className="font-medium text-foreground">Low stock — only {product.stock} left</span>
+          ) : (
+            <span className="text-muted-foreground">In stock — ready to ship</span>
+          )}
+        </p>
+        {product.stock > 0 && product.stock <= 20 && (
+          <div
+            className="mt-2 h-1 w-40 overflow-hidden rounded-full bg-border/70"
+            role="progressbar"
+            aria-valuenow={product.stock}
+            aria-valuemin={0}
+            aria-valuemax={20}
+            aria-label="Remaining stock"
+          >
+            <div
+              className={cn('h-full rounded-full', product.stock <= 10 ? 'bg-amber-star' : 'bg-olive')}
+              style={{ width: `${Math.max(8, (product.stock / 20) * 100)}%` }}
+            />
+          </div>
+        )}
+      </div>
 
       {/* Trust strip */}
       <ul className="mt-6 grid grid-cols-2 gap-3 border-t border-border pt-5">

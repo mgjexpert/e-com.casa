@@ -32,6 +32,7 @@ model Product {
   // Media
   image      String
   hoverImage String?
+  gallery    String @default("") // comma separated additional image paths
 
   // Merchandising
   badge       String? // "Bestseller", "New", "Set of 2"

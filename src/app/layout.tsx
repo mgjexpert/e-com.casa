@@ -6,6 +6,7 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 import { CookieConsent } from '@/components/cookie/cookie-consent';
 import { ChatWidget } from '@/components/chat/chat-widget';
+import { CartDrawer } from '@/components/cart/cart-drawer';
 import { COMPANY } from '@/lib/company';
 
 const playfair = Playfair_Display({
@@ -84,6 +85,7 @@ export default function RootLayout({
         </div>
         <CookieConsent />
         <ChatWidget />
+        <CartDrawer />
         <Toaster />
         {/* Organization structured data */}
         <script

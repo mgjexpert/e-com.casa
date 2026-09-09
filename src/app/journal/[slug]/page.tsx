@@ -2,25 +2,15 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, ArrowUpRight, Clock, User } from 'lucide-react';
+import { ArrowLeft, Clock, User } from 'lucide-react';
 import { journalArticles } from '@/lib/journal-data';
 import { formatDate } from '@/lib/format';
+import { db } from '@/lib/db';
+import { ProductCard } from '@/components/product/product-card';
+import type { Product } from '@/types';
 
 interface ArticlePageProps {
   params: Promise<{ slug: string }>;
-}
-
-const LOWER_WORDS = new Set(['of', 'and', 'the', 'for', 'with', 'a']);
-
-function humanizeSlug(slug: string): string {
-  return slug
-    .split('-')
-    .map((word, i) => {
-      if (word === 'led') return 'LED';
-      if (i > 0 && LOWER_WORDS.has(word)) return word;
-      return word.charAt(0).toUpperCase() + word.slice(1);
-    })
-    .join(' ');
 }
 
 export function generateStaticParams() {
@@ -51,6 +41,22 @@ export default async function JournalArticlePage({ params }: ArticlePageProps) {
   if (!article) notFound();
 
   const related = journalArticles.filter((a) => article.relatedSlugs.includes(a.slug));
+
+  // Real products featured in this article
+  let storyProducts: Product[] = [];
+  if (article.productSlugs.length > 0) {
+    try {
+      const found = await db.product.findMany({
+        where: { slug: { in: article.productSlugs }, complianceStatus: { not: 'BLOCKED' } },
+      });
+      // preserve article order
+      storyProducts = article.productSlugs
+        .map((s) => found.find((p) => p.slug === s))
+        .filter((p): p is Product => Boolean(p)) as unknown as Product[];
+    } catch {
+      storyProducts = [];
+    }
+  }
 
   return (
     <>
@@ -145,33 +151,27 @@ export default async function JournalArticlePage({ params }: ArticlePageProps) {
       </article>
 
       {/* Shop the story */}
-      {article.productSlugs.length > 0 && (
+      {storyProducts.length > 0 && (
         <section className="bg-cream py-12 lg:py-16" aria-labelledby="shop-the-story">
           <div className="container-ecom">
-            <p className="eyebrow text-muted-foreground">Shop the story</p>
-            <h2 id="shop-the-story" className="font-display mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
-              Pieces used in this article
-            </h2>
-            <ul className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-              {article.productSlugs.map((productSlug) => (
-                <li key={productSlug}>
-                  <Link
-                    href={`/product/${productSlug}`}
-                    className="group flex h-full items-center justify-between gap-4 rounded-md border border-border bg-card p-5 transition-shadow hover:shadow-md"
-                  >
-                    <div>
-                      <h3 className="font-display text-[16.5px] font-medium leading-snug">
-                        {humanizeSlug(productSlug)}
-                      </h3>
-                      <p className="mt-1 inline-flex items-center gap-1 text-[12.5px] font-medium text-muted-foreground transition-colors group-hover:text-olive-deep">
-                        View product
-                        <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" strokeWidth={1.75} />
-                      </p>
-                    </div>
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-accent text-olive transition-colors group-hover:bg-olive group-hover:text-white">
-                      <ArrowRight className="h-4 w-4" strokeWidth={1.5} />
-                    </span>
-                  </Link>
+            <div className="flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <p className="eyebrow text-muted-foreground">Shop the story</p>
+                <h2 id="shop-the-story" className="font-display mt-3 text-2xl font-medium tracking-tight sm:text-3xl">
+                  Pieces used in this article
+                </h2>
+              </div>
+              <Link
+                href="/shop"
+                className="text-[13px] font-medium text-foreground/70 transition-colors hover:text-foreground"
+              >
+                View all products →
+              </Link>
+            </div>
+            <ul className="mt-8 grid grid-cols-2 gap-x-4 gap-y-8 lg:grid-cols-4">
+              {storyProducts.map((p) => (
+                <li key={p.slug}>
+                  <ProductCard product={p} />
                 </li>
               ))}
             </ul>

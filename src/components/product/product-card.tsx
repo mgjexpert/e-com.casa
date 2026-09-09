@@ -6,6 +6,7 @@ import { Heart, ShoppingBag } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
+import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
@@ -33,6 +34,7 @@ export function Stars({ rating, className }: { rating: number; className?: strin
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
   const add = useCart((s) => s.add);
   const wishlist = useWishlist();
+  const openCartDrawer = useCartDrawer((s) => s.open);
   const wished = wishlist.slugs.includes(product.slug);
 
   const onAdd = (e: React.MouseEvent) => {
@@ -45,7 +47,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       image: product.image,
       maxStock: product.stock,
     });
-    toast({ title: 'Added to cart', description: product.name });
+    openCartDrawer();
   };
 
   const onWishlist = (e: React.MouseEvent) => {
@@ -73,6 +75,20 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             className="img-zoom object-cover"
             priority={priority}
           />
+          {/* Hover image swap (lifestyle shot) */}
+          {product.hoverImage && (
+            <Image
+              src={product.hoverImage}
+              alt=""
+              aria-hidden
+              fill
+              sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px"
+              className="object-cover opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+              onError={(e) => {
+                e.currentTarget.style.display = 'none';
+              }}
+            />
+          )}
           {product.badge && (
             <span className="absolute left-2.5 top-2.5 rounded-full bg-ink/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-cream backdrop-blur">
               {product.badge}
@@ -110,6 +126,12 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             <Stars rating={product.rating} />
             <span className="text-[11.5px] text-muted-foreground">({product.reviewCount})</span>
           </div>
+          {product.stock > 0 && product.stock <= 10 && (
+            <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-terracotta">
+              <span className="h-1 w-1 rounded-full bg-terracotta" aria-hidden />
+              Only {product.stock} left
+            </p>
+          )}
         </div>
       </Link>
       {/* Wishlist heart */}

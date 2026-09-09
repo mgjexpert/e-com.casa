@@ -20,6 +20,7 @@ import {
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
+import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { SEARCH_SUGGESTIONS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
@@ -68,6 +69,7 @@ export function SiteHeader() {
   const pathname = usePathname();
   const cartCount = useCart((s) => s.lines.reduce((a, l) => a + l.quantity, 0));
   const wishlistCount = useWishlist((s) => s.slugs.length);
+  const openCartDrawer = useCartDrawer((s) => s.open);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -166,10 +168,15 @@ export function SiteHeader() {
               <span className="hidden sm:inline">Account</span>
             </Link>
             <span className="h-3 w-px bg-white/20" aria-hidden />
-            <Link href="/cart" className="flex items-center gap-1.5 transition-colors hover:text-white">
+            <button
+              type="button"
+              onClick={openCartDrawer}
+              className="flex items-center gap-1.5 transition-colors hover:text-white"
+              aria-label={`Open cart, ${cartCount} items`}
+            >
               <ShoppingBag className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Cart (<span className="tabular-nums" aria-live="polite">{cartCount}</span>)
-            </Link>
+              Cart (<span key={cartCount} className="tabular-nums animate-in zoom-in-50 duration-300" aria-live="polite">{cartCount}</span>)
+            </button>
           </nav>
         </div>
       </div>
@@ -335,18 +342,22 @@ export function SiteHeader() {
             >
               <Search className="h-5 w-5" strokeWidth={1.75} />
             </Link>
-            <Link
-              href="/cart"
+            <button
+              type="button"
+              onClick={openCartDrawer}
               className="relative flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent"
-              aria-label={`Cart, ${cartCount} items`}
+              aria-label={`Open cart, ${cartCount} items`}
             >
               <ShoppingBag className="h-5 w-5" strokeWidth={1.75} />
               {cartCount > 0 && (
-                <span className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-semibold text-white">
+                <span
+                  key={cartCount}
+                  className="absolute -right-0.5 -top-0.5 flex h-4 min-w-4 animate-in zoom-in-50 duration-300 items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-semibold text-white"
+                >
                   {cartCount}
                 </span>
               )}
-            </Link>
+            </button>
           </div>
         </div>
 
