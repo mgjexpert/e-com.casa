@@ -1,10 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // "standalone" is only needed for self-hosted/containerized runs.
+  // Vercel ignores it; keep it for parity with the local sandbox runtime.
   output: "standalone",
-  /* config options here */
+  // Type errors are real deployment problems — never ignore them.
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   reactStrictMode: false,
 };

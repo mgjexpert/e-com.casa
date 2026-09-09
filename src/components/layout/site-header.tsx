@@ -199,9 +199,7 @@ export function SiteHeader() {
                     </button>
                   ))}
                   <p className="mt-1 border-t border-border/70 px-3 pb-1 pt-2 text-[10.5px] leading-relaxed text-muted-foreground">
-                    {lang === 'en'
-                      ? 'Store chrome available in Portuguese — AI concierge speaks both.'
-                      : 'Interface disponível em português — o assistente de IA fala as duas línguas.'}
+                    {t('util.langNote')}
                   </p>
                 </div>
               )}

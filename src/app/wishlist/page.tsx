@@ -72,9 +72,9 @@ export default function WishlistPage() {
   };
 
   const isEmpty = hydrated && slugs.length === 0;
-  const visible = isEmpty ? [] : products;
+  const visible: Product[] = isEmpty ? [] : products ?? [];
 
-  if (!hydrated || (visible === null && slugs.length > 0)) {
+  if (!hydrated) {
     return (
       <div className="container-ecom py-10">
         <Skeleton className="h-9 w-40" />

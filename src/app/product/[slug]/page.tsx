@@ -4,6 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
+import { getProduct as fetchProduct, getRelatedProducts as fetchRelated, getCompleteTheLook as fetchLook } from '@/lib/catalog';
 import { BuyBox } from '@/components/product/buy-box';
 import { ProductCard } from '@/components/product/product-card';
 import { Stars } from '@/components/product/product-card';
@@ -22,9 +23,7 @@ export const dynamic = 'force-dynamic';
 
 async function getProduct(slug: string): Promise<Product | null> {
   try {
-    const product = await db.product.findUnique({ where: { slug } });
-    if (!product || product.complianceStatus === 'BLOCKED') return null;
-    return product as unknown as Product;
+    return await fetchProduct(slug);
   } catch {
     return null;
   }
@@ -56,37 +55,19 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const spaceSlugs = product.spaceSlugs.split(',').filter(Boolean);
   const relatedStyle = styleSlugs[0] ?? spaceSlugs[0];
 
+  void relatedStyle;
   let related: Product[] = [];
   try {
-    const candidates = await db.product.findMany({
-      where: {
-        slug: { not: product.slug },
-        complianceStatus: { not: 'BLOCKED' },
-        OR: [
-          ...(relatedStyle ? [{ styleSlugs: { contains: relatedStyle } }] : []),
-          { categorySlug: product.categorySlug },
-        ],
-      },
-      take: 4,
-    });
-    related = candidates as unknown as Product[];
+    related = (await fetchRelated(product.slug, 4)) as Product[];
   } catch {
     related = [];
   }
 
-  // "Complete the Look" — pieces that share the same space, plus a lighting pick
+  // "Complete the Look" — relational merchandising via the catalog service
   let completeTheLook: Product[] = [];
   try {
-    const firstSpace = spaceSlugs[0];
-    const lookCandidates = await db.product.findMany({
-      where: {
-        slug: { notIn: [product.slug, ...related.map((r) => r.slug)] },
-        complianceStatus: { not: 'BLOCKED' },
-        ...(firstSpace ? [{ spaceSlugs: { contains: firstSpace } }] : []),
-      },
-      take: 4,
-    });
-    completeTheLook = lookCandidates as unknown as Product[];
+    const relatedSlugs = new Set(related.map((r) => r.slug));
+    completeTheLook = ((await fetchLook(product.slug, 5)) as Product[]).filter((p) => !relatedSlugs.has(p.slug)).slice(0, 4);
   } catch {
     completeTheLook = [];
   }
@@ -176,7 +157,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             <span className="text-[13px] text-muted-foreground">· {product.reviewCount} reviews</span>
           </div>
 
-          <p className="mt-5 text-[14.5px] leading-relaxed text-foreground/85">{product.description}</p>
+          <p className="mt-5 whitespace-pre-line text-[14.5px] leading-relaxed text-foreground/85">{product.shortDescription || product.description}</p>
 
           <div className="mt-7">
             <BuyBox product={product} />
@@ -338,6 +319,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         rating={product.rating}
         reviewCount={product.reviewCount}
         dbReviews={dbReviews}
+        reviewMode={product.reviewMode}
       />
 
       {/* Recently viewed (client, localStorage) */}
@@ -357,11 +339,17 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             description: product.description,
             sku: product.slug.toUpperCase(),
             brand: { '@type': 'Brand', name: COMPANY.brand },
-            aggregateRating: {
-              '@type': 'AggregateRating',
-              ratingValue: product.rating,
-              reviewCount: product.reviewCount,
-            },
+            // Demo reviews are synthetic — never emit AggregateRating
+            // schema for them (legal: no fabricated social proof).
+            ...(product.reviewMode !== 'demo' && product.reviewCount > 0
+              ? {
+                  aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: product.rating,
+                    reviewCount: product.reviewCount,
+                  },
+                }
+              : {}),
             offers: {
               '@type': 'Offer',
               url: `${COMPANY.domain}/product/${product.slug}`,

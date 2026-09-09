@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import ZAI from 'z-ai-web-dev-sdk';
-import { db } from '@/lib/db';
+import { getProducts } from '@/lib/catalog';
 
 // ============================================================
 // E-com.casa Concierge — AI shopping assistant
@@ -37,22 +37,7 @@ const CATALOG_TTL_MS = 60 * 1000;
 async function getCatalogContext() {
   if (catalogCache && Date.now() - catalogCache.at < CATALOG_TTL_MS) return catalogCache;
 
-  const products = await db.product.findMany({
-    where: { complianceStatus: { not: 'BLOCKED' } },
-    select: {
-      slug: true,
-      name: true,
-      subtitle: true,
-      categorySlug: true,
-      spaceSlugs: true,
-      styleSlugs: true,
-      price: true,
-      stock: true,
-      isBestSeller: true,
-      isNew: true,
-    },
-    orderBy: { sortOrder: 'asc' },
-  });
+  const { products } = await getProducts({ perPage: 48 });
 
   const lines = products
     .map((p) => {

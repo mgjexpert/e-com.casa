@@ -6,6 +6,7 @@ import { ArrowLeft, Clock, User } from 'lucide-react';
 import { journalArticles } from '@/lib/journal-data';
 import { formatDate } from '@/lib/format';
 import { db } from '@/lib/db';
+import { getProduct } from '@/lib/catalog';
 import { ProductCard } from '@/components/product/product-card';
 import type { Product } from '@/types';
 
@@ -46,13 +47,9 @@ export default async function JournalArticlePage({ params }: ArticlePageProps) {
   let storyProducts: Product[] = [];
   if (article.productSlugs.length > 0) {
     try {
-      const found = await db.product.findMany({
-        where: { slug: { in: article.productSlugs }, complianceStatus: { not: 'BLOCKED' } },
-      });
+      const resolved = await Promise.all(article.productSlugs.map((s) => getProduct(s)));
       // preserve article order
-      storyProducts = article.productSlugs
-        .map((s) => found.find((p) => p.slug === s))
-        .filter((p): p is Product => Boolean(p)) as unknown as Product[];
+      storyProducts = resolved.filter((p): p is Product => Boolean(p)) as unknown as Product[];
     } catch {
       storyProducts = [];
     }

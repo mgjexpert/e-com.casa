@@ -1,0 +1,498 @@
+{
+  "runId": "run_1788974419049_18bfb180",
+  "startedAt": "2026-09-09T17:20:19.048Z",
+  "completedAt": "2026-09-09T17:20:19.547Z",
+  "durationMs": 499,
+  "mode": "import",
+  "totals": {
+    "sourcesAttempted": 12,
+    "sourcesCompleted": 0,
+    "sourcesBlocked": [],
+    "urlsVisited": 21,
+    "urlsSuccessful": 21,
+    "urlsBlocked": 0,
+    "urlsFailed": 0,
+    "candidatesDiscovered": 72,
+    "candidatesNormalized": 71,
+    "duplicatesRemoved": 0,
+    "candidatesRejected": 1,
+    "candidatesSelected": 71,
+    "productsGenerated": 120,
+    "productsMatchedToResearch": 54,
+    "priceCalibrated": 16,
+    "importedToDb": true
+  },
+  "mix": {
+    "lighting": 20,
+    "wall-panels": 15,
+    "decoration": 18,
+    "garden": 15,
+    "outdoor": 12,
+    "planters": 10,
+    "outdoor-privacy": 8,
+    "organisation": 7,
+    "kitchen-dining": 5,
+    "gadgets-smart-home": 5,
+    "accessories": 5
+  },
+  "mixTarget": {
+    "lighting": 20,
+    "wall-panels": 15,
+    "decoration": 18,
+    "garden": 15,
+    "outdoor": 12,
+    "planters": 10,
+    "outdoor-privacy": 8,
+    "organisation": 7,
+    "kitchen-dining": 5,
+    "gadgets-smart-home": 5,
+    "accessories": 5
+  },
+  "bySource": [
+    {
+      "source": "Kave Home",
+      "domain": "kavehome.com",
+      "tier": 1,
+      "status": "partial",
+      "pagesVisited": 3,
+      "urlsSuccessful": 3,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 8,
+      "candidatesAccepted": 8,
+      "candidatesRejected": 0,
+      "averageScore": 71,
+      "topCategories": [
+        "lighting",
+        "planters",
+        "decoration"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Maisons du Monde",
+      "domain": "maisonsdumonde.com",
+      "tier": 1,
+      "status": "partial",
+      "pagesVisited": 3,
+      "urlsSuccessful": 3,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 14,
+      "candidatesAccepted": 14,
+      "candidatesRejected": 0,
+      "averageScore": 71,
+      "topCategories": [
+        "lighting",
+        "decoration",
+        "accessories"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Lampenwelt",
+      "domain": "lampenwelt.de",
+      "tier": 1,
+      "status": "partial",
+      "pagesVisited": 2,
+      "urlsSuccessful": 2,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 8,
+      "candidatesAccepted": 8,
+      "candidatesRejected": 0,
+      "averageScore": 75,
+      "topCategories": [
+        "lighting",
+        "decoration"
+      ],
+      "errors": []
+    },
+    {
+      "source": "The Wall Panel Centre",
+      "domain": "thewallpanelcentre.com",
+      "tier": 1,
+      "status": "partial",
+      "pagesVisited": 2,
+      "urlsSuccessful": 2,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 0,
+      "candidatesAccepted": 0,
+      "candidatesRejected": 0,
+      "averageScore": null,
+      "topCategories": [],
+      "errors": []
+    },
+    {
+      "source": "Ferm Living",
+      "domain": "fermliving.com",
+      "tier": 1,
+      "status": "partial",
+      "pagesVisited": 2,
+      "urlsSuccessful": 2,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 11,
+      "candidatesAccepted": 11,
+      "candidatesRejected": 0,
+      "averageScore": 75,
+      "topCategories": [
+        "lighting",
+        "accessories"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Nordic Nest",
+      "domain": "nordicnest.com",
+      "tier": 2,
+      "status": "partial",
+      "pagesVisited": 2,
+      "urlsSuccessful": 2,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 11,
+      "candidatesAccepted": 11,
+      "candidatesRejected": 0,
+      "averageScore": 76,
+      "topCategories": [
+        "lighting",
+        "planters"
+      ],
+      "errors": []
+    },
+    {
+      "source": "MoroDeco",
+      "domain": "morodeco.com",
+      "tier": 2,
+      "status": "partial",
+      "pagesVisited": 1,
+      "urlsSuccessful": 1,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 0,
+      "candidatesAccepted": 0,
+      "candidatesRejected": 0,
+      "averageScore": null,
+      "topCategories": [],
+      "errors": []
+    },
+    {
+      "source": "Luxent",
+      "domain": "luxent.com",
+      "tier": 2,
+      "status": "partial",
+      "pagesVisited": 1,
+      "urlsSuccessful": 1,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 1,
+      "candidatesAccepted": 1,
+      "candidatesRejected": 0,
+      "averageScore": 68,
+      "topCategories": [
+        "decoration"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Lewpe",
+      "domain": "lewpe.com",
+      "tier": 2,
+      "status": "partial",
+      "pagesVisited": 1,
+      "urlsSuccessful": 1,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 0,
+      "candidatesAccepted": 0,
+      "candidatesRejected": 0,
+      "averageScore": null,
+      "topCategories": [],
+      "errors": []
+    },
+    {
+      "source": "The Cozy Garden",
+      "domain": "thecozygarden.com",
+      "tier": 3,
+      "status": "partial",
+      "pagesVisited": 1,
+      "urlsSuccessful": 1,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 9,
+      "candidatesAccepted": 9,
+      "candidatesRejected": 0,
+      "averageScore": 76,
+      "topCategories": [
+        "lighting"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Viridian Bay",
+      "domain": "viridianbay.com",
+      "tier": 3,
+      "status": "partial",
+      "pagesVisited": 1,
+      "urlsSuccessful": 1,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 1,
+      "candidatesAccepted": 1,
+      "candidatesRejected": 0,
+      "averageScore": 78,
+      "topCategories": [
+        "lighting"
+      ],
+      "errors": []
+    },
+    {
+      "source": "Govee EU",
+      "domain": "govee.com",
+      "tier": 3,
+      "status": "partial",
+      "pagesVisited": 2,
+      "urlsSuccessful": 2,
+      "urlsBlocked": 0,
+      "urlsFailed": 0,
+      "candidatesFound": 8,
+      "candidatesAccepted": 8,
+      "candidatesRejected": 0,
+      "averageScore": 79,
+      "topCategories": [
+        "lighting"
+      ],
+      "errors": []
+    }
+  ],
+  "topCandidates": [
+    {
+      "name": "Kite pendant lamp Ø75 cm from New Works - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 84,
+      "priceEur": 49
+    },
+    {
+      "name": "Collections - The Cozy Garden",
+      "source": "cozy-garden",
+      "category": "lighting",
+      "score": 84,
+      "priceEur": 40.92
+    },
+    {
+      "name": "6.2 Feet Tall Patio Garden Arbor with Pergola and 2-Seat Bench for",
+      "source": "cozy-garden",
+      "category": "lighting",
+      "score": 84,
+      "priceEur": 55.24
+    },
+    {
+      "name": "LED Lights: High-Quality LEDs for Home",
+      "source": "govee-eu",
+      "category": "lighting",
+      "score": 84,
+      "priceEur": 60
+    },
+    {
+      "name": "MARKET SET Wandlampe Screen 70's, 40 cm hoch, birke, Textil",
+      "source": "lampenwelt",
+      "category": "lighting",
+      "score": 82,
+      "priceEur": null
+    },
+    {
+      "name": "5 NEW Products RELEASED For 🇺🇲! (January 2024)",
+      "source": "govee-eu",
+      "category": "lighting",
+      "score": 82,
+      "priceEur": 69.99
+    },
+    {
+      "name": "Santa Maria 30 pendant lamp from Globen Lighting - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 80,
+      "priceEur": 1.57
+    },
+    {
+      "name": "Fluid pendant lamp from Muuto - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 79,
+      "priceEur": 219
+    },
+    {
+      "name": "Bulbo pendant lamp from Innolux - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 79,
+      "priceEur": 278.15
+    },
+    {
+      "name": "Rime pendant lamp Ø25 cm from Muuto - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 79,
+      "priceEur": 369
+    },
+    {
+      "name": "Scandinavian design lamps - find your favourite!",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 79,
+      "priceEur": 811.8
+    },
+    {
+      "name": "Margin pendant lamp Ø70 cm from New Works - NordicNest.com",
+      "source": "nordic-nest",
+      "category": "lighting",
+      "score": 79,
+      "priceEur": 879
+    },
+    {
+      "name": "Outdoor lighting",
+      "source": "kave-home",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Aldet outdoor solar floor lamp in black flat rope cord with",
+      "source": "kave-home",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Create a softer atmosphere for the seasons ahead",
+      "source": "kave-home",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "[PDF] THE SEASON'S MOST BEAUTIFUL LIGHTING, BY MAISONS DU",
+      "source": "maisons-du-monde",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Lighting, reading lamps, floors lamps and more",
+      "source": "maisons-du-monde",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Furniture & home accessories - Exotic",
+      "source": "maisons-du-monde",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": 44
+    },
+    {
+      "name": "Viereckige Hängelampe aus Eisen, Messing",
+      "source": "maisons-du-monde",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Flavio - Lampada a sospensione in rattan e metallo dorato",
+      "source": "maisons-du-monde",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Lampen & Leuchten von Nordlux",
+      "source": "lampenwelt",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Serien Lighting Leuchten & Lampen",
+      "source": "lampenwelt",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Philips SuperSlim LED IP44 Ø 24,5cm 4.000K weiß",
+      "source": "lampenwelt",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Portable Lamps",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Arum Portable Lamp - Black",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Luver Portable Lamp - Natural",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Vuelta Portable Lamp",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Living with Kids: At Home with Fanny Nilsson",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Arum Portable Lamp - Beige",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    },
+    {
+      "name": "Frill Portable Lamp",
+      "source": "ferm-living",
+      "category": "lighting",
+      "score": 78,
+      "priceEur": null
+    }
+  ],
+  "missingFieldsReport": {
+    "dimensions": 69,
+    "material": 51,
+    "weight": 71,
+    "brand": 71,
+    "price": 49,
+    "images": 71
+  },
+  "notes": [
+    "One-shot market research utility — NOT a production crawler. No public routes, cron jobs or storefront services expose this pipeline.",
+    "Direct crawling honored robots.txt, used a fixed non-browser user agent, capped pages per source and stopped instantly on any block.",
+    "Most tier-1 retailers operate bot protection; where crawling was blocked the run used public search-index metadata instead. No circumvention was attempted.",
+    "Only original E-com.casa copy, naming and imagery are published. Source data remains internal research metadata (sourceResearchId, sourceUrl, sourceImageUrls).",
+    "No third-party reviews, ratings, customer names, marketing slogans or photography were copied. Demo reviews are clearly demo-mode; JSON-LD AggregateRating is suppressed.",
+    "Demo prices are generated by E-com.casa pricing logic (ENTRY €15–39 / CORE €40–99 / PREMIUM €100–300+), optionally calibrated to observed market medians. Source sale prices are never reused."
+  ]
+}

@@ -1,35 +1,6 @@
-export interface Product {
-  id: string;
-  slug: string;
-  name: string;
-  subtitle: string | null;
-  description: string;
-  price: string;
-  comparePrice: string | null;
-  currency: string;
-  categorySlug: string;
-  spaceSlugs: string;
-  styleSlugs: string;
-  collectionSlugs: string;
-  image: string;
-  hoverImage: string | null;
-  gallery: string;
-  badge: string | null;
-  rating: number;
-  reviewCount: number;
-  stock: number;
-  isBestSeller: boolean;
-  isNew: boolean;
-  featured: boolean;
-  materials: string | null;
-  dimensions: string | null;
-  care: string | null;
-  color: string | null;
-  electrical: boolean;
-  complianceStatus: string;
-  safetyJson: string | null;
-  createdAt: string;
-}
+// Product is now the catalog domain type — the single source of truth
+// shared by the catalog service adapters (see src/lib/catalog/types.ts).
+export type { CatalogProduct as Product, ProductVariant } from '@/lib/catalog/types';
 
 export interface Category {
   id: string;
@@ -48,6 +19,7 @@ export interface OrderItem {
   price: string;
   quantity: number;
   image: string;
+  variantLabel?: string;
 }
 
 export interface Order {
@@ -86,4 +58,7 @@ export interface CartLine {
   image: string;
   quantity: number;
   maxStock: number;
+  /** Optional selected variant (cart identity = slug + variantId) */
+  variantId?: string;
+  variantLabel?: string;
 }

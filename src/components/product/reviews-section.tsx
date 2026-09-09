@@ -11,15 +11,17 @@ export function ReviewsSection({
   rating,
   reviewCount,
   dbReviews = [],
+  reviewMode = 'demo',
 }: {
   slug: string;
   rating: number;
   reviewCount: number;
   dbReviews?: ReviewDTO[];
+  reviewMode?: string;
 }) {
   return (
     <section aria-labelledby="reviews-heading" className="mt-16 border-t border-border pt-12">
-      <ReviewsPanel slug={slug} rating={rating} reviewCount={reviewCount} initialDbReviews={dbReviews} />
+      <ReviewsPanel slug={slug} rating={rating} reviewCount={reviewCount} initialDbReviews={dbReviews} reviewMode={reviewMode} />
     </section>
   );
 }

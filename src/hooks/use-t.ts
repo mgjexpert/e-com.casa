@@ -20,7 +20,7 @@ export function LanguageBoot() {
   }, []);
 
   useEffect(() => {
-    document.documentElement.lang = lang === 'pt' ? 'pt' : 'en';
+    document.documentElement.lang = lang;
   }, [lang]);
 
   return null;

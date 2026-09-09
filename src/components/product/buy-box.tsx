@@ -13,24 +13,44 @@ import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
+const VARIANT_LABELS: Record<string, string> = {
+  colour: 'Colour',
+  size: 'Size',
+  pack: 'Pack',
+  material: 'Material',
+};
+
 export function BuyBox({ product }: { product: Product }) {
   const t = useT();
   const router = useRouter();
   const [qty, setQty] = useState(1);
+  const [selectedVariantId, setSelectedVariantId] = useState<string | undefined>(
+    product.variants.length > 0 ? product.variants[0].id : undefined
+  );
   const add = useCart((s) => s.add);
   const wishlist = useWishlist();
   const openCartDrawer = useCartDrawer((s) => s.open);
   const wished = wishlist.slugs.includes(product.slug);
+
+  const selectedVariant =
+    product.variants.find((v) => v.id === selectedVariantId) ?? (product.variants.length > 0 ? product.variants[0] : undefined);
+
+  // Effective unit price = base + selected variant delta (server re-verifies at order time)
+  const unitPriceCents = product.priceCents + (selectedVariant?.priceDeltaCents ?? 0);
+  const unitPrice = (unitPriceCents / 100).toFixed(2);
+  const variantSubtitle = selectedVariant ? `${product.subtitle ? product.subtitle + ' · ' : ''}${selectedVariant.name}` : product.subtitle;
 
   const addLine = () => {
     add(
       {
         slug: product.slug,
         name: product.name,
-        subtitle: product.subtitle,
-        price: product.price,
+        subtitle: variantSubtitle,
+        price: unitPrice,
         image: product.image,
         maxStock: product.stock,
+        variantId: selectedVariant?.id,
+        variantLabel: selectedVariant?.name,
       },
       qty
     );
@@ -54,12 +74,45 @@ export function BuyBox({ product }: { product: Product }) {
   return (
     <div>
       <div className="flex flex-wrap items-baseline gap-3">
-        <span className="text-[26px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
+        <span className="text-[26px] font-semibold tracking-tight">{formatPrice(unitPrice)}</span>
         {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
           <span className="text-[15px] text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
         )}
         <span className="text-[12px] text-muted-foreground">{t('buy.inclVat')}</span>
       </div>
+
+      {/* Variants */}
+      {groupVariants(product.variants).map(([type, variants]) => (
+        <div key={type} className="mt-5">
+          <p className="text-[12px] font-medium uppercase tracking-wide text-muted-foreground">
+            {VARIANT_LABELS[type] ?? type}
+          </p>
+          <div className="mt-2 flex flex-wrap gap-2" role="radiogroup" aria-label={VARIANT_LABELS[type] ?? type}>
+            {variants.map((v) => {
+              const active = selectedVariant?.id === v.id;
+              const priceNote = v.priceDeltaCents > 0 ? ` (+${formatPrice((v.priceDeltaCents / 100).toFixed(2))})` : '';
+              return (
+                <button
+                  key={v.id}
+                  type="button"
+                  role="radio"
+                  aria-checked={active}
+                  onClick={() => setSelectedVariantId(v.id)}
+                  className={cn(
+                    'min-h-[44px] rounded-md border px-4 py-2 text-[13.5px] font-medium transition-colors',
+                    active
+                      ? 'border-olive bg-olive/5 text-olive'
+                      : 'border-border bg-background text-foreground/80 hover:border-olive/50 hover:text-foreground'
+                  )}
+                >
+                  {v.name}
+                  {priceNote}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      ))}
 
       {/* Quantity + actions */}
       <div className="mt-6 flex flex-col gap-3 sm:flex-row">
@@ -162,4 +215,16 @@ export function BuyBox({ product }: { product: Product }) {
       </ul>
     </div>
   );
+}
+
+
+/** Group variants by type preserving order. */
+function groupVariants(variants: Product['variants']): Array<[string, Product['variants']]> {
+  const groups = new Map<string, Product['variants']>();
+  for (const v of variants) {
+    const list = groups.get(v.type) ?? [];
+    list.push(v);
+    groups.set(v.type, list);
+  }
+  return [...groups.entries()];
 }

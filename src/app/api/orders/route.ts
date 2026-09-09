@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
+import { getProduct } from '@/lib/catalog';
 import { db } from '@/lib/db';
 import {
   SHIPPING_OPTIONS,
@@ -14,6 +15,7 @@ export const dynamic = 'force-dynamic';
 const orderItemSchema = z.object({
   slug: z.string().min(1),
   quantity: z.number().int().min(1).max(99),
+  variantId: z.string().max(60).optional(),
 });
 
 const createOrderSchema = z.object({
@@ -63,10 +65,10 @@ export async function POST(req: NextRequest) {
 
     // Re-price server-side — never trust client totals
     const slugs = data.items.map((i) => i.slug);
-    const products = await db.product.findMany({
-      where: { slug: { in: slugs }, complianceStatus: { not: 'BLOCKED' } },
-    });
-    if (products.length !== slugs.length) {
+    const resolved = await Promise.all(slugs.map((s) => getProduct(s)));
+    const products = resolved.filter((p): p is NonNullable<typeof p> => Boolean(p));
+    const missing = slugs.filter((s) => !products.some((p) => p.slug === s));
+    if (missing.length > 0) {
       return NextResponse.json({ error: 'One or more products are unavailable' }, { status: 400 });
     }
 
@@ -89,15 +91,28 @@ export async function POST(req: NextRequest) {
     let subtotal = 0;
     const lineItems = data.items.map((item) => {
       const product = products.find((p) => p.slug === item.slug)!;
-      const price = parseFloat(product.price);
-      subtotal += price * item.quantity;
+      // Variant deltas are resolved server-side from the catalogue model —
+      // client-provided pricing is never trusted.
+      let variantDeltaCents = 0;
+      let variantLabel: string | undefined;
+      if (item.variantId) {
+        const v = product.variants.find((x) => x.id === item.variantId);
+        if (v) {
+          variantDeltaCents = v.priceDeltaCents ?? 0;
+          variantLabel = v.name;
+        }
+      }
+      const priceCents = (product.priceCents ?? Math.round(parseFloat(product.price) * 100)) + variantDeltaCents;
+      const price = (priceCents / 100).toFixed(2);
+      subtotal += (priceCents / 100) * item.quantity;
       return {
         slug: product.slug,
         name: product.name,
         subtitle: product.subtitle,
-        price: product.price,
+        price,
         quantity: item.quantity,
         image: product.image,
+        variantLabel,
       };
     });
 

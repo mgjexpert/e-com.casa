@@ -1,64 +1,34 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { getProducts } from '@/lib/catalog';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const category = searchParams.get('category');
-    const space = searchParams.get('space');
-    const style = searchParams.get('style');
-    const collection = searchParams.get('collection');
-    const q = searchParams.get('q');
-    const sort = searchParams.get('sort') ?? 'featured';
-    const minPrice = parseFloat(searchParams.get('minPrice') ?? '');
-    const maxPrice = parseFloat(searchParams.get('maxPrice') ?? '');
     const page = Math.max(1, parseInt(searchParams.get('page') ?? '1', 10) || 1);
     const perPage = Math.min(48, parseInt(searchParams.get('perPage') ?? '24', 10) || 24);
 
-    const where: Record<string, unknown> = { complianceStatus: { not: 'BLOCKED' } };
+    const result = await getProducts({
+      category: searchParams.get('category') ?? undefined,
+      subcategory: searchParams.get('subcategory') ?? undefined,
+      space: searchParams.get('space') ?? undefined,
+      style: searchParams.get('style') ?? undefined,
+      collection: searchParams.get('collection') ?? undefined,
+      material: searchParams.get('material') ?? undefined,
+      colour: searchParams.get('colour') ?? undefined,
+      availability: searchParams.get('availability') ?? undefined,
+      q: searchParams.get('q') ?? undefined,
+      minPrice: parseFloat(searchParams.get('minPrice') ?? '') || undefined,
+      maxPrice: parseFloat(searchParams.get('maxPrice') ?? '') || undefined,
+      sort: (searchParams.get('sort') as 'featured' | undefined) ?? 'featured',
+      page,
+      perPage,
+    });
 
-    if (category) where.categorySlug = category;
-    if (space) where.spaceSlugs = { contains: space };
-    if (style) where.styleSlugs = { contains: style };
-    if (collection) where.collectionSlugs = { contains: collection };
-    if (q) {
-      where.OR = [
-        { name: { contains: q } },
-        { description: { contains: q } },
-        { subtitle: { contains: q } },
-        { categorySlug: { contains: q } },
-      ];
-    }
-    if (!Number.isNaN(minPrice) || !Number.isNaN(maxPrice)) {
-      const priceFilter: Record<string, number> = {};
-      if (!Number.isNaN(minPrice)) priceFilter.gte = minPrice;
-      if (!Number.isNaN(maxPrice)) priceFilter.lte = maxPrice;
-      where.price = priceFilter;
-    }
-
-    const orderBy: Record<string, 'asc' | 'desc'> =
-      sort === 'price-asc'
-        ? { price: 'asc' }
-        : sort === 'price-desc'
-          ? { price: 'desc' }
-          : sort === 'rating'
-            ? { rating: 'desc' }
-            : sort === 'best'
-              ? { reviewCount: 'desc' }
-              : sort === 'new'
-                ? { createdAt: 'desc' }
-                : { sortOrder: 'asc' };
-
-    const [products, total] = await Promise.all([
-      db.product.findMany({ where, orderBy, skip: (page - 1) * perPage, take: perPage }),
-      db.product.count({ where }),
-    ]);
-
-    return NextResponse.json({ products, total, page, perPage, totalPages: Math.ceil(total / perPage) });
+    return NextResponse.json(result);
   } catch (error) {
-    console.error('GET /api/products error', error);
-    return NextResponse.json({ error: 'Failed to load products' }, { status: 500 });
+    console.error('Products API error:', error);
+    return NextResponse.json({ products: [], total: 0, page: 1, perPage: 24, totalPages: 1 }, { status: 200 });
   }
 }

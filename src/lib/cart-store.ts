@@ -25,7 +25,8 @@ export const useCart = create<CartState>()(
       hydrated: false,
       add: (line, qty = 1) => {
         const lines = [...get().lines];
-        const idx = lines.findIndex((l) => l.slug === line.slug);
+        const keyOf = (l: Pick<CartLine, 'slug' | 'variantId'>) => `${l.slug}|${l.variantId ?? ''}`;
+        const idx = lines.findIndex((l) => keyOf(l) === keyOf(line));
         if (idx >= 0) {
           const nextQty = Math.min(lines[idx].quantity + qty, lines[idx].maxStock || 99);
           lines[idx] = { ...lines[idx], quantity: nextQty };
@@ -34,12 +35,12 @@ export const useCart = create<CartState>()(
         }
         set({ lines });
       },
-      remove: (slug) => set({ lines: get().lines.filter((l) => l.slug !== slug) }),
+      remove: (slug) => set({ lines: get().lines.filter((l) => `${l.slug}|${l.variantId ?? ''}` !== slug) }),
       setQty: (slug, qty) => {
-        if (qty < 1) return set({ lines: get().lines.filter((l) => l.slug !== slug) });
+        if (qty < 1) return set({ lines: get().lines.filter((l) => `${l.slug}|${l.variantId ?? ''}` !== slug) });
         set({
           lines: get().lines.map((l) =>
-            l.slug === slug ? { ...l, quantity: Math.min(qty, l.maxStock || 99) } : l
+            `${l.slug}|${l.variantId ?? ''}` === slug ? { ...l, quantity: Math.min(qty, l.maxStock || 99) } : l
           ),
         });
       },

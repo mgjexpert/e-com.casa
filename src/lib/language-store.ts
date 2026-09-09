@@ -2,11 +2,12 @@
 
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
-import type { Lang } from '@/lib/i18n';
+import { LANGUAGES_UI, type Lang } from '@/lib/i18n';
 
 interface LanguageState {
   lang: Lang;
   setLang: (lang: Lang) => void;
+  /** Cycle through every language in LANGUAGES_UI order (wraps around). */
   toggle: () => void;
 }
 
@@ -23,10 +24,14 @@ export const useLanguage = create<LanguageState>()(
       setLang: (lang) => {
         set({ lang });
         if (typeof document !== 'undefined') {
-          document.documentElement.lang = lang === 'pt' ? 'pt' : 'en';
+          document.documentElement.lang = lang;
         }
       },
-      toggle: () => get().setLang(get().lang === 'en' ? 'pt' : 'en'),
+      toggle: () => {
+        const codes = LANGUAGES_UI.map((l) => l.code);
+        const next = codes[(codes.indexOf(get().lang) + 1) % codes.length] ?? 'en';
+        get().setLang(next);
+      },
     }),
     {
       name: 'ecom-language',

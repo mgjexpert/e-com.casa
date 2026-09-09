@@ -92,7 +92,7 @@ export default function CheckoutPage() {
           giftWrap: form.giftWrap,
           notes: form.notes.trim() || null,
           promoCode: cart.promoCode,
-          items: cart.lines.map((l) => ({ slug: l.slug, quantity: l.quantity })),
+          items: cart.lines.map((l) => ({ slug: l.slug, quantity: l.quantity, variantId: l.variantId })),
         }),
       });
       const data = await res.json();

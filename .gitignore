@@ -63,3 +63,4 @@ db/*.db-journal
 mini-services/
 examples/
 scripts/test-*
+.research-search-cache.json

@@ -17,11 +17,13 @@ export function ReviewsPanel({
   slug,
   rating,
   reviewCount,
+  reviewMode = 'demo',
   initialDbReviews,
 }: {
   slug: string;
   rating: number;
   reviewCount: number;
+  reviewMode?: string;
   initialDbReviews: ReviewDTO[];
 }) {
   const [dbReviews, setDbReviews] = useState<ReviewDTO[]>(initialDbReviews);
@@ -76,6 +78,12 @@ export function ReviewsPanel({
           <p className="mt-1.5 text-[13px] text-muted-foreground">
             Based on {reviewCount.toLocaleString('en-GB')} reviews
           </p>
+          {reviewMode === 'demo' && (
+            <p className="mt-3 flex items-start gap-1.5 rounded-md bg-background/70 px-3 py-2 text-[12px] leading-snug text-muted-foreground" role="note">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={1.75} aria-hidden />
+              Sample product feedback — demonstration only. This is a preview catalogue.
+            </p>
+          )}
           {customerCount > 0 && (
             <p className="mt-1 text-[13px] font-medium text-olive">
               Includes {customerCount} recent customer review{customerCount === 1 ? '' : 's'}

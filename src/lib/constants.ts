@@ -5,6 +5,11 @@
 // must be validated per market before go-live.
 // ============================================================
 
+// Country configuration has moved to the data-driven country engine
+// (src/lib/countries.ts) per the international architecture. This file
+// keeps thin, backwards-compatible aliases for existing imports.
+import { getCountryConfiguration, getShipToCountries } from './countries';
+
 export interface CountryConfig {
   code: string;
   name: string;
@@ -13,21 +18,13 @@ export interface CountryConfig {
   market: 'EU' | 'UK';
 }
 
-export const COUNTRIES: CountryConfig[] = [
-  { code: 'PT', name: 'Portugal', vatRate: 23, currency: 'EUR', market: 'EU' },
-  { code: 'ES', name: 'Spain', vatRate: 21, currency: 'EUR', market: 'EU' },
-  { code: 'FR', name: 'France', vatRate: 20, currency: 'EUR', market: 'EU' },
-  { code: 'DE', name: 'Germany', vatRate: 19, currency: 'EUR', market: 'EU' },
-  { code: 'IT', name: 'Italy', vatRate: 22, currency: 'EUR', market: 'EU' },
-  { code: 'NL', name: 'Netherlands', vatRate: 21, currency: 'EUR', market: 'EU' },
-  { code: 'BE', name: 'Belgium', vatRate: 21, currency: 'EUR', market: 'EU' },
-  { code: 'AT', name: 'Austria', vatRate: 20, currency: 'EUR', market: 'EU' },
-  { code: 'IE', name: 'Ireland', vatRate: 23, currency: 'EUR', market: 'EU' },
-  { code: 'DK', name: 'Denmark', vatRate: 25, currency: 'EUR', market: 'EU' },
-  { code: 'SE', name: 'Sweden', vatRate: 25, currency: 'EUR', market: 'EU' },
-  { code: 'FI', name: 'Finland', vatRate: 25.5, currency: 'EUR', market: 'EU' },
-  { code: 'GB', name: 'United Kingdom', vatRate: 20, currency: 'GBP', market: 'UK' },
-];
+export const COUNTRIES: CountryConfig[] = getShipToCountries().map((c) => ({
+  code: c.code,
+  name: c.name,
+  vatRate: c.vat.standardRate,
+  currency: c.currency,
+  market: c.market,
+}));
 
 // Shipping — placeholder configuration, confirmed at logistics setup
 export const FREE_SHIPPING_THRESHOLD = 50.0; // EUR — placeholder
@@ -77,14 +74,14 @@ export const SEARCH_SUGGESTIONS = [
 
 // Simple country rule engine scaffold — extend per market requirements
 export function getCountryRequirements(countryCode: string) {
-  const country = COUNTRIES.find((c) => c.code === countryCode);
-  const isUK = country?.market === 'UK';
+  const cfg = getCountryConfiguration(countryCode);
+  const isUK = cfg?.market === 'UK';
   return {
-    withdrawalDays: 14,
-    legalGuaranteeYears: country && !isUK ? 2 : null, // EU minimum; UK: statutory rights
-    currency: country?.currency ?? 'EUR',
-    vatRate: country?.vatRate ?? null,
-    market: country?.market ?? 'EU',
+    withdrawalDays: cfg?.returns.withdrawalDays ?? 14,
+    legalGuaranteeYears: cfg && !isUK ? cfg.returns.legalGuaranteeYears : null,
+    currency: cfg?.currency ?? 'EUR',
+    vatRate: cfg?.vat.standardRate ?? null,
+    market: cfg?.market ?? 'EU',
     complaintBookUrl: countryCode === 'PT' ? 'https://www.livroreclamacoes.pt/' : null,
     mediator: countryCode === 'FR' ? '[MÉDIATEUR DE LA CONSOMMATION À DÉSIGNER]' : null,
   };

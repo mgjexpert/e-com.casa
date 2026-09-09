@@ -1,5 +1,5 @@
 import type { MetadataRoute } from 'next';
-import { db } from '@/lib/db';
+import { getProducts } from '@/lib/catalog';
 import { COMPANY } from '@/lib/company';
 import { journalArticles } from '@/lib/journal-data';
 
@@ -34,13 +34,10 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   let productRoutes: MetadataRoute.Sitemap = [];
   try {
-    const products = await db.product.findMany({
-      where: { complianceStatus: { not: 'BLOCKED' } },
-      select: { slug: true, updatedAt: true },
-    });
+    const { products } = await getProducts({ perPage: 48 });
     productRoutes = products.map((p) => ({
       url: `${base}/product/${p.slug}`,
-      lastModified: p.updatedAt,
+      lastModified: new Date(p.createdAt),
       changeFrequency: 'weekly' as const,
       priority: 0.8,
     }));

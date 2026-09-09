@@ -53,7 +53,11 @@ export const metadata: Metadata = {
     title: 'E-com.casa — Make Your Space Yours.',
     description: 'Curated pieces for interiors, gardens and everyday living.',
   },
-  robots: { index: true, follow: true },
+  // Demo catalogue: noindex until NEXT_PUBLIC_INDEXING_ENABLED=true (production)
+  robots: {
+    index: process.env.NEXT_PUBLIC_INDEXING_ENABLED === 'true',
+    follow: process.env.NEXT_PUBLIC_INDEXING_ENABLED === 'true',
+  },
   alternates: { canonical: '/' },
 };
 

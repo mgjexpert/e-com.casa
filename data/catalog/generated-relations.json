@@ -1,0 +1,37 @@
+{
+  "generatedAt": "2026-09-09T17:20:19.222Z",
+  "relations": [
+    {
+      "type": "COMPLETE_THE_LOOK",
+      "anchor": "warm-oak-slat-panel",
+      "with": [
+        "cordless-glow-portable-lamp",
+        "arched-wall-mirror",
+        "ceramic-vase-trio",
+        "oak-floating-shelf-duo"
+      ]
+    },
+    {
+      "type": "COMPLETE_THE_LOOK",
+      "anchor": "glow-orb-solar",
+      "with": [
+        "solar-cascade-lantern",
+        "ribbed-stone-planter",
+        "slatted-privacy-screen",
+        "outdoor-cushion-waterproof"
+      ]
+    },
+    {
+      "type": "SAME_COLLECTION",
+      "note": "Products sharing collectionSlugs are related via the recommendations engine (see src/lib/catalog/recommendations.ts)."
+    },
+    {
+      "type": "SAME_SPACE",
+      "note": "Products sharing spaceSlugs are related via the recommendations engine."
+    },
+    {
+      "type": "CROSS_SELL",
+      "note": "Cart cross-sell computed from category diversity + shared spaces (see getCrossSell)."
+    }
+  ]
+}
