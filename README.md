@@ -88,7 +88,8 @@ prisma/
   schema.prisma            # PostgreSQL + research layer models
   seed.ts                  # ★ idempotent seed (safe to re-run)
 scripts/
-  catalog-research/        # ★ one-shot research pipeline (dev-only)
+  catalog-research/        # legacy V1 research pipeline (dev-only)
+  catalog-research-v2/     # ★ CATALOG SCRAPER V2 — deep product extraction engine (dev-only)
   generate-catalog-images.sh
 reports/
   catalog-research-report.json / .md
@@ -103,7 +104,7 @@ npm install                     # or bun install
 cp .env.example .env            # then set DATABASE_URL (Neon or local Postgres)
 npx prisma generate
 npx prisma db push             # (or create/apply migrations for production)
-npm run db:seed                 # idempotent — imports the 120-product demo catalogue
+npm run db:seed                 # idempotent — imports the demo catalogue fixtures (fallback)
 npm run dev                     # http://localhost:3000
 npm run lint
 npm run build
@@ -112,6 +113,33 @@ npm run build
 Seed integrity checks run automatically: unique SKUs, demo flags, required display fields. Running `db:seed` twice creates no duplicates.
 
 ## 🔎 One-shot catalog research (dev-only utility)
+
+```bash
+### CATALOG SCRAPER V2 (primary — deep product extraction)
+
+```bash
+npm run catalog:scrape-v2                              # full run: discover → extract → select → import
+npm run catalog:scrape-v2 -- --dry-run                 # no Product writes
+npm run catalog:scrape-v2 -- --source=viridian-bay     # single source
+npm run catalog:scrape-v2 -- --limit=60                # cap final selection
+npm run catalog:scrape-v2 -- --phase=crawl             # discovery+extraction only (resume later)
+npm run catalog:scrape-v2 -- --resume=<runId>[,<run2>] # rebuild/selection/import from persisted research
+```
+
+```bash
+# Populate Neon from the committed replay artifact (no crawling):
+DATABASE_URL="<neon-pooled>" bun scripts/catalog-research-v2/replay-import.ts
+# Regenerate the artifact from the current database:
+DATABASE_URL="<local>" bun scripts/catalog-research-v2/export-catalogue.ts
+# Post-import QA helpers:
+DATABASE_URL="<db>" bun scripts/catalog-research-v2/reclassify.ts       # evidence-weighted category pass
+DATABASE_URL="<db>" bun scripts/catalog-research-v2/retire-legacy.ts    # retire non-research-backed products (§82)
+DATABASE_URL="<db>" bun scripts/catalog-research-v2/final-report.ts     # regenerate honest reports
+```
+
+V2 extracts REAL public product pages (JSON-LD → microdata → embedded JSON → OG/meta → DOM), full galleries, variants, specs with per-field evidence; scores completeness/quality; dedupes across sources; and imports idempotently with stable `EC-<CAT>-###` SKUs. Sources that block the research client are recorded as BLOCKED — never circumvented. See `reports/catalog-scrape-v2-report.md` for the actual run.
+
+### Legacy V1 pipeline (fallback reference)
 
 ```bash
 npm run catalog:research                     # full run + import
