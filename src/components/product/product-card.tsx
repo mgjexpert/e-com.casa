@@ -7,13 +7,15 @@ import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
+import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
 export function Stars({ rating, className }: { rating: number; className?: string }) {
+  const t = useT();
   return (
-    <span className={cn('inline-flex items-center gap-0.5', className)} aria-label={`Rated ${rating} out of 5`}>
+    <span className={cn('inline-flex items-center gap-0.5', className)} aria-label={t('card.rated', { r: rating })}>
       {[1, 2, 3, 4, 5].map((i) => (
         <svg
           key={i}
@@ -32,6 +34,7 @@ export function Stars({ rating, className }: { rating: number; className?: strin
 }
 
 export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+  const t = useT();
   const add = useCart((s) => s.add);
   const wishlist = useWishlist();
   const openCartDrawer = useCartDrawer((s) => s.open);
@@ -54,7 +57,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
     e.preventDefault();
     wishlist.toggle(product.slug);
     toast({
-      title: wished ? 'Removed from wishlist' : 'Saved to wishlist',
+      title: wished ? t('card.removedToast') : t('card.savedToast'),
       description: product.name,
     });
   };
@@ -100,10 +103,10 @@ export function ProductCard({ product, priority = false }: { product: Product; p
               type="button"
               onClick={onAdd}
               className="flex h-9 w-full items-center justify-center gap-2 rounded-md bg-ink/92 text-[12.5px] font-medium text-cream backdrop-blur transition-colors hover:bg-ink"
-              aria-label={`Add ${product.name} to cart`}
+              aria-label={t('card.addToCartNamed', { name: product.name })}
             >
               <ShoppingBag className="h-3.5 w-3.5" strokeWidth={1.75} />
-              Add to cart
+              {t('card.addToCart')}
             </button>
           </div>
         </div>
@@ -123,7 +126,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
                 </span>
                 <span
                   className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta"
-                  aria-label={`Save ${Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)} percent`}
+                  aria-label={t('card.savePercent', {
+                    n: Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100),
+                  })}
                 >
                   −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
                 </span>
@@ -137,7 +142,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {product.stock > 0 && product.stock <= 10 && (
             <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-terracotta">
               <span className="h-1 w-1 rounded-full bg-terracotta" aria-hidden />
-              Only {product.stock} left
+              {t('card.onlyLeft', { n: product.stock })}
             </p>
           )}
         </div>
@@ -146,7 +151,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       <button
         type="button"
         onClick={onWishlist}
-        aria-label={wished ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`}
+        aria-label={wished ? t('card.removeFromWishlist', { name: product.name }) : t('card.addToWishlist', { name: product.name })}
         aria-pressed={wished}
         className="absolute right-2.5 top-2.5 flex h-8 w-8 items-center justify-center rounded-full bg-background/85 backdrop-blur transition-all hover:scale-110 hover:bg-background"
       >

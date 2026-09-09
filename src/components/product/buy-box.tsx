@@ -8,11 +8,13 @@ import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
+import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
 export function BuyBox({ product }: { product: Product }) {
+  const t = useT();
   const router = useRouter();
   const [qty, setQty] = useState(1);
   const add = useCart((s) => s.add);
@@ -46,7 +48,7 @@ export function BuyBox({ product }: { product: Product }) {
 
   const onWishlist = () => {
     wishlist.toggle(product.slug);
-    toast({ title: wished ? 'Removed from wishlist' : 'Saved to wishlist', description: product.name });
+    toast({ title: wished ? t('card.removedToast') : t('card.savedToast'), description: product.name });
   };
 
   return (
@@ -56,7 +58,7 @@ export function BuyBox({ product }: { product: Product }) {
         {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
           <span className="text-[15px] text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
         )}
-        <span className="text-[12px] text-muted-foreground">incl. VAT</span>
+        <span className="text-[12px] text-muted-foreground">{t('buy.inclVat')}</span>
       </div>
 
       {/* Quantity + actions */}
@@ -67,11 +69,11 @@ export function BuyBox({ product }: { product: Product }) {
             onClick={() => setQty((q) => Math.max(1, q - 1))}
             className="flex h-full w-11 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
             disabled={qty <= 1}
-            aria-label="Decrease quantity"
+            aria-label={t('buy.decrease')}
           >
             <Minus className="h-4 w-4" />
           </button>
-          <span className="w-10 text-center text-[14px] font-medium tabular-nums" aria-live="polite" aria-label={`Quantity ${qty}`}>
+          <span className="w-10 text-center text-[14px] font-medium tabular-nums" aria-live="polite" aria-label={t('buy.quantity', { n: qty })}>
             {qty}
           </span>
           <button
@@ -79,14 +81,14 @@ export function BuyBox({ product }: { product: Product }) {
             onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))}
             className="flex h-full w-11 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
             disabled={qty >= (product.stock || 99)}
-            aria-label="Increase quantity"
+            aria-label={t('buy.increase')}
           >
             <Plus className="h-4 w-4" />
           </button>
         </div>
         <Button onClick={onAdd} className="h-12 flex-1 gap-2 rounded-md bg-primary text-[14px] font-semibold hover:bg-primary/90">
           <ShoppingBag className="h-4.5 w-4.5" strokeWidth={1.75} />
-          Add to cart
+          {t('buy.add')}
         </Button>
       </div>
       <div className="mt-3 flex gap-3">
@@ -96,13 +98,13 @@ export function BuyBox({ product }: { product: Product }) {
           className="h-12 flex-1 gap-2 rounded-md border-ink text-[14px] font-semibold hover:bg-ink hover:text-cream"
         >
           <Zap className="h-4 w-4" strokeWidth={1.75} />
-          Buy now
+          {t('buy.buyNow')}
         </Button>
         <Button
           onClick={onWishlist}
           variant="outline"
           className="h-12 w-12 rounded-md border-input p-0"
-          aria-label={wished ? 'Remove from wishlist' : 'Add to wishlist'}
+          aria-label={wished ? t('card.removeWishlistShort') : t('card.addWishlistShort')}
           aria-pressed={wished}
         >
           <Heart className={cn('h-5 w-5', wished && 'fill-terracotta text-terracotta')} strokeWidth={1.75} />
@@ -120,11 +122,11 @@ export function BuyBox({ product }: { product: Product }) {
             aria-hidden
           />
           {product.stock <= 0 ? (
-            <span className="text-terracotta">Out of stock — check back soon</span>
+            <span className="text-terracotta">{t('buy.outOfStock')}</span>
           ) : product.stock <= 10 ? (
-            <span className="font-medium text-foreground">Low stock — only {product.stock} left</span>
+            <span className="font-medium text-foreground">{t('buy.lowStock', { n: product.stock })}</span>
           ) : (
-            <span className="text-muted-foreground">In stock — ready to ship</span>
+            <span className="text-muted-foreground">{t('buy.inStock')}</span>
           )}
         </p>
         {product.stock > 0 && product.stock <= 20 && (
@@ -134,7 +136,7 @@ export function BuyBox({ product }: { product: Product }) {
             aria-valuenow={product.stock}
             aria-valuemin={0}
             aria-valuemax={20}
-            aria-label="Remaining stock"
+            aria-label={t('buy.remainingStock')}
           >
             <div
               className={cn('h-full rounded-full', product.stock <= 10 ? 'bg-amber-star' : 'bg-olive')}
@@ -147,14 +149,14 @@ export function BuyBox({ product }: { product: Product }) {
       {/* Trust strip */}
       <ul className="mt-6 grid grid-cols-2 gap-3 border-t border-border pt-5">
         {[
-          { icon: Truck, label: 'Free shipping over €50' },
-          { icon: RotateCcw, label: '14-day returns' },
-          { icon: ShieldCheck, label: 'Secure checkout' },
-          { icon: Zap, label: 'Dispatch in 24–48h' },
-        ].map((t) => (
-          <li key={t.label} className="flex items-center gap-2 text-[12.5px] text-foreground/75">
-            <t.icon className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
-            {t.label}
+          { icon: Truck, label: t('buy.trustFreeShipping') },
+          { icon: RotateCcw, label: t('buy.trustReturns') },
+          { icon: ShieldCheck, label: t('buy.trustSecure') },
+          { icon: Zap, label: t('buy.trustDispatch') },
+        ].map((item) => (
+          <li key={item.label} className="flex items-center gap-2 text-[12.5px] text-foreground/75">
+            <item.icon className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
+            {item.label}
           </li>
         ))}
       </ul>

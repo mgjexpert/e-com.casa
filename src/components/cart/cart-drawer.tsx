@@ -13,10 +13,12 @@ import {
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/lib/cart-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
+import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import { FREE_SHIPPING_THRESHOLD } from '@/lib/constants';
 
 export function CartDrawer() {
+  const t = useT();
   const isOpen = useCartDrawer((s) => s.isOpen);
   const setOpen = (v: boolean) => (v ? useCartDrawer.getState().open() : useCartDrawer.getState().close());
   const lines = useCart((s) => s.lines);
@@ -33,7 +35,12 @@ export function CartDrawer() {
       <SheetContent side="right" className="flex w-full flex-col gap-0 border-border/70 bg-background p-0 sm:max-w-md">
         <SheetHeader className="border-b border-border/70 px-5 py-4">
           <SheetTitle className="font-display text-[19px] font-medium">
-            Your cart {count > 0 && <span className="text-[14px] font-normal text-muted-foreground">· {count} {count === 1 ? 'item' : 'items'}</span>}
+            {t('drawer.title')}{' '}
+            {count > 0 && (
+              <span className="text-[14px] font-normal text-muted-foreground">
+                {t('drawer.countSuffix', { n: count, word: count === 1 ? 'item' : 'items' })}
+              </span>
+            )}
           </SheetTitle>
           <SheetDescription className="sr-only">Review the items in your shopping cart</SheetDescription>
         </SheetHeader>
@@ -44,11 +51,11 @@ export function CartDrawer() {
               <ShoppingBag className="h-7 w-7 text-muted-foreground" strokeWidth={1.5} />
             </span>
             <div>
-              <p className="font-display text-[18px] font-medium">Your cart is empty</p>
-              <p className="mt-1 text-[13px] text-muted-foreground">Beautiful pieces are waiting for you.</p>
+              <p className="font-display text-[18px] font-medium">{t('drawer.emptyTitle')}</p>
+              <p className="mt-1 text-[13px] text-muted-foreground">{t('drawer.emptyDesc')}</p>
             </div>
             <Button asChild className="mt-2 rounded-md bg-ink text-cream hover:bg-ink/90">
-              <Link href="/shop" onClick={() => setOpen(false)}>Browse the shop</Link>
+              <Link href="/shop" onClick={() => setOpen(false)}>{t('drawer.browse')}</Link>
             </Button>
           </div>
         ) : (
@@ -58,9 +65,13 @@ export function CartDrawer() {
               <p className="flex items-center gap-1.5 text-[12.5px] text-foreground/80">
                 <Truck className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
                 {remaining > 0 ? (
-                  <>You&apos;re <strong className="font-semibold">{formatPrice(remaining.toFixed(2))}</strong> away from free shipping</>
+                  <>
+                    {t('drawer.freeShippingRemaining', { amount: formatPrice(remaining.toFixed(2)) }).split(formatPrice(remaining.toFixed(2)))[0]}
+                    <strong className="font-semibold">{formatPrice(remaining.toFixed(2))}</strong>
+                    {t('drawer.freeShippingRemaining', { amount: formatPrice(remaining.toFixed(2)) }).split(formatPrice(remaining.toFixed(2)))[1]}
+                  </>
                 ) : (
-                  <><strong className="font-semibold text-olive">Free shipping unlocked</strong> — nicely done.</>
+                  <><strong className="font-semibold text-olive">{t('drawer.freeShippingDone')}</strong> {t('drawer.freeShippingDoneSuffix')}</>
                 )}
               </p>
               <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/70" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label="Progress towards free shipping">
@@ -96,7 +107,7 @@ export function CartDrawer() {
                           type="button"
                           onClick={() => setQty(line.slug, line.quantity - 1)}
                           className="flex h-full w-8 items-center justify-center transition-colors hover:bg-accent"
-                          aria-label={`Decrease quantity of ${line.name}`}
+                          aria-label={t('drawer.decrease', { name: line.name })}
                         >
                           <Minus className="h-3.5 w-3.5" />
                         </button>
@@ -106,7 +117,7 @@ export function CartDrawer() {
                           onClick={() => setQty(line.slug, line.quantity + 1)}
                           disabled={line.quantity >= (line.maxStock || 99)}
                           className="flex h-full w-8 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
-                          aria-label={`Increase quantity of ${line.name}`}
+                          aria-label={t('drawer.increase', { name: line.name })}
                         >
                           <Plus className="h-3.5 w-3.5" />
                         </button>
@@ -115,10 +126,10 @@ export function CartDrawer() {
                         type="button"
                         onClick={() => remove(line.slug)}
                         className="flex items-center gap-1 text-[12px] text-muted-foreground transition-colors hover:text-terracotta"
-                        aria-label={`Remove ${line.name} from cart`}
+                        aria-label={t('drawer.remove', { name: line.name })}
                       >
                         <Trash2 className="h-3.5 w-3.5" strokeWidth={1.5} />
-                        Remove
+                        {t('drawer.removeShort')}
                       </button>
                     </div>
                   </div>
@@ -129,21 +140,21 @@ export function CartDrawer() {
             {/* Summary + CTAs */}
             <div className="border-t border-border/70 bg-background px-5 py-4">
               <div className="flex items-baseline justify-between">
-                <span className="text-[13.5px] text-muted-foreground">Subtotal (incl. VAT)</span>
+                <span className="text-[13.5px] text-muted-foreground">{t('drawer.subtotalVat')}</span>
                 <span className="text-[17px] font-semibold tabular-nums">{formatPrice(subtotal.toFixed(2))}</span>
               </div>
               <p className="mt-1 text-[11.5px] text-muted-foreground">
-                {remaining > 0 ? 'Shipping calculated at checkout' : 'Free standard shipping applied at checkout'}
+                {remaining > 0 ? t('drawer.shippingNote') : t('drawer.freeShippingNote')}
               </p>
               <div className="mt-4 grid gap-2">
                 <Button asChild className="h-11 rounded-md bg-ink text-[14px] font-semibold text-cream hover:bg-ink/90">
                   <Link href="/checkout" onClick={() => setOpen(false)}>
                     <Lock className="h-4 w-4" strokeWidth={1.75} />
-                    Secure checkout
+                    {t('drawer.checkout')}
                   </Link>
                 </Button>
                 <Button asChild variant="outline" className="h-11 rounded-md border-ink text-[13.5px] font-semibold hover:bg-ink hover:text-cream">
-                  <Link href="/cart" onClick={() => setOpen(false)}>View cart</Link>
+                  <Link href="/cart" onClick={() => setOpen(false)}>{t('drawer.viewCart')}</Link>
                 </Button>
               </div>
             </div>

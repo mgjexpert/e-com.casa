@@ -19,64 +19,67 @@ import {
   Gem,
   Star,
   PackageCheck,
+  Check,
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
+import { useT } from '@/hooks/use-t';
+import { useLanguage } from '@/lib/language-store';
+import { LANGUAGES_UI } from '@/lib/i18n';
 import { SEARCH_SUGGESTIONS } from '@/lib/constants';
 import { cn } from '@/lib/utils';
 
-const SHOP_MENU: { label: string; href: string; items: { label: string; href: string }[] }[] = [
+const SHOP_MENU: { labelKey: string; href: string; items: { labelKey: string; href: string }[] }[] = [
   {
-    label: 'Shop',
+    labelKey: 'nav.shop',
     href: '/shop',
     items: [
-      { label: 'All Products', href: '/shop' },
-      { label: 'Wall Panels', href: '/shop?category=wall-panels' },
-      { label: 'Lighting', href: '/shop?category=lighting' },
-      { label: 'Garden', href: '/shop?category=garden' },
-      { label: 'Outdoor', href: '/shop?category=outdoor' },
-      { label: 'Decoration', href: '/shop?category=decoration' },
-      { label: 'Organisation', href: '/shop?category=organisation' },
-      { label: 'Interior', href: '/shop?category=interior' },
+      { labelKey: 'shop.all', href: '/shop' },
+      { labelKey: 'shop.wallPanels', href: '/shop?category=wall-panels' },
+      { labelKey: 'shop.lighting', href: '/shop?category=lighting' },
+      { labelKey: 'shop.garden', href: '/shop?category=garden' },
+      { labelKey: 'shop.outdoor', href: '/shop?category=outdoor' },
+      { labelKey: 'shop.decoration', href: '/shop?category=decoration' },
+      { labelKey: 'shop.organisation', href: '/shop?category=organisation' },
+      { labelKey: 'shop.interior', href: '/shop?category=interior' },
     ],
   },
   {
-    label: 'Inspiration',
+    labelKey: 'nav.inspiration',
     href: '/inspiration',
     items: [
-      { label: 'Inspiration Gallery', href: '/inspiration' },
-      { label: 'Shop by Space', href: '/shop?filter=space' },
-      { label: 'Shop by Style', href: '/shop?filter=style' },
-      { label: 'Journal', href: '/journal' },
+      { labelKey: 'insp.gallery', href: '/inspiration' },
+      { labelKey: 'insp.bySpace', href: '/shop?filter=space' },
+      { labelKey: 'insp.byStyle', href: '/shop?filter=style' },
+      { labelKey: 'nav.journal', href: '/journal' },
     ],
   },
 ];
 
-const NAV = [
-  { label: 'Home', href: '/' },
-  { label: 'About Us', href: '/about' },
-  { label: 'Journal', href: '/journal' },
-];
-
-const ANNOUNCEMENTS = [
-  { icon: Truck, text: 'Free shipping across Europe' },
-  { icon: RotateCcw, text: '14-day easy returns' },
-  { icon: ShieldCheck, text: 'Secure payments — Stripe ready' },
-  { icon: Gem, text: 'New in: Garden Glow collection' },
+const ANNOUNCEMENTS: { icon: typeof Truck; key: string }[] = [
+  { icon: Truck, key: 'ann.freeShipping' },
+  { icon: RotateCcw, key: 'ann.returns' },
+  { icon: ShieldCheck, key: 'ann.secure' },
+  { icon: Gem, key: 'ann.newIn' },
 ];
 
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useT();
+  const lang = useLanguage((s) => s.lang);
+  const setLang = useLanguage((s) => s.setLang);
   const cartCount = useCart((s) => s.lines.reduce((a, l) => a + l.quantity, 0));
   const wishlistCount = useWishlist((s) => s.slugs.length);
   const openCartDrawer = useCartDrawer((s) => s.open);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const [langOpen, setLangOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
+  const langRef = useRef<HTMLDivElement>(null);
   const [prevPath, setPrevPath] = useState(pathname);
   const [msgIndex, setMsgIndex] = useState(0);
 
@@ -97,6 +100,7 @@ export function SiteHeader() {
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(e.target as Node)) setSearchOpen(false);
+      if (langRef.current && !langRef.current.contains(e.target as Node)) setLangOpen(false);
     };
     document.addEventListener('mousedown', onClick);
     return () => document.removeEventListener('mousedown', onClick);
@@ -119,6 +123,8 @@ export function SiteHeader() {
   const isActive = (href: string) =>
     href === '/' ? pathname === '/' : pathname.startsWith(href.split('?')[0]);
 
+  const currentLang = LANGUAGES_UI.find((l) => l.code === lang) ?? LANGUAGES_UI[0];
+
   return (
     <header className="sticky top-0 z-50">
       {/* Announcement bar — rotating message + static trust trio (desktop) */}
@@ -132,7 +138,7 @@ export function SiteHeader() {
                 return (
                   <>
                     <Msg.icon className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
-                    {Msg.text}
+                    {t(Msg.key)}
                   </>
                 );
               })()}
@@ -141,44 +147,85 @@ export function SiteHeader() {
             <span className="hidden h-3 w-px bg-white/20 lg:block" aria-hidden />
             <span className="hidden items-center gap-1.5 whitespace-nowrap lg:flex">
               <Star className="h-3.5 w-3.5 shrink-0 fill-[#e0a03c] text-[#e0a03c]" strokeWidth={1.5} />
-              Rated 4.8 by customers
+              {t('trust.rated')}
             </span>
             <span className="hidden h-3 w-px bg-white/20 xl:block" aria-hidden />
             <span className="hidden items-center gap-1.5 whitespace-nowrap xl:flex">
               <PackageCheck className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
-              Dispatched within 24h
+              {t('trust.dispatched')}
             </span>
           </div>
           <nav aria-label="Utility" className="flex shrink-0 items-center gap-4">
-            <button
-              type="button"
-              className="flex items-center gap-1 transition-colors hover:text-white"
-              aria-label="Language: English. More languages coming soon."
-            >
-              <Globe className="h-3.5 w-3.5" strokeWidth={1.5} />
-              EN
-              <ChevronDown className="h-3 w-3" strokeWidth={1.5} />
-            </button>
+            {/* Language switcher */}
+            <div ref={langRef} className="relative">
+              <button
+                type="button"
+                onClick={() => setLangOpen((v) => !v)}
+                className="flex items-center gap-1 transition-colors hover:text-white"
+                aria-label={t('util.language', { lang: currentLang.native })}
+                aria-expanded={langOpen}
+                aria-haspopup="menu"
+              >
+                <Globe className="h-3.5 w-3.5" strokeWidth={1.5} />
+                {lang.toUpperCase()}
+                <ChevronDown className={cn('h-3 w-3 transition-transform', langOpen && 'rotate-180')} strokeWidth={1.5} />
+              </button>
+              {langOpen && (
+                <div
+                  role="menu"
+                  aria-label="Language"
+                  className="absolute right-0 top-full z-50 mt-2 w-44 overflow-hidden rounded-lg border border-border bg-background p-1.5 shadow-[0_12px_32px_rgba(33,30,27,0.12)]"
+                >
+                  {LANGUAGES_UI.map((l) => (
+                    <button
+                      key={l.code}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={l.code === lang}
+                      onClick={() => {
+                        setLang(l.code);
+                        setLangOpen(false);
+                      }}
+                      className={cn(
+                        'flex w-full items-center justify-between rounded-md px-3 py-2 text-left text-[13px] transition-colors hover:bg-accent',
+                        l.code === lang ? 'font-semibold text-foreground' : 'text-foreground/80'
+                      )}
+                    >
+                      <span>
+                        {l.native}
+                        <span className="ml-1.5 text-[10.5px] uppercase tracking-wide text-muted-foreground">{l.code}</span>
+                      </span>
+                      {l.code === lang && <Check className="h-3.5 w-3.5 text-olive" strokeWidth={2} />}
+                    </button>
+                  ))}
+                  <p className="mt-1 border-t border-border/70 px-3 pb-1 pt-2 text-[10.5px] leading-relaxed text-muted-foreground">
+                    {lang === 'en'
+                      ? 'Store chrome available in Portuguese — AI concierge speaks both.'
+                      : 'Interface disponível em português — o assistente de IA fala as duas línguas.'}
+                  </p>
+                </div>
+              )}
+            </div>
             <span className="h-3 w-px bg-white/20" aria-hidden />
             <Link href="/wishlist" className="flex items-center gap-1.5 transition-colors hover:text-white">
               <Heart className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="hidden sm:inline">Wishlist</span>
+              <span className="hidden sm:inline">{t('util.wishlist')}</span>
               {wishlistCount > 0 && <span className="tabular-nums">({wishlistCount})</span>}
             </Link>
             <span className="h-3 w-px bg-white/20" aria-hidden />
             <Link href="/account" className="flex items-center gap-1.5 transition-colors hover:text-white">
               <User className="h-3.5 w-3.5" strokeWidth={1.5} />
-              <span className="hidden sm:inline">Account</span>
+              <span className="hidden sm:inline">{t('util.account')}</span>
             </Link>
             <span className="h-3 w-px bg-white/20" aria-hidden />
             <button
               type="button"
               onClick={openCartDrawer}
               className="flex items-center gap-1.5 transition-colors hover:text-white"
-              aria-label={`Open cart, ${cartCount} items`}
+              aria-label={t('util.openCart', { n: cartCount })}
             >
               <ShoppingBag className="h-3.5 w-3.5" strokeWidth={1.5} />
-              Cart (<span key={cartCount} className="tabular-nums animate-in zoom-in-50 duration-300" aria-live="polite">{cartCount}</span>)
+              {t('util.cart')} (<span key={cartCount} className="tabular-nums animate-in zoom-in-50 duration-300" aria-live="polite">{cartCount}</span>)
             </button>
           </nav>
         </div>
@@ -198,7 +245,7 @@ export function SiteHeader() {
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md transition-colors hover:bg-accent lg:hidden"
             onClick={() => setMobileOpen((v) => !v)}
             aria-expanded={mobileOpen}
-            aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+            aria-label={mobileOpen ? t('menu.close') : t('menu.open')}
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" strokeWidth={1.75} />}
           </button>
@@ -218,7 +265,7 @@ export function SiteHeader() {
                 E-com<span className="text-olive">.</span>casa
               </span>
               <span className="mt-1 block text-[10.5px] font-medium uppercase tracking-[0.18em] text-muted-foreground">
-                Make Your Space Yours.
+                {t('util.brandTagline')}
               </span>
             </span>
           </Link>
@@ -232,10 +279,10 @@ export function SiteHeader() {
                 isActive('/') ? 'text-foreground after:w-full' : 'text-foreground/75'
               )}
             >
-              Home
+              {t('nav.home')}
             </Link>
             {SHOP_MENU.map((menu) => (
-              <div key={menu.label} className="group relative">
+              <div key={menu.labelKey} className="group relative">
                 <Link
                   href={menu.href}
                   className={cn(
@@ -244,18 +291,18 @@ export function SiteHeader() {
                   )}
                   aria-haspopup="true"
                 >
-                  {menu.label}
+                  {t(menu.labelKey)}
                   <ChevronDown className="h-3.5 w-3.5 transition-transform group-hover:rotate-180" strokeWidth={1.75} />
                 </Link>
                 <div className="invisible absolute left-1/2 top-full z-50 w-56 -translate-x-1/2 pt-3 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="rounded-lg border border-border bg-background p-2 shadow-[0_12px_32px_rgba(33,30,27,0.10)]">
                     {menu.items.map((item) => (
                       <Link
-                        key={item.label}
+                        key={item.labelKey}
                         href={item.href}
                         className="flex items-center justify-between rounded-md px-3 py-2 text-[13.5px] text-foreground/80 transition-colors hover:bg-accent hover:text-foreground"
                       >
-                        {item.label}
+                        {t(item.labelKey)}
                       </Link>
                     ))}
                   </div>
@@ -269,7 +316,7 @@ export function SiteHeader() {
                 isActive('/about') ? 'text-foreground after:w-full' : 'text-foreground/75'
               )}
             >
-              About Us
+              {t('nav.about')}
             </Link>
             <Link
               href="/journal"
@@ -278,7 +325,7 @@ export function SiteHeader() {
                 isActive('/journal') ? 'text-foreground after:w-full' : 'text-foreground/75'
               )}
             >
-              Journal
+              {t('nav.journal')}
             </Link>
           </nav>
 
@@ -300,15 +347,15 @@ export function SiteHeader() {
                   setSearchOpen(true);
                 }}
                 onFocus={() => setSearchOpen(true)}
-                placeholder="Search for products, categories..."
-                aria-label="Search for products, categories"
+                placeholder={t('search.placeholder')}
+                aria-label={t('search.aria')}
                 className="h-10 w-full rounded-full border border-input bg-muted/60 pl-10 pr-4 text-[13.5px] outline-none transition-all placeholder:text-muted-foreground focus:border-ring focus:bg-background focus:ring-2 focus:ring-ring/20"
               />
             </form>
             {searchOpen && (
               <div className="absolute right-0 top-full z-50 mt-2 w-full overflow-hidden rounded-lg border border-border bg-background shadow-[0_12px_32px_rgba(33,30,27,0.10)]">
                 <div className="border-b border-border/70 px-4 py-2.5">
-                  <p className="eyebrow text-muted-foreground">Popular searches</p>
+                  <p className="eyebrow text-muted-foreground">{t('search.popular')}</p>
                 </div>
                 <ul className="max-h-72 overflow-y-auto thin-scrollbar p-1.5">
                   {SEARCH_SUGGESTIONS.map((s) => (
@@ -329,7 +376,7 @@ export function SiteHeader() {
                   onClick={() => submitSearch(query || 'all')}
                   className="flex w-full items-center justify-between border-t border-border/70 px-4 py-2.5 text-[13px] font-medium text-olive transition-colors hover:bg-accent"
                 >
-                  {query ? `Search for “${query}”` : 'Browse all products'}
+                  {query ? t('search.for', { q: query }) : t('search.browseAll')}
                   <ChevronRight className="h-3.5 w-3.5" />
                 </button>
               </div>
@@ -341,7 +388,7 @@ export function SiteHeader() {
             <Link
               href="/search"
               className="flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent"
-              aria-label="Search"
+              aria-label={t('search.mobile')}
             >
               <Search className="h-5 w-5" strokeWidth={1.75} />
             </Link>
@@ -349,7 +396,7 @@ export function SiteHeader() {
               type="button"
               onClick={openCartDrawer}
               className="relative flex h-10 w-10 items-center justify-center rounded-md transition-colors hover:bg-accent"
-              aria-label={`Open cart, ${cartCount} items`}
+              aria-label={t('util.openCart', { n: cartCount })}
             >
               <ShoppingBag className="h-5 w-5" strokeWidth={1.75} />
               {cartCount > 0 && (
@@ -381,43 +428,46 @@ export function SiteHeader() {
                   type="search"
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Search for products, categories..."
-                  aria-label="Search"
+                  placeholder={t('search.placeholder')}
+                  aria-label={t('search.mobile')}
                   className="h-11 w-full rounded-full border border-input bg-muted/60 pl-10 pr-4 text-sm outline-none focus:border-ring focus:ring-2 focus:ring-ring/20"
                 />
               </form>
-              {[{ label: 'Home', href: '/' }, ...SHOP_MENU, { label: 'About Us', href: '/about' }, { label: 'Journal', href: '/journal' }].map(
-                (item) => (
-                  <div key={item.label}>
-                    <Link
-                      href={item.href}
-                      className="flex items-center justify-between rounded-md px-3 py-3 text-[15px] font-medium transition-colors hover:bg-accent"
-                    >
-                      {item.label}
-                      {'items' in item && item.items && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
-                    </Link>
-                    {'items' in item && item.items && (
-                      <div className="ml-3 border-l border-border pl-3">
-                        {item.items.slice(0, 6).map((sub) => (
-                          <Link
-                            key={sub.label}
-                            href={sub.href}
-                            className="block rounded-md px-3 py-2 text-[13.5px] text-foreground/70 transition-colors hover:bg-accent hover:text-foreground"
-                          >
-                            {sub.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )
-              )}
+              {[
+                { labelKey: 'nav.home', href: '/' },
+                ...SHOP_MENU,
+                { labelKey: 'nav.about', href: '/about' },
+                { labelKey: 'nav.journal', href: '/journal' },
+              ].map((item) => (
+                <div key={item.labelKey}>
+                  <Link
+                    href={item.href}
+                    className="flex items-center justify-between rounded-md px-3 py-3 text-[15px] font-medium transition-colors hover:bg-accent"
+                  >
+                    {t(item.labelKey)}
+                    {'items' in item && item.items && <ChevronRight className="h-4 w-4 text-muted-foreground" />}
+                  </Link>
+                  {'items' in item && item.items && (
+                    <div className="ml-3 border-l border-border pl-3">
+                      {item.items.slice(0, 6).map((sub) => (
+                        <Link
+                          key={sub.labelKey}
+                          href={sub.href}
+                          className="block rounded-md px-3 py-2 text-[13.5px] text-foreground/70 transition-colors hover:bg-accent hover:text-foreground"
+                        >
+                          {t(sub.labelKey)}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              ))}
               <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border pt-4">
                 <Link href="/wishlist" className="flex items-center justify-center gap-2 rounded-md border border-input px-3 py-2.5 text-sm font-medium">
-                  <Heart className="h-4 w-4" /> Wishlist ({wishlistCount})
+                  <Heart className="h-4 w-4" /> {t('util.wishlist')} ({wishlistCount})
                 </Link>
                 <Link href="/account" className="flex items-center justify-center gap-2 rounded-md border border-input px-3 py-2.5 text-sm font-medium">
-                  <User className="h-4 w-4" /> Account
+                  <User className="h-4 w-4" /> {t('util.account')}
                 </Link>
               </div>
             </nav>

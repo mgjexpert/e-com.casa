@@ -70,6 +70,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'One or more products are unavailable' }, { status: 400 });
     }
 
+    // Oversell guard — reject if any requested quantity exceeds remaining stock
+    for (const item of data.items) {
+      const product = products.find((p) => p.slug === item.slug)!;
+      if (product.stock < item.quantity) {
+        return NextResponse.json(
+          {
+            error:
+              product.stock <= 0
+                ? `Sorry — “${product.name}” has just sold out.`
+                : `Sorry — only ${product.stock} × “${product.name}” remain in stock.`,
+          },
+          { status: 409 },
+        );
+      }
+    }
+
     let subtotal = 0;
     const lineItems = data.items.map((item) => {
       const product = products.find((p) => p.slug === item.slug)!;
@@ -101,32 +117,41 @@ export async function POST(req: NextRequest) {
     const giftWrapFee = data.giftWrap ? GIFT_WRAP_PRICE : 0;
     const total = subtotal - discount + shippingCost + giftWrapFee;
 
-    const order = await db.order.create({
-      data: {
-        orderNumber: generateOrderNumber(),
-        email: data.email,
-        firstName: data.firstName,
-        lastName: data.lastName,
-        address: data.address,
-        address2: data.address2 || null,
-        city: data.city,
-        postalCode: data.postalCode,
-        country: data.country,
-        phone: data.phone || null,
-        shippingMethod: data.shippingMethod,
-        paymentMethod: data.paymentMethod,
-        subtotal: subtotal.toFixed(2),
-        shipping: shippingCost.toFixed(2),
-        tax: '0.00', // VAT-inclusive pricing — no additional tax line (placeholder for OSS/VAT architecture)
-        discount: discount.toFixed(2),
-        total: total.toFixed(2),
-        promoCode: appliedPromo,
-        itemsJson: JSON.stringify(lineItems),
-        giftWrap: data.giftWrap,
-        notes: sanitizeNotes(data.notes) || null,
-        status: 'CONFIRMED',
-        paymentStatus: 'PAID', // mock — Stripe integration point
-      },
+    // Create the order and decrement stock atomically — one failure rolls back both
+    const order = await db.$transaction(async (tx) => {
+      for (const item of data.items) {
+        await tx.product.update({
+          where: { slug: item.slug },
+          data: { stock: { decrement: item.quantity } },
+        });
+      }
+      return tx.order.create({
+        data: {
+          orderNumber: generateOrderNumber(),
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          address: data.address,
+          address2: data.address2 || null,
+          city: data.city,
+          postalCode: data.postalCode,
+          country: data.country,
+          phone: data.phone || null,
+          shippingMethod: data.shippingMethod,
+          paymentMethod: data.paymentMethod,
+          subtotal: subtotal.toFixed(2),
+          shipping: shippingCost.toFixed(2),
+          tax: '0.00', // VAT-inclusive pricing — no additional tax line (placeholder for OSS/VAT architecture)
+          discount: discount.toFixed(2),
+          total: total.toFixed(2),
+          promoCode: appliedPromo,
+          itemsJson: JSON.stringify(lineItems),
+          giftWrap: data.giftWrap,
+          notes: sanitizeNotes(data.notes) || null,
+          status: 'CONFIRMED',
+          paymentStatus: 'PAID', // mock — Stripe integration point
+        },
+      });
     });
 
     return NextResponse.json({ order }, { status: 201 });

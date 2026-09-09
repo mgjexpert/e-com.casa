@@ -7,9 +7,11 @@ import { ProductCard } from '@/components/product/product-card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Button } from '@/components/ui/button';
 import { useWishlist } from '@/lib/wishlist-store';
+import { useT } from '@/hooks/use-t';
 import type { Product } from '@/types';
 
 export default function WishlistPage() {
+  const t = useT();
   const wishlist = useWishlist();
   const [products, setProducts] = useState<Product[] | null>(null);
   const [shared, setShared] = useState(false);
@@ -89,9 +91,9 @@ export default function WishlistPage() {
     <div className="container-ecom py-10 lg:py-14">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <h1 className="font-display text-[28px] font-medium tracking-tight sm:text-[32px]">Wishlist</h1>
+          <h1 className="font-display text-[28px] font-medium tracking-tight sm:text-[32px]">{t('wishlist.title')}</h1>
           <p className="mt-1 text-[13.5px] text-muted-foreground">
-            {visible.length === 0 ? 'Saved pieces will appear here.' : `${visible.length} saved ${visible.length === 1 ? 'piece' : 'pieces'}`}
+            {visible.length === 0 ? t('wishlist.savedAppear') : t('wishlist.savedCount', { n: visible.length, word: visible.length === 1 ? 'piece' : 'pieces' })}
           </p>
         </div>
         {slugs.length > 0 && (
@@ -100,15 +102,15 @@ export default function WishlistPage() {
             variant="outline"
             onClick={copyShareLink}
             className="min-h-[44px] gap-2 rounded-md"
-            aria-label="Copy a link to share this wishlist"
+            aria-label={t('wishlist.shareAria')}
           >
             {shared ? (
               <>
-                <Check className="h-4 w-4 text-olive" strokeWidth={2} /> Link copied
+                <Check className="h-4 w-4 text-olive" strokeWidth={2} /> {t('wishlist.linkCopied')}
               </>
             ) : (
               <>
-                <Share2 className="h-4 w-4" strokeWidth={1.75} /> Share wishlist
+                <Share2 className="h-4 w-4" strokeWidth={1.75} /> {t('wishlist.shareWishlist')}
               </>
             )}
           </Button>
@@ -121,19 +123,19 @@ export default function WishlistPage() {
           className="mt-4 flex items-center gap-2 rounded-md border border-olive/25 bg-olive/5 px-4 py-2.5 text-[13px] text-olive"
         >
           <Check className="h-4 w-4" strokeWidth={2} />
-          {importedCount} shared {importedCount === 1 ? 'piece was' : 'pieces were'} added to your wishlist.
+          {t('wishlist.imported', { n: importedCount })}
         </div>
       )}
 
       {visible.length === 0 ? (
         <div className="mt-12 rounded-lg border border-border bg-cream/50 px-6 py-16 text-center">
           <Heart className="mx-auto h-9 w-9 text-muted-foreground" strokeWidth={1.25} />
-          <p className="font-display mt-5 text-[20px]">Nothing saved yet</p>
+          <p className="font-display mt-5 text-[20px]">{t('wishlist.emptyTitle')}</p>
           <p className="mx-auto mt-2 max-w-sm text-[13.5px] text-muted-foreground">
-            Tap the heart on any product to keep it here — no account needed. Saved on this device.
+            {t('wishlist.emptyDescLong')}
           </p>
           <Button asChild className="mt-6 rounded-md bg-primary px-7">
-            <Link href="/shop">Discover the collection</Link>
+            <Link href="/shop">{t('wishlist.discover')}</Link>
           </Button>
         </div>
       ) : (

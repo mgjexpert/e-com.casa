@@ -6,11 +6,13 @@ import { ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useCart } from '@/lib/cart-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
+import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
 export function StickyAddToCart({ product }: { product: Product }) {
+  const t = useT();
   const add = useCart((s) => s.add);
   const openCartDrawer = useCartDrawer((s) => s.open);
   const sentinelRef = useRef<HTMLDivElement>(null);
@@ -66,7 +68,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
           <div className="min-w-0 flex-1">
             <p className="truncate text-[13.5px] font-medium leading-tight">{product.name}</p>
             <p className="mt-0.5 text-[12.5px] text-muted-foreground">
-              <span className="font-semibold text-foreground">{formatPrice(product.price)}</span> · incl. VAT
+              <span className="font-semibold text-foreground">{formatPrice(product.price)}</span> · {t('buy.inclVat')}
             </p>
           </div>
           <div className="hidden h-10 items-center rounded-md border border-input sm:flex">
@@ -75,7 +77,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
               onClick={() => setQty((q) => Math.max(1, q - 1))}
               disabled={qty <= 1}
               className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
-              aria-label="Decrease quantity"
+              aria-label={t('buy.decrease')}
             >
               −
             </button>
@@ -85,7 +87,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
               onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))}
               disabled={qty >= (product.stock || 99)}
               className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
-              aria-label="Increase quantity"
+              aria-label={t('buy.increase')}
             >
               +
             </button>
@@ -95,7 +97,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
             className="h-10 shrink-0 gap-2 rounded-md bg-ink px-4 text-[13.5px] font-semibold text-cream hover:bg-ink/90 sm:px-6"
           >
             <ShoppingBag className="h-4 w-4" strokeWidth={1.75} />
-            Add to cart
+            {t('sticky.addToCart')}
           </Button>
         </div>
       </div>

@@ -9,12 +9,14 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
+import { useT } from '@/hooks/use-t';
 import { formatPrice, toNumber, money } from '@/lib/format';
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_OPTIONS, PROMO_CODES } from '@/lib/constants';
 import type { Product } from '@/types';
 import { useEffect, useState } from 'react';
 
 export default function CartPage() {
+  const t = useT();
   const cart = useCart();
   const wishlist = useWishlist();
   const [promoInput, setPromoInput] = useState('');
@@ -42,10 +44,10 @@ export default function CartPage() {
     if (!code) return;
     if (PROMO_CODES[code]) {
       cart.setPromo(code);
-      toast({ title: 'Promo applied', description: PROMO_CODES[code].label });
+      toast({ title: t('cart.promoToastApplied'), description: PROMO_CODES[code].label });
       setPromoInput('');
     } else {
-      toast({ title: 'Invalid code', description: 'This promo code does not exist or has expired.', variant: 'destructive' });
+      toast({ title: t('cart.promoInvalid'), description: t('cart.promoToastInvalidDesc'), variant: 'destructive' });
     }
   };
 
@@ -54,7 +56,7 @@ export default function CartPage() {
     if (!line) return;
     wishlist.toggle(slug);
     cart.remove(slug);
-    toast({ title: 'Moved to wishlist', description: line.name });
+    toast({ title: t('cart.movedToast'), description: line.name });
   };
 
   if (lines.length === 0) {
@@ -63,12 +65,12 @@ export default function CartPage() {
         <span className="flex h-16 w-16 items-center justify-center rounded-full bg-cream">
           <ShoppingBag className="h-7 w-7 text-olive" strokeWidth={1.5} />
         </span>
-        <h1 className="font-display mt-6 text-[28px] font-medium">Your cart is empty</h1>
+        <h1 className="font-display mt-6 text-[28px] font-medium">{t('cart.emptyTitle')}</h1>
         <p className="mt-2 max-w-sm text-[14px] text-muted-foreground">
-          Every great space starts with one piece. Explore the collection and find yours.
+          {t('cart.emptyDescMain')}
         </p>
         <Link href="/shop" className="mt-7 inline-flex h-12 items-center rounded-md bg-primary px-8 text-[14px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90">
-          Start shopping
+          {t('cart.startShopping')}
         </Link>
       </div>
     );
@@ -76,19 +78,21 @@ export default function CartPage() {
 
   return (
     <div className="container-ecom py-8 lg:py-12">
-      <h1 className="font-display text-[28px] font-medium tracking-tight sm:text-[32px]">Your cart</h1>
+      <h1 className="font-display text-[28px] font-medium tracking-tight sm:text-[32px]">{t('cart.title')}</h1>
       <p className="mt-1 text-[13.5px] text-muted-foreground">
-        {lines.length} {lines.length === 1 ? 'item' : 'items'} · prices include VAT
+        {t('cart.itemsCount', { n: lines.length, word: lines.length === 1 ? 'item' : 'items' })}
       </p>
 
       {/* Free shipping progress */}
       <div className="mt-6 rounded-lg border border-border bg-cream/60 p-4">
         <p className="text-[13px]">
           {freeShipping ? (
-            <span className="font-medium text-olive">You have unlocked free standard shipping across Europe.</span>
+            <span className="font-medium text-olive">{t('cart.freeShippingUnlockedFull')}</span>
           ) : (
             <>
-              You are <strong>{formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount))}</strong> away from free standard shipping.
+              {t('cart.freeShippingAway', { amount: formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)) }).split(formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)))[0]}
+              <strong>{formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount))}</strong>
+              {t('cart.freeShippingAway', { amount: formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)) }).split(formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)))[1]}
             </>
           )}
         </p>
@@ -100,14 +104,14 @@ export default function CartPage() {
             aria-valuenow={Math.round(progress)}
             aria-valuemin={0}
             aria-valuemax={100}
-            aria-label="Progress to free shipping"
+            aria-label={t('cart.progressLabel')}
           />
         </div>
       </div>
 
       <div className="mt-8 grid gap-10 lg:grid-cols-[1fr_360px]">
         {/* Lines */}
-        <section aria-label="Cart items">
+        <section aria-label={t('cart.itemsRegion')}>
           <ul className="divide-y divide-border border-y border-border">
             {lines.map((line) => (
               <li key={line.slug} className="flex gap-4 py-5">
@@ -130,7 +134,7 @@ export default function CartPage() {
                         type="button"
                         onClick={() => cart.setQty(line.slug, line.quantity - 1)}
                         className="flex h-full w-9 items-center justify-center hover:bg-accent"
-                        aria-label={`Decrease quantity of ${line.name}`}
+                        aria-label={t('cart.decrease', { name: line.name })}
                       >
                         <Minus className="h-3.5 w-3.5" />
                       </button>
@@ -139,7 +143,7 @@ export default function CartPage() {
                         type="button"
                         onClick={() => cart.setQty(line.slug, line.quantity + 1)}
                         className="flex h-full w-9 items-center justify-center hover:bg-accent"
-                        aria-label={`Increase quantity of ${line.name}`}
+                        aria-label={t('cart.increase', { name: line.name })}
                       >
                         <Plus className="h-3.5 w-3.5" />
                       </button>
@@ -150,15 +154,15 @@ export default function CartPage() {
                         onClick={() => moveToWishlist(line.slug)}
                         className="flex items-center gap-1.5 text-[12px] text-muted-foreground transition-colors hover:text-foreground"
                       >
-                        <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> Save for later
+                        <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {t('cart.saveForLater')}
                       </button>
                       <button
                         type="button"
                         onClick={() => cart.remove(line.slug)}
                         className="flex items-center gap-1.5 text-[12px] text-muted-foreground transition-colors hover:text-destructive"
-                        aria-label={`Remove ${line.name} from cart`}
+                        aria-label={t('cart.removeFor', { name: line.name })}
                       >
-                        <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} /> Remove
+                        <Trash2 className="h-3.5 w-3.5" strokeWidth={1.75} /> {t('drawer.removeShort')}
                       </button>
                     </div>
                   </div>
@@ -170,7 +174,7 @@ export default function CartPage() {
           {/* Suggestions */}
           {suggested.length > 0 && (
             <div className="mt-10">
-              <h2 className="font-display text-[20px] font-medium">Complete the look</h2>
+              <h2 className="font-display text-[20px] font-medium">{t('cart.completeTheLook')}</h2>
               <div className="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-4">
                 {suggested.map((p) => (
                   <Link key={p.id} href={`/product/${p.slug}`} className="group">
@@ -187,19 +191,19 @@ export default function CartPage() {
         </section>
 
         {/* Summary */}
-        <aside aria-label="Order summary">
+        <aside aria-label={t('cart.summary')}>
           <div className="rounded-lg border border-border bg-card p-6 lg:sticky lg:top-32">
-            <h2 className="font-display text-[20px] font-medium">Order summary</h2>
+            <h2 className="font-display text-[20px] font-medium">{t('cart.summary')}</h2>
 
             {/* Promo */}
             <div className="mt-5">
               {cart.promoCode && promo ? (
                 <div className="flex items-center justify-between rounded-md bg-olive/10 px-3.5 py-2.5">
                   <span className="flex items-center gap-2 text-[13px] font-medium text-olive">
-                    <Tag className="h-3.5 w-3.5" /> {cart.promoCode} — {promo.label}
+                    <Tag className="h-3.5 w-3.5" /> {t('cart.promoApplied', { code: cart.promoCode, label: promo.label })}
                   </span>
-                  <button type="button" onClick={() => cart.setPromo(null)} className="text-[12px] text-muted-foreground hover:text-destructive" aria-label="Remove promo code">
-                    Remove
+                  <button type="button" onClick={() => cart.setPromo(null)} className="text-[12px] text-muted-foreground hover:text-destructive" aria-label={t('cart.promoRemoveAria')}>
+                    {t('cart.promoRemove')}
                   </button>
                 </div>
               ) : (
@@ -207,12 +211,12 @@ export default function CartPage() {
                   <Input
                     value={promoInput}
                     onChange={(e) => setPromoInput(e.target.value)}
-                    placeholder="Promo code"
+                    placeholder={t('cart.promoPlaceholder')}
                     className="h-10 rounded-md text-[13px]"
-                    aria-label="Promo code"
+                    aria-label={t('cart.promoPlaceholder')}
                   />
                   <Button variant="outline" onClick={applyPromo} className="h-10 shrink-0 rounded-md px-4 text-[13px]">
-                    Apply
+                    {t('cart.promoApply')}
                   </Button>
                 </div>
               )}
@@ -221,26 +225,26 @@ export default function CartPage() {
             <Separator className="my-5" />
             <dl className="space-y-3 text-[13.5px]">
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Subtotal</dt>
+                <dt className="text-muted-foreground">{t('cart.subtotal')}</dt>
                 <dd className="font-medium">{formatPrice(subtotal)}</dd>
               </div>
               {discount > 0 && (
                 <div className="flex justify-between text-olive">
-                  <dt>Discount ({cart.promoCode})</dt>
+                  <dt>{t('cart.discount')} ({cart.promoCode})</dt>
                   <dd className="font-medium">−{formatPrice(discount)}</dd>
                 </div>
               )}
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">Shipping (standard est.)</dt>
-                <dd className="font-medium">{shippingEstimate === 0 ? <span className="text-olive">Free</span> : formatPrice(shippingEstimate)}</dd>
+                <dt className="text-muted-foreground">{t('cart.shippingEstimate')}</dt>
+                <dd className="font-medium">{shippingEstimate === 0 ? <span className="text-olive">{t('common.free')}</span> : formatPrice(shippingEstimate)}</dd>
               </div>
               <div className="flex justify-between">
-                <dt className="text-muted-foreground">VAT</dt>
-                <dd className="text-muted-foreground">Included</dd>
+                <dt className="text-muted-foreground">{t('cart.vat')}</dt>
+                <dd className="text-muted-foreground">{t('cart.vatIncludedNote')}</dd>
               </div>
               <Separator />
               <div className="flex justify-between text-[16px]">
-                <dt className="font-semibold">Total</dt>
+                <dt className="font-semibold">{t('cart.total')}</dt>
                 <dd className="font-semibold">{formatPrice(money(total))}</dd>
               </div>
             </dl>
@@ -249,21 +253,21 @@ export default function CartPage() {
               href="/checkout"
               className="mt-6 flex h-12 w-full items-center justify-center rounded-md bg-primary text-[14.5px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Proceed to checkout
+              {t('cart.checkout')}
             </Link>
             <Link href="/shop" className="mt-3 block text-center text-[13px] text-muted-foreground underline-offset-4 hover:text-foreground hover:underline">
-              or continue shopping
+              {t('cart.orContinue')}
             </Link>
 
             <ul className="mt-6 space-y-2.5 border-t border-border pt-5">
               {[
-                { icon: ShieldCheck, label: 'Secure payments — Stripe ready' },
-                { icon: RotateCcw, label: '14-day free returns' },
-                { icon: Truck, label: 'Tracked delivery across Europe' },
-              ].map((t) => (
-                <li key={t.label} className="flex items-center gap-2.5 text-[12.5px] text-muted-foreground">
-                  <t.icon className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
-                  {t.label}
+                { icon: ShieldCheck, label: t('cart.trustSecure') },
+                { icon: RotateCcw, label: t('cart.trustReturns') },
+                { icon: Truck, label: t('cart.trustTracked') },
+              ].map((item) => (
+                <li key={item.label} className="flex items-center gap-2.5 text-[12.5px] text-muted-foreground">
+                  <item.icon className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
+                  {item.label}
                 </li>
               ))}
             </ul>

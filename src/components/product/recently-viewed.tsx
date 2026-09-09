@@ -3,9 +3,11 @@
 import { useEffect, useState } from 'react';
 import { useRecentlyViewed } from '@/lib/recently-viewed-store';
 import { ProductCard } from '@/components/product/product-card';
+import { useT } from '@/hooks/use-t';
 import type { Product } from '@/types';
 
 export function RecentlyViewed({ excludeSlug }: { excludeSlug?: string }) {
+  const t = useT();
   const { slugs, hydrated } = useRecentlyViewed();
   const [products, setProducts] = useState<Product[] | null>(null);
 
@@ -37,7 +39,7 @@ export function RecentlyViewed({ excludeSlug }: { excludeSlug?: string }) {
     <section aria-labelledby="recently-viewed-heading" className="mt-16 border-t border-border pt-12">
       <div className="flex items-end justify-between">
         <h2 id="recently-viewed-heading" className="font-display text-[24px] font-medium">
-          Recently viewed
+          {t('recently.title')}
         </h2>
       </div>
       <div className="no-scrollbar -mx-4 mt-6 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:grid sm:grid-cols-4 sm:overflow-visible sm:px-0">

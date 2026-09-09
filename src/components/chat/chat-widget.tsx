@@ -12,7 +12,9 @@ import {
 } from 'lucide-react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { formatPrice } from '@/lib/format';
+import { useT } from '@/hooks/use-t';
 import type { Product } from '@/types';
+import { cn } from '@/lib/utils';
 
 // ============================================================
 // E-com.casa Concierge — AI shopping assistant (live, /api/chat)
@@ -60,12 +62,7 @@ function loadStoredChat(): { messages: ChatMessage[]; restoredAt: number } | nul
   }
 }
 
-const QUICK_QUESTIONS = [
-  'Recommend something for a small balcony',
-  'How long does delivery take?',
-  'What is your return policy?',
-  'Best gift under €60?',
-];
+const QUICK_QUESTION_KEYS = ['chat.q1', 'chat.q2', 'chat.q3', 'chat.q4'];
 
 // Fetched-product cache shared across opens (module scope)
 const productCache = new Map<string, Product>();
@@ -79,6 +76,7 @@ function timeLabel() {
 }
 
 export function ChatWidget() {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
@@ -227,10 +225,10 @@ export function ChatWidget() {
         aria-expanded={open}
         aria-label={
           open
-            ? 'Close chat'
+            ? t('chat.close')
             : messages.length > 0
-              ? 'Continue your conversation — open chat'
-              : 'Need help? Open chat'
+              ? t('chat.continue')
+              : t('chat.open')
         }
         className="fixed bottom-5 right-5 z-[60] flex h-13 w-13 items-center justify-center rounded-full bg-ink text-cream shadow-[0_8px_24px_rgba(29,33,30,0.35)] transition-transform hover:scale-105 md:bottom-6 md:right-6"
         style={{ height: 52, width: 52 }}
@@ -252,21 +250,21 @@ export function ChatWidget() {
             exit={{ opacity: 0, y: 16, scale: 0.97 }}
             transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             role="dialog"
-            aria-label="E-com.casa Concierge chat"
+            aria-label={t('chat.title')}
             className="fixed bottom-[84px] right-5 z-[60] flex max-h-[min(72vh,620px)] w-[min(92vw,380px)] flex-col overflow-hidden rounded-xl border border-border bg-background shadow-[0_20px_60px_rgba(33,30,27,0.22)] md:right-6"
           >
             {/* Header */}
             <div className="shrink-0 bg-ink px-5 py-4">
               <div className="flex items-center justify-between gap-2">
-                <p className="font-display text-[17px] font-medium text-white">E-com.casa Concierge</p>
+                <p className="font-display text-[17px] font-medium text-white">{t('chat.title')}</p>
                 {messages.length > 0 && (
                   <button
                     type="button"
                     onClick={resetChat}
                     className="flex items-center gap-1 rounded-md px-2 py-1 text-[11.5px] text-[#a7ada0] transition-colors hover:bg-white/10 hover:text-white"
-                    aria-label="Start a new conversation"
+                    aria-label={t('chat.newChat')}
                   >
-                    <RotateCcw className="h-3 w-3" strokeWidth={1.75} /> New chat
+                    <RotateCcw className="h-3 w-3" strokeWidth={1.75} /> {t('chat.newChat')}
                   </button>
                 )}
               </div>
@@ -275,7 +273,7 @@ export function ChatWidget() {
                   <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#7da87b] opacity-60" />
                   <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-[#7da87b]" />
                 </span>
-                Online — styling advice, orders & delivery
+                {t('chat.online')}
               </p>
             </div>
 
@@ -284,21 +282,21 @@ export function ChatWidget() {
               ref={listRef}
               role="log"
               aria-live="polite"
-              aria-label="Conversation"
+              aria-label={t('chat.conversation')}
               className="thin-scrollbar min-h-[220px] flex-1 space-y-4 overflow-y-auto p-4"
             >
               {/* Restored-conversation notice */}
               {restoredNotice && messages.length > 0 && (
                 <div className="sticky top-0 z-10 -mx-1 flex items-center justify-between gap-2 rounded-full border border-border bg-background/95 px-3.5 py-1.5 backdrop-blur">
                   <p className="text-[11px] font-medium text-muted-foreground">
-                    Picked up where you left off
+                    {t('chat.restored')}
                   </p>
                   <button
                     type="button"
                     onClick={resetChat}
                     className="shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold text-terracotta underline-offset-2 hover:underline"
                   >
-                    Start fresh
+                    {t('chat.startFresh')}
                   </button>
                 </div>
               )}
@@ -306,22 +304,21 @@ export function ChatWidget() {
               {messages.length === 0 ? (
                 <div className="py-1">
                   <div className="rounded-lg rounded-tl-none bg-muted/70 px-4 py-3 text-[13.5px] leading-relaxed text-foreground">
-                    Hello — I&apos;m the E-com.casa concierge. Ask me about pieces, spaces, delivery or your
-                    order, and I&apos;ll point you the right way.
+                    {t('chat.greeting')}
                   </div>
                   <p className="mb-2 mt-4 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                    <Sparkles className="h-3 w-3 text-[#e0a03c]" strokeWidth={1.75} /> Try asking
+                    <Sparkles className="h-3 w-3 text-[#e0a03c]" strokeWidth={1.75} /> {t('chat.tryAsking')}
                   </p>
                   <div className="flex flex-col gap-2">
-                    {QUICK_QUESTIONS.map((q) => (
+                    {QUICK_QUESTION_KEYS.map((key) => (
                       <button
-                        key={q}
+                        key={key}
                         type="button"
                         disabled={pending}
-                        onClick={() => send(q)}
+                        onClick={() => send(t(key))}
                         className="flex min-h-[44px] items-center justify-between rounded-lg border border-border bg-card px-4 py-2.5 text-left text-[13px] font-medium transition-colors hover:border-ring hover:bg-accent disabled:opacity-50"
                       >
-                        {q}
+                        {t(key)}
                         <SendHorizontal className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                       </button>
                     ))}
@@ -348,17 +345,28 @@ export function ChatWidget() {
                         {m.content}
                       </div>
                     </div>
-                    {/* Product suggestion mini-cards */}
+                    {/* Product suggestion mini-cards — carousel when more than 2 */}
                     {m.role === 'assistant' && m.suggestions && m.suggestions.length > 0 && (
-                      <div className="mt-2 space-y-2">
+                      <div
+                        className={
+                          m.suggestions.length > 2
+                            ? 'no-scrollbar -mr-4 mt-2 flex snap-x gap-2 overflow-x-auto px-1 pb-1 pr-4'
+                            : 'mt-2 space-y-2'
+                        }
+                        role={m.suggestions.length > 2 ? 'region' : undefined}
+                        aria-label={m.suggestions.length > 2 ? 'Suggested products — scroll for more' : undefined}
+                      >
                         {m.suggestions.map((slug) => {
                           const p = productFor(slug);
                           if (!p) {
                             return (
                               <div
                                 key={slug}
-                                className="flex h-[68px] animate-pulse items-center gap-3 rounded-lg border border-border bg-card px-3"
-                                aria-label="Loading product"
+                                className={cn(
+                                  'flex h-[68px] animate-pulse items-center gap-3 rounded-lg border border-border bg-card px-3',
+                                  m.suggestions && m.suggestions.length > 2 && 'w-[210px] shrink-0 snap-start'
+                                )}
+                                aria-label={t('chat.loadingProduct')}
                               >
                                 <div className="h-11 w-11 rounded-md bg-muted" />
                                 <div className="flex-1 space-y-1.5">
@@ -373,7 +381,10 @@ export function ChatWidget() {
                               key={slug}
                               href={`/product/${p.slug}`}
                               onClick={() => setOpen(false)}
-                              className="group flex items-center gap-3 rounded-lg border border-border bg-card p-2.5 pr-3.5 transition-all hover:border-ring hover:shadow-[0_4px_16px_rgba(33,30,27,0.08)]"
+                              className={cn(
+                                'group flex items-center gap-3 rounded-lg border border-border bg-card p-2.5 pr-3.5 transition-all hover:border-ring hover:shadow-[0_4px_16px_rgba(33,30,27,0.08)]',
+                                m.suggestions && m.suggestions.length > 2 && 'w-[210px] shrink-0 snap-start'
+                              )}
                             >
                               <span className="relative block h-12 w-12 shrink-0 overflow-hidden rounded-md bg-muted">
                                 <img src={p.image} alt="" className="h-full w-full object-cover" loading="lazy" />
@@ -385,7 +396,7 @@ export function ChatWidget() {
                                 <span className="mt-0.5 block text-[12px] text-olive">{formatPrice(p.price)}</span>
                               </span>
                               <span className="shrink-0 rounded-full bg-cream px-2.5 py-1 text-[11px] font-semibold text-olive transition-colors group-hover:bg-olive group-hover:text-cream">
-                                View
+                                {t('chat.view')}
                               </span>
                             </Link>
                           );
@@ -398,7 +409,7 @@ export function ChatWidget() {
 
               {/* Typing indicator */}
               {pending && (
-                <div className="flex justify-start" aria-label="Concierge is typing">
+                <div className="flex justify-start" aria-label={t('chat.typing')}>
                   <div className="flex items-center gap-1.5 rounded-xl rounded-bl-sm bg-muted/70 px-4 py-3.5">
                     {[0, 1, 2].map((i) => (
                       <span
@@ -426,8 +437,8 @@ export function ChatWidget() {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Ask about products, delivery, orders…"
-                  aria-label="Message the concierge"
+                  placeholder={t('chat.inputPlaceholder')}
+                  aria-label={t('chat.inputAria')}
                   maxLength={500}
                   disabled={pending}
                   className="h-11 min-w-0 flex-1 rounded-full border border-input bg-muted/50 px-4 text-[13.5px] outline-none transition-all placeholder:text-muted-foreground focus:border-ring focus:bg-background focus:ring-2 focus:ring-ring/20 disabled:opacity-60"
@@ -435,7 +446,7 @@ export function ChatWidget() {
                 <button
                   type="submit"
                   disabled={pending || !input.trim()}
-                  aria-label="Send message"
+                  aria-label={t('chat.send')}
                   className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-ink text-cream transition-all hover:bg-olive disabled:opacity-40"
                 >
                   <SendHorizontal className="h-4 w-4" strokeWidth={1.75} />
@@ -446,7 +457,7 @@ export function ChatWidget() {
             {/* Footer */}
             <div className="shrink-0 border-t border-border bg-muted/40 px-5 py-2.5">
               <p className="text-[11px] leading-relaxed text-muted-foreground">
-                AI assistant — answers may not be perfect. For anything binding, email{' '}
+                {t('chat.disclaimer')}{' '}
                 <a href="mailto:support@e-com.casa" className="underline underline-offset-2 hover:text-foreground">
                   <Mail className="mr-0.5 inline h-3 w-3" strokeWidth={1.75} />
                   support@e-com.casa
