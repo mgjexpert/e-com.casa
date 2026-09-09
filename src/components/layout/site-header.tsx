@@ -16,6 +16,7 @@ import {
   RotateCcw,
   ShieldCheck,
   Globe,
+  Gem,
 } from 'lucide-react';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
@@ -55,6 +56,13 @@ const NAV = [
   { label: 'Journal', href: '/journal' },
 ];
 
+const ANNOUNCEMENTS = [
+  { icon: Truck, text: 'Free shipping across Europe' },
+  { icon: RotateCcw, text: '14-day easy returns' },
+  { icon: ShieldCheck, text: 'Secure payments — Stripe ready' },
+  { icon: Gem, text: 'New in: Garden Glow collection' },
+];
+
 export function SiteHeader() {
   const router = useRouter();
   const pathname = usePathname();
@@ -66,6 +74,7 @@ export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
   const [prevPath, setPrevPath] = useState(pathname);
+  const [msgIndex, setMsgIndex] = useState(0);
 
   // Close overlays when navigation happens (render-time state adjustment)
   if (prevPath !== pathname) {
@@ -89,6 +98,13 @@ export function SiteHeader() {
     return () => document.removeEventListener('mousedown', onClick);
   }, []);
 
+  // Rotate announcement messages (disabled for reduced-motion users)
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const id = setInterval(() => setMsgIndex((i) => (i + 1) % ANNOUNCEMENTS.length), 4500);
+    return () => clearInterval(id);
+  }, []);
+
   const submitSearch = (q: string) => {
     if (!q.trim()) return;
     setSearchOpen(false);
@@ -101,21 +117,29 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-50">
-      {/* Announcement bar */}
+      {/* Announcement bar — rotating message + static trust trio (desktop) */}
       <div className="bg-ink text-[#d6d9d2]">
         <div className="container-ecom flex h-9 items-center justify-between gap-4 text-[11px] tracking-wide">
           <div className="flex min-w-0 items-center gap-4 overflow-hidden">
-            <span className="flex items-center gap-1.5 whitespace-nowrap">
-              <Truck className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
-              Free shipping across Europe
+            {/* Rotating message (all breakpoints) */}
+            <span key={msgIndex} className="flex items-center gap-1.5 whitespace-nowrap transition-opacity duration-500" aria-live="off">
+              {(() => {
+                const Msg = ANNOUNCEMENTS[msgIndex];
+                return (
+                  <>
+                    <Msg.icon className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
+                    {Msg.text}
+                  </>
+                );
+              })()}
             </span>
-            <span className="hidden h-3 w-px bg-white/20 sm:block" aria-hidden />
-            <span className="hidden items-center gap-1.5 whitespace-nowrap sm:flex">
+            <span className="hidden h-3 w-px bg-white/20 lg:block" aria-hidden />
+            <span className="hidden items-center gap-1.5 whitespace-nowrap lg:flex">
               <RotateCcw className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
               14-day returns
             </span>
-            <span className="hidden h-3 w-px bg-white/20 md:block" aria-hidden />
-            <span className="hidden items-center gap-1.5 whitespace-nowrap md:flex">
+            <span className="hidden h-3 w-px bg-white/20 xl:block" aria-hidden />
+            <span className="hidden items-center gap-1.5 whitespace-nowrap xl:flex">
               <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#e0a03c]" strokeWidth={1.5} />
               Secure payments
             </span>

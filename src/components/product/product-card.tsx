@@ -64,7 +64,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         className="block focus-visible:outline-ring rounded-md"
         aria-label={`${product.name}, ${formatPrice(product.price)}`}
       >
-        <div className="relative aspect-[5/5] overflow-hidden rounded-md border border-border/60 bg-muted/40">
+        <div className="relative aspect-[5/5] overflow-hidden rounded-md border border-border/60 bg-muted/40 transition-all duration-300 group-hover:border-ring/50 group-hover:shadow-[0_10px_28px_rgba(33,30,27,0.10)]">
           <Image
             src={product.image}
             alt={product.name}

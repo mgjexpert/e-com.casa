@@ -6,6 +6,9 @@ import { db } from '@/lib/db';
 import { BuyBox } from '@/components/product/buy-box';
 import { ProductCard } from '@/components/product/product-card';
 import { Stars } from '@/components/product/product-card';
+import { ReviewsSection } from '@/components/product/reviews-section';
+import { RecentlyViewed } from '@/components/product/recently-viewed';
+import { TrackProductView } from '@/components/product/track-product-view';
 import { formatPrice } from '@/lib/format';
 import { COMPANY } from '@/lib/company';
 import type { Product } from '@/types';
@@ -26,15 +29,16 @@ async function getProduct(slug: string): Promise<Product | null> {
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProduct(slug);
-  if (!product) return { title: 'Product not found' };
+  // Throw before streaming begins so the response carries a real 404 status
+  if (!product) notFound();
   return {
-    title: `${product.name} — ${formatPrice(product.price)}`,
-    description: product.description.slice(0, 155),
-    alternates: { canonical: `/product/${product.slug}` },
+    title: `${product!.name} — ${formatPrice(product!.price)}`,
+    description: product!.description.slice(0, 155),
+    alternates: { canonical: `/product/${product!.slug}` },
     openGraph: {
-      title: product.name,
-      description: product.description.slice(0, 155),
-      images: [{ url: product.image }],
+      title: product!.name,
+      description: product!.description.slice(0, 155),
+      images: [{ url: product!.image }],
     },
   };
 }
@@ -64,6 +68,23 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     related = candidates as unknown as Product[];
   } catch {
     related = [];
+  }
+
+  // "Complete the Look" — pieces that share the same space, plus a lighting pick
+  let completeTheLook: Product[] = [];
+  try {
+    const firstSpace = spaceSlugs[0];
+    const lookCandidates = await db.product.findMany({
+      where: {
+        slug: { notIn: [product.slug, ...related.map((r) => r.slug)] },
+        complianceStatus: { not: 'BLOCKED' },
+        ...(firstSpace ? [{ spaceSlugs: { contains: firstSpace } }] : []),
+      },
+      take: 4,
+    });
+    completeTheLook = lookCandidates as unknown as Product[];
+  } catch {
+    completeTheLook = [];
   }
 
   let safety: {
@@ -247,6 +268,29 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       </div>
 
+      {/* Complete the Look */}
+      {completeTheLook.length >= 2 && (
+        <section aria-labelledby="ctl-heading" className="mt-16 border-t border-border pt-12">
+          <div className="flex items-end justify-between">
+            <div>
+              <h2 id="ctl-heading" className="font-display text-[24px] font-medium">Complete the Look</h2>
+              <p className="mt-1 text-[13.5px] text-muted-foreground">
+                Pieces that pair beautifully with this one — curated for your{' '}
+                <span className="capitalize">{spaceSlugs[0]?.replace(/-/g, ' ') ?? 'space'}</span>.
+              </p>
+            </div>
+            <Link href={`/shop?space=${spaceSlugs[0] ?? ''}`} className="hidden text-[13px] font-medium text-foreground/70 hover:text-foreground sm:block">
+              Shop the space →
+            </Link>
+          </div>
+          <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
+            {completeTheLook.map((p) => (
+              <ProductCard key={p.id} product={p} />
+            ))}
+          </div>
+        </section>
+      )}
+
       {/* Related */}
       {related.length > 0 && (
         <section aria-labelledby="related-heading" className="mt-16 border-t border-border pt-12">
@@ -263,6 +307,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
         </section>
       )}
+
+      {/* Reviews */}
+      <ReviewsSection slug={product.slug} rating={product.rating} reviewCount={product.reviewCount} />
+
+      {/* Recently viewed (client, localStorage) */}
+      <RecentlyViewed excludeSlug={product.slug} />
+
+      <TrackProductView slug={product.slug} />
 
       {/* Product structured data */}
       <script
