@@ -145,6 +145,10 @@ export interface PaymentMethodCapability {
    *  Stripe's Express Checkout Element and have no static logo. */
   logo: string | null;
   logoKind: 'static' | 'dynamic';
+  /** Optional individual brand marks for methods whose single logo is a
+   *  combined card artwork (e.g. Visa / Mastercard / American Express
+   *  cropped from the same supplied asset). Display-only. */
+  brandLogos?: Array<{ src: string; alt: string }>;
   countryAvailability: readonly string[];
   currencyAvailability: readonly string[];
   providerAvailability: boolean;

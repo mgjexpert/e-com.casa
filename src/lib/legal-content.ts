@@ -62,7 +62,7 @@ export const legalDocuments: LegalDocument[] = [
           `Legal matters: ${COMPANY.emails.legal}`,
           `Privacy matters: ${COMPANY.emails.privacy}`,
           `Product compliance: ${COMPANY.emails.compliance}`,
-          `Telephone: ${COMPANY.telephone}`,
+          ...(COMPANY.telephone ? [`Telephone: ${COMPANY.telephone}`] : []),
         ],
       },
       {
@@ -724,7 +724,7 @@ export const legalDocuments: LegalDocument[] = [
         bullets: [
           `Email: ${COMPANY.emails.support}`,
           `Legal matters: ${COMPANY.emails.legal}`,
-          `Telephone: ${COMPANY.telephone}`,
+          ...(COMPANY.telephone ? [`Telephone: ${COMPANY.telephone}`] : []),
         ],
       },
       {

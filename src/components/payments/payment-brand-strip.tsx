@@ -62,11 +62,19 @@ export function PaymentBrandStrip({
   }, [country, currency, preloaded]);
 
   const methods = preloaded ?? fetched;
-  const logos = (methods ?? []).filter(
-    (m) => m.geographicallyEligible && m.logoKind === 'static' && m.logo,
+  const visible = (methods ?? []).filter(
+    (m) => m.geographicallyEligible && m.logoKind === 'static' && (m.logo || m.brandLogos?.length),
   );
 
-  if (logos.length === 0) return null;
+  if (visible.length === 0) return null;
+
+  // Flatten: methods carrying individual brand marks (card networks
+  // cropped from the same supplied artwork) render one chip per brand.
+  const logos = visible.flatMap((m) =>
+    m.brandLogos?.length
+      ? m.brandLogos.map((b) => ({ key: `${m.method}:${b.alt}`, src: b.src, alt: b.alt }))
+      : [{ key: m.method, src: m.logo!, alt: m.displayName }],
+  );
 
   return (
     <div className={className}>
@@ -76,9 +84,9 @@ export function PaymentBrandStrip({
         </p>
       )}
       <ul className="flex flex-wrap items-center gap-1.5" aria-label={caption ?? 'Accepted payment methods'}>
-        {logos.map((m) => (
-          <li key={m.method}>
-            <PaymentMethodLogo src={m.logo!} alt={m.displayName} variant={variant} height={variant === 'footer' ? 22 : 26} />
+        {logos.map((l) => (
+          <li key={l.key}>
+            <PaymentMethodLogo src={l.src} alt={l.alt} variant={variant} height={variant === 'footer' ? 22 : 26} />
           </li>
         ))}
       </ul>

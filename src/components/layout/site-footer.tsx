@@ -248,7 +248,9 @@ export function SiteFooter() {
                 {COMPANY.emails.support}
               </a>
             </p>
-            <p className="mt-1.5 text-[12.5px] text-[#9aa093]">{t('footer.telephone', { n: COMPANY.telephone })}</p>
+            {COMPANY.telephone && (
+              <p className="mt-1.5 text-[12.5px] text-[#9aa093]">{t('footer.telephone', { n: COMPANY.telephone })}</p>
+            )}
           </div>
           <div className="flex flex-col items-start justify-between gap-8 md:items-end">
             {/* Social — configuration-driven; renders only real,

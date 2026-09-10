@@ -33,6 +33,9 @@ export interface PaymentMethodDefinition {
   requiresGatewaySupport: boolean;
   /** Rendered by Stripe Express Checkout Element rather than a static logo? */
   dynamic?: boolean;
+  /** Individual brand marks cropped from the same supplied asset
+   *  (display-only — capability identity stays the single `method`). */
+  brandLogos?: ReadonlyArray<{ src: string; alt: string }>;
   sortOrder: number;
 }
 
@@ -70,6 +73,13 @@ export const PAYMENT_METHODS: Record<PaymentMethodType, PaymentMethodDefinition>
     displayName: 'Card',
     // Supplied combined brand asset (Visa · Mastercard · American Express)
     logo: '/payment-methods/cards.jpg',
+    // Individual marks cropped from that same supplied artwork — used by
+    // the brand strips so each card network stays legible.
+    brandLogos: [
+      { src: '/payment-methods/visa.png', alt: 'Visa' },
+      { src: '/payment-methods/mastercard.png', alt: 'Mastercard' },
+      { src: '/payment-methods/amex.png', alt: 'American Express' },
+    ],
     countries: ['*'],
     currencies: ['EUR', 'GBP', 'DKK', 'SEK', 'PLN', 'CZK', 'HUF', 'RON', 'BGN'],
     requiresGatewaySupport: false,
@@ -227,6 +237,7 @@ export function getPaymentMethodsForCountry(
       displayName: def.displayName,
       logo: def.logo,
       logoKind: def.dynamic ? 'dynamic' : 'static',
+      brandLogos: def.brandLogos ? def.brandLogos.map((b) => ({ ...b })) : undefined,
       countryAvailability: def.countries,
       currencyAvailability: def.currencies,
       providerAvailability: providerOk,

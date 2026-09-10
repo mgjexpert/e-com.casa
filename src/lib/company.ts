@@ -24,7 +24,9 @@ export const COMPANY = {
     privacy: 'privacy@e-com.casa',
     compliance: 'compliance@e-com.casa',
   },
-  telephone: 'To be provided',
+  // Real value required before it is rendered anywhere (footer, legal
+  // pages hide the line while it is a placeholder — never fabricate).
+  telephone: '',
   vatNumber: '[TO BE COMPLETED]',
   hostingProvider: '[TO BE COMPLETED]',
   representative: '[TO BE COMPLETED]',

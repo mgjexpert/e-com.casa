@@ -38,19 +38,21 @@ const INTRINSIC: Record<string, readonly [number, number]> = {
   '/payment-methods/blik.png': [540, 284],
   '/payment-methods/bancontact.png': [518, 386],
   '/payment-methods/cards.jpg': [900, 360],
-  '/payment-methods/visa.png': [1280, 720],
-  '/payment-methods/mastercard.png': [1280, 720],
+  '/payment-methods/visa.png': [248, 89],
+  '/payment-methods/mastercard.png': [254, 163],
+  '/payment-methods/amex.png': [229, 229],
 };
 
 export function PaymentMethodLogo({ src, alt, variant = 'checkout', height = 24, className = '' }: PaymentMethodLogoProps) {
   const chipPadding = variant === 'compact' ? 'px-1.5 py-1' : 'px-2 py-1.5';
   const imgHeight = variant === 'footer' ? 20 : height;
 
-  // Multibanco's supplied asset is portrait — give it extra height so
-  // the wordmark stays legible, keeping the original proportions.
-  const [, intrinsicH] = INTRINSIC[src] ?? [4, 1];
-  const renderHeight =
-    intrinsicH > 400 && imgHeight <= 26 ? Math.round(imgHeight * 1.9) : imgHeight;
+  // Portrait / near-square supplied assets (Multibanco, Amex square)
+  // get extra height so their wordmarks stay legible, while keeping
+  // the original brand proportions.
+  const [iw0, ih0] = INTRINSIC[src] ?? [4, 1];
+  const portrait = ih0 > iw0 / 1.2;
+  const renderHeight = portrait && imgHeight <= 26 ? Math.round(imgHeight * 1.9) : imgHeight;
 
   const [iw, ih] = INTRINSIC[src] ?? [4, 1];
   const renderWidth = Math.max(8, Math.round((renderHeight * iw) / ih));
