@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
-import { ArrowRight, Instagram, Facebook, Youtube, MapPin, Mail } from 'lucide-react';
+import { ArrowRight, Building2, Instagram, Facebook, Youtube, MapPin, Mail, PackageSearch, Phone, Warehouse } from 'lucide-react';
 import { COMPANY } from '@/lib/company';
 import { activeSocialLinks } from '@/lib/social';
 import { useCookieConsent } from '@/lib/cookie-store';
@@ -32,8 +32,8 @@ const COLUMNS: { titleKey: string; links: { labelKey: string; href: string }[] }
       { labelKey: 'help.contact', href: '/contact' },
       { labelKey: 'help.faq', href: '/contact#faq' },
       { labelKey: 'help.shipping', href: '/shipping' },
+      { labelKey: 'help.trackOrder', href: '/track' },
       { labelKey: 'help.returns', href: '/returns' },
-      { labelKey: 'help.trackOrder', href: '/account/orders' },
       { labelKey: 'help.warranty', href: '/legal/warranty' },
       { labelKey: 'help.productSafety', href: '/legal/product-safety' },
       { labelKey: 'help.accessibility', href: '/legal/accessibility' },
@@ -217,9 +217,10 @@ export function SiteFooter() {
         </div>
       </div>
 
-      {/* Company legal identity */}
+      {/* Company legal identity — institutional entity + operational contacts + 3PL network */}
       <div className="border-t border-white/10">
-        <div className="container-ecom grid gap-8 py-10 md:grid-cols-2">
+        <div className="container-ecom grid gap-10 py-10 md:grid-cols-2 lg:grid-cols-3">
+          {/* Brand + institutional entity */}
           <div>
             <div className="flex items-center gap-2.5">
               <span className="flex h-9 w-9 items-center justify-center rounded-md bg-white/10 text-cream">
@@ -239,54 +240,98 @@ export function SiteFooter() {
               })}
             </p>
             <address className="mt-3 text-[12.5px] not-italic leading-relaxed text-[#9aa093]">
-              {COMPANY.registeredOffice.line1}, {COMPANY.registeredOffice.line2}, {COMPANY.registeredOffice.city},{' '}
-              {COMPANY.registeredOffice.postcode}, {COMPANY.registeredOffice.country}
+              {COMPANY.legalName}
+              <br />
+              {COMPANY.registeredOffice.line1}, {COMPANY.registeredOffice.line2}
+              <br />
+              {COMPANY.registeredOffice.city}, {COMPANY.registeredOffice.postcode}, {COMPANY.registeredOffice.country}
             </address>
-            <p className="mt-3 flex items-center gap-2 text-[12.5px] text-[#9aa093]">
-              <Mail className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
-              <a href={`mailto:${COMPANY.emails.support}`} className="transition-colors hover:text-white">
-                {COMPANY.emails.support}
+            <p className="mt-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#8a9082]">
+              {t('footer.institutional')}
+            </p>
+            <p className="mt-1.5 flex items-center gap-2 text-[12.5px] text-[#9aa093]">
+              <Building2 className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+              <a href={`mailto:${COMPANY.emails.institutional}`} className="transition-colors hover:text-white">
+                {COMPANY.emails.institutional}
               </a>
             </p>
-            {COMPANY.telephone && (
-              <p className="mt-1.5 text-[12.5px] text-[#9aa093]">{t('footer.telephone', { n: COMPANY.telephone })}</p>
-            )}
           </div>
-          <div className="flex flex-col items-start justify-between gap-8 md:items-end">
-            {/* Social — configuration-driven; renders only real,
-                enabled profiles (§51, §52). No placeholders. */}
-            {socials.length > 0 && (
-              <div className="flex items-center gap-3">
-                {socials.map((s) => {
-                  const Icon =
-                    s.id === 'instagram' ? Instagram :
-                    s.id === 'facebook' ? Facebook :
-                    s.id === 'youtube' ? Youtube : null;
-                  return (
-                    <a
-                      key={s.id}
-                      href={s.url ?? '#'}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={s.label}
-                      title={s.label}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 text-[#b3b8ad] transition-colors hover:border-white/30 hover:text-white"
-                    >
-                      {Icon ? <Icon className="h-4 w-4" strokeWidth={1.5} /> : <span className="text-[11px] font-semibold">{s.label.slice(0, 2)}</span>}
-                    </a>
-                  );
-                })}
-              </div>
-            )}
-            <div className="text-left md:text-right">
-              <p className="text-[12px] text-[#8a9082]">
-                {t('footer.copyright', { brand: COMPANY.brand })}
-              </p>
-              <p className="mt-1 flex items-center gap-1.5 text-[12px] text-[#8a9082] md:justify-end">
-                <MapPin className="h-3 w-3" strokeWidth={1.5} />
-                {t('footer.vatNote')}
-              </p>
+
+          {/* Operational contacts — e-com.casa customers & support */}
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#e0a03c]">
+              {t('footer.customerSupport')}
+            </p>
+            <ul className="mt-3 space-y-2.5 text-[12.5px] text-[#9aa093]">
+              <li className="flex items-center gap-2">
+                <Mail className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                <a href={`mailto:${COMPANY.emails.support}`} className="transition-colors hover:text-white">
+                  {COMPANY.emails.support}
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <Phone className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                <a href={`tel:${COMPANY.telephone.replace(/\s+/g, '')}`} className="transition-colors hover:text-white">
+                  {COMPANY.telephone}
+                </a>
+              </li>
+              <li className="flex items-center gap-2">
+                <PackageSearch className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                <Link href="/track" className="transition-colors hover:text-white">
+                  {t('help.trackOrder')}
+                </Link>
+              </li>
+            </ul>
+            <div className="mt-4 flex items-center gap-3">
+              {socials.map((s) => {
+                const Icon =
+                  s.id === 'instagram' ? Instagram :
+                  s.id === 'facebook' ? Facebook :
+                  s.id === 'youtube' ? Youtube : null;
+                return (
+                  <a
+                    key={s.id}
+                    href={s.url ?? '#'}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={s.label}
+                    title={s.label}
+                    className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 text-[#b3b8ad] transition-colors hover:border-white/30 hover:text-white"
+                  >
+                    {Icon ? <Icon className="h-4 w-4" strokeWidth={1.5} /> : <span className="text-[11px] font-semibold">{s.label.slice(0, 2)}</span>}
+                  </a>
+                );
+              })}
             </div>
+          </div>
+
+          {/* EU 3PL logistics warehouses */}
+          <div>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-[#e0a03c]">
+              {t('footer.warehouses')}
+            </p>
+            <ul className="mt-3 space-y-4">
+              {COMPANY.warehouses.map((w) => (
+                <li key={w.id} className="text-[12.5px] leading-relaxed text-[#9aa093]">
+                  <p className="flex items-start gap-2 font-medium text-[#b3b8ad]">
+                    <Warehouse className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                    {w.name}
+                  </p>
+                  <p className="mt-0.5 pl-5.5">
+                    {w.streets}, {w.postalCode} {w.city}, {w.country}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="container-ecom border-t border-white/10 py-5">
+          <div className="flex flex-col items-start justify-between gap-2 text-[12px] text-[#8a9082] md:flex-row md:items-center">
+            <p>{t('footer.copyright', { brand: COMPANY.brand })}</p>
+            <p className="flex items-center gap-1.5 md:justify-end">
+              <MapPin className="h-3 w-3" strokeWidth={1.5} />
+              {t('footer.vatNote')}
+            </p>
           </div>
         </div>
       </div>

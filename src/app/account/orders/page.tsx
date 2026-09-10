@@ -163,9 +163,35 @@ export default function OrderHistoryPage() {
                           </li>
                         ))}
                       </ol>
-                      {order.status === 'SHIPPED' && (
-                        <p className="mt-2 flex items-center gap-1.5 text-[12px] text-muted-foreground">
-                          <Truck className="h-3.5 w-3.5 text-olive" /> Tracking number will arrive by email.
+                      {order.status === 'SHIPPED' && order.trackingNumber && (
+                        <p className="mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-muted-foreground">
+                          <Truck className="h-3.5 w-3.5 text-olive" /> Tracking:{' '}
+                          <Link
+                            href={`/track?code=${encodeURIComponent(order.trackingNumber)}`}
+                            className="font-mono font-medium text-foreground underline underline-offset-2 hover:text-olive"
+                          >
+                            {order.trackingNumber}
+                          </Link>
+                        </p>
+                      )}
+                      {order.status !== 'SHIPPED' && (
+                        <p className="mt-2 flex flex-wrap items-center gap-1.5 text-[12px] text-muted-foreground">
+                          {order.trackingNumber ? (
+                            <>
+                              <Truck className="h-3.5 w-3.5 text-olive" /> Tracking:{' '}
+                              <Link
+                                href={`/track?code=${encodeURIComponent(order.trackingNumber)}`}
+                                className="font-mono font-medium text-foreground underline underline-offset-2 hover:text-olive"
+                              >
+                                {order.trackingNumber}
+                              </Link>
+                            </>
+                          ) : (
+                            <>
+                              <Truck className="h-3.5 w-3.5 text-olive" /> Tracking number will arrive by email once
+                              your parcel is dispatched.
+                            </>
+                          )}
                         </p>
                       )}
                     </div>
@@ -202,16 +228,26 @@ export default function OrderHistoryPage() {
                     ))}
                   </ul>
                   <div className="border-t border-border/70 px-5 py-3">
-                    <Link
-                      href={`/checkout/success?order=${encodeURIComponent(order.orderNumber)}&token=${encodeURIComponent(
-                        (JSON.parse(localStorage.getItem('ecom-orders') ?? '[]') as StoredRef[]).find(
-                          (r) => r.orderNumber === order.orderNumber,
-                        )?.accessToken ?? '',
-                      )}`}
-                      className="flex items-center gap-1 text-[12.5px] font-medium text-olive hover:underline"
-                    >
-                      View order details <ChevronRight className="h-3.5 w-3.5" />
-                    </Link>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <Link
+                        href={`/checkout/success?order=${encodeURIComponent(order.orderNumber)}&token=${encodeURIComponent(
+                          (JSON.parse(localStorage.getItem('ecom-orders') ?? '[]') as StoredRef[]).find(
+                            (r) => r.orderNumber === order.orderNumber,
+                          )?.accessToken ?? '',
+                        )}`}
+                        className="flex items-center gap-1 text-[12.5px] font-medium text-olive hover:underline"
+                      >
+                        View order details <ChevronRight className="h-3.5 w-3.5" />
+                      </Link>
+                      {order.trackingNumber && (
+                        <Link
+                          href={`/track?code=${encodeURIComponent(order.trackingNumber)}`}
+                          className="flex items-center gap-1 text-[12.5px] font-medium text-olive hover:underline"
+                        >
+                          <Truck className="h-3.5 w-3.5" /> Track parcel <ChevronRight className="h-3.5 w-3.5" />
+                        </Link>
+                      )}
+                    </div>
                   </div>
                 </li>
               );

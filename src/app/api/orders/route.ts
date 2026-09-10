@@ -11,6 +11,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { rateLimit } from '@/lib/rate-limit';
 import { tokenMatches } from '@/lib/checkout';
+import { ensureTracking } from '@/lib/tracking';
 
 export const dynamic = 'force-dynamic';
 
@@ -39,35 +40,45 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    const invoice = await db.invoice.findUnique({ where: { orderId: order.id } });
+    // Keep the tracking lifecycle moving on every authenticated read
+    // (idempotent — also backfills legacy paid orders that pre-date
+    // the tracking engine).
+    const tracked = await ensureTracking(order);
+    const o = tracked.order;
+
+    const invoice = await db.invoice.findUnique({ where: { orderId: o.id } });
 
     return NextResponse.json({
       order: {
-        orderNumber: order.orderNumber,
-        email: order.email,
-        firstName: order.firstName,
-        lastName: order.lastName,
-        address: order.address,
-        address2: order.address2,
-        city: order.city,
-        postalCode: order.postalCode,
-        country: order.country,
-        shippingMethod: order.shippingMethod,
-        subtotal: order.subtotal,
-        shipping: order.shipping,
-        tax: order.tax,
-        discount: order.discount,
-        total: order.total,
-        promoCode: order.promoCode,
-        itemsJson: order.itemsJson,
-        giftWrap: order.giftWrap,
-        notes: order.notes,
-        status: order.status,
-        paymentStatus: order.paymentStatus,
-        paymentMethodType: order.paymentMethodType,
-        currency: order.currency,
-        paidAt: order.paidAt,
-        createdAt: order.createdAt,
+        orderNumber: o.orderNumber,
+        email: o.email,
+        firstName: o.firstName,
+        lastName: o.lastName,
+        address: o.address,
+        address2: o.address2,
+        city: o.city,
+        postalCode: o.postalCode,
+        country: o.country,
+        shippingMethod: o.shippingMethod,
+        subtotal: o.subtotal,
+        shipping: o.shipping,
+        tax: o.tax,
+        discount: o.discount,
+        total: o.total,
+        promoCode: o.promoCode,
+        itemsJson: o.itemsJson,
+        giftWrap: o.giftWrap,
+        notes: o.notes,
+        status: o.status,
+        paymentStatus: o.paymentStatus,
+        paymentMethodType: o.paymentMethodType,
+        currency: o.currency,
+        paidAt: o.paidAt,
+        createdAt: o.createdAt,
+        trackingNumber: o.trackingNumber,
+        carrier: o.carrier,
+        originWarehouse: o.originWarehouse,
+        estimatedDeliveryAt: o.estimatedDeliveryAt,
       },
       invoice: invoice
         ? { invoiceNumber: invoice.invoiceNumber, status: invoice.status, issuedAt: invoice.issuedAt }

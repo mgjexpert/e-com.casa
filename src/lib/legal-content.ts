@@ -21,9 +21,13 @@ export interface LegalDocument {
   sections: LegalSection[];
 }
 
-export const LEGAL_LAST_UPDATED = '2026-02-16';
+export const LEGAL_LAST_UPDATED = '2026-09-10';
 
 const POSTAL = `${COMPANY.registeredOffice.line1}, ${COMPANY.registeredOffice.line2}, ${COMPANY.registeredOffice.city}, ${COMPANY.registeredOffice.postcode}, ${COMPANY.registeredOffice.country}`;
+
+const WAREHOUSE_LINES = COMPANY.warehouses.map(
+  (w) => `${w.name} — ${w.streets}, ${w.postalCode} ${w.city}, ${w.country} (${w.role}).`,
+);
 
 export const legalDocuments: LegalDocument[] = [
   // ---------------------------------------------------------------- 1
@@ -55,15 +59,22 @@ export const legalDocuments: LegalDocument[] = [
         heading: 'Contact',
         paragraphs: ['You can reach us through the following channels:'],
         bullets: [
-          `General enquiries: ${COMPANY.emails.general}`,
+          `Institutional contact (${COMPANY.legalName}): ${COMPANY.emails.institutional}`,
           `Customer support: ${COMPANY.emails.support}`,
           `Orders: ${COMPANY.emails.orders}`,
           `Returns: ${COMPANY.emails.returns}`,
           `Legal matters: ${COMPANY.emails.legal}`,
           `Privacy matters: ${COMPANY.emails.privacy}`,
           `Product compliance: ${COMPANY.emails.compliance}`,
-          ...(COMPANY.telephone ? [`Telephone: ${COMPANY.telephone}`] : []),
+          ...(COMPANY.telephone ? [`Telephone (customers & support): ${COMPANY.telephone}`] : []),
         ],
+      },
+      {
+        heading: 'Fulfilment and logistics network',
+        paragraphs: [
+          'Orders are fulfilled through our third-party logistics (3PL) warehouses in the European Union. Orders ship from the warehouse that serves your delivery region:',
+        ],
+        bullets: WAREHOUSE_LINES,
       },
       {
         heading: 'Registration and tax information',
@@ -141,7 +152,7 @@ export const legalDocuments: LegalDocument[] = [
       {
         heading: 'Delivery',
         paragraphs: [
-          'We deliver to the markets stated on our Shipping page. Estimated delivery times (standard: 3–5 working days; express: 1–2 working days) begin from dispatch, not from the order date. Risk of loss or damage passes to you on physical delivery. Delivery estimates are indicative and are not a legal guarantee until our logistics configuration is finalised. See the Shipping Policy for full details.',
+          'We deliver to the markets stated on our Shipping page. Orders ship from our EU 3PL fulfilment warehouses — currently Greenport Venlo (Netherlands) and Plataforma Logística de Zaragoza (Spain) — with the warehouse chosen automatically for your delivery region. Estimated delivery times (standard: 3–5 working days; express: 1–2 working days) begin from dispatch, not from the order date. Risk of loss or damage passes to you on physical delivery. Every paid order receives a tracking number that you can follow on our Track Your Order page. Delivery estimates are indicative and are not a legal guarantee until our logistics configuration is finalised. See the Shipping Policy for full details.',
         ],
       },
       {
@@ -181,7 +192,7 @@ export const legalDocuments: LegalDocument[] = [
   {
     slug: 'privacy',
     title: 'Privacy Policy',
-    description: 'How VANTERA DIGITAL LTD collects and processes personal data under the EU/EEA GDPR and the UK GDPR.',
+    description: `How ${COMPANY.legalName} collects and processes personal data under the EU/EEA GDPR and the UK GDPR.`,
     intro:
       `This Privacy Policy explains how ${COMPANY.legalName} (“we”, “us”), as data controller, collects and uses personal data when you visit e-com.casa or shop with us, in accordance with the EU/EEA General Data Protection Regulation (GDPR) and, for users in the UK, the UK GDPR and the Data Protection Act 2018.`,
     sections: [
@@ -233,7 +244,7 @@ export const legalDocuments: LegalDocument[] = [
           'Payment processing — XPayments and Stripe Elements, as part of our configured payment service infrastructure. Depending on the payment method and market, payment processing may involve these providers.',
           'Hosting and website operation — final hosting provider [TO BE COMPLETED].',
           'Email and newsletter delivery — provider [TO BE COMPLETED].',
-          'Logistics and delivery partners — details confirmed at checkout.',
+          'Logistics and delivery — our EU 3PL fulfilment warehouses (Greenport Venlo, Netherlands, and Plataforma Logística de Zaragoza, Spain) and the carrier partners that deliver your parcels. Each receives only the data needed to fulfil and deliver your order (name, delivery address, contact details and order contents).',
           'Professional advisers, auditors, and public authorities where required by law.',
         ],
       },
@@ -413,6 +424,13 @@ export const legalDocuments: LegalDocument[] = [
         ],
       },
       {
+        heading: 'Our fulfilment network (EU 3PL warehouses)',
+        paragraphs: [
+          'Orders are picked, packed and dispatched from our third-party logistics (3PL) warehouses inside the European Union. The warehouse that serves your delivery region ships your order:',
+        ],
+        bullets: WAREHOUSE_LINES,
+      },
+      {
         heading: 'EU shipping',
         paragraphs: [
           'For the EU, we offer standard and express delivery where available. Standard delivery takes 3–5 working days and express delivery 1–2 working days from dispatch. Working days exclude weekends and public holidays.',
@@ -435,7 +453,7 @@ export const legalDocuments: LegalDocument[] = [
       {
         heading: 'Tracking',
         paragraphs: [
-          'When your order is dispatched we send a confirmation email containing a tracking link. Tracking events are provided by the carrier and may take a few hours to update after dispatch. If tracking shows no movement for several working days, contact support@e-com.casa.',
+          'Every paid order is assigned a tracking number as soon as payment is verified, and the parcel is scanned at each fulfilment step. When your order is dispatched we send a confirmation email containing the tracking number; you can also enter it at any time on our Track Your Order page to see the current delivery state, the journey so far and the estimated delivery date. If tracking shows no movement for several working days, contact support@e-com.casa.',
         ],
       },
       {

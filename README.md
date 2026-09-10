@@ -2,8 +2,8 @@
 
 **E-com.casa ecommerce application** — a polished, Vercel-ready **European home & garden store** built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Prisma (PostgreSQL / Neon)**, with **Stripe-compatible payment processing through XPayments**.
 
-> E-com.casa is a trading brand operated by **VANTERA DIGITAL LTD** (Company No. 17422035, 71–75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom).
-> The storefront ships a research-derived catalogue, cart, real payment architecture (Stripe Elements + XPayments), orders, editorial content, a full legal/compliance architecture and one-shot catalog import tooling (dev-only).
+> E-com.casa is a trading brand operated by **MGJ EXPERT LTD** (Company No. 17422467, 71–75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom — institutional contact: contact@mgj.expert).
+> The storefront ships a research-derived catalogue, cart, real payment architecture (Stripe Elements + XPayments), orders with tracking & fulfilment states, editorial content, a full legal/compliance architecture and one-shot catalog import tooling (dev-only).
 
 ---
 
@@ -17,6 +17,7 @@
 - **Cart** (`/cart`) — variant-aware line items, save-for-later, free-shipping progress, promo codes (`WELCOME10`, `HOME5`), gift wrap, delivery notes
 - **Real checkout** (`/checkout`) — 28 EU/UK countries, delivery options, **Stripe Payment Element + Express Checkout** (Apple Pay / Google Pay / Link / PayPal where supported) backed by the XPayments Stripe-compatible Direct API; totals are repriced **server-side** (incl. variant deltas from the catalogue model) and the amount is charged in the smallest currency unit
 - **Payment lifecycle** — PENDING_PAYMENT → PAYMENT_PROCESSING → PAID (only via verified gateway webhook), plus PAYMENT_FAILED / CANCELLED / REFUNDED; fulfilment stays a separate state machine; stock is finalised only after verified payment; idempotent PaymentIntent creation with persisted intent ids
+- **Tracking & fulfilment (3PL simulation engine)** — every paid order gets a buyer-facing tracking number (`ECC-YYMM-XXXXXX`) at the verified-payment moment; the fulfilment state machine advances through CONFIRMED → PROCESSING → SHIPPED → IN_TRANSIT → OUT_FOR_DELIVERY → DELIVERED with an idempotent persisted event history (`TrackingEvent`); public `/track` page where buyers enter the code to see the current state, journey, origin warehouse and estimated delivery; EU 3PL network — Greenport Venlo (NL) for Northern/Central Europe, PLAZA Zaragoza (ES) for Iberia/Mediterranean
 - **Order confirmation + order history** — status pages verify payment server-side; order access requires the per-order random token (no email-only lookups)
 - **Wishlist** (`/wishlist`) — persistent, shareable via URL
 - **Search** — global product search across name/description/category/style/space/materials
@@ -257,7 +258,7 @@ See `.env.example`. **Never commit `.env`.** Only `NEXT_PUBLIC_*` values reach t
 
 ## 🧭 Legal & compliance notes
 
-- **Identity:** E-com.casa is presented as the storefront brand operated by VANTERA DIGITAL LTD (the two are never presented as different sellers).
+- **Identity:** E-com.casa is presented as the storefront brand operated by MGJ EXPERT LTD (the two are never presented as different sellers). Institutional contact: contact@mgj.expert; customer & operational contacts: support@e-com.casa / +44 7451 214299. EU 3PL fulfilment warehouses: Greenport Venlo (NL) and Plataforma Logística de Zaragoza (ES).
 - **No invented compliance:** VAT numbers, phone numbers, EPR/WEEE registrations, mediators, ADR entities, return warehouses and certifications are `[TO BE CONFIRMED]` placeholders until real documents exist.
 - **EU/UK consumer baseline:** 14-day withdrawal, 2-year legal guarantee (EU), clear pre-contract information; country configs can extend (never reduce) mandatory rights.
 - **GPSR:** product safety data model exists (manufacturer, EU responsible person, warnings, product identifier); demo products are `DEMO` and require compliance review before any production listing.

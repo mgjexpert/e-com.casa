@@ -24,6 +24,7 @@ import { clientIp } from '@/lib/rate-limit';
 import { getPaymentProvider } from '@/lib/payments/xpayments-provider';
 import { PAYMENT_STATUS_RANK, normaliseGatewayIntentStatus } from '@/lib/payments/payment-types';
 import type { StripeLikeIntent } from '@/lib/payments/payment-types';
+import { assignTrackingFields } from '@/lib/tracking';
 
 export const dynamic = 'force-dynamic';
 
@@ -185,13 +186,23 @@ export async function POST(req: NextRequest) {
 
     // ---- 6. PAID path: fulfilment, stock, invoice (§39, §40, §43) --
     if (nextOrderStatus === 'PAID') {
+      const paidAtNow = new Date();
+      // Tracking & fulfilment logistics are assigned exactly once, at
+      // the verified-payment moment — buyers get a tracking number for
+      // every paid order (3PL simulation engine).
+      const tracking = assignTrackingFields(
+        order.orderNumber,
+        order.shippingMethod,
+        order.country,
+        paidAtNow,
+      );
       await db.$transaction(async (tx) => {
         // payment row first (server-authoritative record)
         await tx.payment.update({
           where: { id: payment.id },
           data: {
             status: 'SUCCEEDED',
-            paidAt: new Date(),
+            paidAt: paidAtNow,
             lastEventId: eventId,
             failureCode: null,
             failureMessage: null,
@@ -202,10 +213,14 @@ export async function POST(req: NextRequest) {
           where: { id: order.id },
           data: {
             paymentStatus: 'PAID',
-            paidAt: new Date(),
+            paidAt: paidAtNow,
             status: 'CONFIRMED', // fulfilment starts only after verified payment (§40)
             paymentMethodType: payment.paymentMethodType ?? 'other',
             paymentFailureReason: null,
+            trackingNumber: tracking.trackingNumber,
+            carrier: tracking.carrier,
+            originWarehouse: tracking.originWarehouse,
+            estimatedDeliveryAt: tracking.estimatedDeliveryAt,
           },
         });
 

@@ -13,7 +13,7 @@ import {
   Send,
 } from 'lucide-react';
 import { toast } from '@/hooks/use-toast';
-import { EMAILS } from '@/lib/company';
+import { EMAILS, COMPANY } from '@/lib/company';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -76,9 +76,10 @@ const CHANNELS = [
   {
     icon: Phone,
     title: 'Phone support',
-    description: 'We are preparing a phone line for customer care.',
-    value: 'Email & live chat',
-    hint: 'Until then, email and live chat are the fastest ways to reach us.',
+    description: 'Talk to our team about orders, delivery and returns.',
+    value: COMPANY.telephone,
+    href: `tel:${COMPANY.telephone.replace(/\s+/g, '')}`,
+    valueLabel: `${COMPANY.telephone} — Customers & Support`,
   },
   {
     icon: Send,
@@ -109,7 +110,7 @@ const FAQS = [
   {
     question: 'How can I track my order?',
     answer:
-      'As soon as your parcel is dispatched we send you a confirmation email with a tracking link. If tracking has not moved for several working days, contact us with your order number and we will investigate with the carrier.',
+      'Every paid order gets a tracking number as soon as payment is verified. It is shown on your order confirmation page, in your order history and in your dispatch email. Enter it on our Track Your Order page to see the current delivery state, the journey so far and the estimated delivery date. If tracking has not moved for several working days, contact us with your order number and we will investigate with the carrier.',
   },
   {
     question: 'What if my order arrives damaged?',
@@ -265,7 +266,7 @@ export default function ContactPage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="contact-order">Order number <span className="text-[12px] font-normal text-muted-foreground">(optional)</span></Label>
-                <Input id="contact-order" name="orderRef" value={form.orderRef} onChange={update('orderRef')} placeholder="e.g. EC-240210-1234" />
+                <Input id="contact-order" name="orderRef" value={form.orderRef} onChange={update('orderRef')} placeholder="e.g. EC-123456" />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="contact-subject">

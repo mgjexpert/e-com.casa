@@ -176,6 +176,15 @@ model Order {
   checkoutToken String? @unique // client checkout-session idempotency token
   pricingHash   String?        // fingerprint of the server-repriced totals used for the PaymentIntent
 
+  // ---- Tracking & fulfilment logistics (3PL simulation engine) ----
+  // Assigned once when payment is verified (webhook PAID path) or
+  // lazily backfilled for legacy paid orders — never before payment.
+  trackingNumber      String?   @unique // ECC-YYMM-XXXXXX, buyer-facing on /track
+  carrier             String?   // fulfilment carrier partner display name
+  originWarehouse     String?   // warehouse id: "venlo" | "zaragoza"
+  estimatedDeliveryAt DateTime?
+  trackingEvents      TrackingEvent[]
+
   stockApplied Boolean @default(false) // final stock decrement applied after payment
 
   createdAt DateTime @default(now())
@@ -272,6 +281,23 @@ model CreditNote {
   issuedAt  DateTime @default(now())
 
   @@index([orderId])
+}
+
+/// Fulfilment tracking events (3PL demo simulation engine).
+/// One event per state per order — the (orderId, status) unique pair
+/// makes every insert idempotent, so lazy backfills never duplicate.
+model TrackingEvent {
+  id          String   @id @default(cuid())
+  orderId     String
+  order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  status      String   // CONFIRMED | PROCESSING | SHIPPED | IN_TRANSIT | OUT_FOR_DELIVERY | DELIVERED | CANCELLED
+  description String
+  location    String?
+  occurredAt  DateTime
+  createdAt   DateTime @default(now())
+
+  @@unique([orderId, status])
+  @@index([orderId, occurredAt])
 }
 
 /// Processed gateway webhook events — enforces exactly-once side

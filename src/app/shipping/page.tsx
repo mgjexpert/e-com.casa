@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, Clock, Euro, Info, PackageCheck, Radar } from 'lucide-react';
+import { ArrowRight, Clock, Euro, Info, MapPin, PackageCheck, Radar, Warehouse } from 'lucide-react';
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_OPTIONS } from '@/lib/constants';
 import { formatPrice } from '@/lib/format';
+import { COMPANY } from '@/lib/company';
 
 export const metadata: Metadata = {
   title: 'Shipping & Delivery',
@@ -33,9 +34,9 @@ const SUMMARY = [
   },
   {
     icon: PackageCheck,
-    title: 'Tracking link by email',
-    label: 'Every order',
-    sub: 'as soon as it is dispatched',
+    title: 'Tracking number for every order',
+    label: 'Track & trace',
+    sub: 'follow your parcel on our Track page',
   },
 ];
 
@@ -130,6 +131,39 @@ export default function ShippingPage() {
             </p>
           </section>
 
+          <section aria-labelledby="fulfilment-network" id="fulfilment-network" className="scroll-mt-24">
+            <h2 id="fulfilment-network" className="font-display text-xl font-medium tracking-tight sm:text-2xl">
+              Our fulfilment network — EU 3PL warehouses
+            </h2>
+            <p className="mt-3 text-[15px] leading-relaxed text-foreground/80">
+              Your order is picked, packed and dispatched from one of our third-party logistics (3PL) warehouses
+              inside the European Union, chosen automatically for your delivery region. Shipping from inside the EU
+              customs union keeps EU deliveries simple — no customs border for EU destinations.
+            </p>
+            <ul className="mt-5 grid gap-4 sm:grid-cols-2">
+              {COMPANY.warehouses.map((w) => (
+                <li key={w.id} className="rounded-md border border-border bg-card p-5">
+                  <p className="flex items-start gap-2 font-display text-[16px] font-medium leading-snug">
+                    <Warehouse className="mt-1 h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
+                    {w.name}
+                  </p>
+                  <p className="mt-2 flex items-start gap-2 text-[13px] leading-relaxed text-muted-foreground">
+                    <MapPin className="mt-0.5 h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                    {w.streets}, {w.postalCode} {w.city}, {w.country}
+                  </p>
+                  <p className="mt-2 text-[12px] font-medium uppercase tracking-wide text-muted-foreground/80">
+                    {w.role}
+                  </p>
+                </li>
+              ))}
+            </ul>
+            <p className="mt-4 text-[13.5px] leading-relaxed text-muted-foreground">
+              Iberian Peninsula and Mediterranean destinations ship from Zaragoza (PLAZA); Northern and Central
+              European destinations ship from Venlo. Returns are handled through the returns process described on
+              our Returns page — the return address is confirmed in our reply to your return request.
+            </p>
+          </section>
+
           <section aria-labelledby="estimates">
             <h2 id="estimates" className="font-display text-xl font-medium tracking-tight sm:text-2xl">
               Delivery estimates
@@ -193,10 +227,25 @@ export default function ShippingPage() {
               Tracking
             </h2>
             <p className="mt-3 text-[15px] leading-relaxed text-foreground/80">
-              When your parcel is handed to the carrier we send you a confirmation email with a tracking link.
-              Tracking events can take a few hours to appear after dispatch. If tracking shows no movement for
-              several working days, contact us with your order number and we will follow it up with the carrier.
+              Every paid order is assigned a tracking number as soon as payment is verified. When your parcel is
+              handed to the carrier we send you a confirmation email with the tracking number, and you can enter it
+              at any time on our{' '}
+              <Link href="/track" className="underline underline-offset-2 hover:text-olive">
+                Track Your Order page
+              </Link>{' '}
+              to see the current delivery state, the full journey and the estimated delivery date. If tracking shows
+              no movement for several working days, contact us with your order number and we will follow it up with
+              the carrier.
             </p>
+            <div className="mt-4">
+              <Link
+                href="/track"
+                className="inline-flex h-10 items-center gap-2 rounded-md bg-primary px-5 text-[13.5px] font-medium text-primary-foreground transition-all hover:bg-primary/90"
+              >
+                <Radar className="h-4 w-4" strokeWidth={1.75} />
+                Track your order
+              </Link>
+            </div>
           </section>
 
           <section aria-labelledby="damaged">

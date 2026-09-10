@@ -21,6 +21,7 @@ import {
   Package,
   ShieldQuestion,
   StickyNote,
+  Truck,
   XCircle,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -54,6 +55,7 @@ export interface SuccessOrderData {
   paymentMethodType: string | null;
   createdAt: string;
   invoiceNumber: string | null;
+  trackingNumber?: string | null;
   items: { slug: string; name: string; image: string; price: string; quantity: number; variantLabel?: string | null }[];
 }
 
@@ -213,6 +215,18 @@ export function SuccessView({ order, token }: { order: SuccessOrderData; token: 
                 {t('success.invoice')}: {order.invoiceNumber}
               </p>
             )}
+            {order.status === 'PAID' && order.trackingNumber && (
+              <p className="mt-1 flex flex-wrap items-center gap-x-1.5 text-[12px] text-muted-foreground">
+                <Truck className="h-3.5 w-3.5 text-olive" strokeWidth={1.5} />
+                {t('success.trackingNumber')}&nbsp;
+                <Link
+                  href={`/track?code=${encodeURIComponent(order.trackingNumber)}`}
+                  className="font-mono font-medium text-foreground underline underline-offset-2 hover:text-olive"
+                >
+                  {order.trackingNumber}
+                </Link>
+              </p>
+            )}
           </div>
           <div className="text-right">
             <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
@@ -326,7 +340,9 @@ export function SuccessView({ order, token }: { order: SuccessOrderData; token: 
           </Button>
         ) : (
           <Button asChild variant="outline" className="rounded-md">
-            <Link href="/account/orders">{t('success.trackOrder')}</Link>
+            <Link href={order.trackingNumber ? `/track?code=${encodeURIComponent(order.trackingNumber)}` : '/account/orders'}>
+              {t('success.trackOrder')}
+            </Link>
           </Button>
         )}
         <Button asChild className="rounded-md bg-primary">

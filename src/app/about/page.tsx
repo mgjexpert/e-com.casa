@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowRight, BadgeCheck, Compass, HeartHandshake, Mail, MessagesSquare } from 'lucide-react';
-import { EMAILS } from '@/lib/company';
+import { ArrowRight, BadgeCheck, Compass, HeartHandshake, Mail, MessagesSquare, Warehouse } from 'lucide-react';
+import { EMAILS, COMPANY } from '@/lib/company';
 
 export const metadata: Metadata = {
   title: 'About Us',
@@ -93,9 +93,64 @@ export default function AboutPage() {
             </p>
             <p>
               We are based in Europe, we ship across European markets, and we are still growing. Where something
-              on this site is still being set up — logistics details, certifications, policies — we say so
-              plainly instead of pretending otherwise.
+              on this site is still being set up — certifications, final policy details — we say so plainly instead
+              of pretending otherwise. Orders are fulfilled through our EU 3PL warehouses in Venlo (Netherlands)
+              and Zaragoza (Spain), so your parcels start their journey close to home.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Company & logistics */}
+      <section className="container-ecom pb-4" aria-labelledby="company-title">
+        <div className="rounded-md border border-border bg-card p-6 sm:p-8">
+          <div className="grid gap-8 sm:grid-cols-2">
+            <div>
+              <p className="eyebrow text-muted-foreground">The company behind the brand</p>
+              <h2 id="company-title" className="font-display mt-2 text-xl font-medium tracking-tight">
+                {COMPANY.legalName}
+              </h2>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-muted-foreground">
+                E-com.casa is the consumer trading brand of {COMPANY.legalName}, a company incorporated in{' '}
+                {COMPANY.countryOfIncorporation} under company number {COMPANY.companyNumber}, registered at{' '}
+                {COMPANY.registeredOffice.line1}, {COMPANY.registeredOffice.line2}, {COMPANY.registeredOffice.city}{' '}
+                {COMPANY.registeredOffice.postcode}, {COMPANY.registeredOffice.country}.
+              </p>
+              <p className="mt-3 text-[13.5px] leading-relaxed text-muted-foreground">
+                Institutional contact:{' '}
+                <a href={`mailto:${EMAILS.institutional}`} className="font-medium underline underline-offset-2 hover:text-olive">
+                  {EMAILS.institutional}
+                </a>
+                {' '}· Customer support:{' '}
+                <a href={`mailto:${EMAILS.support}`} className="font-medium underline underline-offset-2 hover:text-olive">
+                  {EMAILS.support}
+                </a>
+                {COMPANY.telephone ? (
+                  <>
+                    {' '}· {COMPANY.telephone}
+                  </>
+                ) : null}
+              </p>
+            </div>
+            <div>
+              <p className="eyebrow text-muted-foreground">Where your order starts</p>
+              <h2 className="font-display mt-2 flex items-center gap-2 text-xl font-medium tracking-tight">
+                <Warehouse className="h-4.5 w-4.5 text-olive" strokeWidth={1.5} /> EU 3PL warehouses
+              </h2>
+              <ul className="mt-3 space-y-3 text-[13.5px] leading-relaxed text-muted-foreground">
+                {COMPANY.warehouses.map((w) => (
+                  <li key={w.id}>
+                    <span className="font-medium text-foreground">{w.name}</span>
+                    <br />
+                    {w.streets}, {w.postalCode} {w.city}, {w.country}
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-[12.5px] text-muted-foreground/80">
+                Every paid order carries a tracking number you can follow on our{' '}
+                <a href="/track" className="underline underline-offset-2 hover:text-olive">Track Your Order page</a>.
+              </p>
+            </div>
           </div>
         </div>
       </section>

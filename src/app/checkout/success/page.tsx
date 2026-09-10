@@ -3,6 +3,7 @@ import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
 import { tokenMatches } from '@/lib/checkout';
+import { ensureTracking } from '@/lib/tracking';
 import { SuccessView, type SuccessOrderData } from './success-view';
 
 export const metadata: Metadata = {
@@ -20,6 +21,10 @@ async function loadOrder(orderNumber: string, token: string): Promise<SuccessOrd
     });
     if (!order || !tokenMatches(order.accessToken, token)) return null;
 
+    // Keep the tracking lifecycle moving on this read (idempotent).
+    const tracked = await ensureTracking(order);
+    const trackedOrder = tracked.order;
+
     let items: { slug: string; name: string; image: string; price: string; quantity: number; variantLabel?: string | null }[] = [];
     try {
       items = JSON.parse(order.itemsJson);
@@ -28,29 +33,30 @@ async function loadOrder(orderNumber: string, token: string): Promise<SuccessOrd
     }
 
     return {
-      orderNumber: order.orderNumber,
-      status: order.paymentStatus,
-      fulfilmentStatus: order.status,
-      email: order.email,
-      firstName: order.firstName,
-      lastName: order.lastName,
-      address: order.address,
-      address2: order.address2,
-      city: order.city,
-      postalCode: order.postalCode,
-      country: order.country,
-      shippingMethod: order.shippingMethod,
-      subtotal: order.subtotal,
-      shipping: order.shipping,
-      discount: order.discount,
-      total: order.total,
-      promoCode: order.promoCode,
-      giftWrap: order.giftWrap,
-      notes: order.notes,
-      currency: order.currency,
-      paymentMethodType: order.paymentMethodType,
-      createdAt: order.createdAt.toISOString(),
-      invoiceNumber: order.invoices[0]?.invoiceNumber ?? null,
+      orderNumber: trackedOrder.orderNumber,
+      status: trackedOrder.paymentStatus,
+      fulfilmentStatus: trackedOrder.status,
+      email: trackedOrder.email,
+      firstName: trackedOrder.firstName,
+      lastName: trackedOrder.lastName,
+      address: trackedOrder.address,
+      address2: trackedOrder.address2,
+      city: trackedOrder.city,
+      postalCode: trackedOrder.postalCode,
+      country: trackedOrder.country,
+      shippingMethod: trackedOrder.shippingMethod,
+      subtotal: trackedOrder.subtotal,
+      shipping: trackedOrder.shipping,
+      discount: trackedOrder.discount,
+      total: trackedOrder.total,
+      promoCode: trackedOrder.promoCode,
+      giftWrap: trackedOrder.giftWrap,
+      notes: trackedOrder.notes,
+      currency: trackedOrder.currency,
+      paymentMethodType: trackedOrder.paymentMethodType,
+      createdAt: trackedOrder.createdAt.toISOString(),
+      invoiceNumber: trackedOrder.invoices[0]?.invoiceNumber ?? null,
+      trackingNumber: trackedOrder.trackingNumber,
       items,
     };
   } catch {
