@@ -77,7 +77,7 @@ const CHANNELS = [
     icon: Phone,
     title: 'Phone support',
     description: 'We are preparing a phone line for customer care.',
-    value: 'Coming soon',
+    value: 'Email & live chat',
     hint: 'Until then, email and live chat are the fastest ways to reach us.',
   },
   {
@@ -104,7 +104,7 @@ const FAQS = [
   {
     question: 'Which payment methods can I use?',
     answer:
-      'Checkout uses secure payment powered by Stripe (integration ready), so you can pay with the major cards and payment methods shown at checkout. Prices are displayed with VAT included where applicable.',
+      'Checkout uses secure payment processing, so you can pay with the major cards and the payment methods available in your country — such as cards, MB WAY and Multibanco in Portugal, Bizum in Spain, BLIK in Poland and Bancontact in Belgium, plus Apple Pay and Google Pay where your device supports them. The methods shown at checkout depend on your location and currency. Prices are displayed with VAT included where applicable.',
   },
   {
     question: 'How can I track my order?',

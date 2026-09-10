@@ -3,8 +3,8 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { CreditCard, Gift, Lock, LoaderCircle, ShieldCheck, ShoppingBag } from 'lucide-react';
+import { useEffect, useMemo, useState } from 'react';
+import { Gift, Lock, LoaderCircle, ShieldCheck, ShoppingBag } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -15,7 +15,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from '@/hooks/use-toast';
 import { useT } from '@/hooks/use-t';
 import { useCart } from '@/lib/cart-store';
+import { usePaymentSession } from '@/hooks/use-payment-session';
 import { formatPrice, toNumber, money } from '@/lib/format';
+import { PaymentElement } from '@/components/payments/payment-element';
+import { ExpressCheckout } from '@/components/payments/express-checkout';
+import { PaymentBrandStrip } from '@/components/payments/payment-brand-strip';
 import {
   COUNTRIES,
   FREE_SHIPPING_THRESHOLD,
@@ -29,7 +33,6 @@ export default function CheckoutPage() {
   const t = useT();
   const router = useRouter();
   const cart = useCart();
-  const [submitting, setSubmitting] = useState(false);
   const [mounted, setMounted] = useState(false);
 
   const [form, setForm] = useState({
@@ -43,17 +46,22 @@ export default function CheckoutPage() {
     country: 'PT',
     phone: '',
     shippingMethod: 'standard' as 'standard' | 'express',
-    paymentMethod: 'card' as 'card' | 'paypal',
     giftWrap: false,
     notes: '',
     marketingOptIn: false,
     termsAccepted: false,
   });
 
-  useEffect(() => setMounted(true), []);
+  // Deferred so the first client render matches SSR (hydration-safe):
+  // cart-derived UI renders in its empty state until after mount.
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
+  }, []);
 
-  const subtotal = toNumber(cart.subtotal().toFixed(2));
-  const promo = cart.promoCode ? PROMO_CODES[cart.promoCode] : null;
+  const displayLines = mounted ? cart.lines : [];
+  const subtotal = mounted ? toNumber(cart.subtotal().toFixed(2)) : 0;
+  const promo = mounted && cart.promoCode ? PROMO_CODES[cart.promoCode] : null;
   const discount = promo ? (subtotal * promo.value) / 100 : 0;
   const option = SHIPPING_OPTIONS.find((o) => o.id === form.shippingMethod) ?? SHIPPING_OPTIONS[0];
   const shipping = option.id === 'standard' && subtotal - discount >= FREE_SHIPPING_THRESHOLD ? 0 : option.price;
@@ -62,7 +70,60 @@ export default function CheckoutPage() {
 
   const set = (key: keyof typeof form, value: string | boolean) => setForm((f) => ({ ...f, [key]: value }));
 
-  const onSubmit = async (e: React.FormEvent) => {
+  // ---- Real payment session (§5) ------------------------------------
+  // Contact + delivery must be complete before an order/intent is created.
+  const detailsValid =
+    form.email.includes('@') &&
+    form.firstName.trim().length > 0 &&
+    form.lastName.trim().length > 0 &&
+    form.address.trim().length > 0 &&
+    form.city.trim().length > 0 &&
+    form.postalCode.trim().length > 0;
+
+  const payload = useMemo(
+    () =>
+      detailsValid && cart.lines.length > 0
+        ? {
+            email: form.email.trim(),
+            firstName: form.firstName.trim(),
+            lastName: form.lastName.trim(),
+            address: form.address.trim(),
+            address2: form.address2.trim() || null,
+            city: form.city.trim(),
+            postalCode: form.postalCode.trim(),
+            country: form.country,
+            phone: form.phone.trim() || null,
+            shippingMethod: form.shippingMethod,
+            promoCode: cart.promoCode,
+            giftWrap: form.giftWrap,
+            notes: form.notes.trim() || null,
+            marketingConsent: form.marketingOptIn,
+            items: cart.lines.map((l) => ({ slug: l.slug, quantity: l.quantity, variantId: l.variantId ?? null })),
+          }
+        : null,
+    [
+      detailsValid,
+      cart.lines,
+      cart.promoCode,
+      form.email, form.firstName, form.lastName, form.address, form.address2,
+      form.city, form.postalCode, form.country, form.phone,
+      form.shippingMethod, form.giftWrap, form.notes, form.marketingOptIn,
+    ],
+  );
+
+  const signature = useMemo(
+    () => (payload ? JSON.stringify(payload) : 'invalid'),
+    [payload],
+  );
+
+  const finishOrder = (orderNumber: string, accessToken: string) => {
+    saveOrderReference(orderNumber, accessToken);
+    router.push(`/checkout/success?order=${encodeURIComponent(orderNumber)}&token=${encodeURIComponent(accessToken)}`);
+  };
+
+  const session = usePaymentSession({ payload, signature, onComplete: finishOrder });
+
+  const onPay = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.termsAccepted) {
       toast({ title: t('checkout.toastTerms'), variant: 'destructive' });
@@ -72,41 +133,18 @@ export default function CheckoutPage() {
       toast({ title: t('checkout.toastEmpty'), variant: 'destructive' });
       return;
     }
-    setSubmitting(true);
-    try {
-      const res = await fetch('/api/orders', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          email: form.email,
-          firstName: form.firstName,
-          lastName: form.lastName,
-          address: form.address,
-          address2: form.address2 || null,
-          city: form.city,
-          postalCode: form.postalCode,
-          country: form.country,
-          phone: form.phone || null,
-          shippingMethod: form.shippingMethod,
-          paymentMethod: form.paymentMethod,
-          giftWrap: form.giftWrap,
-          notes: form.notes.trim() || null,
-          promoCode: cart.promoCode,
-          items: cart.lines.map((l) => ({ slug: l.slug, quantity: l.quantity, variantId: l.variantId })),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) {
-        toast({ title: data.error ?? t('checkout.toastFailed'), variant: 'destructive' });
-        return;
-      }
-      cart.clear();
-      router.push(`/checkout/success?order=${data.order.orderNumber}`);
-    } catch {
-      toast({ title: t('checkout.toastNetwork'), variant: 'destructive' });
-    } finally {
-      setSubmitting(false);
+    if (session.phase !== 'ready') return;
+
+    const result = await session.confirmPayment();
+    if (!result.ok) {
+      const message =
+        result.errorCode === 'PAYMENT_CANCELLED'
+          ? t('checkout.errorCancelled')
+          : result.errorMessage || t('checkout.errorPayment');
+      toast({ title: t('checkout.errorPaymentTitle'), description: message, variant: 'destructive' });
     }
+    // On success confirmPayment either redirects (3DS / async methods)
+    // or calls onComplete → success page (server-verified).
   };
 
   if (mounted && cart.lines.length === 0) {
@@ -143,6 +181,8 @@ export default function CheckoutPage() {
     </div>
   );
 
+  const payDisabled = session.phase !== 'ready' || !form.termsAccepted;
+
   return (
     <div className="container-ecom py-8 lg:py-12">
       <div className="flex items-center justify-between">
@@ -152,7 +192,7 @@ export default function CheckoutPage() {
         </span>
       </div>
 
-      <form onSubmit={onSubmit} className="mt-8 grid gap-10 lg:grid-cols-[1fr_380px]">
+      <form onSubmit={onPay} className="mt-8 grid gap-10 lg:grid-cols-[1fr_380px]">
         {/* Left: details */}
         <div className="space-y-8">
           {/* Contact */}
@@ -303,47 +343,82 @@ export default function CheckoutPage() {
             </div>
           </section>
 
-          {/* Payment */}
+          {/* Payment — real Stripe Elements flow (§57) */}
           <section aria-labelledby="co-payment" className="rounded-lg border border-border bg-card p-6">
-            <h2 id="co-payment" className="font-display text-[19px] font-medium">
-              {t('checkout.s4')}
-            </h2>
-            <RadioGroup
-              value={form.paymentMethod}
-              onValueChange={(v) => set('paymentMethod', v)}
-              className="mt-4 gap-3"
-            >
-              <Label
-                htmlFor="pay-card"
-                className="flex cursor-pointer items-center justify-between rounded-md border border-border px-4 py-3.5 transition-colors has-[[data-state=checked]]:border-olive has-[[data-state=checked]]:bg-olive/5"
-              >
-                <span className="flex items-center gap-3">
-                  <RadioGroupItem value="card" id="pay-card" />
-                  <span className="flex items-center gap-2 text-[13.5px] font-medium">
-                    <CreditCard className="h-4 w-4" strokeWidth={1.5} /> {t('checkout.card')}
-                  </span>
-                </span>
-                <span className="text-[11.5px] text-muted-foreground">{t('checkout.cardNote')}</span>
-              </Label>
-              <Label
-                htmlFor="pay-paypal"
-                className="flex cursor-pointer items-center justify-between rounded-md border border-border px-4 py-3.5 transition-colors has-[[data-state=checked]]:border-olive has-[[data-state=checked]]:bg-olive/5"
-              >
-                <span className="flex items-center gap-3">
-                  <RadioGroupItem value="paypal" id="pay-paypal" />
-                  <span className="text-[13.5px] font-medium">{t('checkout.paypal')}</span>
-                </span>
-              </Label>
-            </RadioGroup>
-
-            {/* Mock payment notice — never collect card data in custom frontend */}
-            <div className="mt-4 rounded-md border border-amber-600/25 bg-amber-500/5 px-4 py-3">
-              <p className="text-[12.5px] leading-relaxed text-muted-foreground">
-                <strong className="text-foreground">{t('checkout.demoTitle')}</strong> {t('checkout.demoNotice')}
-              </p>
+            <div className="flex flex-wrap items-baseline justify-between gap-2">
+              <h2 id="co-payment" className="font-display text-[19px] font-medium">
+                {t('checkout.s4')}
+              </h2>
+              <span className="text-[12px] text-muted-foreground">{t('checkout.secureTitle')}</span>
             </div>
+            <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted-foreground">
+              {t('checkout.secureDesc')}
+            </p>
 
-            <div className="mt-4 flex items-start gap-2.5">
+            {!detailsValid && (
+              <p className="mt-4 rounded-md border border-border/70 bg-cream/50 px-4 py-3 text-[12.5px] text-muted-foreground">
+                {t('checkout.completeDetails')}
+              </p>
+            )}
+
+            {detailsValid && session.phase === 'unavailable' && (
+              <div className="mt-4 rounded-md border border-terracotta/30 bg-terracotta/5 px-4 py-3">
+                <p className="text-[12.5px] leading-relaxed text-muted-foreground">{session.errorMessage ?? t('checkout.paymentUnavailable')}</p>
+              </div>
+            )}
+
+            {detailsValid && session.phase === 'error' && (
+              <div className="mt-4 rounded-md border border-terracotta/30 bg-terracotta/5 px-4 py-3">
+                <p className="text-[12.5px] leading-relaxed text-muted-foreground">{session.errorMessage ?? t('checkout.errorPayment')}</p>
+                <button
+                  type="button"
+                  onClick={session.retry}
+                  className="mt-2 text-[12.5px] font-semibold text-olive underline underline-offset-2"
+                >
+                  {t('checkout.paymentRetry')}
+                </button>
+              </div>
+            )}
+
+            {(session.phase === 'preparing' || (session.phase === 'idle' && detailsValid)) && (
+              <div className="mt-4 flex items-center gap-2 rounded-md border border-border/70 bg-background/60 px-4 py-4 text-[12.5px] text-muted-foreground">
+                <LoaderCircle className="h-4 w-4 animate-spin" strokeWidth={2} />
+                {t('checkout.paymentInitializing')}
+              </div>
+            )}
+
+            {session.elements && (
+              <>
+                {/* Express wallets — official Stripe buttons, shown only
+                    when the browser/device/merchant supports them (§25) */}
+                <ExpressCheckout
+                  stripe={session.stripe}
+                  elements={session.elements}
+                  onBeforeConfirm={async () => undefined}
+                  onConfirm={() => session.confirmPayment().then((r) => { if (!r.ok && r.errorMessage) toast({ title: t('checkout.errorPaymentTitle'), description: r.errorMessage, variant: 'destructive' }); })}
+                  className="mt-5"
+                />
+
+                {/* Separator */}
+                <div className="my-5 flex items-center gap-3" aria-hidden>
+                  <span className="h-px flex-1 bg-border" />
+                  <span className="text-[11.5px] uppercase tracking-[0.12em] text-muted-foreground">
+                    {t('checkout.orPayWith')}
+                  </span>
+                  <span className="h-px flex-1 bg-border" />
+                </div>
+
+                {/* Official Stripe Payment Element — all card + local
+                    method UI (incl. MB WAY phone field, Multibanco flow) */}
+                <PaymentElement elements={session.elements} />
+
+                {/* Compact brand strip (§28) — informational only; the
+                    selectable methods are the Stripe Element's own */}
+                <PaymentBrandStrip country={form.country} currency="EUR" variant="compact" caption={t('checkout.weAccept')} className="mt-5" />
+              </>
+            )}
+
+            <div className="mt-5 flex items-start gap-2.5">
               <Checkbox
                 id="co-terms"
                 checked={form.termsAccepted}
@@ -365,7 +440,7 @@ export default function CheckoutPage() {
           <div className="rounded-lg border border-border bg-card p-6">
             <h2 className="font-display text-[19px] font-medium">{t('checkout.summary')}</h2>
             <ul className="mt-4 max-h-72 space-y-4 overflow-y-auto thin-scrollbar pr-1">
-              {cart.lines.map((l) => (
+              {displayLines.map((l) => (
                 <li key={l.slug} className="flex gap-3">
                   <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-md border border-border/60">
                     <Image src={l.image} alt={l.name} fill sizes="64px" className="object-cover" />
@@ -417,26 +492,51 @@ export default function CheckoutPage() {
             </dl>
             <button
               type="submit"
-              disabled={submitting}
-              className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary text-[14.5px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:opacity-60"
+              disabled={payDisabled}
+              className="mt-6 flex h-12 w-full items-center justify-center gap-2 rounded-md bg-primary text-[14.5px] font-semibold text-primary-foreground transition-colors hover:bg-primary/90 disabled:cursor-not-allowed disabled:opacity-60"
             >
-              {submitting ? (
+              {session.phase === 'confirming' ? (
                 <>
                   <LoaderCircle className="h-4 w-4 animate-spin" /> {t('checkout.processing')}
                 </>
-              ) : (
+              ) : session.phase === 'ready' ? (
                 <>
                   <Lock className="h-4 w-4" strokeWidth={2} /> {t('checkout.pay', { amount: formatPrice(money(total)) })}
+                </>
+              ) : session.phase === 'unavailable' ? (
+                <>
+                  <Lock className="h-4 w-4" strokeWidth={2} /> {t('checkout.paymentUnavailableShort')}
+                </>
+              ) : (
+                <>
+                  <LoaderCircle className="h-4 w-4 animate-spin" /> {t('checkout.paymentInitializing')}
                 </>
               )}
             </button>
             <p className="mt-3.5 flex items-center justify-center gap-1.5 text-[11.5px] text-muted-foreground">
               <ShieldCheck className="h-3.5 w-3.5 text-olive" strokeWidth={1.5} />
-              {t('checkout.stripeNote')}
+              {t('checkout.payNote')}
             </p>
           </div>
         </aside>
       </form>
     </div>
   );
+}
+
+/** Persist (orderNumber, token) so this browser can find the order
+ *  later without any email-only lookup (§60). */
+function saveOrderReference(orderNumber: string, accessToken: string) {
+  try {
+    sessionStorage.setItem('ecom-last-order', JSON.stringify({ orderNumber, accessToken }));
+    const raw = localStorage.getItem('ecom-orders');
+    const list: { orderNumber: string; accessToken: string; createdAt: string }[] = raw ? JSON.parse(raw) : [];
+    const next = [
+      { orderNumber, accessToken, createdAt: new Date().toISOString() },
+      ...list.filter((o) => o.orderNumber !== orderNumber),
+    ].slice(0, 20);
+    localStorage.setItem('ecom-orders', JSON.stringify(next));
+  } catch {
+    // storage unavailable — the success URL still carries both values
+  }
 }

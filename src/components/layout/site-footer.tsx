@@ -4,9 +4,11 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { ArrowRight, Instagram, Facebook, Youtube, MapPin, Mail } from 'lucide-react';
 import { COMPANY } from '@/lib/company';
+import { activeSocialLinks } from '@/lib/social';
 import { useCookieConsent } from '@/lib/cookie-store';
 import { useT } from '@/hooks/use-t';
 import { toast } from '@/hooks/use-toast';
+import { PaymentBrandStrip } from '@/components/payments/payment-brand-strip';
 
 const COLUMNS: { titleKey: string; links: { labelKey: string; href: string }[] }[] = [
   {
@@ -79,8 +81,10 @@ const COLUMNS: { titleKey: string; links: { labelKey: string; href: string }[] }
 export function SiteFooter() {
   const t = useT();
   const [email, setEmail] = useState('');
+  const [consent, setConsent] = useState(false);
   const [subscribing, setSubscribing] = useState(false);
   const reopenCookies = useCookieConsent((s) => s.reopen);
+  const socials = activeSocialLinks();
 
   const subscribe = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -88,16 +92,23 @@ export function SiteFooter() {
       toast({ title: t('footer.toastInvalid'), variant: 'destructive' });
       return;
     }
+    // Explicit marketing consent is REQUIRED — never inferred from
+    // the form submission itself (§61).
+    if (!consent) {
+      toast({ title: t('footer.toastConsentRequired'), variant: 'destructive' });
+      return;
+    }
     setSubscribing(true);
     try {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, source: 'footer' }),
+        body: JSON.stringify({ email, source: 'footer', marketingConsent: true }),
       });
       if (res.ok) {
         toast({ title: t('footer.toastWelcome'), description: t('footer.toastWelcomeDesc') });
         setEmail('');
+        setConsent(false);
       } else {
         const data = await res.json().catch(() => null);
         toast({ title: data?.error ?? t('footer.toastError'), variant: 'destructive' });
@@ -142,6 +153,25 @@ export function SiteFooter() {
               <ArrowRight className="h-4.5 w-4.5" strokeWidth={2} />
             </button>
           </form>
+          <div className="mt-3 w-full max-w-md">
+            <label htmlFor="newsletter-consent" className="flex cursor-pointer items-start gap-2 text-[12px] leading-relaxed text-[#a7ada0]">
+              <input
+                id="newsletter-consent"
+                type="checkbox"
+                checked={consent}
+                onChange={(e) => setConsent(e.target.checked)}
+                className="mt-0.5 h-4 w-4 shrink-0 rounded border-white/25 bg-white/10 accent-[#e0a03c]"
+                required
+              />
+              <span>
+                {t('footer.newsletterConsent')}{' '}
+                <Link href="/legal/privacy" className="underline underline-offset-2 hover:text-white">
+                  {t('checkout.privacyShort')}
+                </Link>
+                .
+              </span>
+            </label>
+          </div>
         </div>
       </div>
 
@@ -175,6 +205,16 @@ export function SiteFooter() {
             </ul>
           </nav>
         ))}
+      </div>
+
+      {/* Payment methods — configured, brand-correct, small + balanced (§27) */}
+      <div className="border-t border-white/10">
+        <div className="container-ecom flex flex-col items-start justify-between gap-4 py-8 md:flex-row md:items-center">
+          <PaymentBrandStrip country="ALL" currency="ALL" variant="footer" caption={t('footer.weAccept')} />
+          <p className="flex items-center gap-1.5 text-[11.5px] text-[#9aa093]">
+            {t('footer.securePaymentNote')}
+          </p>
+        </div>
       </div>
 
       {/* Company legal identity */}
@@ -211,25 +251,31 @@ export function SiteFooter() {
             <p className="mt-1.5 text-[12.5px] text-[#9aa093]">{t('footer.telephone', { n: COMPANY.telephone })}</p>
           </div>
           <div className="flex flex-col items-start justify-between gap-8 md:items-end">
-            <div className="flex items-center gap-3">
-              {/* Social icons — shown as placeholders pending real profiles */}
-              {[
-                { name: 'Instagram', icon: Instagram },
-                { name: 'Pinterest', icon: null },
-                { name: 'TikTok', icon: Youtube },
-                { name: 'Facebook', icon: Facebook },
-              ].map((s) => (
-                <span
-                  key={s.name}
-                  role="img"
-                  aria-label={t('footer.comingSoon', { name: s.name })}
-                  title={t('footer.comingSoon', { name: s.name })}
-                  className="flex h-9 w-9 cursor-default items-center justify-center rounded-full border border-white/12 text-[#9aa093]"
-                >
-                  {s.icon ? <s.icon className="h-4 w-4" strokeWidth={1.5} /> : <span className="text-[11px] font-semibold">P</span>}
-                </span>
-              ))}
-            </div>
+            {/* Social — configuration-driven; renders only real,
+                enabled profiles (§51, §52). No placeholders. */}
+            {socials.length > 0 && (
+              <div className="flex items-center gap-3">
+                {socials.map((s) => {
+                  const Icon =
+                    s.id === 'instagram' ? Instagram :
+                    s.id === 'facebook' ? Facebook :
+                    s.id === 'youtube' ? Youtube : null;
+                  return (
+                    <a
+                      key={s.id}
+                      href={s.url ?? '#'}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={s.label}
+                      title={s.label}
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/12 text-[#b3b8ad] transition-colors hover:border-white/30 hover:text-white"
+                    >
+                      {Icon ? <Icon className="h-4 w-4" strokeWidth={1.5} /> : <span className="text-[11px] font-semibold">{s.label.slice(0, 2)}</span>}
+                    </a>
+                  );
+                })}
+              </div>
+            )}
             <div className="text-left md:text-right">
               <p className="text-[12px] text-[#8a9082]">
                 {t('footer.copyright', { brand: COMPANY.brand })}

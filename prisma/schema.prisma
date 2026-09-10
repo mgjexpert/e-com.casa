@@ -143,7 +143,7 @@ model Order {
   phone     String?
 
   shippingMethod String @default("standard") // standard | express
-  paymentMethod  String @default("card")     // card | paypal (mock)
+  paymentMethod  String?                    // card | mb_way | multibanco | bizum | blik | bancontact | … (from method registry)
 
   subtotal  String
   shipping  String
@@ -155,11 +155,133 @@ model Order {
   itemsJson String // JSON array of line items snapshot
   giftWrap  Boolean @default(false) // gift wrap service (+ fixed fee)
   notes     String? // customer delivery notes / gift message (max 500 chars)
-  status    String @default("CONFIRMED") // CONFIRMED | PROCESSING | SHIPPED | DELIVERED | CANCELLED
-  paymentStatus String @default("PAID") // mock: PAID | PENDING | REFUNDED
+
+  // Fulfilment state — CONFIRMED | PROCESSING | SHIPPED | DELIVERED | CANCELLED
+  status String @default("PENDING")
+
+  // Payment state — server-authoritative; only a verified gateway event
+  // may move an order to PAID (webhook or server-confirmed intent).
+  paymentStatus String @default("PENDING_PAYMENT") // PENDING_PAYMENT | PAYMENT_PROCESSING | PAID | PAYMENT_FAILED | CANCELLED | REFUNDED | PARTIALLY_REFUNDED
+  paymentProvider      String?  // xpayments_stripe
+  paymentIntentId      String?  // provider PaymentIntent id (denormalised for lookup)
+  paymentMethodType    String?  // method used on the successful/failed attempt
+  paymentFailureReason String?
+  currency             String   @default("EUR")
+  paidAt               DateTime?
+
+  // Secret that authorises browser access to this order (never
+  // email-only lookups). Returned once at creation and stored with
+  // the customer's checkout session.
+  accessToken   String @unique
+  checkoutToken String? @unique // client checkout-session idempotency token
+  pricingHash   String?        // fingerprint of the server-repriced totals used for the PaymentIntent
+
+  stockApplied Boolean @default(false) // final stock decrement applied after payment
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  payments    Payment[]
+  invoices    Invoice[]
+  creditNotes CreditNote[]
+}
+
+model Payment {
+  id                String    @id @default(cuid())
+  orderId           String    @unique
+  order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider          String    @default("xpayments_stripe")
+  providerAccount   String?   // store/mid identifier — never secrets
+  paymentIntentId   String    @unique
+  paymentMethodType String?   // card | mb_way | multibanco | …
+  amount            String    // major units (string) — matches Order money convention
+  amountMinor       Int?      // smallest currency unit actually charged
+  currency          String
+  status            String    @default("CREATED") // CREATED | REQUIRES_PAYMENT_METHOD | REQUIRES_ACTION | PROCESSING | SUCCEEDED | FAILED | CANCELLED | REFUNDED | PARTIALLY_REFUNDED
+  clientSecretCreatedAt DateTime?
+  paidAt            DateTime?
+  failedAt          DateTime?
+  failureCode       String?
+  failureMessage    String?
+  lastEventId       String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  attempts PaymentAttempt[]
+  refunds  Refund[]
+}
+
+model PaymentAttempt {
+  id                String   @id @default(cuid())
+  paymentId         String
+  payment           Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  provider          String
+  paymentMethodType String? // card | mb_way | multibanco | apple_pay | google_pay | other
+  providerReference String? // intent/charge/reference id
+  status            String
+  amount            String
+  currency          String
+  errorCode         String?
+  errorMessage      String?
+  createdAt         DateTime @default(now())
+
+  @@index([paymentId])
+}
+
+model Refund {
+  id          String   @id @default(cuid())
+  paymentId   String
+  payment     Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  refundId    String   @unique // provider refund id
+  amount      String
+  currency    String
+  reason      String?
+  status      String   @default("PENDING") // PENDING | SUCCEEDED | FAILED
+  createdAt   DateTime @default(now())
+}
+
+model Invoice {
+  id                   String   @id @default(cuid())
+  orderId              String   @unique
+  order                Order    @relation(fields: [orderId], references: [id])
+  invoiceNumber        String   @unique
+  country              String
+  currency             String
+  subtotal             String
+  shipping             String
+  tax                  String
+  discount             String
+  total                String
+  status               String   @default("ISSUED") // DRAFT | ISSUED | CANCELLED — fiscal issuance stays adapter-ready
+  pdfUrl               String?
+  externalAccountingId String?
+  issuedAt             DateTime @default(now())
+}
+
+model CreditNote {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id])
+  invoiceId String?
+  refundId  String?
+  number    String   @unique
+  amount    String
+  currency  String
+  reason    String?
+  status    String   @default("ISSUED")
+  issuedAt  DateTime @default(now())
+
+  @@index([orderId])
+}
+
+/// Processed gateway webhook events — enforces exactly-once side
+/// effects (no double invoices, double stock decrements, double emails).
+model WebhookEvent {
+  id          String   @id // provider event id
+  provider    String   @default("xpayments_stripe")
+  type        String
+  payloadJson String
+  processedAt DateTime @default(now())
 }
 
 // ============================================================

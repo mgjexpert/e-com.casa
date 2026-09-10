@@ -52,9 +52,9 @@ export default function AccountPage() {
         </div>
 
         <div className="mt-8 rounded-lg border border-border bg-cream/50 p-5 text-[13px] leading-relaxed text-muted-foreground">
-          <strong className="text-foreground">Accounts are coming soon.</strong> This first version keeps things
-          simple: orders are found by email, wishlists live on your device, and checkout takes under a minute.
-          Full accounts (saved addresses, faster checkout) are on the roadmap — see our{' '}
+          <strong className="text-foreground">Simple and secure by design.</strong> Orders you place on this device
+          are listed with private order links, wishlists live on your device, and checkout takes under a minute.
+          Saved addresses and faster checkout are on the roadmap — see our{' '}
           <Link href="/legal/privacy" className="text-olive underline underline-offset-2">privacy policy</Link> for
           how data is handled today.
         </div>

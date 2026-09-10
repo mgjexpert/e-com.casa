@@ -151,11 +151,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {product.name}
           </h1>
           {product.subtitle && <p className="mt-1.5 text-[14px] text-muted-foreground">{product.subtitle}</p>}
-          <div className="mt-3 flex items-center gap-2">
-            <Stars rating={product.rating} />
-            <span className="text-[13px] font-medium">{product.rating.toFixed(1)}</span>
-            <span className="text-[13px] text-muted-foreground">· {product.reviewCount} reviews</span>
-          </div>
+          {dbReviews.length > 0 && (
+            <div className="mt-3 flex items-center gap-2">
+              <Stars rating={product.rating} />
+              <span className="text-[13px] font-medium">{product.rating.toFixed(1)}</span>
+              <span className="text-[13px] text-muted-foreground">
+                · {dbReviews.length} customer review{dbReviews.length === 1 ? '' : 's'}
+              </span>
+            </div>
+          )}
 
           <p className="mt-5 whitespace-pre-line text-[14.5px] leading-relaxed text-foreground/85">{product.shortDescription || product.description}</p>
 
@@ -313,14 +317,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Reviews */}
-      <ReviewsSection
-        slug={product.slug}
-        rating={product.rating}
-        reviewCount={product.reviewCount}
-        dbReviews={dbReviews}
-        reviewMode={product.reviewMode}
-      />
+      {/* Reviews — verified customer reviews only */}
+      <ReviewsSection slug={product.slug} dbReviews={dbReviews} />
 
       {/* Recently viewed (client, localStorage) */}
       <RecentlyViewed excludeSlug={product.slug} />
@@ -339,14 +337,15 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             description: product.description,
             sku: product.slug.toUpperCase(),
             brand: { '@type': 'Brand', name: COMPANY.brand },
-            // Demo reviews are synthetic — never emit AggregateRating
-            // schema for them (legal: no fabricated social proof).
-            ...(product.reviewMode !== 'demo' && product.reviewCount > 0
+            // AggregateRating schema ONLY from verified customer
+            // reviews — synthetic catalogue ratings are never emitted
+            // (legal: no fabricated social proof).
+            ...(dbReviews.length > 0
               ? {
                   aggregateRating: {
                     '@type': 'AggregateRating',
                     ratingValue: product.rating,
-                    reviewCount: product.reviewCount,
+                    reviewCount: dbReviews.length,
                   },
                 }
               : {}),

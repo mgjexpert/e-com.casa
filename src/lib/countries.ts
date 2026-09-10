@@ -78,8 +78,10 @@ export interface EPRProfile {
 }
 
 export interface PaymentMethodsProfile {
+  /** Actual capability candidates for this market — resolved from the
+   *  payment-method registry (never "(demo)" placeholders). */
   methods: string[];
-  provider: string; // 'DemoPaymentProvider' in V1 — Stripe-ready abstraction
+  provider: string; // XPaymentsStripe — Stripe-compatible Direct API
   stripeEnabled: boolean;
 }
 
@@ -115,12 +117,27 @@ const EU_BASE_CONSUMER_RIGHTS = [
   'Protection against faulty goods',
 ];
 
-function eurPayments(stripeEnabled = false): PaymentMethodsProfile {
-  return {
-    methods: ['Card (demo)', 'PayPal (demo)'],
-    provider: 'DemoPaymentProvider',
-    stripeEnabled,
+/**
+ * Capability candidates per market (§46, §48). Real availability is
+ * resolved at checkout by /api/payments/capabilities (country +
+ * currency + gateway configuration stay authoritative).
+ */
+function eurPayments(countryCode: string, stripeEnabled = true): PaymentMethodsProfile {
+  const cc = countryCode.toUpperCase();
+  const local: Record<string, string[]> = {
+    PT: ['mb_way', 'multibanco'],
+    ES: ['bizum'],
+    PL: ['blik'],
+    BE: ['bancontact'],
   };
+  const methods = [
+    'card',
+    ...(local[cc] ?? []),
+    // wallets render dynamically via the Stripe Express Checkout Element
+    'apple_pay',
+    'google_pay',
+  ];
+  return { methods, provider: 'XPaymentsStripe', stripeEnabled };
 }
 
 function baseCountry(
@@ -179,7 +196,7 @@ function baseCountry(
       status: 'NOT_REGISTERED',
       ...(config.epr ?? {}),
     },
-    paymentMethods: eurPayments(),
+    paymentMethods: eurPayments(config.code),
   };
 }
 

@@ -135,7 +135,7 @@ export const legalDocuments: LegalDocument[] = [
       {
         heading: 'Payment',
         paragraphs: [
-          'Secure payment powered by Stripe (integration ready). Stripe processes card and other supported payment methods on our behalf; your full card details are handled by Stripe and are not stored on our systems. You must provide valid payment details and authorise us to take the total amount due, including delivery costs.',
+          'Payments are processed through our configured payment service infrastructure. Depending on the payment method and market, payment processing may involve XPayments and Stripe Elements. Your full payment details are handled by the payment infrastructure and are not stored on our systems. You must provide valid payment details and authorise us to take the total amount due, including delivery costs.',
         ],
       },
       {
@@ -197,7 +197,7 @@ export const legalDocuments: LegalDocument[] = [
           'Identity and contact data — name, email address, and (where provided) telephone number.',
           'Account data — email address and hashed credentials if you create an account.',
           'Order and checkout data — products purchased, order number, delivery address, order history.',
-          'Payment data — processed by our payment provider; we do not store full card numbers.',
+          'Payment data — processed by our payment service infrastructure; we do not store full card numbers. Depending on the payment method and market, payment processing may involve XPayments and Stripe Elements.',
           'Shipping data — delivery instructions and tracking status.',
           'Customer service data — messages you send us through forms, email or live chat.',
           'Newsletter data — email address and marketing preferences.',
@@ -230,7 +230,7 @@ export const legalDocuments: LegalDocument[] = [
         heading: 'Who we share your data with',
         paragraphs: ['We never sell your personal data. We share it only with service providers (processors) and authorities where necessary:'],
         bullets: [
-          'Payment processing — Stripe (integration ready).',
+          'Payment processing — XPayments and Stripe Elements, as part of our configured payment service infrastructure. Depending on the payment method and market, payment processing may involve these providers.',
           'Hosting and website operation — final hosting provider [TO BE COMPLETED].',
           'Email and newsletter delivery — provider [TO BE COMPLETED].',
           'Logistics and delivery partners — details confirmed at checkout.',

@@ -35,7 +35,7 @@ export interface Order {
   country: string;
   phone: string | null;
   shippingMethod: string;
-  paymentMethod: string;
+  paymentMethod?: string | null;
   subtotal: string;
   shipping: string;
   tax: string;
@@ -46,7 +46,11 @@ export interface Order {
   giftWrap: boolean;
   notes: string | null;
   status: string;
+  /** PENDING_PAYMENT | PAYMENT_PROCESSING | PAID | PAYMENT_FAILED | CANCELLED | REFUNDED | PARTIALLY_REFUNDED */
   paymentStatus: string;
+  paymentMethodType?: string | null;
+  currency?: string;
+  paidAt?: string | null;
   createdAt: string;
 }
 

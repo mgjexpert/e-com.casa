@@ -1,11 +1,9 @@
 # E-com.casa — Make Your Space Yours.
 
-A polished, Vercel-ready **European home & garden e-commerce demo** built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Prisma (PostgreSQL / Neon)**.
+**E-com.casa ecommerce application** — a polished, Vercel-ready **European home & garden store** built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Prisma (PostgreSQL / Neon)**, with **Stripe-compatible payment processing through XPayments**.
 
 > E-com.casa is a trading brand operated by **VANTERA DIGITAL LTD** (Company No. 17422035, 71–75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom).
-> This repository contains the V1 **demo** build: a 120-product synthetic "preview catalogue", cart, mock checkout, orders, editorial content, a full legal/compliance architecture and a one-shot market-research import pipeline.
-
-**Demo messaging:** “Preview catalogue — E-com.casa” · “Demo checkout — no payment will be charged.”
+> The storefront ships a research-derived catalogue, cart, real payment architecture (Stripe Elements + XPayments), orders, editorial content, a full legal/compliance architecture and one-shot catalog import tooling (dev-only).
 
 ---
 
@@ -17,8 +15,9 @@ A polished, Vercel-ready **European home & garden e-commerce demo** built with *
 - **Product pages** (`/product/[slug]`) — gallery, **interactive variants** (colour / size / pack with price deltas), quantity, add-to-cart, buy-now, wishlist, GPSR safety & compliance block, related products, **Complete the Look**, JSON-LD (aggregate rating suppressed for demo reviews)
 - **Relational catalogue** — Complete the Look, related products, cart cross-sell computed from category/space/style/collection metadata
 - **Cart** (`/cart`) — variant-aware line items, save-for-later, free-shipping progress, promo codes (`WELCOME10`, `HOME5`), gift wrap, delivery notes
-- **Demo checkout** (`/checkout`) — 28 EU/UK countries, delivery options, no real payment credentials ever collected; the order endpoint re-prices everything **server-side** (incl. variant deltas from the catalogue model)
-- **Order confirmation + order history** — email lookup with status tracker
+- **Real checkout** (`/checkout`) — 28 EU/UK countries, delivery options, **Stripe Payment Element + Express Checkout** (Apple Pay / Google Pay / Link / PayPal where supported) backed by the XPayments Stripe-compatible Direct API; totals are repriced **server-side** (incl. variant deltas from the catalogue model) and the amount is charged in the smallest currency unit
+- **Payment lifecycle** — PENDING_PAYMENT → PAYMENT_PROCESSING → PAID (only via verified gateway webhook), plus PAYMENT_FAILED / CANCELLED / REFUNDED; fulfilment stays a separate state machine; stock is finalised only after verified payment; idempotent PaymentIntent creation with persisted intent ids
+- **Order confirmation + order history** — status pages verify payment server-side; order access requires the per-order random token (no email-only lookups)
 - **Wishlist** (`/wishlist`) — persistent, shareable via URL
 - **Search** — global product search across name/description/category/style/space/materials
 - **Journal + Inspiration** — editorial content linked to the live catalogue
@@ -41,8 +40,8 @@ src/lib/catalog/
 ```
 The UI never queries Prisma for catalogue reads. To connect the future **real** catalogue, implement a new adapter behind the same facade — no frontend redesign.
 
-### Demo-flagged data model
-Every seeded product carries `isDemo = true`, `complianceStatus = DEMO`, `reviewMode = demo`, `documentationStatus = DEMO`, GPSR scaffold fields (manufacturer/EU-responsible-person **placeholders only** — nothing fabricated), `sourceResearchId` for internal research traceability, and no fake "was" prices. Demo reviews show "Sample product feedback — demonstration only"; no AggregateRating schema is emitted; no Verified Buyer claims.
+### Internal catalogue lifecycle flags
+Catalogue rows carry internal lifecycle fields (`isDemo`, `complianceStatus`, `reviewMode`, `documentationStatus`) used **only inside the pipeline** — shoppers never see them. GPSR scaffold fields are **placeholders only** (nothing fabricated), `sourceResearchId` keeps research traceability internal, and there are no fake "was" prices. Only verified customer reviews are ever displayed, and AggregateRating schema is emitted solely from real customer reviews.
 
 ---
 
@@ -168,29 +167,80 @@ Each demo product keeps `sourceResearchId/sourceDomain/sourceUrl` internally so 
 
 ---
 
+## 💳 Payments — architecture (XPayments + Stripe Elements)
+
+```
+Browser → Stripe.js / Stripe Elements (Payment Element + Express Checkout)
+        → client_secret
+        → E-com.casa Next.js server (route handlers only)
+        → XPayments Stripe-compatible API  (POST {base}/payment_intents)
+        → configured gateway
+        → XPayments merchant webhook  (POST /api/webhooks/xpayments)
+        → order state (PAID only after verified event)
+        → invoice workflow → fulfilment → customer email
+```
+
+- **Server routes:** `POST /api/checkout/create` (server-repriced PENDING order + access token), `POST /api/payments/create-intent` (idempotent intent creation via XPayments), `GET /api/payments/status`, `GET /api/payments/capabilities`, `POST /api/webhooks/xpayments`
+- **Provider abstraction:** `src/lib/payments/payment-provider.ts` with the single production implementation `xpayments-provider.ts` — `application/x-www-form-urlencoded`, `Authorization: Bearer xp_*`, `Idempotency-Key` (`ecom-order-<num>-<hash>`) and `Stripe-Version` preserved on every request
+- **State machines:** payment (`PENDING_PAYMENT → PAYMENT_PROCESSING → PAID | PAYMENT_FAILED | CANCELLED | REFUNDED`) is strictly separate from fulfilment (`CONFIRMED → …`); webhook transitions are monotonic (a stale event can never un-PAID an order) and idempotent via persisted event ids (`WebhookEvent`)
+- **Money:** amounts are converted to the smallest currency unit with an exponent table; floating-point amounts never reach the gateway
+- **Security:** the browser only ever receives the publishable key and `client_secret`; webhook verification is fail-closed (timing-safe HMAC); no card data touches E-com.casa systems; rate limiting on checkout/payment/webhook/form routes; safe logging only (order number, intent id, event id, status)
+- **Payment models (Prisma):** `Payment`, `PaymentAttempt`, `Refund`, `Invoice`, `CreditNote`, `WebhookEvent` + payment fields on `Order` (`paymentStatus`, `paymentIntentId`, `accessToken`, `paidAt`, …)
+
+### Payment methods availability
+Availability is layered: storefront configuration (`PAYMENT_METHODS`) → country/currency rules → gateway capability. Supplied brand assets live in `public/payment-methods/` and are shown only where the rules allow; a logo never implies gateway availability.
+
+| Method | Markets | Notes |
+|---|---|---|
+| Card (Visa · Mastercard · Amex) | all | via Payment Element |
+| MB WAY | PT · EUR | requires merchant activation at XPayments |
+| Multibanco | PT · EUR | async — success page polls server-verified state |
+| Bizum | ES · EUR | requires merchant activation |
+| BLIK | PL | requires merchant activation |
+| Bancontact | BE · EUR | requires merchant activation |
+| Apple Pay / Google Pay / Link / PayPal | dynamic | official buttons via Express Checkout Element (browser/device/merchant-dependent) |
+| PIX | BR · BRL only | configuration-gated (`PAYMENT_METHODS`); never shown in Europe |
+
+### Webhook setup (merchant configuration required)
+1. Point the XPayments merchant webhook to `https://<your-domain>/api/webhooks/xpayments`
+2. Set `XPAYMENTS_WEBHOOK_SECRET` to the signing secret from the merchant account
+3. The handler is fail-closed: deliveries without a valid timing-safe HMAC signature are rejected (400)
+
+### Apple Pay / Google Pay domain setup (merchant configuration required)
+Register the production domain for Apple Pay / Google Pay in the payment dashboard (Apple Pay domain verification file or dashboard setting, depending on the XPayments store configuration). The Express Checkout Element renders wallet buttons only for properly registered domains and capable browsers.
+
+### Test / live mode
+`PAYMENT_ENVIRONMENT=test` uses `xp_test_*` / `pk_test_*` credentials — the storefront UI stays normal (there is no customer-facing "test" messaging). Switch to `live` with `xp_live_*` / `pk_live_*`; never mix environments.
+
 ## ☁️ Deploy to Vercel (Neon PostgreSQL)
 
 1. Push this repository to GitHub
 2. Import into Vercel — framework auto-detected (Next.js)
-3. Attach the Neon Postgres integration (or set `DATABASE_URL` manually)
-4. Add the environment variables from `.env.example` (`NEXT_PUBLIC_SITE_URL`, `COMMERCE_MODE=demo`, `NEXT_PUBLIC_STRIPE_ENABLED=false`, `NEXT_PUBLIC_INDEXING_ENABLED=false`, `NEXT_PUBLIC_CHAT_ENABLED=true`)
-5. Run once against Neon: `npx prisma migrate deploy` (or `prisma db push`) then `npm run db:seed`
+3. Attach the Neon Postgres integration (or set `DATABASE_URL` manually — use the **pooled** endpoint)
+4. Add the environment variables from `.env.example` — payments require `XPAYMENTS_SECRET_KEY`, `XPAYMENTS_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `PAYMENT_ENVIRONMENT` at minimum
+5. Apply the schema once against Neon: `npx prisma migrate deploy`, then seed the catalogue: `npm run db:seed`
 6. Deploy
 
-No local SQLite, no local filesystem database — the production runtime is PostgreSQL-only. If the database is briefly unreachable, the storefront degrades gracefully to the bundled JSON artifacts via the demo adapter.
+No local SQLite, no local filesystem database — the production runtime is PostgreSQL-only. If the database is briefly unreachable, the storefront degrades gracefully to the bundled JSON artifacts via the fallback adapter.
 
 ## 🔐 Environment variables
 
-See `.env.example`. **Never commit `.env`.** Only `NEXT_PUBLIC_*` values reach the browser.
+See `.env.example`. **Never commit `.env`.** Only `NEXT_PUBLIC_*` values reach the browser — the `xp_*` server keys never do.
 
 | Variable | Purpose |
 |---|---|
-| `DATABASE_URL` | Neon PostgreSQL connection string |
+| `DATABASE_URL` | Neon PostgreSQL connection string (pooled endpoint) |
 | `NEXT_PUBLIC_SITE_URL` | Canonical URL (https://e-com.casa) |
-| `COMMERCE_MODE` | `demo` — mock checkout, no charges |
-| `NEXT_PUBLIC_STRIPE_ENABLED` | `false` until Stripe goes live (official Stripe components only) |
+| `PAYMENT_ENVIRONMENT` | `test` or `live` |
+| `XPAYMENTS_API_BASE_URL` | XPayments Stripe-compatible base URL |
+| `XPAYMENTS_SECRET_KEY` | **server-only** `xp_test_*` / `xp_live_*` credential |
+| `XPAYMENTS_WEBHOOK_SECRET` | merchant webhook signing secret |
+| `XPAYMENTS_STORE_ID` | optional store identifier (metadata) |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | publishable `pk_*` key (browser) |
+| `STRIPE_API_VERSION` | Stripe-Version header preserved on XPayments requests |
+| `PAYMENT_METHODS` | storefront-active methods (PIX opt-in) |
 | `NEXT_PUBLIC_ANALYTICS_ENABLED` | analytics load only after cookie consent |
-| `NEXT_PUBLIC_INDEXING_ENABLED` | `false` while the catalogue is synthetic (noindex) |
+| `NEXT_PUBLIC_INDEXING_ENABLED` | keep `false` until the real store goes live (noindex) |
 | `NEXT_PUBLIC_CHAT_ENABLED` | floating Concierge widget |
 
 ## 🖥️ Scripts
@@ -201,6 +251,7 @@ See `.env.example`. **Never commit `.env`.** Only `NEXT_PUBLIC_*` values reach t
 | `npm run build` / `npm run start` | production build / serve |
 | `npm run lint` | ESLint |
 | `npm run db:push` / `db:migrate` / `db:generate` | Prisma schema sync / migrations / client |
+| `npx prisma migrate deploy` | apply committed migrations to Neon (production-safe, additive) |
 | `npm run db:seed` | idempotent demo-catalogue seed (from `data/catalog/*.json`) |
 | `npm run catalog:research` | one-shot market research + catalogue generation (dev only) |
 

@@ -10,6 +10,7 @@ import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
 import { useWishlist } from '@/lib/wishlist-store';
 import { useT } from '@/hooks/use-t';
+import { PaymentBrandStrip } from '@/components/payments/payment-brand-strip';
 import { formatPrice, toNumber, money } from '@/lib/format';
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_OPTIONS, PROMO_CODES } from '@/lib/constants';
 import type { Product } from '@/types';
@@ -21,9 +22,16 @@ export default function CartPage() {
   const wishlist = useWishlist();
   const [promoInput, setPromoInput] = useState('');
   const [suggested, setSuggested] = useState<Product[]>([]);
+  // Hydration-safe: the first client render must match the SSR payload
+  // (empty cart), real lines appear right after mount.
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMounted(true), 0);
+    return () => clearTimeout(t);
+  }, []);
 
-  const lines = cart.lines;
-  const subtotal = toNumber(cart.subtotal().toFixed(2));
+  const lines = mounted ? cart.lines : [];
+  const subtotal = mounted ? toNumber(cart.subtotal().toFixed(2)) : 0;
   const promo = cart.promoCode ? PROMO_CODES[cart.promoCode] : null;
   const discount = promo ? (subtotal * promo.value) / 100 : 0;
   const freeShipping = subtotal - discount >= FREE_SHIPPING_THRESHOLD;
@@ -271,6 +279,8 @@ export default function CartPage() {
                 </li>
               ))}
             </ul>
+
+            <PaymentBrandStrip country="ALL" currency="ALL" variant="compact" caption={t('footer.weAccept')} className="mt-6 border-t border-border pt-5" />
           </div>
         </aside>
       </div>
