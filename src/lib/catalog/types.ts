@@ -50,6 +50,15 @@ export interface CatalogProduct {
   priceCents: number;
   comparePrice: string | null;
   currency: string;
+  /** Observed EU retail benchmark. This is NOT a statutory previous price. */
+  marketReferencePrice?: string | null;
+  marketReferenceSampleCount?: number;
+  marketReferenceConfidence?: 'HIGH' | 'MEDIUM' | 'LOW' | null;
+  marketReferenceBasis?: 'EXACT' | 'COMPARABLE' | null;
+  marketReferenceReviewedAt?: string | null;
+  /** Real, fixed-ended campaign metadata. Timers must never reset per visitor. */
+  promoDiscountPct?: number | null;
+  promoEndsAt?: string | null;
   categorySlug: string;
   subcategorySlugs: string;
   spaceSlugs: string;
