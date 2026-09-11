@@ -8,6 +8,7 @@ import { useCart } from '@/lib/cart-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
+import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -18,20 +19,22 @@ export function StickyAddToCart({ product }: { product: Product }) {
   const sentinelRef = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
   const [qty, setQty] = useState(1);
+  const saleable = isCatalogProductSaleable(product);
 
   useEffect(() => {
     const target = sentinelRef.current;
-    if (!target) return;
+    if (!target || !saleable) return;
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Show bar when the buy box area has scrolled out of view (below viewport)
         setVisible(!entry.isIntersecting && entry.boundingClientRect.top < 0);
       },
-      { threshold: 0 }
+      { threshold: 0 },
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, []);
+  }, [saleable]);
+
+  if (!saleable) return null;
 
   const onAdd = () => {
     add(
@@ -43,21 +46,19 @@ export function StickyAddToCart({ product }: { product: Product }) {
         image: product.image,
         maxStock: product.stock,
       },
-      qty
+      qty,
     );
     openCartDrawer();
   };
 
   return (
     <>
-      {/* Sentinel placed right after the buy box */}
       <div ref={sentinelRef} aria-hidden className="h-0" />
-
       <div
         className={cn(
           'fixed inset-x-0 bottom-0 z-40 border-t border-border/80 bg-background/95 backdrop-blur transition-transform duration-300 will-change-transform',
           'supports-[backdrop-filter]:bg-background/90',
-          visible ? 'translate-y-0' : 'translate-y-full'
+          visible ? 'translate-y-0' : 'translate-y-full',
         )}
         aria-hidden={!visible}
       >
@@ -72,30 +73,11 @@ export function StickyAddToCart({ product }: { product: Product }) {
             </p>
           </div>
           <div className="hidden h-10 items-center rounded-md border border-input sm:flex">
-            <button
-              type="button"
-              onClick={() => setQty((q) => Math.max(1, q - 1))}
-              disabled={qty <= 1}
-              className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
-              aria-label={t('buy.decrease')}
-            >
-              −
-            </button>
+            <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" aria-label={t('buy.decrease')}>−</button>
             <span className="w-8 text-center text-[13px] font-medium tabular-nums" aria-live="polite">{qty}</span>
-            <button
-              type="button"
-              onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))}
-              disabled={qty >= (product.stock || 99)}
-              className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
-              aria-label={t('buy.increase')}
-            >
-              +
-            </button>
+            <button type="button" onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))} disabled={qty >= (product.stock || 99)} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" aria-label={t('buy.increase')}>+</button>
           </div>
-          <Button
-            onClick={onAdd}
-            className="h-10 shrink-0 gap-2 rounded-md bg-ink px-4 text-[13.5px] font-semibold text-cream hover:bg-ink/90 sm:px-6"
-          >
+          <Button onClick={onAdd} className="h-10 shrink-0 gap-2 rounded-md bg-ink px-4 text-[13.5px] font-semibold text-cream hover:bg-ink/90 sm:px-6">
             <ShoppingBag className="h-4 w-4" strokeWidth={1.75} />
             {t('sticky.addToCart')}
           </Button>
