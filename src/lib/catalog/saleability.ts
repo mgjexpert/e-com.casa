@@ -32,7 +32,6 @@ export function isCatalogProductSaleable(
 export function getCatalogSaleabilityLabel(
   product: Pick<CatalogProduct, 'isDemo' | 'requiresComplianceReview' | 'complianceStatus' | 'documentationStatus' | 'availability' | 'stock'>,
 ): string {
-  if (product.availability === 'outOfStock' || product.stock <= 0) return 'Out of stock';
   if (product.isDemo) return 'Catalogue preview';
   if (
     product.requiresComplianceReview ||
@@ -41,5 +40,6 @@ export function getCatalogSaleabilityLabel(
   ) {
     return 'Supplier validation in progress';
   }
+  if (product.availability === 'outOfStock' || product.stock <= 0) return 'Out of stock';
   return 'Available';
 }
