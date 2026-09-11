@@ -80,13 +80,24 @@ export async function repriceCart(input: {
     throw new CheckoutValidationError('One or more products are unavailable');
   }
 
+  // Research/demo rows are allowed to exist for design/research continuity,
+  // but they can never create a payable order. Only supplier-backed products
+  // imported with isDemo=false are eligible for checkout.
+  const nonSaleable = products.find((product) => product.isDemo);
+  if (nonSaleable) {
+    throw new CheckoutValidationError(
+      `“${nonSaleable.name}” is a catalogue preview and is not available for purchase yet.`,
+      409,
+    );
+  }
+
   // Oversell guard — stock is NOT decremented here (§39): the final
   // decrement happens only after verified payment.
   for (const item of input.items) {
     const product = products.find((p) => p.slug === item.slug)!;
-    if (product.stock < item.quantity) {
+    if (product.stock < item.quantity || product.availability === 'outOfStock') {
       throw new CheckoutValidationError(
-        product.stock <= 0
+        product.stock <= 0 || product.availability === 'outOfStock'
           ? `Sorry — “${product.name}” has just sold out.`
           : `Sorry — only ${product.stock} × “${product.name}” remain in stock.`,
         409,
