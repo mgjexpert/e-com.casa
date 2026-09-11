@@ -37,6 +37,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Syntax-check scraper
+        run: node --check scripts/catalog-suppliers/bigbuy-web-scrape.mjs
+
       - name: Validate private configuration
         shell: bash
         run: |
@@ -60,7 +63,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install application dependencies
         run: bun install --frozen-lockfile
