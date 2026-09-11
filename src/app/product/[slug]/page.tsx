@@ -5,6 +5,7 @@ import path from 'path';
 import type { Metadata } from 'next';
 import { db } from '@/lib/db';
 import { getProduct as fetchProduct, getRelatedProducts as fetchRelated, getCompleteTheLook as fetchLook } from '@/lib/catalog';
+import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import { BuyBox } from '@/components/product/buy-box';
 import { ProductCard } from '@/components/product/product-card';
 import { Stars } from '@/components/product/product-card';
@@ -17,7 +18,7 @@ import { formatPrice } from '@/lib/format';
 import { COMPANY } from '@/lib/company';
 import type { ReviewDTO } from '@/lib/reviews-data';
 import type { Product } from '@/types';
-import { ChevronRight, Package, Info } from 'lucide-react';
+import { ChevronRight, Info } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -29,19 +30,27 @@ async function getProduct(slug: string): Promise<Product | null> {
   }
 }
 
+function absoluteProductImage(src: string): string {
+  return /^https:\/\//i.test(src) ? src : `${COMPANY.domain}${src}`;
+}
+
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const product = await getProduct(slug);
-  // Throw before streaming begins so the response carries a real 404 status
   if (!product) notFound();
+  const saleable = isCatalogProductSaleable(product);
   return {
-    title: `${product!.name} — ${formatPrice(product!.price)}`,
-    description: product!.description.slice(0, 155),
-    alternates: { canonical: `/product/${product!.slug}` },
+    title: saleable ? `${product.name} — ${formatPrice(product.price)}` : product.name,
+    description: product.description.slice(0, 155),
+    alternates: { canonical: `/product/${product.slug}` },
+    robots: {
+      index: process.env.NEXT_PUBLIC_INDEXING_ENABLED === 'true' && saleable,
+      follow: true,
+    },
     openGraph: {
-      title: product!.name,
-      description: product!.description.slice(0, 155),
-      images: [{ url: product!.image }],
+      title: product.name,
+      description: product.description.slice(0, 155),
+      images: [{ url: product.image }],
     },
   };
 }
@@ -50,6 +59,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const { slug } = await params;
   const product = await getProduct(slug);
   if (!product) notFound();
+  const saleable = isCatalogProductSaleable(product);
 
   const styleSlugs = product.styleSlugs.split(',').filter(Boolean);
   const spaceSlugs = product.spaceSlugs.split(',').filter(Boolean);
@@ -63,7 +73,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     related = [];
   }
 
-  // "Complete the Look" — relational merchandising via the catalog service
   let completeTheLook: Product[] = [];
   try {
     const relatedSlugs = new Set(related.map((r) => r.slug));
@@ -78,8 +87,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     manufacturerAddress?: string;
     manufacturerEmail?: string;
     euResponsiblePerson?: string;
-    warnings?: string;
-    safetyInstructions?: string;
+    warnings?: string | string[];
+    safetyInstructions?: string | string[];
     ceMarking?: string;
     countryOfOrigin?: string;
   } | null = null;
@@ -89,12 +98,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     safety = null;
   }
 
-  // Gallery: main + additional gallery images (deduped; only files that exist on disk)
+  // Public supplier media may legitimately live on an allow-listed remote CDN.
+  // Local media still has to exist on disk; remote hosts are constrained by next.config.ts.
   const galleryCandidates = [
     product.image,
     ...(product.gallery ? product.gallery.split(',').map((s) => s.trim()) : []),
   ].filter((src, i, arr) => src && arr.indexOf(src) === i);
   const galleryImages = galleryCandidates.filter((src) => {
+    if (/^https:\/\//i.test(src)) return true;
     try {
       return fs.existsSync(path.join(process.cwd(), 'public', src));
     } catch {
@@ -102,7 +113,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     }
   });
 
-  // Approved customer reviews from the DB (real submissions, newest first)
   let dbReviews: ReviewDTO[] = [];
   try {
     const rows = await db.review.findMany({
@@ -124,10 +134,12 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   } catch {
     dbReviews = [];
   }
+  const verifiedRating = dbReviews.length > 0
+    ? dbReviews.reduce((sum, review) => sum + review.rating, 0) / dbReviews.length
+    : null;
 
   return (
     <div className="container-ecom py-8 lg:py-12">
-      {/* Breadcrumbs */}
       <nav aria-label="Breadcrumb" className="text-[12px] text-muted-foreground">
         <ol className="flex flex-wrap items-center gap-1.5">
           <li><Link href="/" className="hover:text-foreground">Home</Link></li>
@@ -140,7 +152,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </ol>
       </nav>
 
-      {/* Gallery + info */}
       <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:gap-14">
         <div>
           <ProductGallery images={galleryImages} productName={product.name} badge={product.badge} />
@@ -151,10 +162,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             {product.name}
           </h1>
           {product.subtitle && <p className="mt-1.5 text-[14px] text-muted-foreground">{product.subtitle}</p>}
-          {dbReviews.length > 0 && (
+          {verifiedRating !== null && (
             <div className="mt-3 flex items-center gap-2">
-              <Stars rating={product.rating} />
-              <span className="text-[13px] font-medium">{product.rating.toFixed(1)}</span>
+              <Stars rating={verifiedRating} />
+              <span className="text-[13px] font-medium">{verifiedRating.toFixed(1)}</span>
               <span className="text-[13px] text-muted-foreground">
                 · {dbReviews.length} customer review{dbReviews.length === 1 ? '' : 's'}
               </span>
@@ -168,7 +179,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           </div>
           <StickyAddToCart product={product} />
 
-          {/* Styles & spaces chips */}
           {(styleSlugs.length > 0 || spaceSlugs.length > 0) && (
             <div className="mt-7 flex flex-wrap gap-2 border-t border-border pt-5">
               {styleSlugs.map((s) => (
@@ -194,7 +204,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
       </div>
 
-      {/* Details grid */}
       <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
         <section aria-labelledby="details-heading">
           <h2 id="details-heading" className="font-display text-[22px] font-medium">Product details</h2>
@@ -253,7 +262,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Warnings</dt>
-                  <dd className="max-w-[65%] text-right leading-relaxed">{safety.warnings ?? 'See enclosed manual.'}</dd>
+                  <dd className="max-w-[65%] text-right leading-relaxed">
+                    {Array.isArray(safety.warnings) ? safety.warnings.join(' · ') : (safety.warnings ?? 'See enclosed manual.')}
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-muted-foreground">Compliance status</dt>
@@ -277,7 +288,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       </div>
 
-      {/* Complete the Look */}
       {completeTheLook.length >= 2 && (
         <section aria-labelledby="ctl-heading" className="mt-16 border-t border-border pt-12">
           <div className="flex items-end justify-between">
@@ -300,7 +310,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Related */}
       {related.length > 0 && (
         <section aria-labelledby="related-heading" className="mt-16 border-t border-border pt-12">
           <div className="flex items-end justify-between">
@@ -317,15 +326,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       )}
 
-      {/* Reviews — verified customer reviews only */}
       <ReviewsSection slug={product.slug} dbReviews={dbReviews} />
-
-      {/* Recently viewed (client, localStorage) */}
       <RecentlyViewed excludeSlug={product.slug} />
-
       <TrackProductView slug={product.slug} />
 
-      {/* Product structured data */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -333,30 +337,31 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             '@context': 'https://schema.org',
             '@type': 'Product',
             name: product.name,
-            image: `${COMPANY.domain}${product.image}`,
+            image: absoluteProductImage(product.image),
             description: product.description,
-            sku: product.slug.toUpperCase(),
+            sku: product.sku,
             brand: { '@type': 'Brand', name: COMPANY.brand },
-            // AggregateRating schema ONLY from verified customer
-            // reviews — synthetic catalogue ratings are never emitted
-            // (legal: no fabricated social proof).
-            ...(dbReviews.length > 0
+            ...(verifiedRating !== null
               ? {
                   aggregateRating: {
                     '@type': 'AggregateRating',
-                    ratingValue: product.rating,
+                    ratingValue: Number(verifiedRating.toFixed(2)),
                     reviewCount: dbReviews.length,
                   },
                 }
               : {}),
-            offers: {
-              '@type': 'Offer',
-              url: `${COMPANY.domain}/product/${product.slug}`,
-              priceCurrency: product.currency,
-              price: product.price,
-              availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
-              itemCondition: 'https://schema.org/NewCondition',
-            },
+            ...(saleable
+              ? {
+                  offers: {
+                    '@type': 'Offer',
+                    url: `${COMPANY.domain}/product/${product.slug}`,
+                    priceCurrency: product.currency,
+                    price: product.price,
+                    availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                    itemCondition: 'https://schema.org/NewCondition',
+                  },
+                }
+              : {}),
           }),
         }}
       />
