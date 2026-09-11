@@ -77,6 +77,8 @@ export interface CatalogProduct {
   stock: number;
   /** False when a public supplier page only exposes available/unavailable, not an exact sellable quantity. */
   stockKnown?: boolean;
+  /** Direct manufacture: no inventory quantity is tracked or decremented. */
+  stockUnlimited?: boolean;
   availability: 'inStock' | 'lowStock' | 'outOfStock';
   /** Customer-safe API projection; internal hold reasons remain private. */
   canPurchase?: boolean;

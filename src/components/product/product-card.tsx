@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit } from '@/lib/catalog/inventory';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Heart, ShoppingBag } from 'lucide-react';
@@ -59,7 +60,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       subtitle: product.subtitle,
       price: product.price,
       image: product.image,
-      maxStock: product.stock,
+      maxStock: cartStockLimit(product),
     });
     openCartDrawer();
   };
@@ -170,7 +171,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
               <span className="text-[11.5px] text-muted-foreground">({product.reviewCount})</span>
             </div>
           )}
-          {saleable && product.stock > 0 && product.stock <= 10 && (
+          {saleable && !product.stockUnlimited && product.stock > 0 && product.stock <= 10 && (
             <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-terracotta">
               <span className="h-1 w-1 rounded-full bg-terracotta" aria-hidden />
               {t('card.onlyLeft', { n: product.stock })}

@@ -293,7 +293,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
                     url: `${COMPANY.domain}/product/${product.slug}`,
                     priceCurrency: product.currency,
                     price: product.price,
-                    availability: product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
+                    availability: product.stockUnlimited ? 'https://schema.org/PreOrder' : product.stock > 0 ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock',
                     itemCondition: 'https://schema.org/NewCondition',
                   },
                 }

@@ -10,6 +10,7 @@
 import 'server-only';
 
 import { db } from '@/lib/db';
+import { getProduct } from '@/lib/catalog';
 import { assignTrackingFields } from '@/lib/tracking';
 import { sendPaymentConfirmedEmail } from '@/lib/email/order-email';
 import { getPaymentProvider } from './xpayments-provider';
@@ -97,6 +98,10 @@ export async function applyProviderIntent(
     const tracking = assignTrackingFields(order.orderNumber, order.shippingMethod, order.country, paidAt);
     let transitionedToPaid = false;
 
+    const orderedItems = JSON.parse(order.itemsJson) as Array<{ slug: string }>;
+    const catalogueProducts = await Promise.all(orderedItems.map(item => getProduct(item.slug)));
+    const unlimitedSlugs = new Set(catalogueProducts.filter(product => product?.stockUnlimited).map(product => product!.slug));
+
     await db.$transaction(async (tx) => {
       await tx.payment.update({
         where: { id: payment.id },
@@ -140,6 +145,7 @@ export async function applyProviderIntent(
         catch { items = []; }
         for (const item of items) {
           if (!item.slug || !Number.isInteger(item.quantity) || item.quantity <= 0) continue;
+          if (unlimitedSlugs.has(item.slug)) continue;
           const updated = await tx.product.updateMany({
             where: { slug: item.slug, stock: { gte: item.quantity } },
             data: { stock: { decrement: item.quantity } },

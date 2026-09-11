@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Heart, Minus, Plus, ShoppingBag, Zap, ShieldCheck, RotateCcw, Truck } from 'lucide-react';
@@ -93,7 +94,7 @@ export function BuyBox({ product }: { product: Product }) {
         subtitle: variantSubtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: product.stock,
+        maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },
@@ -169,7 +170,7 @@ export function BuyBox({ product }: { product: Product }) {
             <Minus className="h-4 w-4" />
           </button>
           <span className="w-10 text-center text-[14px] font-medium tabular-nums" aria-live="polite">{qty}</span>
-          <button type="button" onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))} className="flex h-full w-11 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" disabled={qty >= (product.stock || 99)} aria-label={t('buy.increase')}>
+          <button type="button" onClick={() => setQty((q) => Math.min(quantityLimit(product), q + 1))} className="flex h-full w-11 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" disabled={qty >= (quantityLimit(product))} aria-label={t('buy.increase')}>
             <Plus className="h-4 w-4" />
           </button>
         </div>
@@ -190,8 +191,8 @@ export function BuyBox({ product }: { product: Product }) {
 
       <div className="mt-3">
         <p className="flex items-center gap-1.5 text-[12.5px]" aria-live="polite">
-          <span className={cn('h-1.5 w-1.5 rounded-full', product.stock <= 0 ? 'bg-terracotta' : product.stock <= 10 ? 'bg-amber-star' : 'bg-olive')} aria-hidden />
-          {product.stock <= 0 ? <span className="text-terracotta">{t('buy.outOfStock')}</span> : product.stock <= 10 ? <span className="font-medium text-foreground">{t('buy.lowStock', { n: product.stock })}</span> : <span className="text-muted-foreground">{t('buy.inStock')}</span>}
+          <span className={cn('h-1.5 w-1.5 rounded-full', !product.stockUnlimited && product.stock <= 0 ? 'bg-terracotta' : !product.stockUnlimited && product.stock <= 10 ? 'bg-amber-star' : 'bg-olive')} aria-hidden />
+          {!product.stockUnlimited && product.stock <= 0 ? <span className="text-terracotta">{t('buy.outOfStock')}</span> : !product.stockUnlimited && product.stock <= 10 ? <span className="font-medium text-foreground">{t('buy.lowStock', { n: product.stock })}</span> : <span className="text-muted-foreground">{t('buy.inStock')}</span>}
         </p>
       </div>
 

@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, Ruler } from 'lucide-react';
 import { useRouter } from 'next/navigation';
@@ -46,7 +47,7 @@ export function PanelConfigurator({ product, offerSlug }: { product: CatalogProd
       subtitle: `${selectedColor.name} · ${selected.name}`,
       price: (regularCents / 100).toFixed(2),
       image: product.image,
-      maxStock: product.stock,
+      maxStock: cartStockLimit(product),
       variantId: selected.id,
       variantLabel: `${selectedColor.name} · ${selected.name}`,
     }, qty);
@@ -102,7 +103,7 @@ export function PanelConfigurator({ product, offerSlug }: { product: CatalogProd
             {calculatorOpen && <div className="mt-3 rounded-lg border border-[#e0d6cb] bg-[#fdfbf9] p-4"><p className="text-sm font-semibold">Calculadora rápida</p><p className="mt-1 text-xs text-[#7d6f64]">Introduza as medidas aproximadas da parede em centímetros.</p><div className="mt-3 grid grid-cols-2 gap-2"><input value={wallWidth} onChange={(event) => setWallWidth(event.target.value)} placeholder="Largura cm" inputMode="decimal" className="h-10 rounded-md border border-[#d9cec2] bg-white px-3 text-sm" /><input value={wallHeight} onChange={(event) => setWallHeight(event.target.value)} placeholder="Altura cm" inputMode="decimal" className="h-10 rounded-md border border-[#d9cec2] bg-white px-3 text-sm" /></div>{estimate && <p className="mt-3 text-sm">Estimativa inicial: <strong>{estimate} {estimate === 1 ? 'painel' : 'painéis'}</strong></p>}</div>}
           </div>
 
-          <div><span className="mb-2 block text-base font-semibold text-[#3d342e]">Quantidade</span><div className="flex h-12 items-center justify-between rounded-xl bg-[#f1ece6] px-1"><button type="button" onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-10 w-10 place-items-center"><Minus className="h-4 w-4" /></button><strong className="text-base tabular-nums">{qty} {qty === 1 ? 'painel' : 'painéis'}</strong><button type="button" onClick={() => setQty(Math.min(product.stock, qty + 1))} className="grid h-10 w-10 place-items-center rounded-lg bg-[#201a17] text-white"><Plus className="h-4 w-4" /></button></div></div>
+          <div><span className="mb-2 block text-base font-semibold text-[#3d342e]">Quantidade</span><div className="flex h-12 items-center justify-between rounded-xl bg-[#f1ece6] px-1"><button type="button" onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-10 w-10 place-items-center"><Minus className="h-4 w-4" /></button><strong className="text-base tabular-nums">{qty} {qty === 1 ? 'painel' : 'painéis'}</strong><button type="button" onClick={() => setQty(Math.min(quantityLimit(product), qty + 1))} className="grid h-10 w-10 place-items-center rounded-lg bg-[#201a17] text-white"><Plus className="h-4 w-4" /></button></div></div>
 
           <div className="space-y-3">
             <div className="flex items-baseline justify-between"><span className="text-sm text-[#7d6f64]">Total promocional</span><strong className="text-xl">{campaignEuro(offerCents * qty)}</strong></div>

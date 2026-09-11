@@ -1,0 +1,33 @@
+name: Import partner catalogue into PostgreSQL
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'prisma/seed.ts'
+      - 'prisma/partner-catalog-schema.sql'
+      - 'scripts/catalog-partners/provision-db.ts'
+      - 'data/catalog/generated-provider-products.json'
+      - '.github/workflows/catalog-partner-import.yml'
+permissions:
+  contents: read
+concurrency:
+  group: partner-catalogue-db
+  cancel-in-progress: false
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+      - run: bun install --frozen-lockfile
+      - run: bunx prisma generate
+      - run: bun run test:catalog
+      - run: bun prisma/seed.ts --dry-run
+      - name: Require database connection
+        run: test -n "$DATABASE_URL"
+      - run: bun scripts/catalog-partners/provision-db.ts
+      - run: bun prisma/seed.ts

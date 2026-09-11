@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Minus, Plus, ShoppingBag, Zap, ShieldCheck } from 'lucide-react';
@@ -42,14 +43,14 @@ export function OfferBuyBoxV2({ product, offerSlug, initialLanguage }: { product
     trackOfferEvent('variant_selected', { offerSlug, productSlug: product.slug, variantId: id });
   };
   const setQty = (next: number) => {
-    const max = saleable ? Math.max(1, product.stock) : 20;
+    const max = saleable ? Math.max(1, quantityLimit(product)) : 20;
     const value = Math.min(max, Math.max(1, next));
     setQuantity(value);
     trackOfferEvent('quantity_changed', { offerSlug, productSlug: product.slug, quantity: value });
   };
   const addLine = () => {
     if (!saleable) return;
-    add({ slug: product.slug, name: product.name, subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle, price: unitPrice, image: product.image, maxStock: product.stock, variantId: selectedVariant?.id, variantLabel: selectedVariant?.name }, quantity);
+    add({ slug: product.slug, name: product.name, subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle, price: unitPrice, image: product.image, maxStock: cartStockLimit(product), variantId: selectedVariant?.id, variantLabel: selectedVariant?.name }, quantity);
   };
   const addToCart = () => {
     if (!saleable) return;
@@ -93,7 +94,7 @@ export function OfferBuyBoxV2({ product, offerSlug, initialLanguage }: { product
         <div className="flex h-12 items-center rounded-lg border border-input bg-background">
           <button type="button" onClick={() => setQty(quantity - 1)} disabled={quantity <= 1} className="grid h-full w-11 place-items-center disabled:opacity-35" aria-label={text.decrease}><Minus className="h-4 w-4" /></button>
           <span className="w-9 text-center text-sm font-semibold tabular-nums" aria-live="polite">{quantity}</span>
-          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= product.stock} className="grid h-full w-11 place-items-center disabled:opacity-35" aria-label={text.increase}><Plus className="h-4 w-4" /></button>
+          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= quantityLimit(product)} className="grid h-full w-11 place-items-center disabled:opacity-35" aria-label={text.increase}><Plus className="h-4 w-4" /></button>
         </div>
         <button type="button" onClick={buyNow} disabled={!saleable} className="flex h-12 flex-1 items-center justify-center gap-2 rounded-lg bg-ink px-5 text-sm font-semibold text-cream transition hover:bg-ink/90 disabled:cursor-not-allowed disabled:opacity-45"><Zap className="h-4 w-4" />{saleable ? text.buyNow : text.validating}</button>
       </div>

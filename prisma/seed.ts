@@ -1,16 +1,4 @@
-// ============================================================
-// E-com.casa — Idempotent database seed
-// ------------------------------------------------------------
-//   npm run db:seed          (bun prisma/seed.ts)
-//
-// Creates/updates categories, products, bundles metadata and
-// demo reviews from the /data/catalog artifacts produced by the
-// one-shot research pipeline. Uses stable SKUs/slugs, so it is
-// safe to re-run any number of times — no duplicates, no deletion
-// of unrelated records (orders, reviews and subscribers are never
-// touched except idempotent demo-review upserts keyed by content).
-// ============================================================
-
+// Partner-only import: validate first, atomically upsert and archive/remove mocks.
 import { PrismaClient } from '@prisma/client';
 import { readFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
@@ -41,6 +29,14 @@ interface ArtifactProduct {
   rating: number;
   reviewCount: number;
   stock: number;
+  stockKnown: boolean;
+  stockUnlimited: boolean;
+  brand: string | null;
+  manufacturer: string | null;
+  supplierKey: string | null;
+  supplierProductId: string | null;
+  mediaRights: string | null;
+
   availability: string;
   isBestSeller: boolean;
   isNew: boolean;
@@ -72,20 +68,28 @@ function readArtifact(file: string): unknown | null {
 }
 
 async function main() {
-  console.log('E-com.casa seed — idempotent demo catalogue import');
+  console.log('E-com.casa seed — idempotent partner catalogue import');
 
-  const catalog = readArtifact('generated-catalog.json') as { categories?: Array<{ slug: string; name: string; type: string; image: string; subtitle?: string }> } | null;
-  const products = readArtifact('generated-products.json') as ArtifactProduct[] | null;
+  const catalog = readArtifact('generated-provider-catalog.json') as { categories?: Array<{ slug: string; name: string; type: string; image: string; subtitle?: string }> } | null;
+  const products = readArtifact('generated-provider-products.json') as ArtifactProduct[] | null;
 
   if (!products || !Array.isArray(products) || products.length === 0) {
-    console.error('No /data/catalog/generated-products.json found. Run `npm run catalog:research` first.');
+    console.error('No /data/catalog/generated-provider-products.json found. Run `npm run catalog:sync:partners` first.');
     process.exit(1);
   }
 
+  if (products.length < 240 || products.filter(p => p.supplierKey === 'odem').length < 40 || products.filter(p => p.supplierKey === 'woodupp').length < 200) throw new Error('Incomplete partner snapshot');
+  if (products.some(p => p.isDemo || !p.stockUnlimited || !['odem', 'woodupp'].includes(p.supplierKey ?? '') || !p.supplierProductId || !p.sku || !p.slug)) throw new Error('Invalid partner identity or stock policy');
+  if (new Set(products.map(p => p.sku)).size !== products.length || new Set(products.map(p => p.slug)).size !== products.length) throw new Error('Duplicate SKU/slug');
+  if (!catalog?.categories?.length || products.some(p => !catalog.categories!.some(c => c.slug === p.categorySlug))) throw new Error('Missing categories');
+  console.log(`Validated ${products.length} products`);
+  if (process.argv.includes('--dry-run')) return;
+
+  await db.$transaction(async (tx) => {
   // ---- Categories ----
   const categories = catalog?.categories ?? [];
   for (const [i, c] of categories.entries()) {
-    await db.category.upsert({
+    await tx.category.upsert({
       where: { type_slug: { type: c.type, slug: c.slug } },
       create: {
         slug: c.slug,
@@ -128,6 +132,14 @@ async function main() {
       rating: p.rating,
       reviewCount: p.reviewCount,
       stock: p.stock,
+      stockKnown: p.stockKnown,
+      stockUnlimited: p.stockUnlimited,
+      brand: p.brand,
+      manufacturer: p.manufacturer,
+      supplierKey: p.supplierKey,
+      supplierProductId: p.supplierProductId,
+      mediaRights: p.mediaRights,
+
       availability: p.availability,
       isBestSeller: p.isBestSeller,
       isNew: p.isNew,
@@ -152,24 +164,31 @@ async function main() {
       sourceUrl: p.sourceUrl,
       sortOrder: i + 1,
     };
-    const existing = await db.product.findUnique({ where: { sku: p.sku } });
+    const existing = await tx.product.findUnique({ where: { sku: p.sku } });
     if (existing) {
-      await db.product.update({ where: { sku: p.sku }, data });
+      await tx.product.update({ where: { sku: p.sku }, data });
       updated++;
     } else {
-      await db.product.create({ data });
+      await tx.product.create({ data });
       created++;
     }
   }
   console.log(`✔ products: ${products.length} processed (${created} created, ${updated} updated)`);
 
+  // Keep an internal recoverable copy of mock catalogue rows, then remove them.
+  // Orders/reviews are separate records and are never rewritten or deleted.
+  await tx.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS "CatalogMockArchive" ("id" TEXT PRIMARY KEY, "row" JSONB NOT NULL, "archivedAt" TIMESTAMPTZ NOT NULL DEFAULT now())');
+  await tx.$executeRaw`INSERT INTO "CatalogMockArchive" ("id", "row") SELECT "id", to_jsonb(p) FROM "Product" p WHERE "isDemo" = true OR "sku" = 'EC-WAL-001' ON CONFLICT ("id") DO NOTHING`;
+  const removed = await tx.product.deleteMany({ where: { OR: [{ isDemo: true }, { sku: 'EC-WAL-001' }] } });
+  console.log(`Removed ${removed.count} mock products (recoverable archive retained)`);
+
   // ---- Integrity checks (idempotency + data quality) ----
-  const total = await db.product.count();
-  const dupSkus = await db.$queryRaw<Array<{ sku: string; n: number }>>`
+  const total = await tx.product.count();
+  const dupSkus = await tx.$queryRaw<Array<{ sku: string; n: number }>>`
     SELECT sku, COUNT(*)::int AS n FROM "Product" GROUP BY sku HAVING COUNT(*) > 1`;
-  const withoutSku = await db.product.count({ where: { sku: '' } });
-  const demoCount = await db.product.count({ where: { isDemo: true } });
-  const missing = await db.product.count({
+  const withoutSku = await tx.product.count({ where: { sku: '' } });
+  const demoCount = await tx.product.count({ where: { isDemo: true } });
+  const missing = await tx.product.count({
     where: { OR: [{ image: '' }, { description: '' }, { categorySlug: '' }, { price: '' }] },
   });
 
@@ -177,6 +196,7 @@ async function main() {
   if (dupSkus.length > 0) throw new Error('Duplicate SKUs detected — seed identity violated');
   if (missing > 0) console.warn('⚠ some products are missing required display data (image/description/category/price)');
 
+  }, { timeout: 120000 });
   console.log('Seed complete ✔ (safe to re-run)');
 }
 
