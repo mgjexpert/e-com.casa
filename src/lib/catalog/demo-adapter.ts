@@ -1,14 +1,11 @@
 // ============================================================
-// E-com.casa — Demo catalog adapter (JSON artifact fallback)
+// E-com.casa — JSON catalogue fallback
 // ------------------------------------------------------------
-// Reads /data/catalog/generated-products.json + generated-catalog.json.
-// Purpose:
-//   1. Resilience — the storefront keeps rendering when the
-//      database is unreachable (e.g. first boot, preview builds).
-//   2. Reproducibility — the same artifacts the seed imports into
-//      Neon power a fully static fallback of the demo catalogue.
-// These artifacts are produced by the one-shot research pipeline
-// and never contain secrets or third-party copyrighted content.
+// Reads the curated demo artefact and, when present, the generated
+// Shopify supplier snapshot. Supplier rows remain explicitly staged
+// (SUPPLIER_PENDING / PENDING) and cannot pass the saleability gate.
+// This gives the storefront a real supplier-backed catalogue preview
+// even when the production database is not provisioned.
 // ============================================================
 
 import { readFileSync } from 'node:fs';
@@ -28,54 +25,76 @@ let cache: { products: CatalogProduct[]; categories: CatalogCategory[]; loadedAt
 const CACHE_TTL_MS = 30_000;
 
 function dataPath(file: string): string {
-  // Works both from repo root and from bundled contexts
   return path.join(process.cwd(), 'data', 'catalog', file);
+}
+
+function readProducts(file: string): CatalogProduct[] {
+  try {
+    const raw = readFileSync(dataPath(file), 'utf-8');
+    const parsed = JSON.parse(raw) as JsonProduct[];
+    if (!Array.isArray(parsed)) return [];
+    return parsed.map((product) => ({
+      ...product,
+      variants: Array.isArray(product.variants) ? product.variants : [],
+    }));
+  } catch {
+    return [];
+  }
 }
 
 function load(): { products: CatalogProduct[]; categories: CatalogCategory[] } {
   if (cache && Date.now() - cache.loadedAt < CACHE_TTL_MS) {
     return { products: cache.products, categories: cache.categories };
   }
+
+  const demoProducts = readProducts('generated-products.json');
+  const supplierProducts = readProducts('generated-supplier-products.json');
+  const products = [
+    ...new Map([...demoProducts, ...supplierProducts].map((product) => [product.sku, product])).values(),
+  ];
+
+  let categories: CatalogCategory[] = [];
   try {
-    const raw = readFileSync(dataPath('generated-products.json'), 'utf-8');
-    const products = (JSON.parse(raw) as JsonProduct[]).map((p) => ({
-      ...p,
-      variants: Array.isArray(p.variants) ? p.variants : [],
-    }));
-    let categories: CatalogCategory[] = [];
-    try {
-      const catRaw = readFileSync(dataPath('generated-catalog.json'), 'utf-8');
-      const parsed = JSON.parse(catRaw) as { categories?: CatalogCategory[] };
-      categories = Array.isArray(parsed.categories) ? parsed.categories : [];
-    } catch {
-      categories = [];
-    }
-    cache = { products, categories, loadedAt: Date.now() };
-    return { products, categories };
+    const catRaw = readFileSync(dataPath('generated-catalog.json'), 'utf-8');
+    const parsed = JSON.parse(catRaw) as { categories?: CatalogCategory[] };
+    categories = Array.isArray(parsed.categories) ? parsed.categories : [];
   } catch {
-    cache = { products: [], categories: [], loadedAt: Date.now() };
-    return { products: [], categories: [] };
+    categories = [];
   }
+
+  cache = { products, categories, loadedAt: Date.now() };
+  return { products, categories };
 }
 
-function matches(p: CatalogProduct, q: ProductQuery): boolean {
-  if (q.category && p.categorySlug !== q.category) return false;
-  if (q.subcategory && !p.subcategorySlugs.includes(q.subcategory)) return false;
-  if (q.space && !p.spaceSlugs.includes(q.space)) return false;
-  if (q.style && !p.styleSlugs.includes(q.style)) return false;
-  if (q.collection && !p.collectionSlugs.includes(q.collection)) return false;
-  if (q.material && !(p.materials ?? '').toLowerCase().includes(q.material.toLowerCase())) return false;
-  if (q.colour && !(p.color ?? '').toLowerCase().includes(q.colour.toLowerCase())) return false;
-  if (q.availability && p.availability !== q.availability) return false;
-  if (q.minPrice !== undefined && p.priceCents < Math.round(q.minPrice * 100)) return false;
-  if (q.maxPrice !== undefined && p.priceCents > Math.round(q.maxPrice * 100)) return false;
-  if (q.q) {
-    const needle = q.q.toLowerCase();
-    const hay = [p.name, p.subtitle, p.shortDescription, p.description, p.categorySlug, p.subcategorySlugs, p.styleSlugs, p.spaceSlugs, p.collectionSlugs, p.materials]
+function matches(product: CatalogProduct, query: ProductQuery): boolean {
+  if (query.category && product.categorySlug !== query.category) return false;
+  if (query.subcategory && !product.subcategorySlugs.includes(query.subcategory)) return false;
+  if (query.space && !product.spaceSlugs.includes(query.space)) return false;
+  if (query.style && !product.styleSlugs.includes(query.style)) return false;
+  if (query.collection && !product.collectionSlugs.includes(query.collection)) return false;
+  if (query.material && !(product.materials ?? '').toLowerCase().includes(query.material.toLowerCase())) return false;
+  if (query.colour && !(product.color ?? '').toLowerCase().includes(query.colour.toLowerCase())) return false;
+  if (query.availability && product.availability !== query.availability) return false;
+  if (query.minPrice !== undefined && product.priceCents < Math.round(query.minPrice * 100)) return false;
+  if (query.maxPrice !== undefined && product.priceCents > Math.round(query.maxPrice * 100)) return false;
+  if (query.q) {
+    const needle = query.q.toLowerCase();
+    const haystack = [
+      product.name,
+      product.subtitle,
+      product.shortDescription,
+      product.description,
+      product.categorySlug,
+      product.subcategorySlugs,
+      product.styleSlugs,
+      product.spaceSlugs,
+      product.collectionSlugs,
+      product.materials,
+    ]
       .filter(Boolean)
       .join(' ')
       .toLowerCase();
-    if (!hay.includes(needle)) return false;
+    if (!haystack.includes(needle)) return false;
   }
   return true;
 }
@@ -94,19 +113,24 @@ function sortProducts(products: CatalogProduct[], sort: ProductQuery['sort']): C
     case 'new':
       return arr.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     default:
-      // featured first, then curated sortOrder (best sellers before rest)
+      // Keep the curated demo assortment first and append supplier validation
+      // candidates afterwards so production previews do not displace the home page.
       return arr.sort(
-        (a, b) => Number(b.featured) - Number(a.featured) || Number(b.isBestSeller) - Number(a.isBestSeller) || a.name.localeCompare(b.name),
+        (a, b) =>
+          Number(a.complianceStatus === 'SUPPLIER_PENDING') - Number(b.complianceStatus === 'SUPPLIER_PENDING') ||
+          Number(b.featured) - Number(a.featured) ||
+          Number(b.isBestSeller) - Number(a.isBestSeller) ||
+          a.name.localeCompare(b.name),
       );
   }
 }
 
 export class DemoCatalogAdapter implements CatalogAdapter {
-  readonly name = 'demo-json';
+  readonly name = 'json-fallback';
 
   async list(query: ProductQuery): Promise<ProductListResult> {
     const { products } = load();
-    const filtered = products.filter((p) => p.complianceStatus !== 'BLOCKED' && matches(p, query));
+    const filtered = products.filter((product) => product.complianceStatus !== 'BLOCKED' && matches(product, query));
     const sorted = sortProducts(filtered, query.sort);
     const page = Math.max(1, query.page ?? 1);
     const perPage = Math.min(48, Math.max(1, query.perPage ?? 24));
@@ -122,18 +146,17 @@ export class DemoCatalogAdapter implements CatalogAdapter {
 
   async getBySlug(slug: string): Promise<CatalogProduct | null> {
     const { products } = load();
-    const found = products.find((p) => p.slug === slug && p.complianceStatus !== 'BLOCKED');
-    return found ?? null;
+    return products.find((product) => product.slug === slug && product.complianceStatus !== 'BLOCKED') ?? null;
   }
 
   async getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {
     const { categories } = load();
-    const filtered = type ? categories.filter((c) => c.type === type) : categories;
+    const filtered = type ? categories.filter((category) => category.type === type) : categories;
     return [...filtered].sort((a, b) => a.sortOrder - b.sortOrder);
   }
 
   async count(): Promise<number> {
     const { products } = load();
-    return products.filter((p) => p.complianceStatus !== 'BLOCKED').length;
+    return products.filter((product) => product.complianceStatus !== 'BLOCKED').length;
   }
 }
