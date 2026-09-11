@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { db } from '@/lib/db';
 import { tokenMatches } from '@/lib/checkout';
 import { ensureTracking } from '@/lib/tracking';
+import { refreshOrderPayment } from '@/lib/payments/reconcile-payment';
 import { SuccessView, type SuccessOrderData } from './success-view';
 
 export const metadata: Metadata = {
@@ -13,13 +14,27 @@ export const metadata: Metadata = {
 
 export const dynamic = 'force-dynamic';
 
+const terminalPaymentStates = new Set(['PAID', 'PAYMENT_FAILED', 'CANCELLED', 'REFUNDED', 'PARTIALLY_REFUNDED']);
+
 async function loadOrder(orderNumber: string, token: string): Promise<SuccessOrderData | null> {
   try {
-    const order = await db.order.findUnique({
+    let order = await db.order.findUnique({
       where: { orderNumber },
       include: { invoices: { select: { invoiceNumber: true } } },
     });
     if (!order || !tokenMatches(order.accessToken, token)) return null;
+
+    // Reconcile immediately on the authenticated return URL. This makes
+    // card/express success confirmation independent of a merchant webhook
+    // and avoids waiting for the client polling interval in the common case.
+    if (!terminalPaymentStates.has(order.paymentStatus)) {
+      await refreshOrderPayment(order.id);
+      order = await db.order.findUnique({
+        where: { id: order.id },
+        include: { invoices: { select: { invoiceNumber: true } } },
+      });
+      if (!order) return null;
+    }
 
     // Keep the tracking lifecycle moving on this read (idempotent).
     const tracked = await ensureTracking(order);
@@ -59,7 +74,8 @@ async function loadOrder(orderNumber: string, token: string): Promise<SuccessOrd
       trackingNumber: trackedOrder.trackingNumber,
       items,
     };
-  } catch {
+  } catch (error) {
+    console.error('checkout success load/reconciliation failed', error instanceof Error ? error.message : 'unknown');
     return null;
   }
 }
