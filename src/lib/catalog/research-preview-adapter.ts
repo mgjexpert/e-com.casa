@@ -3,8 +3,9 @@
 // ------------------------------------------------------------
 // Production currently has the internal ResearchProduct tables but may not
 // yet have the public Product table. This adapter keeps the storefront alive
-// on its JSON catalogue while exposing normalized BigBuy research records as
-// explicitly non-saleable supplier-validation previews.
+// on its JSON catalogue while exposing normalized BigBuy research records.
+// Internal validation/compliance state remains in the domain model and is
+// deliberately not turned into customer-facing messaging by this adapter.
 // ============================================================
 
 import type { PrismaClient, ResearchProduct as ResearchProductRow } from '@prisma/client';
@@ -16,8 +17,10 @@ import type {
   ProductQuery,
 } from './types';
 import { DemoCatalogAdapter, matchesCatalogProduct, sortCatalogProducts } from './demo-adapter';
+import { getMarketPricing } from './market-pricing';
 
 const PLACEHOLDER_IMAGE = '/images/product-awaiting-media.svg';
+const TRUSTED_SUPPLIER_MEDIA = new Set(['cdnbigbuy.com']);
 
 function slugify(value: string): string {
   return String(value || '')
@@ -38,6 +41,29 @@ function parseJson(value: string | null): Record<string, unknown> {
   }
 }
 
+function parseSupplierImages(value: string | null): string[] {
+  try {
+    const parsed = value ? JSON.parse(value) : [];
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((item): item is string => typeof item === 'string')
+      .map((item) => item.trim())
+      .filter(Boolean)
+      .filter((item, index, all) => all.indexOf(item) === index)
+      .filter((item) => {
+        try {
+          const url = new URL(item);
+          return url.protocol === 'https:' && TRUSTED_SUPPLIER_MEDIA.has(url.hostname.toLowerCase());
+        } catch {
+          return false;
+        }
+      })
+      .slice(0, 12);
+  } catch {
+    return [];
+  }
+}
+
 function categoryFor(row: ResearchProductRow): string {
   if (row.sourceCategory === 'Iluminação') return 'lighting';
   const sub = String(row.sourceSubcategory || '').toLowerCase();
@@ -53,7 +79,11 @@ function mapResearchProduct(row: ResearchProductRow): CatalogProduct | null {
   const electrical = sourceData.electrical === true;
   const baseSlug = slugify(row.sourceProductName) || 'bigbuy-product';
   const subtitle = [row.sourceBrand, row.sourceSubcategory].filter(Boolean).join(' · ') || null;
-  const description = row.sourceDescription || `${row.sourceProductName} — supplier catalogue item pending validation.`;
+  const description = row.sourceDescription || row.sourceProductName;
+  const supplierImages = parseSupplierImages(row.sourceImageUrls);
+  const market = getMarketPricing(supplierId);
+  const mainImage = supplierImages[0] ?? PLACEHOLDER_IMAGE;
+  const gallery = supplierImages.slice(1);
   const safetyJson = JSON.stringify({
     productIdentifier: `BIGBUY-${supplierId}`,
     manufacturerName: null,
@@ -75,19 +105,26 @@ function mapResearchProduct(row: ResearchProductRow): CatalogProduct | null {
     subtitle,
     shortDescription: description,
     description,
-    price: '0.00',
-    priceCents: 0,
+    price: market?.displayPrice ?? '0.00',
+    priceCents: market?.displayPriceCents ?? 0,
     comparePrice: null,
     currency: 'EUR',
+    marketReferencePrice: market?.marketAverage ?? null,
+    marketReferenceSampleCount: market?.sampleCount ?? 0,
+    marketReferenceConfidence: market?.confidence ?? null,
+    marketReferenceBasis: market?.basis ?? null,
+    marketReferenceReviewedAt: market?.reviewedAt ?? null,
+    promoDiscountPct: market?.promoDiscountPct ?? null,
+    promoEndsAt: market?.promoEndsAt ?? null,
     categorySlug: categoryFor(row),
     subcategorySlugs: slugify(row.sourceSubcategory || ''),
     spaceSlugs: '',
     styleSlugs: '',
     collectionSlugs: 'bigbuy-public-research',
-    image: PLACEHOLDER_IMAGE,
-    hoverImage: null,
-    gallery: '',
-    imageStatus: 'PLACEHOLDER',
+    image: mainImage,
+    hoverImage: supplierImages[1] ?? null,
+    gallery: gallery.join(','),
+    imageStatus: supplierImages.length > 0 ? 'SUPPLIER' : 'PLACEHOLDER',
     badge: null,
     rating: 0,
     reviewCount: 0,
