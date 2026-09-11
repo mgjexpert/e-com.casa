@@ -1,0 +1,74 @@
+name: ODEM + WoodUpp partner catalogue sync
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '17 4 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/catalog-partners/shopify-partner-sync.ts'
+      - '.github/workflows/catalog-partner-sync.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: partner-catalogue-sync
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Sync public partner catalogues
+        env:
+          PARTNER_CATALOG_DELAY_MS: '500'
+        run: bun scripts/catalog-partners/shopify-partner-sync.ts
+
+      - name: Validate provider snapshot
+        run: |
+          test -s data/catalog/generated-provider-products.json
+          test -s data/catalog/generated-provider-catalog.json
+          test -s data/catalog/provider-sync-report.json
+          node <<'NODE'
+          const products = require('./data/catalog/generated-provider-products.json');
+          const catalog = require('./data/catalog/generated-provider-catalog.json');
+          const report = require('./data/catalog/provider-sync-report.json');
+          if (!Array.isArray(products) || products.length < 240) throw new Error(`catalogue too small: ${products.length}`);
+          if (!Array.isArray(catalog.categories) || catalog.categories.length < 10) throw new Error('categories missing');
+          if ((report.odemProducts || 0) < 40) throw new Error(`ODEM count too small: ${report.odemProducts}`);
+          if ((report.woodUppProducts || 0) < 200) throw new Error(`WoodUpp count too small: ${report.woodUppProducts}`);
+          if (products.some(p => p.isDemo)) throw new Error('demo row found in provider snapshot');
+          if (products.some(p => p.mediaRights === 'UNCONFIRMED' && p.image !== '/images/product-awaiting-media.svg')) {
+            throw new Error('unconfirmed third-party media exposed');
+          }
+          console.log(JSON.stringify({ products: products.length, categories: catalog.categories.length, odem: report.odemProducts, woodupp: report.woodUppProducts }));
+          NODE
+
+      - name: Commit refreshed provider snapshot
+        run: |
+          if [ -z "$(git status --porcelain -- data/catalog/generated-provider-products.json data/catalog/generated-provider-catalog.json data/catalog/provider-sync-report.json)" ]; then
+            echo 'Partner catalogue snapshot is unchanged.'
+            exit 0
+          fi
+          git config user.name 'e-com.casa catalogue bot'
+          git config user.email 'catalogue-bot@users.noreply.github.com'
+          git add data/catalog/generated-provider-products.json data/catalog/generated-provider-catalog.json data/catalog/provider-sync-report.json
+          git commit -m 'data(catalog): refresh ODEM and WoodUpp partner snapshot'
+          git pull --rebase origin main
+          git push origin HEAD:main
