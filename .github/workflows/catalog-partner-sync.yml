@@ -35,6 +35,22 @@ jobs:
       - name: Install dependencies
         run: bun install --frozen-lockfile
 
+      - name: Probe WoodUpp public Shopify surfaces
+        run: |
+          node <<'NODE'
+          for (const url of [
+            'https://woodupp.pt/products.json?limit=2&page=1',
+            'https://woodupp.pt/collections/todos-1/products.json?limit=2&page=1',
+            'https://woodupp.pt/collections/todos-1?page=1',
+          ]) {
+            const r = await fetch(url, { headers: { 'user-agent': 'E-com.casa catalogue sync/1.0 (+https://e-com.casa)' } });
+            const text = await r.text();
+            let count = null;
+            try { count = JSON.parse(text)?.products?.length ?? null; } catch {}
+            console.log(JSON.stringify({ url, status: r.status, contentType: r.headers.get('content-type'), count, bytes: text.length }));
+          }
+          NODE
+
       - name: Sync public partner catalogues
         env:
           PARTNER_CATALOG_DELAY_MS: '500'
