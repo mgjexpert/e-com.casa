@@ -1,8 +1,10 @@
 import type { Metadata } from 'next';
+import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { OfferPage } from '@/components/offers/offer-page';
-import { getOfferConfig, getOfferSlugs } from '@/lib/offers/registry';
+import { OfferPageV2 } from '@/components/offers/offer-page-v2';
+import { getOfferSlugs } from '@/lib/offers/registry';
 import { resolveOffer } from '@/lib/offers/resolver';
+import { resolveOfferMarket } from '@/lib/offers/geo';
 import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import { COMPANY } from '@/lib/company';
 
@@ -16,23 +18,29 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const resolved = await resolveOffer(slug);
   if (!resolved) notFound();
+
+  const requestHeaders = await headers();
+  const market = resolveOfferMarket(requestHeaders);
   const { offer, product } = resolved;
+  const seo = offer.translations?.[market.language]?.seo ?? offer.seo;
   const canonical = `/offers/${offer.slug}`;
+
   return {
-    title: offer.seo.title,
-    description: offer.seo.description,
+    title: seo.title,
+    description: seo.description,
     alternates: { canonical },
     openGraph: {
-      title: offer.seo.title,
-      description: offer.seo.description,
+      title: seo.title,
+      description: seo.description,
       url: canonical,
       type: 'website',
+      locale: market.locale.replace('-', '_'),
       images: product.image ? [{ url: product.image }] : undefined,
     },
     twitter: {
       card: 'summary_large_image',
-      title: offer.seo.title,
-      description: offer.seo.description,
+      title: seo.title,
+      description: seo.description,
       images: product.image ? [product.image] : undefined,
     },
     robots: {
@@ -46,17 +54,22 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
   const { slug } = await params;
   const resolved = await resolveOffer(slug);
   if (!resolved) notFound();
-  const { offer, product } = resolved;
 
+  const requestHeaders = await headers();
+  const market = resolveOfferMarket(requestHeaders);
+  const { offer, product } = resolved;
+  const seo = offer.translations?.[market.language]?.seo ?? offer.seo;
   const image = product.image?.startsWith('http') ? product.image : `${COMPANY.domain}${product.image}`;
-  // Intentionally no AggregateRating, Review, price Offer or availability schema
-  // unless verified source data exists and the product has passed the catalogue
-  // saleability gate. The UI may still demonstrate the visual review module.
+
+  // No AggregateRating, Review, price Offer or availability schema is emitted
+  // unless verified source data exists. The visual review layer may still show
+  // clearly-labelled staging/demo UI without presenting it as factual SEO data.
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
-    name: offer.seo.title,
-    description: offer.seo.description,
+    name: seo.title,
+    description: seo.description,
+    inLanguage: market.locale,
     url: `${COMPANY.domain}/offers/${offer.slug}`,
     primaryImageOfPage: image ? { '@type': 'ImageObject', url: image } : undefined,
     mainEntity: {
@@ -71,7 +84,7 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
 
   return (
     <>
-      <OfferPage offer={offer} product={product} />
+      <OfferPageV2 offer={offer} product={product} market={market} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
