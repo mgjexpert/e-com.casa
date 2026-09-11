@@ -1,0 +1,55 @@
+name: Supplier catalogue snapshot
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/catalog-supplier-snapshot.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: supplier-catalogue-snapshot
+  cancel-in-progress: false
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build supplier snapshot
+        env:
+          SHOPIFY_SNAPSHOT_LIMIT: '80'
+        run: bun scripts/catalog-suppliers/shopify-snapshot.ts
+
+      - name: Validate snapshot
+        run: |
+          test -s data/catalog/generated-supplier-products.json
+          node -e "const p=require('./data/catalog/generated-supplier-products.json'); if(!Array.isArray(p)||p.length<10) process.exit(1); console.log('supplier products:',p.length)"
+
+      - name: Commit refreshed snapshot
+        run: |
+          if git diff --quiet -- data/catalog/generated-supplier-products.json; then
+            echo 'Supplier snapshot is unchanged.'
+            exit 0
+          fi
+          git config user.name 'e-com.casa catalogue bot'
+          git config user.email 'catalogue-bot@users.noreply.github.com'
+          git add data/catalog/generated-supplier-products.json
+          git commit -m 'data(catalog): refresh Shopify supplier snapshot'
+          git push origin HEAD:main
