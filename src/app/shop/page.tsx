@@ -4,6 +4,7 @@ import { ShopClient } from '@/components/product/shop-client';
 import { CatalogCategoryStrip } from '@/components/product/catalog-category-strip';
 import { Skeleton } from '@/components/ui/skeleton';
 import { getCategories } from '@/lib/catalog';
+import type { CatalogCategory } from '@/lib/catalog/types';
 
 export const dynamic = 'force-dynamic';
 
@@ -15,7 +16,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ShopPage() {
-  let categories = [];
+  let categories: CatalogCategory[] = [];
   try {
     categories = await getCategories('shop');
   } catch {
