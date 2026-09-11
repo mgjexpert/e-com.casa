@@ -9,6 +9,7 @@ import { useWishlist } from '@/lib/wishlist-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
+import { getCatalogSaleabilityLabel, isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -39,9 +40,15 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   const wishlist = useWishlist();
   const openCartDrawer = useCartDrawer((s) => s.open);
   const wished = wishlist.slugs.includes(product.slug);
+  const saleable = isCatalogProductSaleable(product);
+  const saleabilityLabel = getCatalogSaleabilityLabel(product);
 
   const onAdd = (e: React.MouseEvent) => {
     e.preventDefault();
+    if (!saleable) {
+      toast({ title: saleabilityLabel, description: 'This product is visible for catalogue review but checkout remains locked until supplier and compliance validation are complete.' });
+      return;
+    }
     add({
       slug: product.slug,
       name: product.name,
@@ -67,7 +74,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       <Link
         href={`/product/${product.slug}`}
         className="block focus-visible:outline-ring rounded-md"
-        aria-label={`${product.name}, ${formatPrice(product.price)}`}
+        aria-label={`${product.name}${saleable ? `, ${formatPrice(product.price)}` : ''}`}
       >
         <div className="relative aspect-[5/5] overflow-hidden rounded-md border border-border/60 bg-muted/40 transition-all duration-300 group-hover:border-ring/50 group-hover:shadow-[0_10px_28px_rgba(33,30,27,0.10)]">
           <Image
@@ -78,7 +85,6 @@ export function ProductCard({ product, priority = false }: { product: Product; p
             className="img-zoom object-cover"
             priority={priority}
           />
-          {/* Hover image swap (lifestyle shot) */}
           {product.hoverImage && (
             <Image
               src={product.hoverImage}
@@ -97,16 +103,23 @@ export function ProductCard({ product, priority = false }: { product: Product; p
               {product.badge}
             </span>
           )}
-          {/* Hover add-to-cart */}
+          {!saleable && !product.isDemo && (
+            <span className="absolute left-2.5 top-2.5 rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.10em] text-foreground backdrop-blur">
+              Supplier validation
+            </span>
+          )}
           <div className="absolute inset-x-2.5 bottom-2.5 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden">
             <button
               type="button"
               onClick={onAdd}
-              className="flex h-9 w-full items-center justify-center gap-2 rounded-md bg-ink/92 text-[12.5px] font-medium text-cream backdrop-blur transition-colors hover:bg-ink"
-              aria-label={t('card.addToCartNamed', { name: product.name })}
+              className={cn(
+                'flex h-9 w-full items-center justify-center gap-2 rounded-md text-[12.5px] font-medium backdrop-blur transition-colors',
+                saleable ? 'bg-ink/92 text-cream hover:bg-ink' : 'bg-background/92 text-foreground/70',
+              )}
+              aria-label={saleable ? t('card.addToCartNamed', { name: product.name }) : saleabilityLabel}
             >
               <ShoppingBag className="h-3.5 w-3.5" strokeWidth={1.75} />
-              {t('card.addToCart')}
+              {saleable ? t('card.addToCart') : 'View details'}
             </button>
           </div>
         </div>
@@ -117,29 +130,28 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {product.subtitle && (
             <p className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">{product.subtitle}</p>
           )}
-          <div className="mt-1.5 flex flex-wrap items-baseline gap-2">
-            <span className="text-[14px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
-            {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
-              <>
-                <span className="text-[12px] text-muted-foreground line-through">
-                  {formatPrice(product.comparePrice)}
-                </span>
-                <span
-                  className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta"
-                  aria-label={t('card.savePercent', {
-                    n: Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100),
-                  })}
-                >
-                  −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
-                </span>
-              </>
-            )}
-          </div>
-          <div className="mt-1.5 flex items-center gap-1.5">
-            <Stars rating={product.rating} />
-            <span className="text-[11.5px] text-muted-foreground">({product.reviewCount})</span>
-          </div>
-          {product.stock > 0 && product.stock <= 10 && (
+          {saleable ? (
+            <div className="mt-1.5 flex flex-wrap items-baseline gap-2">
+              <span className="text-[14px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
+              {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
+                <>
+                  <span className="text-[12px] text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
+                  <span className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta">
+                    −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
+                  </span>
+                </>
+              )}
+            </div>
+          ) : (
+            <p className="mt-1.5 text-[12px] font-medium text-olive">{saleabilityLabel}</p>
+          )}
+          {product.reviewCount > 0 && (
+            <div className="mt-1.5 flex items-center gap-1.5">
+              <Stars rating={product.rating} />
+              <span className="text-[11.5px] text-muted-foreground">({product.reviewCount})</span>
+            </div>
+          )}
+          {saleable && product.stock > 0 && product.stock <= 10 && (
             <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] font-medium text-terracotta">
               <span className="h-1 w-1 rounded-full bg-terracotta" aria-hidden />
               {t('card.onlyLeft', { n: product.stock })}
@@ -147,7 +159,6 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           )}
         </div>
       </Link>
-      {/* Wishlist heart */}
       <button
         type="button"
         onClick={onWishlist}
