@@ -18,7 +18,7 @@ import { formatPrice } from '@/lib/format';
 import { COMPANY } from '@/lib/company';
 import type { ReviewDTO } from '@/lib/reviews-data';
 import type { Product } from '@/types';
-import { ChevronRight, Info } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 export const dynamic = 'force-dynamic';
 
@@ -79,23 +79,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     completeTheLook = ((await fetchLook(product.slug, 5)) as Product[]).filter((p) => !relatedSlugs.has(p.slug)).slice(0, 4);
   } catch {
     completeTheLook = [];
-  }
-
-  let safety: {
-    productIdentifier?: string;
-    manufacturerName?: string;
-    manufacturerAddress?: string;
-    manufacturerEmail?: string;
-    euResponsiblePerson?: string;
-    warnings?: string | string[];
-    safetyInstructions?: string | string[];
-    ceMarking?: string;
-    countryOfOrigin?: string;
-  } | null = null;
-  try {
-    safety = product.safetyJson ? JSON.parse(product.safetyJson) : null;
-  } catch {
-    safety = null;
   }
 
   // Public supplier media may legitimately live on an allow-listed remote CDN.
@@ -204,7 +187,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </div>
       </div>
 
-      <div className="mt-14 grid gap-10 lg:grid-cols-[1fr_1fr] lg:gap-16">
+      <div className="mt-14 max-w-3xl">
         <section aria-labelledby="details-heading">
           <h2 id="details-heading" className="font-display text-[22px] font-medium">Product details</h2>
           <dl className="mt-5 divide-y divide-border rounded-lg border border-border">
@@ -236,55 +219,6 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
               </dd>
             </div>
           </dl>
-        </section>
-
-        <section aria-labelledby="safety-heading">
-          <h2 id="safety-heading" className="font-display text-[22px] font-medium">Safety &amp; Compliance</h2>
-          <div className="mt-5 rounded-lg border border-border bg-cream/50 p-5">
-            <p className="flex items-start gap-2 text-[12.5px] leading-relaxed text-muted-foreground">
-              <Info className="mt-0.5 h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
-              Product safety information under the EU General Product Safety Regulation. Values marked
-              [TO BE COMPLETED] are placeholders pending supplier documentation — they are never invented.
-            </p>
-            {safety && (
-              <dl className="mt-4 space-y-2.5 text-[13px]">
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Product identifier</dt>
-                  <dd className="text-right font-medium">{safety.productIdentifier ?? product.slug}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Manufacturer</dt>
-                  <dd className="text-right font-medium">{safety.manufacturerName ?? '[TO BE COMPLETED]'}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">EU responsible person</dt>
-                  <dd className="text-right font-medium">{safety.euResponsiblePerson ?? '[TO BE COMPLETED]'}</dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Warnings</dt>
-                  <dd className="max-w-[65%] text-right leading-relaxed">
-                    {Array.isArray(safety.warnings) ? safety.warnings.join(' · ') : (safety.warnings ?? 'See enclosed manual.')}
-                  </dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Compliance status</dt>
-                  <dd className="text-right">
-                    <span className="rounded-full bg-olive/15 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wide text-olive">
-                      {product.complianceStatus.replace(/_/g, ' ')}
-                    </span>
-                  </dd>
-                </div>
-                <div className="flex justify-between gap-4">
-                  <dt className="text-muted-foreground">Questions on safety</dt>
-                  <dd className="text-right">
-                    <a href={`mailto:${COMPANY.emails.compliance}`} className="text-olive underline underline-offset-2">
-                      {COMPANY.emails.compliance}
-                    </a>
-                  </dd>
-                </div>
-              </dl>
-            )}
-          </div>
         </section>
       </div>
 
