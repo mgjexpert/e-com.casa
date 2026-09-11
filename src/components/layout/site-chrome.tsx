@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
+import { OfferCompactFooter } from '@/components/offers/offer-compact-footer';
 
 /**
  * Offers are self-contained campaign destinations. They keep all global
@@ -19,7 +20,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <main id="main-content" className="flex-1">
         {children}
       </main>
-      {!isOfferRoute && <SiteFooter />}
+      {isOfferRoute ? <OfferCompactFooter /> : <SiteFooter />}
     </div>
   );
 }
