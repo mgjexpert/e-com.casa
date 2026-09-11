@@ -43,10 +43,41 @@ export const SHIPPING_OPTIONS = [
   },
 ] as const;
 
-export const PROMO_CODES: Record<string, { type: 'percent'; value: number; label: string }> = {
+export interface PromoCodeConfig {
+  type: 'percent';
+  value: number;
+  label: string;
+  /** When set, the discount is calculated only on matching product slugs. */
+  eligibleSlugs?: string[];
+  /** Campaign codes can be applied automatically by a dedicated offer page. */
+  campaign?: boolean;
+}
+
+export const PROMO_CODES: Record<string, PromoCodeConfig> = {
   WELCOME10: { type: 'percent', value: 10, label: '10% welcome discount' },
   HOME5: { type: 'percent', value: 5, label: '5% off your order' },
+  PAINEL75: {
+    type: 'percent',
+    value: 75,
+    label: 'Oferta Painel Ripado — 75%',
+    eligibleSlugs: ['warm-oak-slatted-wall-panel'],
+    campaign: true,
+  },
 };
+
+export function calculatePromoDiscount(
+  lines: Array<{ slug: string; price: string | number; quantity: number }>,
+  promo: PromoCodeConfig | null | undefined,
+): number {
+  if (!promo) return 0;
+  const eligibleSubtotal = lines.reduce((sum, line) => {
+    if (promo.eligibleSlugs?.length && !promo.eligibleSlugs.includes(line.slug)) return sum;
+    const price = typeof line.price === 'number' ? line.price : Number.parseFloat(line.price);
+    if (!Number.isFinite(price)) return sum;
+    return sum + price * line.quantity;
+  }, 0);
+  return (eligibleSubtotal * promo.value) / 100;
+}
 
 // Gift wrap service — flat fee added at checkout (never discounted by promos)
 export const GIFT_WRAP_PRICE = 3.9; // EUR

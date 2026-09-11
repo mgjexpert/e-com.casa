@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { OfferPageZAI } from '@/components/offers/offer-page-zai';
+import { PainelRipadoOfferPage } from '@/components/offers/painel-ripado/page';
 import { getOfferSlugs } from '@/lib/offers/registry';
 import { resolveOffer } from '@/lib/offers/resolver';
 import { resolveOfferMarket } from '@/lib/offers/geo';
@@ -63,8 +64,8 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
   const seo = offer.translations?.[market.language]?.seo ?? offer.seo;
   const image = product.image?.startsWith('http') ? product.image : `${COMPANY.domain}${product.image}`;
 
-  // Keep campaign social proof separate from factual SEO markup. Ratings/reviews
-  // are only added to schema when a verified customer-review source is wired in.
+  // Campaign reviews remain presentation content. We deliberately do not emit
+  // AggregateRating/Review schema until a verified review source is connected.
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -83,13 +84,14 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
     },
   };
 
+  const page = offer.slug === 'painel-ripado'
+    ? <PainelRipadoOfferPage offer={offer} product={publicProduct} market={market} />
+    : <OfferPageZAI offer={offer} product={publicProduct} market={market} />;
+
   return (
     <>
-      <OfferPageZAI offer={offer} product={publicProduct} market={market} />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
+      {page}
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
     </>
   );
 }

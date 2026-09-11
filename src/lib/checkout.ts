@@ -14,6 +14,7 @@ import {
   PROMO_CODES,
   GIFT_WRAP_PRICE,
   ORDER_NOTES_MAX,
+  calculatePromoDiscount,
 } from '@/lib/constants';
 import { getCountryConfiguration } from '@/lib/countries';
 
@@ -80,10 +81,6 @@ export async function repriceCart(input: {
     throw new CheckoutValidationError('One or more products are unavailable');
   }
 
-  // Research, supplier-staged and compliance-pending rows may exist in the
-  // catalogue for merchandising/review continuity, but they can never create
-  // a payable order. A product becomes saleable only after supplier/media
-  // rights and product documentation/compliance have been explicitly cleared.
   const blockedCompliance = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'SUPPLIER_PENDING']);
   const blockedDocumentation = new Set(['DEMO', 'PENDING', 'PENDING_REVIEW', 'MISSING']);
   const nonSaleable = products.find((product) =>
@@ -99,8 +96,6 @@ export async function repriceCart(input: {
     );
   }
 
-  // Oversell guard — stock is NOT decremented here (§39): the final
-  // decrement happens only after verified payment.
   for (const item of input.items) {
     const product = products.find((p) => p.slug === item.slug)!;
     if (product.stock < item.quantity || product.availability === 'outOfStock') {
@@ -110,6 +105,12 @@ export async function repriceCart(input: {
           : `Sorry — only ${product.stock} × “${product.name}” remain in stock.`,
         409,
       );
+    }
+    if (item.variantId) {
+      const variant = product.variants.find((candidate) => candidate.id === item.variantId);
+      if (!variant || variant.availability === 'outOfStock') {
+        throw new CheckoutValidationError('The selected product option is unavailable.', 409);
+      }
     }
   }
 
@@ -145,7 +146,7 @@ export async function repriceCart(input: {
   let appliedPromo: string | null = null;
   if (input.promoCode && PROMO_CODES[input.promoCode.toUpperCase()]) {
     const promo = PROMO_CODES[input.promoCode.toUpperCase()];
-    discount = (subtotal * promo.value) / 100;
+    discount = calculatePromoDiscount(lineItems, promo);
     appliedPromo = input.promoCode.toUpperCase();
   }
 
@@ -155,7 +156,6 @@ export async function repriceCart(input: {
   const giftWrapFee = input.giftWrap ? GIFT_WRAP_PRICE : 0;
   const total = subtotal - discount + shippingCost + giftWrapFee;
 
-  // Country engine decides the charge currency (never hardcoded EUR — §13).
   const countryCfg = getCountryConfiguration(input.country);
   const currency = countryCfg?.currency ?? 'EUR';
 
@@ -168,6 +168,7 @@ export async function repriceCart(input: {
         shipping: shippingCost.toFixed(2),
         giftWrap: giftWrapFee.toFixed(2),
         total: total.toFixed(2),
+        promoCode: appliedPromo,
         currency,
       }),
     )
@@ -188,7 +189,6 @@ export async function repriceCart(input: {
   };
 }
 
-/** Strip HTML tags and control characters — notes are plain text. */
 export function sanitizeNotes(value: unknown): string {
   if (typeof value !== 'string') return '';
   return value
@@ -198,15 +198,10 @@ export function sanitizeNotes(value: unknown): string {
     .slice(0, ORDER_NOTES_MAX);
 }
 
-/**
- * Constant-time comparison of the order access token. Prevents
- * timing oracles on order lookups (§60).
- */
 export function tokenMatches(stored: string | null | undefined, provided: string | null | undefined): boolean {
   if (!stored || !provided) return false;
   const a = Buffer.from(stored);
   const b = Buffer.from(provided);
   if (a.length !== b.length) return false;
-  // length check above leaks length only — acceptable for random hex tokens
   return timingSafeEqual(a, b);
 }
