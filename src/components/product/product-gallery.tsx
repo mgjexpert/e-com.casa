@@ -19,13 +19,12 @@ export function ProductGallery({
 
   return (
     <div>
-      {/* Main image */}
       <div className="group/main relative aspect-square overflow-hidden rounded-lg border border-border/60 bg-muted/30">
         {safeImages.map((src, i) => (
           <Image
             key={src + i}
             src={src}
-            alt={mediaPending ? `${productName} — supplier image pending` : `${productName} — image ${i + 1} of ${safeImages.length}`}
+            alt={mediaPending ? productName : `${productName} — image ${i + 1} of ${safeImages.length}`}
             fill
             priority={i === 0}
             sizes="(max-width: 1024px) 100vw, 600px"
@@ -47,7 +46,6 @@ export function ProductGallery({
         )}
       </div>
 
-      {/* Thumbnails */}
       {safeImages.length > 1 && (
         <div
           role="tablist"
@@ -76,9 +74,7 @@ export function ProductGallery({
       )}
 
       <p className="mt-3 text-center text-[11.5px] text-muted-foreground">
-        {mediaPending
-          ? 'Supplier image pending — media rights are being verified before publication.'
-          : 'Lifestyle photography — colours may vary slightly in person.'}
+        {mediaPending ? 'Product image temporarily unavailable.' : 'Product photography — colours may vary slightly in person.'}
       </p>
     </div>
   );
