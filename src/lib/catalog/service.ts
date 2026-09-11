@@ -1,19 +1,18 @@
 // ============================================================
 // E-com.casa — Catalog service (the ONLY catalogue entrypoint)
 // ------------------------------------------------------------
-// The UI must call these abstractions, never Prisma queries
-// scattered across components. Adapter resolution:
-//   1. prisma           — PostgreSQL Product table (final production path)
-//   2. json+research-db — JSON catalogue + normalized ResearchProduct rows
-//   3. json-fallback    — /data/catalog artifacts when DB is unavailable
-// This keeps the storefront resilient while supplier research is promoted
-// into the final normalized Product schema.
+// The UI must call these abstractions, never Prisma queries scattered across
+// components. Adapter resolution:
+//   1. prisma        — PostgreSQL Product table when provisioned and populated
+//   2. file-catalog  — validated ODEM/WoodUpp partner snapshot
+//
+// ResearchProduct and historic demo datasets no longer participate in the
+// storefront adapter chain once the partner snapshot exists.
 // ============================================================
 
 import { db } from '@/lib/db';
 import { PrismaCatalogAdapter } from './prisma-adapter';
 import { DemoCatalogAdapter } from './demo-adapter';
-import { ResearchPreviewCatalogAdapter } from './research-preview-adapter';
 import { applyCommercialProductOverrides } from './commercial-overrides';
 import { getCompleteTheLook as computeCompleteTheLook, getRelatedProducts as computeRelated, getCrossSell as computeCrossSell } from './recommendations';
 import type {
@@ -28,8 +27,7 @@ export type { CatalogProduct, CatalogCategory, ProductListResult, ProductQuery, 
 export { mapProduct } from './prisma-adapter';
 
 const prismaAdapter = new PrismaCatalogAdapter(db);
-const demoAdapter = new DemoCatalogAdapter();
-const researchPreviewAdapter = new ResearchPreviewCatalogAdapter(db, demoAdapter);
+const fileAdapter = new DemoCatalogAdapter();
 
 let databaseHealthy: boolean | null = null;
 let productTableReady: boolean | null = null;
@@ -48,11 +46,11 @@ async function activeAdapter(): Promise<CatalogAdapter> {
     lastHealthCheck = Date.now();
   }
 
-  if (!databaseHealthy) return demoAdapter;
+  if (!databaseHealthy) return fileAdapter;
 
-  // Prefer the normalized Product table whenever it exists and has catalogue
-  // rows. A missing Product table does NOT mean the database is unavailable:
-  // ResearchProduct may already be provisioned and should still feed previews.
+  // Use PostgreSQL only when the normalized Product table genuinely exists and
+  // is populated. A healthy connection alone is not enough: historically the
+  // production DB existed before the Product table was provisioned.
   if (productTableReady !== false) {
     try {
       if ((await prismaAdapter.count()) > 0) {
@@ -65,13 +63,17 @@ async function activeAdapter(): Promise<CatalogAdapter> {
     }
   }
 
-  return researchPreviewAdapter;
+  return fileAdapter;
 }
 
 /** Which adapter is currently serving the catalogue (for diagnostics). */
-export async function catalogStatus(): Promise<{ adapter: string; products: number }> {
+export async function catalogStatus(): Promise<{ adapter: string; products: number; source?: string }> {
   const adapter = await activeAdapter();
-  return { adapter: adapter.name, products: await adapter.count() };
+  return {
+    adapter: adapter.name,
+    products: await adapter.count(),
+    source: adapter === fileAdapter ? fileAdapter.getSource() : 'postgresql',
+  };
 }
 
 export async function getProducts(query: ProductQuery = {}): Promise<ProductListResult> {
