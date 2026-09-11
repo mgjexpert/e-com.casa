@@ -3,16 +3,19 @@
 // ------------------------------------------------------------
 // Server-authoritative payment status for one order. Email-only
 // lookups are NOT allowed; the random access token issued at
-// checkout is required. Returns the minimum the customer needs —
-// never gateway internals.
+// checkout is required. Pending states are reconciled server-to-
+// server against XPayments, so a merchant webhook is optional.
 // ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';
 import { rateLimit, clientIp } from '@/lib/rate-limit';
 import { tokenMatches } from '@/lib/checkout';
+import { refreshOrderPayment } from '@/lib/payments/reconcile-payment';
 
 export const dynamic = 'force-dynamic';
+
+const terminal = new Set(['PAID', 'PAYMENT_FAILED', 'CANCELLED', 'REFUNDED', 'PARTIALLY_REFUNDED']);
 
 export async function GET(req: NextRequest) {
   const limit = rateLimit(req, 'payment-status', 60, 60_000);
@@ -31,7 +34,7 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Order and token are required' }, { status: 400 });
     }
 
-    const order = await db.order.findUnique({
+    let order = await db.order.findUnique({
       where: { orderNumber },
       select: {
         id: true,
@@ -51,19 +54,34 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
-    // Server-side truth: reflect a verified SUCCEEDED payment even if
-    // the order-row update is lagging, so a customer refresh never lies.
-    let verifiedStatus = order.paymentStatus;
-    if (['PENDING_PAYMENT', 'PAYMENT_PROCESSING'].includes(order.paymentStatus)) {
-      const payment = await db.payment.findUnique({ where: { orderId: order.id } });
-      if (payment?.status === 'SUCCEEDED') {
-        verifiedStatus = 'PAID';
-      }
+    // Without a merchant webhook, this authenticated browser poll becomes
+    // the reconciliation trigger. XPayments is queried only after the
+    // order access token has been validated, preventing arbitrary gateway
+    // lookups from the public endpoint.
+    if (!terminal.has(order.paymentStatus)) {
+      await refreshOrderPayment(order.id);
+      order = await db.order.findUnique({
+        where: { id: order.id },
+        select: {
+          id: true,
+          orderNumber: true,
+          accessToken: true,
+          paymentStatus: true,
+          paymentMethodType: true,
+          status: true,
+          total: true,
+          currency: true,
+          paidAt: true,
+          createdAt: true,
+          paymentFailureReason: true,
+        },
+      });
+      if (!order) return NextResponse.json({ error: 'Order not found' }, { status: 404 });
     }
 
     return NextResponse.json({
       orderNumber: order.orderNumber,
-      paymentStatus: verifiedStatus,
+      paymentStatus: order.paymentStatus,
       orderStatus: order.status,
       paymentMethodType: order.paymentMethodType,
       total: order.total,
