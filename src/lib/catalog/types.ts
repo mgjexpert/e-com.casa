@@ -2,8 +2,8 @@
 // E-com.casa — Catalog domain types
 // ------------------------------------------------------------
 // The storefront UI NEVER talks to Prisma directly for catalogue
-// reads. It consumes these abstractions so the future production
-// catalogue can be connected without redesigning the frontend.
+// reads. It consumes these abstractions so supplier snapshots and
+// the future normalized production catalogue share one contract.
 // ============================================================
 
 export type VariantType = 'colour' | 'size' | 'material' | 'pack';
@@ -19,12 +19,15 @@ export interface ProductVariant {
   priceDeltaCents: number;
   /** Optional per-variant image override */
   image?: string;
-  /** Availability for this variant (demo) */
   availability?: 'inStock' | 'lowStock' | 'outOfStock';
+  /** Supplier traceability: server/admin data, never a saleability shortcut. */
+  sku?: string | null;
+  barcode?: string | null;
+  supplierVariantId?: string;
+  optionValues?: Record<string, string>;
 }
 
 export interface ProductSafety {
-  /** Demo products carry placeholders — never fabricated compliance data */
   manufacturerName: string;
   manufacturerAddress: string;
   manufacturerEmail: string;
@@ -37,7 +40,7 @@ export interface ProductSafety {
   weee: string;
 }
 
-/** UI-facing product shape (serialized, JSON-safe). */
+/** UI-facing product shape (serialized, JSON-safe after public projection). */
 export interface CatalogProduct {
   id: string;
   slug: string;
@@ -72,6 +75,8 @@ export interface CatalogProduct {
   rating: number;
   reviewCount: number;
   stock: number;
+  /** False when a public supplier page only exposes available/unavailable, not an exact sellable quantity. */
+  stockKnown?: boolean;
   availability: 'inStock' | 'lowStock' | 'outOfStock';
   /** Customer-safe API projection; internal hold reasons remain private. */
   canPurchase?: boolean;
@@ -85,6 +90,9 @@ export interface CatalogProduct {
   color: string | null;
   shippingClass: string;
   variants: ProductVariant[];
+  /** Commercial identity shown on PDPs. */
+  brand?: string | null;
+  manufacturer?: string | null;
   electrical: boolean;
   battery: boolean;
   complianceStatus: string;
@@ -94,6 +102,14 @@ export interface CatalogProduct {
   requiresComplianceReview: boolean;
   isDemo: boolean;
   sourceResearchId: string | null;
+  /** Internal supplier traceability. Public projection strips these fields. */
+  supplierKey?: string | null;
+  supplierProductId?: string | null;
+  mediaRights?: string | null;
+  sourceDomain?: string | null;
+  sourceUrl?: string | null;
+  sourceImageUrls?: string[];
+  sortOrder?: number;
   createdAt: string;
 }
 
