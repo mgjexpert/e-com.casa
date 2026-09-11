@@ -7,6 +7,9 @@ export type OfferAnalyticsEvent =
   | 'quantity_changed'
   | 'review_interaction'
   | 'faq_open'
+  | 'video_play'
+  | 'calculator_used'
+  | 'locale_changed'
   | 'add_to_cart'
   | 'begin_checkout'
   | 'purchase';
