@@ -148,8 +148,21 @@ export function usePaymentSession({ payload, signature, onComplete }: UsePayment
         return;
       }
 
-      // 3. Initialise Stripe + Elements (publishable key only)
-      const stripe = await getStripe(intentData.publishableKey ?? process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY ?? '');
+      // 3. Initialise Stripe + Elements (publishable key only).
+      // Primary source is the server response so deployments cannot drift
+      // between server and client env names. NEXT_PUBLIC fallback exists for
+      // resilience and is safe because pk_* is explicitly browser-visible.
+      const publishableKey =
+        intentData.publishableKey ??
+        process.env.NEXT_PUBLIC_XPAYMENTS_STRIPE_PUBLISHABLE_KEY ??
+        '';
+      if (!publishableKey) {
+        setPhase('unavailable');
+        setState((s) => ({ ...s, errorCode: 'PAYMENT_CONFIGURATION_ERROR', errorMessage: 'Payment could not be initialised.' }));
+        return;
+      }
+
+      const stripe = await getStripe(publishableKey);
       if (!stripe) {
         setPhase('unavailable');
         setState((s) => ({ ...s, errorCode: 'PAYMENT_CONFIGURATION_ERROR', errorMessage: 'Payment could not be initialised.' }));
@@ -219,13 +232,10 @@ export function usePaymentSession({ payload, signature, onComplete }: UsePayment
       return { ok: false, errorCode: code, errorMessage: error.message ?? undefined };
     }
 
-    // Succeeded without redirect (e.g. wallets / no-action cards)
+    // Succeeded/processing in the browser still navigates to the status
+    // page. The server then retrieves the same intent from XPayments and
+    // reconciles the authoritative DB state before showing confirmation.
     if (paymentIntent && (paymentIntent.status === 'succeeded' || paymentIntent.status === 'processing')) {
-      if (paymentIntent.status === 'succeeded') {
-        onCompleteRef.current(orderNumber, accessToken);
-        return { ok: true };
-      }
-      // processing → let the success page poll the server-verified state
       onCompleteRef.current(orderNumber, accessToken);
       return { ok: true };
     }
