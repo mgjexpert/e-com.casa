@@ -1,13 +1,18 @@
-// Production XPayments merchant webhook contract.
-// XPayments signs the RAW JSON body with HMAC-SHA256 and sends
-// the lowercase hexadecimal digest in x-nexflowx-signature.
+// Optional XPayments merchant webhook contract.
+// ------------------------------------------------------------
+// The E-com.casa checkout does NOT depend on this route: pending
+// orders are reconciled server-to-server through the PaymentIntent
+// API. If XPayments provides a merchant callback secret, this route
+// remains available as a faster push path and shares the same
+// idempotent reconciliation logic.
 
 import { NextRequest, NextResponse } from 'next/server';
 import { createHmac, timingSafeEqual } from 'crypto';
 import { db } from '@/lib/db';
 import { getPaymentConfig } from '@/lib/payments/payments-config';
-import { assignTrackingFields } from '@/lib/tracking';
-import { sendPaymentConfirmedEmail } from '@/lib/email/order-email';
+import { applyProviderIntent } from '@/lib/payments/reconcile-payment';
+import { toMinorUnit } from '@/lib/payments/amounts';
+import type { PaymentStatus, ProviderPaymentIntent } from '@/lib/payments/payment-types';
 
 export const dynamic = 'force-dynamic';
 
@@ -34,9 +39,26 @@ function idFor(event: XPaymentsEvent): string {
   return [event.transaction_id ?? 'unknown', event.event ?? 'unknown', event.timestamp ?? ''].join(':');
 }
 
+function mapStatus(event: XPaymentsEvent): PaymentStatus | null {
+  const status = String(event.status ?? '').toLowerCase();
+  const type = String(event.event ?? '').toLowerCase();
+  if (type === 'payment_intent.succeeded' || status === 'succeeded') return 'SUCCEEDED';
+  if (type === 'payment_intent.processing' || status === 'processing') return 'PROCESSING';
+  if (type === 'payment_intent.payment_failed' || status === 'failed') return 'FAILED';
+  if (type === 'payment_intent.canceled' || type === 'payment_intent.cancelled' || status === 'canceled' || status === 'cancelled') return 'CANCELLED';
+  return null;
+}
+
 export async function POST(req: NextRequest) {
   const rawBody = await req.text();
   const cfg = getPaymentConfig();
+
+  // Fail closed if the optional merchant callback is not configured.
+  // This does not affect checkout because status reconciliation uses
+  // authenticated server-to-server PaymentIntent retrieval instead.
+  if (!cfg.webhookSecret) {
+    return NextResponse.json({ error: 'Merchant webhook not configured' }, { status: 404 });
+  }
   if (!verify(rawBody, req.headers.get('x-nexflowx-signature'), cfg.webhookSecret)) {
     return NextResponse.json({ error: 'Invalid signature' }, { status: 400 });
   }
@@ -49,6 +71,9 @@ export async function POST(req: NextRequest) {
   const eventType = String(event.event ?? '');
   if (!transactionId || !eventType) return NextResponse.json({ error: 'Invalid event' }, { status: 400 });
 
+  const providerStatus = mapStatus(event);
+  if (!providerStatus) return NextResponse.json({ received: true, ignored: eventType });
+
   const eventId = idFor(event);
   try {
     await db.webhookEvent.create({ data: { id: eventId, provider: 'xpayments_stripe', type: eventType, payloadJson: rawBody.slice(0, 20_000) } });
@@ -57,64 +82,38 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-    // providerAccount stores the XPayments transaction id. This is the
-    // authoritative correlation key from the merchant webhook contract.
-    const payment = await db.payment.findFirst({ where: { providerAccount: transactionId }, include: { order: true } });
+    const payment = await db.payment.findFirst({
+      where: { providerAccount: transactionId },
+      include: { order: true },
+    });
     if (!payment) return NextResponse.json({ received: true, unknownTransaction: true });
 
-    const order = payment.order;
-    const status = String(event.status ?? '').toLowerCase();
-    const method = String(event.method ?? payment.paymentMethodType ?? 'other');
+    const amountMinor =
+      typeof event.amount === 'number' && Number.isInteger(event.amount) && event.amount >= 0
+        ? event.amount
+        : payment.amountMinor ?? toMinorUnit(payment.order.total, payment.order.currency);
 
-    if (eventType === 'payment_intent.succeeded' || status === 'succeeded') {
-      if (order.paymentStatus === 'PAID') return NextResponse.json({ received: true, noop: true });
-      const paidAt = event.timestamp ? new Date(event.timestamp) : new Date();
-      const effectivePaidAt = Number.isNaN(paidAt.getTime()) ? new Date() : paidAt;
-      const tracking = assignTrackingFields(order.orderNumber, order.shippingMethod, order.country, effectivePaidAt);
+    const intent: ProviderPaymentIntent = {
+      id: payment.paymentIntentId,
+      clientSecret: null,
+      status: providerStatus,
+      amountMinor,
+      currency: String(event.currency ?? payment.order.currency).toUpperCase(),
+      paymentMethodType: event.method ?? payment.paymentMethodType ?? null,
+      xpaymentsTransactionId: transactionId,
+    };
 
-      await db.$transaction(async (tx) => {
-        await tx.payment.update({ where: { id: payment.id }, data: { status: 'SUCCEEDED', paidAt: effectivePaidAt, lastEventId: eventId, paymentMethodType: method, failureCode: null, failureMessage: null } });
-        await tx.order.update({ where: { id: order.id }, data: { paymentStatus: 'PAID', paidAt: effectivePaidAt, status: 'CONFIRMED', paymentMethodType: method, paymentFailureReason: null, trackingNumber: tracking.trackingNumber, carrier: tracking.carrier, originWarehouse: tracking.originWarehouse, estimatedDeliveryAt: tracking.estimatedDeliveryAt } });
+    const timestamp = event.timestamp ? new Date(event.timestamp) : undefined;
+    const paidAt = timestamp && !Number.isNaN(timestamp.getTime()) ? timestamp : undefined;
 
-        if (!order.stockApplied) {
-          const items = JSON.parse(order.itemsJson) as Array<{ slug: string; quantity: number }>;
-          for (const item of items) await tx.product.updateMany({ where: { slug: item.slug, stock: { gte: item.quantity } }, data: { stock: { decrement: item.quantity } } });
-          await tx.order.update({ where: { id: order.id }, data: { stockApplied: true } });
-        }
+    const result = await applyProviderIntent(payment.orderId, intent, {
+      paidAt,
+      eventId,
+      paymentMethodType: event.method ?? null,
+      xpaymentsTransactionId: transactionId,
+    });
 
-        const invoice = await tx.invoice.findUnique({ where: { orderId: order.id } });
-        if (!invoice) await tx.invoice.create({ data: { orderId: order.id, invoiceNumber: `INV-${order.orderNumber.replace('EC-', '')}`, country: order.country, currency: order.currency, subtotal: order.subtotal, shipping: order.shipping, tax: order.tax, discount: order.discount, total: order.total, status: 'ISSUED' } });
-      });
-
-      await sendPaymentConfirmedEmail({ orderNumber: order.orderNumber, customerEmail: order.email, firstName: order.firstName, total: order.total, currency: order.currency, trackingNumber: tracking.trackingNumber, originWarehouse: tracking.originWarehouse });
-      return NextResponse.json({ received: true });
-    }
-
-    if (eventType === 'payment_intent.payment_failed' || status === 'failed') {
-      if (order.paymentStatus !== 'PAID') await db.$transaction([
-        db.payment.update({ where: { id: payment.id }, data: { status: 'FAILED', failedAt: new Date(), lastEventId: eventId, paymentMethodType: method, failureCode: 'payment_failed' } }),
-        db.order.update({ where: { id: order.id }, data: { paymentStatus: 'PAYMENT_FAILED', paymentFailureReason: 'payment_failed' } }),
-      ]);
-      return NextResponse.json({ received: true });
-    }
-
-    if (eventType === 'payment_intent.processing' || status === 'processing') {
-      if (order.paymentStatus !== 'PAID') await db.$transaction([
-        db.payment.update({ where: { id: payment.id }, data: { status: 'PROCESSING', lastEventId: eventId, paymentMethodType: method } }),
-        db.order.update({ where: { id: order.id }, data: { paymentStatus: 'PAYMENT_PROCESSING' } }),
-      ]);
-      return NextResponse.json({ received: true });
-    }
-
-    if (eventType === 'payment_intent.canceled' || status === 'canceled' || status === 'cancelled') {
-      if (!['PAID', 'REFUNDED', 'PARTIALLY_REFUNDED'].includes(order.paymentStatus)) await db.$transaction([
-        db.payment.update({ where: { id: payment.id }, data: { status: 'CANCELLED', lastEventId: eventId, paymentMethodType: method } }),
-        db.order.update({ where: { id: order.id }, data: { paymentStatus: 'CANCELLED', status: 'CANCELLED' } }),
-      ]);
-      return NextResponse.json({ received: true });
-    }
-
-    return NextResponse.json({ received: true, ignored: eventType });
+    return NextResponse.json({ received: true, applied: result.paymentStatus });
   } catch (error) {
     console.error(`XPayments webhook ${eventId} processing error`, error instanceof Error ? error.message : 'unknown');
     await db.webhookEvent.delete({ where: { id: eventId } }).catch(() => undefined);
