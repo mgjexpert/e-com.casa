@@ -14,6 +14,8 @@
     "db:reset": "prisma migrate reset",
     "catalog:research": "bun scripts/catalog-research/cli.ts",
     "catalog:scrape-v2": "bun scripts/catalog-research-v2/cli.ts",
+    "catalog:sync:bigbuy": "bun scripts/catalog-suppliers/bigbuy-sync.ts",
+    "catalog:sync:bigbuy:dry": "BIGBUY_DRY_RUN=1 bun scripts/catalog-suppliers/bigbuy-sync.ts",
     "db:seed": "bun prisma/seed.ts",
     "build:standalone": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/"
   },
@@ -49,7 +51,7 @@
     "@radix-ui/react-tabs": "^1.1.12",
     "@radix-ui/react-toast": "^1.2.14",
     "@radix-ui/react-toggle": "^1.1.9",
-    "@radix-ui/react-toggle-group": "^1.1.10",
+    "@radix-ui/react-toggle-group": "^1.1.9",
     "@radix-ui/react-tooltip": "^1.2.7",
     "@reactuses/core": "^6.0.5",
     "@stripe/stripe-js": "^7.10.0",
