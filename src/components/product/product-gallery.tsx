@@ -14,7 +14,8 @@ export function ProductGallery({
   badge?: string | null;
 }) {
   const [active, setActive] = useState(0);
-  const safeImages = images.length > 0 ? images : ['/images/placeholder.jpg'];
+  const safeImages = images.length > 0 ? images : ['/images/product-awaiting-media.svg'];
+  const mediaPending = safeImages.every((src) => src.includes('product-awaiting-media.svg'));
 
   return (
     <div>
@@ -24,12 +25,12 @@ export function ProductGallery({
           <Image
             key={src + i}
             src={src}
-            alt={`${productName} — image ${i + 1} of ${safeImages.length}`}
+            alt={mediaPending ? `${productName} — supplier image pending` : `${productName} — image ${i + 1} of ${safeImages.length}`}
             fill
             priority={i === 0}
             sizes="(max-width: 1024px) 100vw, 600px"
             className={cn(
-              'object-cover transition-all duration-700 group-hover/main:scale-[1.03]',
+              mediaPending ? 'object-contain p-8' : 'object-cover transition-all duration-700 group-hover/main:scale-[1.03]',
               i === active ? 'opacity-100' : 'opacity-0'
             )}
           />
@@ -68,14 +69,16 @@ export function ProductGallery({
                   : 'border-border/60 opacity-75 hover:opacity-100 hover:border-ring/50'
               )}
             >
-              <Image src={src} alt="" fill sizes="120px" className="object-cover" />
+              <Image src={src} alt="" fill sizes="120px" className={mediaPending ? 'object-contain p-2' : 'object-cover'} />
             </button>
           ))}
         </div>
       )}
 
       <p className="mt-3 text-center text-[11.5px] text-muted-foreground">
-        Lifestyle photography — colours may vary slightly in person.
+        {mediaPending
+          ? 'Supplier image pending — media rights are being verified before publication.'
+          : 'Lifestyle photography — colours may vary slightly in person.'}
       </p>
     </div>
   );
