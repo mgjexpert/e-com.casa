@@ -6,6 +6,7 @@ import type { Metadata } from 'next';
 import { db } from '@/lib/db';
 import { getProduct as fetchProduct, getRelatedProducts as fetchRelated, getCompleteTheLook as fetchLook } from '@/lib/catalog';
 import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { toStorefrontProduct } from '@/lib/catalog/public-product';
 import { BuyBox } from '@/components/product/buy-box';
 import { ProductCard } from '@/components/product/product-card';
 import { Stars } from '@/components/product/product-card';
@@ -60,12 +61,11 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const product = await getProduct(slug);
   if (!product) notFound();
   const saleable = isCatalogProductSaleable(product);
+  const publicProduct = toStorefrontProduct(product) as Product;
 
   const styleSlugs = product.styleSlugs.split(',').filter(Boolean);
   const spaceSlugs = product.spaceSlugs.split(',').filter(Boolean);
-  const relatedStyle = styleSlugs[0] ?? spaceSlugs[0];
 
-  void relatedStyle;
   let related: Product[] = [];
   try {
     related = (await fetchRelated(product.slug, 4)) as Product[];
@@ -81,8 +81,10 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
     completeTheLook = [];
   }
 
-  // Public supplier media may legitimately live on an allow-listed remote CDN.
-  // Local media still has to exist on disk; remote hosts are constrained by next.config.ts.
+  // Strip all internal catalogue/hold fields before related products cross the RSC boundary.
+  const publicRelated = related.map((p) => toStorefrontProduct(p) as Product);
+  const publicCompleteTheLook = completeTheLook.map((p) => toStorefrontProduct(p) as Product);
+
   const galleryCandidates = [
     product.image,
     ...(product.gallery ? product.gallery.split(',').map((s) => s.trim()) : []),
@@ -158,9 +160,9 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
           <p className="mt-5 whitespace-pre-line text-[14.5px] leading-relaxed text-foreground/85">{product.shortDescription || product.description}</p>
 
           <div className="mt-7">
-            <BuyBox product={product} />
+            <BuyBox product={publicProduct} />
           </div>
-          <StickyAddToCart product={product} />
+          <StickyAddToCart product={publicProduct} />
 
           {(styleSlugs.length > 0 || spaceSlugs.length > 0) && (
             <div className="mt-7 flex flex-wrap gap-2 border-t border-border pt-5">
@@ -222,7 +224,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
         </section>
       </div>
 
-      {completeTheLook.length >= 2 && (
+      {publicCompleteTheLook.length >= 2 && (
         <section aria-labelledby="ctl-heading" className="mt-16 border-t border-border pt-12">
           <div className="flex items-end justify-between">
             <div>
@@ -237,14 +239,14 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
-            {completeTheLook.map((p) => (
+            {publicCompleteTheLook.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
         </section>
       )}
 
-      {related.length > 0 && (
+      {publicRelated.length > 0 && (
         <section aria-labelledby="related-heading" className="mt-16 border-t border-border pt-12">
           <div className="flex items-end justify-between">
             <h2 id="related-heading" className="font-display text-[24px] font-medium">You may also like</h2>
@@ -253,7 +255,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             </Link>
           </div>
           <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-8 sm:grid-cols-4">
-            {related.map((p) => (
+            {publicRelated.map((p) => (
               <ProductCard key={p.id} product={p} />
             ))}
           </div>
