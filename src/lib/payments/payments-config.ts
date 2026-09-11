@@ -3,6 +3,10 @@
 // ------------------------------------------------------------
 // Exact names for the XPayments Stripe-compatible LIVE contract.
 // Secrets are server-only and are never returned to the browser.
+//
+// Merchant webhook verification is optional: when no merchant
+// callback secret is configured, pending orders are reconciled by
+// authenticated server-to-server PaymentIntent retrieval.
 // ============================================================
 
 import 'server-only';
@@ -42,6 +46,10 @@ export function isPaymentConfigured(): boolean {
   return Boolean(cfg.secretKey && cfg.publishableKey);
 }
 
+export function isMerchantWebhookConfigured(): boolean {
+  return Boolean(getPaymentConfig().webhookSecret);
+}
+
 export interface PaymentConfigIssue {
   field: string;
   problem: string;
@@ -66,9 +74,8 @@ export function validatePaymentConfig(): PaymentConfigIssue[] {
     issues.push({ field: 'NEXT_PUBLIC_XPAYMENTS_STRIPE_PUBLISHABLE_KEY', problem: 'expected pk_live_ for LIVE environment' });
   }
 
-  if (!cfg.webhookSecret) {
-    issues.push({ field: 'XPAYMENTS_WEBHOOK_SECRET', problem: 'missing — webhook verification will reject every delivery' });
-  }
-
+  // XPAYMENTS_WEBHOOK_SECRET is deliberately not required. If present,
+  // /api/webhooks/xpayments remains available as an additional push path;
+  // if absent, /api/payments/status securely reconciles with XPayments.
   return issues;
 }
