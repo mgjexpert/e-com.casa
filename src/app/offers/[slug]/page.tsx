@@ -6,6 +6,7 @@ import { getOfferSlugs } from '@/lib/offers/registry';
 import { resolveOffer } from '@/lib/offers/resolver';
 import { resolveOfferMarket } from '@/lib/offers/geo';
 import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { toStorefrontProduct } from '@/lib/catalog/public-product';
 import { COMPANY } from '@/lib/company';
 
 export const dynamic = 'force-dynamic';
@@ -58,6 +59,7 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
   const requestHeaders = await headers();
   const market = resolveOfferMarket(requestHeaders);
   const { offer, product } = resolved;
+  const publicProduct = toStorefrontProduct(product);
   const seo = offer.translations?.[market.language]?.seo ?? offer.seo;
   const image = product.image?.startsWith('http') ? product.image : `${COMPANY.domain}${product.image}`;
 
@@ -83,7 +85,7 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
 
   return (
     <>
-      <OfferPageV3 offer={offer} product={product} market={market} />
+      <OfferPageV3 offer={offer} product={publicProduct} market={market} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
