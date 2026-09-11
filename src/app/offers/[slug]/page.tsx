@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { OfferPageV3 } from '@/components/offers/offer-page-v3';
+import { OfferPageZAI } from '@/components/offers/offer-page-zai';
 import { getOfferSlugs } from '@/lib/offers/registry';
 import { resolveOffer } from '@/lib/offers/resolver';
 import { resolveOfferMarket } from '@/lib/offers/geo';
@@ -85,7 +85,7 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
 
   return (
     <>
-      <OfferPageV3 offer={offer} product={publicProduct} market={market} />
+      <OfferPageZAI offer={offer} product={publicProduct} market={market} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
