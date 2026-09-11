@@ -9,7 +9,7 @@ import { useWishlist } from '@/lib/wishlist-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
-import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { getCatalogSaleabilityLabel, isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import { OfferCountdown } from '@/components/product/offer-countdown';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
@@ -42,11 +42,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   const openCartDrawer = useCartDrawer((s) => s.open);
   const wished = wishlist.slugs.includes(product.slug);
   const saleable = typeof product.canPurchase === 'boolean' ? product.canPurchase : isCatalogProductSaleable(product);
-  const saleabilityLabel = saleable
-    ? 'Available'
-    : product.availability === 'outOfStock' || product.stock <= 0
-      ? 'Out of stock'
-      : 'Temporarily unavailable';
+  const saleabilityLabel = getCatalogSaleabilityLabel(product);
   const marketReference = product.marketReferencePrice && parseFloat(product.marketReferencePrice) > 0
     ? product.marketReferencePrice
     : null;
