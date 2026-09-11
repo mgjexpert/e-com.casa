@@ -5,10 +5,9 @@ import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 
 /**
- * Offers are campaign destinations: they keep institutional/legal footer and
- * all global infrastructure, while removing the full navigation header to
- * reduce distraction. The offer renders its own minimal E-com.casa market
- * header inside the page.
+ * Offers are self-contained campaign destinations. They keep all global
+ * infrastructure (cookies, cart, chat, language boot) from RootLayout while
+ * owning a minimal campaign header and compact institutional footer.
  */
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -20,7 +19,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <main id="main-content" className="flex-1">
         {children}
       </main>
-      <SiteFooter />
+      {!isOfferRoute && <SiteFooter />}
     </div>
   );
 }
