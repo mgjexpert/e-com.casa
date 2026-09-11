@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Heart, Minus, Plus, ShoppingBag, Zap, ShieldCheck, RotateCcw, Truck, Clock3 } from 'lucide-react';
+import { Heart, Minus, Plus, ShoppingBag, Zap, ShieldCheck, RotateCcw, Truck } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { toast } from '@/hooks/use-toast';
 import { useCart } from '@/lib/cart-store';
@@ -11,6 +11,7 @@ import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import { getCatalogSaleabilityLabel, isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { OfferCountdown } from '@/components/product/offer-countdown';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -48,21 +49,25 @@ export function BuyBox({ product }: { product: Product }) {
 
   if (!saleable) {
     return (
-      <div className="rounded-xl border border-olive/20 bg-olive/5 p-5 sm:p-6">
-        <div className="flex items-start gap-3">
-          <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-background text-olive shadow-sm">
-            <Clock3 className="h-4.5 w-4.5" strokeWidth={1.7} />
-          </span>
-          <div>
-            <p className="text-[14px] font-semibold text-foreground">{saleabilityLabel}</p>
-            <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
-              This supplier-backed item is already in our catalogue, but purchasing stays disabled until trade terms, media rights, stock quantity and applicable product documentation are verified.
+      <div className="rounded-xl border border-border bg-cream/40 p-5 sm:p-6">
+        {product.marketReferencePrice && parseFloat(product.marketReferencePrice) > 0 && (
+          <div className="mb-4">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Observed market reference</p>
+            <p className="mt-1 text-[24px] font-semibold tracking-tight">{formatPrice(product.marketReferencePrice)}</p>
+            <p className="mt-1 text-[11.5px] leading-relaxed text-muted-foreground">
+              Reference based on observed EU retail listings; it is not a previous E-com.casa selling price.
             </p>
           </div>
+        )}
+        <div>
+          <p className="text-[14px] font-semibold text-foreground">{saleabilityLabel}</p>
+          <p className="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+            This item cannot be purchased right now. Save it to your wishlist and check back soon.
+          </p>
         </div>
         {product.variants.length > 0 && (
           <div className="mt-5">
-            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Supplier options detected</p>
+            <p className="text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">Options</p>
             <div className="mt-2 flex flex-wrap gap-2">
               {product.variants.slice(0, 12).map((variant) => (
                 <span key={variant.id} className="rounded-md border border-border bg-background px-3 py-2 text-[12.5px] text-foreground/75">
@@ -74,7 +79,7 @@ export function BuyBox({ product }: { product: Product }) {
         )}
         <Button onClick={onWishlist} variant="outline" className="mt-5 h-11 w-full gap-2 rounded-md border-input">
           <Heart className={cn('h-4.5 w-4.5', wished && 'fill-terracotta text-terracotta')} strokeWidth={1.75} />
-          {wished ? 'Saved to wishlist' : 'Save for availability'}
+          {wished ? 'Saved to wishlist' : 'Save to wishlist'}
         </Button>
       </div>
     );
@@ -115,6 +120,21 @@ export function BuyBox({ product }: { product: Product }) {
         )}
         <span className="text-[12px] text-muted-foreground">{t('buy.inclVat')}</span>
       </div>
+
+      {product.promoDiscountPct === 30 && product.marketReferencePrice && product.promoEndsAt && (
+        <div className="mt-2">
+          <p className="text-[12px] font-medium text-terracotta">
+            30% below the observed market reference of {formatPrice(product.marketReferencePrice)}
+          </p>
+          <OfferCountdown endsAt={product.promoEndsAt} />
+        </div>
+      )}
+
+      {!product.promoDiscountPct && product.marketReferencePrice && parseFloat(product.marketReferencePrice) > 0 && (
+        <p className="mt-2 text-[11.5px] text-muted-foreground">
+          Observed market reference: {formatPrice(product.marketReferencePrice)}
+        </p>
+      )}
 
       {groupVariants(product.variants).map(([type, variants]) => (
         <div key={type} className="mt-5">
