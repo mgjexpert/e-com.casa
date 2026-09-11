@@ -10,6 +10,7 @@ import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { useT } from '@/hooks/use-t';
 import { formatPrice } from '@/lib/format';
 import { getCatalogSaleabilityLabel, isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { OfferCountdown } from '@/components/product/offer-countdown';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
@@ -42,11 +43,14 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   const wished = wishlist.slugs.includes(product.slug);
   const saleable = isCatalogProductSaleable(product);
   const saleabilityLabel = getCatalogSaleabilityLabel(product);
+  const marketReference = product.marketReferencePrice && parseFloat(product.marketReferencePrice) > 0
+    ? product.marketReferencePrice
+    : null;
 
   const onAdd = (e: React.MouseEvent) => {
     e.preventDefault();
     if (!saleable) {
-      toast({ title: saleabilityLabel, description: 'This product is visible for catalogue review but checkout remains locked until supplier and compliance validation are complete.' });
+      toast({ title: saleabilityLabel, description: 'This item cannot be purchased right now.' });
       return;
     }
     add({
@@ -103,9 +107,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
               {product.badge}
             </span>
           )}
-          {!saleable && !product.isDemo && (
-            <span className="absolute left-2.5 top-2.5 rounded-full bg-background/90 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.10em] text-foreground backdrop-blur">
-              Supplier validation
+          {saleable && product.promoDiscountPct === 30 && product.promoEndsAt && (
+            <span className="absolute left-2.5 top-2.5 rounded-full bg-terracotta px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.10em] text-white shadow-sm">
+              30% launch offer
             </span>
           )}
           <div className="absolute inset-x-2.5 bottom-2.5 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden">
@@ -130,21 +134,36 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           {product.subtitle && (
             <p className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">{product.subtitle}</p>
           )}
+
           {saleable ? (
-            <div className="mt-1.5 flex flex-wrap items-baseline gap-2">
-              <span className="text-[14px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
-              {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
-                <>
-                  <span className="text-[12px] text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
-                  <span className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta">
-                    −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
-                  </span>
-                </>
+            <>
+              <div className="mt-1.5 flex flex-wrap items-baseline gap-2">
+                <span className="text-[14px] font-semibold tracking-tight">{formatPrice(product.price)}</span>
+                {product.comparePrice && parseFloat(product.comparePrice) > parseFloat(product.price) && (
+                  <>
+                    <span className="text-[12px] text-muted-foreground line-through">{formatPrice(product.comparePrice)}</span>
+                    <span className="rounded-full bg-terracotta/10 px-1.5 py-0.5 text-[10.5px] font-semibold leading-none text-terracotta">
+                      −{Math.round((1 - parseFloat(product.price) / parseFloat(product.comparePrice)) * 100)}%
+                    </span>
+                  </>
+                )}
+              </div>
+              {product.promoDiscountPct === 30 && marketReference && product.promoEndsAt && (
+                <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
+                  <span className="text-[10.5px] font-medium text-terracotta">30% below market reference</span>
+                  <OfferCountdown endsAt={product.promoEndsAt} compact />
+                </div>
               )}
-            </div>
+            </>
           ) : (
-            <p className="mt-1.5 text-[12px] font-medium text-olive">{saleabilityLabel}</p>
+            <>
+              {marketReference && (
+                <p className="mt-1.5 text-[13px] font-semibold tracking-tight">Market reference {formatPrice(marketReference)}</p>
+              )}
+              <p className="mt-1 text-[11.5px] font-medium text-muted-foreground">{saleabilityLabel}</p>
+            </>
           )}
+
           {product.reviewCount > 0 && (
             <div className="mt-1.5 flex items-center gap-1.5">
               <Stars rating={product.rating} />
