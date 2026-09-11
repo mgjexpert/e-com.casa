@@ -186,27 +186,71 @@ async function fetchText(url: string): Promise<string> {
   return response.text();
 }
 
+interface RobotsRule {
+  kind: 'allow' | 'disallow';
+  value: string;
+}
+
+/** Shopify robots files use wildcard rules such as /collections/*+*.
+ * Evaluate the complete wildcard expression instead of treating the prefix
+ * before `*` as blocked, which would incorrectly reject every collection.
+ */
+function robotsPatternMatches(pattern: string, path: string): boolean {
+  if (!pattern) return false;
+  const anchoredAtEnd = pattern.endsWith('$');
+  const raw = anchoredAtEnd ? pattern.slice(0, -1) : pattern;
+  const escaped = raw.replace(/[.+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+  const re = new RegExp(`^${escaped}${anchoredAtEnd ? '$' : ''}`);
+  return re.test(path);
+}
+
 function robotsDisallows(robots: string, pathname: string): boolean {
-  const lines = robots.split(/\r?\n/);
-  let applies = false;
-  for (const rawLine of lines) {
+  const groups: Array<{ agents: string[]; rules: RobotsRule[] }> = [];
+  let current: { agents: string[]; rules: RobotsRule[] } | null = null;
+  let rulesStarted = false;
+
+  for (const rawLine of robots.split(/\r?\n/)) {
     const line = rawLine.replace(/#.*$/, '').trim();
     if (!line) continue;
     const idx = line.indexOf(':');
     if (idx < 0) continue;
     const key = line.slice(0, idx).trim().toLowerCase();
     const value = line.slice(idx + 1).trim();
+
     if (key === 'user-agent') {
-      applies = value === '*' || value.toLowerCase().includes('e-com.casa');
+      if (!current || rulesStarted) {
+        current = { agents: [], rules: [] };
+        groups.push(current);
+        rulesStarted = false;
+      }
+      current.agents.push(value.toLowerCase());
       continue;
     }
-    if (applies && key === 'disallow' && value && value !== '/') {
-      const prefix = value.split('*')[0];
-      if (prefix && pathname.startsWith(prefix)) return true;
+
+    if ((key === 'allow' || key === 'disallow') && current) {
+      rulesStarted = true;
+      if (value) current.rules.push({ kind: key, value });
     }
-    if (applies && key === 'disallow' && value === '/') return true;
   }
-  return false;
+
+  const crawler = 'e-com.casa-supplierresearch';
+  const applicable = groups.filter((group) =>
+    group.agents.some((agent) => agent === '*' || crawler.startsWith(agent)),
+  );
+
+  const matched = applicable
+    .flatMap((group) => group.rules)
+    .filter((rule) => robotsPatternMatches(rule.value, pathname))
+    .sort((a, b) => {
+      const specificity = (value: string) => value.replace(/[\*$]/g, '').length;
+      const diff = specificity(b.value) - specificity(a.value);
+      if (diff !== 0) return diff;
+      // RFC-style tie behaviour: the least restrictive rule wins.
+      if (a.kind === b.kind) return 0;
+      return a.kind === 'allow' ? -1 : 1;
+    });
+
+  return matched[0]?.kind === 'disallow';
 }
 
 function extractProductPaths(html: string, origin: string): string[] {
