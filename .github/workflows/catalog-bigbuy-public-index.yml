@@ -7,7 +7,6 @@ on:
     paths:
       - 'data/catalog/bigbuy-public-index-seed.json'
       - 'scripts/catalog-suppliers/bigbuy-public-index-import.mjs'
-      - 'scripts/catalog-suppliers/bigbuy-public-promote.mjs'
       - '.github/workflows/catalog-bigbuy-public-index.yml'
 
 permissions:
@@ -36,10 +35,8 @@ jobs:
             exit 2
           fi
 
-      - name: Syntax-check catalogue jobs
-        run: |
-          node --check scripts/catalog-suppliers/bigbuy-public-index-import.mjs
-          node --check scripts/catalog-suppliers/bigbuy-public-promote.mjs
+      - name: Syntax-check importer
+        run: node --check scripts/catalog-suppliers/bigbuy-public-index-import.mjs
 
       - name: Setup Bun
         uses: oven-sh/setup-bun@v2
@@ -54,6 +51,3 @@ jobs:
 
       - name: Import public indexed BigBuy starter catalogue
         run: node scripts/catalog-suppliers/bigbuy-public-index-import.mjs
-
-      - name: Expose researched products in storefront catalogue
-        run: node scripts/catalog-suppliers/bigbuy-public-promote.mjs
