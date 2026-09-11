@@ -78,7 +78,7 @@ function TechnicalBlock({
   number: string;
   title: string;
   subtitle: string;
-  rows: Array<[string, string]>;
+  rows: string[][];
   defaultOpen?: boolean;
 }) {
   const [open, setOpen] = useState(defaultOpen);
