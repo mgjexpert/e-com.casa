@@ -11,6 +11,11 @@ const nextConfig: NextConfig = {
         hostname: "cdnbigbuy.com",
         pathname: "/images/**",
       },
+      {
+        protocol: "https",
+        hostname: "cdn.shopify.com",
+        pathname: "/s/files/**",
+      },
     ],
   },
 };
