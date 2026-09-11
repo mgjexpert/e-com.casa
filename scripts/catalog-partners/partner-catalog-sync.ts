@@ -93,6 +93,7 @@ type PartnerProduct = {
   reviewCount: number;
   stock: number;
   stockKnown: false;
+  stockUnlimited: true;
   availability: Availability;
   isBestSeller: boolean;
   isNew: boolean;
@@ -416,14 +417,13 @@ function normalize(
           value: slugify(title) || String(variant.id ?? ''),
           priceDeltaCents: Math.round(price(variant.price) * 100) - baseCents,
           image: publishImages ? variant.featured_image?.src : undefined,
-          availability: variant.available === false ? 'outOfStock' : 'inStock',
+          availability: 'inStock',
           sku: variant.sku ?? null,
           barcode: variant.barcode ?? null,
           supplierVariantId: String(variant.id ?? ''),
           optionValues: values,
         };
       });
-  const available = variants.some((variant) => variant.available === true);
   const short = (description.split('\n').find((line) => line.trim().length > 30) || description || product.title || 'Produto do catálogo parceiro').slice(0, 260);
   const material = odem ? odemMaterial(category.slug, product, description) : null;
   const electrical = isElectrical(product);
@@ -455,7 +455,8 @@ function normalize(
     reviewCount: 0,
     stock: 0,
     stockKnown: false,
-    availability: available ? 'inStock' : 'outOfStock',
+    stockUnlimited: true,
+    availability: 'inStock',
     isBestSeller: false,
     isNew: false,
     featured: odem && category.slug === 'painel-ripado',
@@ -480,7 +481,7 @@ function normalize(
       sourceUrl,
       warnings: [],
       safetyInstructions: [],
-      complianceNote: 'Dados de catálogo do fornecedor importados; documentação técnica/compliance e stock exato exigem aprovação E-com.casa antes da venda.',
+      complianceNote: 'Dados de catálogo do fornecedor importados; documentação técnica/compliance exige aprovação E-com.casa antes da venda. Fabricação direta sem limite de stock, conforme política comercial.',
     }),
     requiresComplianceReview: true,
     isDemo: false,

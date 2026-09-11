@@ -28,10 +28,10 @@ export const useCart = create<CartState>()(
         const keyOf = (l: Pick<CartLine, 'slug' | 'variantId'>) => `${l.slug}|${l.variantId ?? ''}`;
         const idx = lines.findIndex((l) => keyOf(l) === keyOf(line));
         if (idx >= 0) {
-          const nextQty = Math.min(lines[idx].quantity + qty, lines[idx].maxStock || 99);
-          lines[idx] = { ...lines[idx], quantity: nextQty };
+          const nextQty = Math.min(lines[idx].quantity + qty, line.maxStock ?? Number.MAX_SAFE_INTEGER);
+          lines[idx] = { ...lines[idx], ...line, quantity: nextQty };
         } else {
-          lines.push({ ...line, quantity: Math.max(1, qty) });
+          lines.push({ ...line, quantity: Math.min(Math.max(1, qty), line.maxStock ?? Number.MAX_SAFE_INTEGER) });
         }
         set({ lines });
       },
@@ -40,7 +40,7 @@ export const useCart = create<CartState>()(
         if (qty < 1) return set({ lines: get().lines.filter((l) => `${l.slug}|${l.variantId ?? ''}` !== slug) });
         set({
           lines: get().lines.map((l) =>
-            `${l.slug}|${l.variantId ?? ''}` === slug ? { ...l, quantity: Math.min(qty, l.maxStock || 99) } : l
+            `${l.slug}|${l.variantId ?? ''}` === slug ? { ...l, quantity: Math.min(qty, l.maxStock ?? Number.MAX_SAFE_INTEGER) } : l
           ),
         });
       },

@@ -2,9 +2,8 @@
 // E-com.casa — Prisma schema (PostgreSQL / Neon)
 // ------------------------------------------------------------
 // Datasource is PostgreSQL (Neon in production via DATABASE_URL).
-// All demo catalogue data is seeded idempotently from
-// /data/catalog/generated-*.json artifacts produced by the
-// one-shot research pipeline (npm run catalog:research).
+// Partner catalogue data is imported idempotently from the validated
+// ODEM/WoodUpp snapshot (npm run catalog:import:partners).
 // ============================================================
 
 generator client {
@@ -52,7 +51,15 @@ model Product {
   badge       String? // "New" | "Featured" | "Popular" | "Editor's Pick" | "Best Seller" (demo merchandising label)
   rating      Float   @default(4.5) // demo presentation value — reviews are demo-mode
   reviewCount Int     @default(0)
-  stock       Int     @default(50) // demo stock
+  stock       Int     @default(0)
+  stockKnown Boolean @default(false)
+  stockUnlimited Boolean @default(false)
+  brand String?
+  manufacturer String?
+  supplierKey String?
+  supplierProductId String?
+  mediaRights String?
+
   availability String @default("inStock") // inStock | lowStock | outOfStock (demo — no false scarcity)
   isBestSeller Boolean @default(false)
   isNew       Boolean @default(false)

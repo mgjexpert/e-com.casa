@@ -8,6 +8,7 @@
 
 import { createHash, randomBytes, timingSafeEqual } from 'crypto';
 import { getProduct } from '@/lib/catalog';
+import { hasStock } from '@/lib/catalog/inventory';
 import {
   SHIPPING_OPTIONS,
   FREE_SHIPPING_THRESHOLD,
@@ -73,6 +74,9 @@ export async function repriceCart(input: {
   promoCode?: string | null;
   giftWrap?: boolean;
 }): Promise<RepricedTotals> {
+  if (!input.items.length || input.items.some((item) => !Number.isSafeInteger(item.quantity) || item.quantity < 1)) {
+    throw new CheckoutValidationError('Invalid product quantity');
+  }
   const slugs = input.items.map((i) => i.slug);
   const resolved = await Promise.all(slugs.map((s) => getProduct(s)));
   const products = resolved.filter((p): p is NonNullable<typeof p> => Boolean(p));
@@ -82,7 +86,7 @@ export async function repriceCart(input: {
   }
 
   const blockedCompliance = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'SUPPLIER_PENDING']);
-  const blockedDocumentation = new Set(['DEMO', 'PENDING', 'PENDING_REVIEW', 'MISSING']);
+  const blockedDocumentation = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'MISSING']);
   const nonSaleable = products.find((product) =>
     product.isDemo
     || product.requiresComplianceReview
@@ -98,7 +102,7 @@ export async function repriceCart(input: {
 
   for (const item of input.items) {
     const product = products.find((p) => p.slug === item.slug)!;
-    if (product.stock < item.quantity || product.availability === 'outOfStock') {
+    if (!hasStock(product, input.items.filter((line) => line.slug === item.slug).reduce((sum, line) => sum + line.quantity, 0))) {
       throw new CheckoutValidationError(
         product.stock <= 0 || product.availability === 'outOfStock'
           ? `Sorry — “${product.name}” has just sold out.`

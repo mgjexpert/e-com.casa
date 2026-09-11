@@ -47,7 +47,7 @@ async function getCatalogContext() {
         ...p.styleSlugs.split(',').filter(Boolean),
         p.isBestSeller ? 'bestseller' : '',
         p.isNew ? 'new' : '',
-        p.stock === 0 ? 'OUT OF STOCK' : '',
+        p.stockUnlimited ? 'MADE TO ORDER' : p.stock === 0 ? 'OUT OF STOCK' : '',
       ]
         .filter(Boolean)
         .join('/');

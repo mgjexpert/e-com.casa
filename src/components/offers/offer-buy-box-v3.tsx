@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ChevronDown, Minus, Plus, ShoppingBag } from 'lucide-react';
@@ -65,7 +66,7 @@ export function OfferBuyBoxV3({ product, offerSlug }: { product: CatalogProduct;
   }, [panel, wallHeight, wallWidth]);
 
   const setQty = (next: number) => {
-    const max = saleable ? Math.max(1, product.stock) : 99;
+    const max = saleable ? Math.max(1, quantityLimit(product)) : 99;
     const value = Math.min(max, Math.max(1, next));
     setQuantity(value);
     trackOfferEvent('quantity_changed', { offerSlug, productSlug: product.slug, quantity: value });
@@ -87,7 +88,7 @@ export function OfferBuyBoxV3({ product, offerSlug }: { product: CatalogProduct;
           : product.subtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: product.stock,
+        maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },
@@ -243,7 +244,7 @@ export function OfferBuyBoxV3({ product, offerSlug }: { product: CatalogProduct;
         <div className="flex h-12 w-[142px] items-center overflow-hidden rounded-[5px] border border-[#d8d4cd] bg-white">
           <button type="button" onClick={() => setQty(quantity - 1)} disabled={quantity <= 1} className="grid h-full w-12 place-items-center text-[#262522] disabled:opacity-30" aria-label="Diminuir quantidade"><Minus className="h-4 w-4" /></button>
           <span className="flex-1 text-center text-[13px] font-semibold tabular-nums">{quantity}</span>
-          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= product.stock} className="grid h-full w-12 place-items-center text-[#262522] disabled:opacity-30" aria-label="Aumentar quantidade"><Plus className="h-4 w-4" /></button>
+          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= quantityLimit(product)} className="grid h-full w-12 place-items-center text-[#262522] disabled:opacity-30" aria-label="Aumentar quantidade"><Plus className="h-4 w-4" /></button>
         </div>
       </div>
 

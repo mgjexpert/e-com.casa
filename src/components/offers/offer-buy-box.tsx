@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Minus, Plus, ShoppingBag, Zap, ShieldCheck } from 'lucide-react';
@@ -31,7 +32,7 @@ export function OfferBuyBox({ product, offerSlug }: { product: CatalogProduct; o
   };
 
   const setQty = (next: number) => {
-    const max = saleable ? Math.max(1, product.stock) : 20;
+    const max = saleable ? Math.max(1, quantityLimit(product)) : 20;
     const value = Math.min(max, Math.max(1, next));
     setQuantity(value);
     trackOfferEvent('quantity_changed', { offerSlug, productSlug: product.slug, quantity: value });
@@ -46,7 +47,7 @@ export function OfferBuyBox({ product, offerSlug }: { product: CatalogProduct; o
         subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: product.stock,
+        maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },
@@ -135,7 +136,7 @@ export function OfferBuyBox({ product, offerSlug }: { product: CatalogProduct; o
             <Minus className="h-4 w-4" />
           </button>
           <span className="w-9 text-center text-sm font-semibold tabular-nums" aria-live="polite">{quantity}</span>
-          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= product.stock} className="grid h-full w-11 place-items-center disabled:opacity-35" aria-label="Aumentar quantidade">
+          <button type="button" onClick={() => setQty(quantity + 1)} disabled={saleable && quantity >= quantityLimit(product)} className="grid h-full w-11 place-items-center disabled:opacity-35" aria-label="Aumentar quantidade">
             <Plus className="h-4 w-4" />
           </button>
         </div>

@@ -56,6 +56,14 @@ export function mapProduct(row: ProductRow): CatalogProduct {
     rating: row.rating,
     reviewCount: row.reviewCount,
     stock: row.stock,
+    stockKnown: row.stockKnown,
+    stockUnlimited: row.stockUnlimited,
+    brand: row.brand,
+    manufacturer: row.manufacturer,
+    supplierKey: row.supplierKey,
+    supplierProductId: row.supplierProductId,
+    mediaRights: row.mediaRights,
+
     availability: (row.availability as CatalogProduct['availability']) ?? 'inStock',
     isBestSeller: row.isBestSeller,
     isNew: row.isNew,
@@ -93,7 +101,7 @@ function mapCategory(row: CategoryRow): CatalogCategory {
 }
 
 function buildWhere(query: ProductQuery): Record<string, unknown> {
-  const where: Record<string, unknown> = { complianceStatus: { not: 'BLOCKED' } };
+  const where: Record<string, unknown> = { isDemo: false, supplierKey: { in: ['odem', 'woodupp'] }, complianceStatus: { not: 'BLOCKED' } };
   if (query.category) where.categorySlug = query.category;
   if (query.subcategory) where.subcategorySlugs = { contains: query.subcategory };
   if (query.space) where.spaceSlugs = { contains: query.space };
@@ -175,7 +183,7 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
 
   async getBySlug(slug: string): Promise<CatalogProduct | null> {
     const row = await this.client.product.findUnique({ where: { slug } });
-    if (!row || row.complianceStatus === 'BLOCKED') return null;
+    if (!row || row.isDemo || !['odem', 'woodupp'].includes(row.supplierKey ?? '') || row.complianceStatus === 'BLOCKED') return null;
     return mapProduct(row);
   }
 
@@ -188,6 +196,6 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
   }
 
   async count(): Promise<number> {
-    return this.client.product.count({ where: { complianceStatus: { not: 'BLOCKED' } } });
+    return this.client.product.count({ where: { isDemo: false, supplierKey: { in: ['odem', 'woodupp'] }, complianceStatus: { not: 'BLOCKED' } } });
   }
 }

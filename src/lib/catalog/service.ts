@@ -13,7 +13,6 @@
 import { db } from '@/lib/db';
 import { PrismaCatalogAdapter } from './prisma-adapter';
 import { DemoCatalogAdapter } from './demo-adapter';
-import { applyCommercialProductOverrides } from './commercial-overrides';
 import { getCompleteTheLook as computeCompleteTheLook, getRelatedProducts as computeRelated, getCrossSell as computeCrossSell } from './recommendations';
 import type {
   CatalogAdapter,
@@ -39,6 +38,7 @@ async function activeAdapter(): Promise<CatalogAdapter> {
     try {
       await db.$queryRaw`SELECT 1`;
       databaseHealthy = true;
+      productTableReady = null;
     } catch {
       databaseHealthy = false;
       productTableReady = false;
@@ -80,13 +80,13 @@ export async function getProducts(query: ProductQuery = {}): Promise<ProductList
   const result = await (await activeAdapter()).list(query);
   return {
     ...result,
-    products: result.products.map(applyCommercialProductOverrides),
+    products: result.products,
   };
 }
 
 export async function getProduct(slug: string): Promise<CatalogProduct | null> {
   const product = await (await activeAdapter()).getBySlug(slug);
-  return product ? applyCommercialProductOverrides(product) : null;
+  return product;
 }
 
 export async function getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {

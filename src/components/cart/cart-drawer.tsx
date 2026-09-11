@@ -115,7 +115,7 @@ export function CartDrawer() {
                         <button
                           type="button"
                           onClick={() => setQty(line.slug, line.quantity + 1)}
-                          disabled={line.quantity >= (line.maxStock || 99)}
+                          disabled={line.quantity >= (line.maxStock ?? Number.MAX_SAFE_INTEGER)}
                           className="flex h-full w-8 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
                           aria-label={t('drawer.increase', { name: line.name })}
                         >

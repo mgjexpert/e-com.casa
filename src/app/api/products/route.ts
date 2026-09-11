@@ -1,28 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getProducts } from '@/lib/catalog';
-import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
-import type { CatalogProduct } from '@/lib/catalog/types';
+import { toStorefrontProduct } from '@/lib/catalog/public-product';
 
 export const dynamic = 'force-dynamic';
-
-function toPublicProduct(product: CatalogProduct) {
-  const {
-    complianceStatus: _complianceStatus,
-    documentationStatus: _documentationStatus,
-    safetyJson: _safetyJson,
-    requiresComplianceReview: _requiresComplianceReview,
-    reviewMode: _reviewMode,
-    sourceResearchId: _sourceResearchId,
-    isDemo: _isDemo,
-    imageStatus: _imageStatus,
-    ...publicProduct
-  } = product;
-
-  return {
-    ...publicProduct,
-    canPurchase: isCatalogProductSaleable(product),
-  };
-}
 
 export async function GET(req: NextRequest) {
   try {
@@ -49,7 +29,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json({
       ...result,
-      products: result.products.map(toPublicProduct),
+      products: result.products.map(toStorefrontProduct),
     });
   } catch (error) {
     console.error('Products API error:', error);

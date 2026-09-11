@@ -60,6 +60,14 @@ jobs:
           console.log(JSON.stringify({ products: products.length, categories: catalog.categories.length, odem: report.odemProducts, woodupp: report.woodUppProducts }));
           NODE
 
+      - name: Refresh PostgreSQL partner catalogue
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        run: |
+          test -n "$DATABASE_URL"
+          bun scripts/catalog-partners/provision-db.ts
+          bun prisma/seed.ts
+
       - name: Commit refreshed provider snapshot
         run: |
           if [ -z "$(git status --porcelain -- data/catalog/generated-provider-products.json data/catalog/generated-provider-catalog.json data/catalog/provider-sync-report.json)" ]; then

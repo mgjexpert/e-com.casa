@@ -66,7 +66,7 @@ export interface CartLine {
   price: string;
   image: string;
   quantity: number;
-  maxStock: number;
+  maxStock: number | null; // null: manufacture on demand, no inventory ceiling
   /** Optional selected variant (cart identity = slug + variantId) */
   variantId?: string;
   variantLabel?: string;

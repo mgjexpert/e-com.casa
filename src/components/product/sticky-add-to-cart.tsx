@@ -1,5 +1,6 @@
 'use client';
 
+import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
 import { ShoppingBag } from 'lucide-react';
@@ -44,7 +45,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
         subtitle: product.subtitle,
         price: product.price,
         image: product.image,
-        maxStock: product.stock,
+        maxStock: cartStockLimit(product),
       },
       qty,
     );
@@ -75,7 +76,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
           <div className="hidden h-10 items-center rounded-md border border-input sm:flex">
             <button type="button" onClick={() => setQty((q) => Math.max(1, q - 1))} disabled={qty <= 1} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" aria-label={t('buy.decrease')}>−</button>
             <span className="w-8 text-center text-[13px] font-medium tabular-nums" aria-live="polite">{qty}</span>
-            <button type="button" onClick={() => setQty((q) => Math.min(product.stock || 99, q + 1))} disabled={qty >= (product.stock || 99)} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" aria-label={t('buy.increase')}>+</button>
+            <button type="button" onClick={() => setQty((q) => Math.min(quantityLimit(product), q + 1))} disabled={qty >= (quantityLimit(product))} className="flex h-full w-9 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40" aria-label={t('buy.increase')}>+</button>
           </div>
           <Button onClick={onAdd} className="h-10 shrink-0 gap-2 rounded-md bg-ink px-4 text-[13.5px] font-semibold text-cream hover:bg-ink/90 sm:px-6">
             <ShoppingBag className="h-4 w-4" strokeWidth={1.75} />
