@@ -5,7 +5,7 @@
 // Shopify supplier snapshot. Supplier rows remain explicitly staged
 // (SUPPLIER_PENDING / PENDING) and cannot pass the saleability gate.
 // This gives the storefront a real supplier-backed catalogue preview
-// even when the production database is not provisioned.
+// even when the production Product table is not provisioned.
 // ============================================================
 
 import { readFileSync } from 'node:fs';
@@ -66,7 +66,7 @@ function load(): { products: CatalogProduct[]; categories: CatalogCategory[] } {
   return { products, categories };
 }
 
-function matches(product: CatalogProduct, query: ProductQuery): boolean {
+export function matchesCatalogProduct(product: CatalogProduct, query: ProductQuery): boolean {
   if (query.category && product.categorySlug !== query.category) return false;
   if (query.subcategory && !product.subcategorySlugs.includes(query.subcategory)) return false;
   if (query.space && !product.spaceSlugs.includes(query.space)) return false;
@@ -90,6 +90,8 @@ function matches(product: CatalogProduct, query: ProductQuery): boolean {
       product.spaceSlugs,
       product.collectionSlugs,
       product.materials,
+      product.color,
+      product.sku,
     ]
       .filter(Boolean)
       .join(' ')
@@ -99,7 +101,7 @@ function matches(product: CatalogProduct, query: ProductQuery): boolean {
   return true;
 }
 
-function sortProducts(products: CatalogProduct[], sort: ProductQuery['sort']): CatalogProduct[] {
+export function sortCatalogProducts(products: CatalogProduct[], sort: ProductQuery['sort']): CatalogProduct[] {
   const arr = [...products];
   switch (sort) {
     case 'price-asc':
@@ -113,10 +115,11 @@ function sortProducts(products: CatalogProduct[], sort: ProductQuery['sort']): C
     case 'new':
       return arr.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
     default:
-      // Keep the curated demo assortment first and append supplier validation
-      // candidates afterwards so production previews do not displace the home page.
+      // Real supplier/research candidates come before demo presentation rows,
+      // while Shopify SUPPLIER_PENDING rows remain after the curated assortment.
       return arr.sort(
         (a, b) =>
+          Number(b.complianceStatus === 'PENDING_REVIEW' && !b.isDemo) - Number(a.complianceStatus === 'PENDING_REVIEW' && !a.isDemo) ||
           Number(a.complianceStatus === 'SUPPLIER_PENDING') - Number(b.complianceStatus === 'SUPPLIER_PENDING') ||
           Number(b.featured) - Number(a.featured) ||
           Number(b.isBestSeller) - Number(a.isBestSeller) ||
@@ -128,10 +131,14 @@ function sortProducts(products: CatalogProduct[], sort: ProductQuery['sort']): C
 export class DemoCatalogAdapter implements CatalogAdapter {
   readonly name = 'json-fallback';
 
+  /** Full local fallback set for resilient composite adapters. */
+  getAllProducts(): CatalogProduct[] {
+    return load().products.filter((product) => product.complianceStatus !== 'BLOCKED');
+  }
+
   async list(query: ProductQuery): Promise<ProductListResult> {
-    const { products } = load();
-    const filtered = products.filter((product) => product.complianceStatus !== 'BLOCKED' && matches(product, query));
-    const sorted = sortProducts(filtered, query.sort);
+    const filtered = this.getAllProducts().filter((product) => matchesCatalogProduct(product, query));
+    const sorted = sortCatalogProducts(filtered, query.sort);
     const page = Math.max(1, query.page ?? 1);
     const perPage = Math.min(48, Math.max(1, query.perPage ?? 24));
     const start = (page - 1) * perPage;
@@ -145,8 +152,7 @@ export class DemoCatalogAdapter implements CatalogAdapter {
   }
 
   async getBySlug(slug: string): Promise<CatalogProduct | null> {
-    const { products } = load();
-    return products.find((product) => product.slug === slug && product.complianceStatus !== 'BLOCKED') ?? null;
+    return this.getAllProducts().find((product) => product.slug === slug) ?? null;
   }
 
   async getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {
@@ -156,7 +162,6 @@ export class DemoCatalogAdapter implements CatalogAdapter {
   }
 
   async count(): Promise<number> {
-    const { products } = load();
-    return products.filter((product) => product.complianceStatus !== 'BLOCKED').length;
+    return this.getAllProducts().length;
   }
 }
