@@ -33,8 +33,8 @@ export interface ProductSafety {
   countryOfOrigin: string | null;
   warnings: string[];
   safetyInstructions: string[];
-  ceMarking: string; // "DEMO" | "[TO BE CONFIRMED]"
-  weee: string; // "DEMO" | "[TO BE CONFIRMED]"
+  ceMarking: string;
+  weee: string;
 }
 
 /** UI-facing product shape (serialized, JSON-safe). */
@@ -73,6 +73,8 @@ export interface CatalogProduct {
   reviewCount: number;
   stock: number;
   availability: 'inStock' | 'lowStock' | 'outOfStock';
+  /** Customer-safe API projection; internal hold reasons remain private. */
+  canPurchase?: boolean;
   isBestSeller: boolean;
   isNew: boolean;
   featured: boolean;
