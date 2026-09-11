@@ -80,13 +80,21 @@ export async function repriceCart(input: {
     throw new CheckoutValidationError('One or more products are unavailable');
   }
 
-  // Research/demo rows are allowed to exist for design/research continuity,
-  // but they can never create a payable order. Only supplier-backed products
-  // imported with isDemo=false are eligible for checkout.
-  const nonSaleable = products.find((product) => product.isDemo);
+  // Research, supplier-staged and compliance-pending rows may exist in the
+  // catalogue for merchandising/review continuity, but they can never create
+  // a payable order. A product becomes saleable only after supplier/media
+  // rights and product documentation/compliance have been explicitly cleared.
+  const blockedCompliance = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'SUPPLIER_PENDING']);
+  const blockedDocumentation = new Set(['DEMO', 'PENDING', 'PENDING_REVIEW', 'MISSING']);
+  const nonSaleable = products.find((product) =>
+    product.isDemo
+    || product.requiresComplianceReview
+    || blockedCompliance.has(String(product.complianceStatus || '').toUpperCase())
+    || blockedDocumentation.has(String(product.documentationStatus || '').toUpperCase()),
+  );
   if (nonSaleable) {
     throw new CheckoutValidationError(
-      `“${nonSaleable.name}” is a catalogue preview and is not available for purchase yet.`,
+      `“${nonSaleable.name}” is still being validated for sale and is not available for purchase yet.`,
       409,
     );
   }
