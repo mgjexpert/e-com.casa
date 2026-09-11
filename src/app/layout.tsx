@@ -2,8 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
-import { SiteHeader } from '@/components/layout/site-header';
-import { SiteFooter } from '@/components/layout/site-footer';
+import { SiteChrome } from '@/components/layout/site-chrome';
 import { CookieConsent } from '@/components/cookie/cookie-consent';
 import { ChatWidget } from '@/components/chat/chat-widget';
 import { CartDrawer } from '@/components/cart/cart-drawer';
@@ -53,7 +52,6 @@ export const metadata: Metadata = {
     title: 'E-com.casa — Make Your Space Yours.',
     description: 'Curated pieces for interiors, gardens and everyday living.',
   },
-  // Demo catalogue: noindex until NEXT_PUBLIC_INDEXING_ENABLED=true (production)
   robots: {
     index: process.env.NEXT_PUBLIC_INDEXING_ENABLED === 'true',
     follow: process.env.NEXT_PUBLIC_INDEXING_ENABLED === 'true',
@@ -81,19 +79,12 @@ export default function RootLayout({
         >
           Skip to main content
         </a>
-        <div className="flex min-h-screen flex-col">
-          <SiteHeader />
-          <main id="main-content" className="flex-1">
-            {children}
-          </main>
-          <SiteFooter />
-        </div>
+        <SiteChrome>{children}</SiteChrome>
         <CookieConsent />
         <ChatWidget />
         <CartDrawer />
         <LanguageBoot />
         <Toaster />
-        {/* Organization structured data */}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
