@@ -3,15 +3,17 @@
 // ------------------------------------------------------------
 // The UI must call these abstractions, never Prisma queries
 // scattered across components. Adapter resolution:
-//   1. prisma   — PostgreSQL / Neon (production path)
-//   2. demo-json— /data/catalog artifacts (DB-less fallback)
-// This keeps the demo resilient and gives a clean migration
-// path to the future real catalogue (same facade, new adapter).
+//   1. prisma           — PostgreSQL Product table (final production path)
+//   2. json+research-db — JSON catalogue + normalized ResearchProduct rows
+//   3. json-fallback    — /data/catalog artifacts when DB is unavailable
+// This keeps the storefront resilient while supplier research is promoted
+// into the final normalized Product schema.
 // ============================================================
 
 import { db } from '@/lib/db';
 import { PrismaCatalogAdapter } from './prisma-adapter';
 import { DemoCatalogAdapter } from './demo-adapter';
+import { ResearchPreviewCatalogAdapter } from './research-preview-adapter';
 import { getCompleteTheLook as computeCompleteTheLook, getRelatedProducts as computeRelated, getCrossSell as computeCrossSell } from './recommendations';
 import type {
   CatalogAdapter,
@@ -26,34 +28,46 @@ export { mapProduct } from './prisma-adapter';
 
 const prismaAdapter = new PrismaCatalogAdapter(db);
 const demoAdapter = new DemoCatalogAdapter();
+const researchPreviewAdapter = new ResearchPreviewCatalogAdapter(db, demoAdapter);
 
-let prismaHealthy: boolean | null = null;
+let databaseHealthy: boolean | null = null;
+let productTableReady: boolean | null = null;
 let lastHealthCheck = 0;
 const HEALTH_TTL_MS = 60_000;
 
 async function activeAdapter(): Promise<CatalogAdapter> {
-  if (prismaHealthy === null || Date.now() - lastHealthCheck > HEALTH_TTL_MS) {
+  if (databaseHealthy === null || Date.now() - lastHealthCheck > HEALTH_TTL_MS) {
     try {
       await db.$queryRaw`SELECT 1`;
-      prismaHealthy = true;
+      databaseHealthy = true;
     } catch {
-      prismaHealthy = false;
+      databaseHealthy = false;
+      productTableReady = false;
     }
     lastHealthCheck = Date.now();
   }
-  if (prismaHealthy) {
-    // Prefer Prisma unless the database has no catalogue yet
-    // (fresh Neon project before seed) — then fall back to artifacts.
+
+  if (!databaseHealthy) return demoAdapter;
+
+  // Prefer the normalized Product table whenever it exists and has catalogue
+  // rows. A missing Product table does NOT mean the database is unavailable:
+  // ResearchProduct may already be provisioned and should still feed previews.
+  if (productTableReady !== false) {
     try {
-      if ((await prismaAdapter.count()) > 0) return prismaAdapter;
+      if ((await prismaAdapter.count()) > 0) {
+        productTableReady = true;
+        return prismaAdapter;
+      }
+      productTableReady = false;
     } catch {
-      prismaHealthy = false;
+      productTableReady = false;
     }
   }
-  return demoAdapter;
+
+  return researchPreviewAdapter;
 }
 
-/** Which adapter is currently serving the catalogue (for /api/catalog-status). */
+/** Which adapter is currently serving the catalogue (for diagnostics). */
 export async function catalogStatus(): Promise<{ adapter: string; products: number }> {
   const adapter = await activeAdapter();
   return { adapter: adapter.name, products: await adapter.count() };
