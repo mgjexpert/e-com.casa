@@ -1,30 +1,44 @@
 import { Suspense } from 'react';
 import type { Metadata } from 'next';
 import { ShopClient } from '@/components/product/shop-client';
+import { CatalogCategoryStrip } from '@/components/product/catalog-category-strip';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getCategories } from '@/lib/catalog';
+
+export const dynamic = 'force-dynamic';
 
 export const metadata: Metadata = {
-  title: 'Shop — Wall Panels, Lighting, Garden & Outdoor',
+  title: 'Shop — Revestimentos, Painéis Acústicos & Acessórios',
   description:
-    'Browse the full E-com.casa collection: wood slat wall panels, lighting, garden and outdoor living, decoration and organisation. Free shipping across Europe.',
+    'Explore o catálogo E-com.casa com revestimentos ODEM-PT e sistemas WoodUpp, incluindo painéis ripados, WPC, SPC, rodapés, sancas, painéis acústicos e acessórios.',
   alternates: { canonical: '/shop' },
 };
 
-export default function ShopPage() {
+export default async function ShopPage() {
+  let categories = [];
+  try {
+    categories = await getCategories('shop');
+  } catch {
+    categories = [];
+  }
+
   return (
-    <Suspense
-      fallback={
-        <div className="container-ecom py-10">
-          <Skeleton className="h-9 w-48" />
-          <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
-            {Array.from({ length: 8 }).map((_, i) => (
-              <Skeleton key={i} className="aspect-square w-full rounded-md" />
-            ))}
+    <>
+      <CatalogCategoryStrip categories={categories} />
+      <Suspense
+        fallback={
+          <div className="container-ecom py-10">
+            <Skeleton className="h-9 w-48" />
+            <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-4">
+              {Array.from({ length: 8 }).map((_, i) => (
+                <Skeleton key={i} className="aspect-square w-full rounded-md" />
+              ))}
+            </div>
           </div>
-        </div>
-      }
-    >
-      <ShopClient />
-    </Suspense>
+        }
+      >
+        <ShopClient />
+      </Suspense>
+    </>
   );
 }
