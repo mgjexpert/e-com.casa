@@ -1,0 +1,77 @@
+name: BigBuy authenticated catalogue research
+
+on:
+  workflow_dispatch:
+    inputs:
+      max_products_per_root:
+        description: 'Maximum products to research per root category'
+        required: false
+        default: '100'
+  push:
+    branches: [main]
+    paths:
+      - 'scripts/catalog-suppliers/bigbuy-web-scrape.mjs'
+      - '.github/workflows/catalog-bigbuy-web.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: bigbuy-authenticated-catalogue-research
+  cancel-in-progress: false
+
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    env:
+      DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      BIGBUY_EMAIL: ${{ secrets.BIGBUY_EMAIL }}
+      BIGBUY_PASSWORD: ${{ secrets.BIGBUY_PASSWORD }}
+      BIGBUY_MAX_PRODUCTS_PER_ROOT: ${{ github.event.inputs.max_products_per_root || '100' }}
+      BIGBUY_MAX_CATEGORY_PAGES: '30'
+      BIGBUY_REQUEST_DELAY_MS: '900'
+      BIGBUY_HEADLESS: '1'
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate private configuration
+        shell: bash
+        run: |
+          missing=0
+          for var in DATABASE_URL BIGBUY_EMAIL BIGBUY_PASSWORD; do
+            if [ -z "${!var}" ]; then
+              echo "::error::$var is not configured as a GitHub Actions secret."
+              missing=1
+            fi
+          done
+          if [ "$missing" -ne 0 ]; then
+            echo 'Configure the missing repository secrets and re-run this failed job.'
+            exit 2
+          fi
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install application dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Install ephemeral browser runtime
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+
+      - name: Generate Prisma client
+        run: bunx prisma generate
+
+      - name: Research Casa e cozinha + Iluminação
+        run: node scripts/catalog-suppliers/bigbuy-web-scrape.mjs
