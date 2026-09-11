@@ -1,9 +1,8 @@
 // ============================================================
-// E-com.casa — File-backed catalogue adapter
+// E-com.casa — File-backed partner catalogue adapter
 // ------------------------------------------------------------
-// Production preference is the validated ODEM + WoodUpp partner snapshot.
-// Legacy generated demo/research artefacts are read only as a temporary
-// fallback until the first partner sync has completed successfully.
+// The validated ODEM + WoodUpp snapshot is the only file catalogue source.
+// Historic mock/research datasets are intentionally not read by storefront.
 // ============================================================
 
 import { readFileSync } from 'node:fs';
@@ -19,7 +18,7 @@ import type {
 
 type JsonProduct = Omit<CatalogProduct, 'variants'> & { variants?: ProductVariant[] };
 
-let cache: { products: CatalogProduct[]; categories: CatalogCategory[]; loadedAt: number; source: string } | null = null;
+let cache: { products: CatalogProduct[]; categories: CatalogCategory[]; loadedAt: number } | null = null;
 const CACHE_TTL_MS = 30_000;
 
 function dataPath(file: string): string {
@@ -33,7 +32,7 @@ function readProducts(file: string): CatalogProduct[] {
     if (!Array.isArray(parsed)) return [];
     return parsed.map((product) => ({
       ...product,
-      stockKnown: product.stockKnown ?? true,
+      stockKnown: product.stockKnown ?? false,
       variants: Array.isArray(product.variants) ? product.variants : [],
     }));
   } catch {
@@ -48,7 +47,7 @@ function readCategories(file: string): CatalogCategory[] {
     if (!Array.isArray(parsed.categories)) return [];
     return parsed.categories.map((category, index) => ({
       ...category,
-      id: category.id || `file-category-${category.type}-${category.slug}`,
+      id: category.id || `partner-category-${category.type}-${category.slug}`,
       image: category.image ?? null,
       subtitle: category.subtitle ?? null,
       sortOrder: category.sortOrder ?? index,
@@ -58,36 +57,17 @@ function readCategories(file: string): CatalogCategory[] {
   }
 }
 
-function load(): { products: CatalogProduct[]; categories: CatalogCategory[]; source: string } {
+function load(): { products: CatalogProduct[]; categories: CatalogCategory[] } {
   if (cache && Date.now() - cache.loadedAt < CACHE_TTL_MS) {
-    return { products: cache.products, categories: cache.categories, source: cache.source };
+    return { products: cache.products, categories: cache.categories };
   }
 
   const providerProducts = readProducts('generated-provider-products.json');
-  const providerCategories = readCategories('generated-provider-catalog.json');
+  const categories = readCategories('generated-provider-catalog.json');
+  const products = [...new Map(providerProducts.map((product) => [product.sku, product])).values()];
 
-  let products: CatalogProduct[];
-  let categories: CatalogCategory[];
-  let source: string;
-
-  if (providerProducts.length > 0) {
-    // Once the commercial partner snapshot exists it is authoritative. Never
-    // mix it with old BigBuy/Shopify research rows or presentation mocks.
-    products = [...new Map(providerProducts.map((product) => [product.sku, product])).values()];
-    categories = providerCategories;
-    source = 'partner-snapshot';
-  } else {
-    const demoProducts = readProducts('generated-products.json');
-    const supplierProducts = readProducts('generated-supplier-products.json');
-    products = [
-      ...new Map([...demoProducts, ...supplierProducts].map((product) => [product.sku, product])).values(),
-    ];
-    categories = readCategories('generated-catalog.json');
-    source = 'legacy-fallback';
-  }
-
-  cache = { products, categories, source, loadedAt: Date.now() };
-  return { products, categories, source };
+  cache = { products, categories, loadedAt: Date.now() };
+  return { products, categories };
 }
 
 export function matchesCatalogProduct(product: CatalogProduct, query: ProductQuery): boolean {
@@ -152,15 +132,14 @@ export function sortCatalogProducts(products: CatalogProduct[], sort: ProductQue
 }
 
 export class DemoCatalogAdapter implements CatalogAdapter {
-  readonly name = 'file-catalog';
+  readonly name = 'partner-file-catalog';
 
-  /** Full local fallback set for resilient server-side catalogue reads. */
   getAllProducts(): CatalogProduct[] {
     return load().products.filter((product) => product.complianceStatus !== 'BLOCKED');
   }
 
   getSource(): string {
-    return load().source;
+    return 'partner-snapshot';
   }
 
   async list(query: ProductQuery): Promise<ProductListResult> {
