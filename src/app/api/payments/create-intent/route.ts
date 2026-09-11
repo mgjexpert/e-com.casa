@@ -8,7 +8,7 @@ import { db } from '@/lib/db';
 import { rateLimit } from '@/lib/rate-limit';
 import { tokenMatches } from '@/lib/checkout';
 import { getPaymentProvider } from '@/lib/payments/xpayments-provider';
-import { isPaymentConfigured } from '@/lib/payments/payments-config';
+import { getPaymentConfig, isPaymentConfigured } from '@/lib/payments/payments-config';
 import { resolvePaymentCapabilities } from '@/lib/payments/payment-capabilities';
 import { toMinorUnit } from '@/lib/payments/amounts';
 import { PaymentError } from '@/lib/payments/payment-errors';
@@ -37,6 +37,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Online payments are temporarily unavailable. Please try again shortly.' }, { status: 503 });
     }
 
+    const config = getPaymentConfig();
+    // isPaymentConfigured() already guarantees this, but keep the response
+    // fail-closed rather than ever initialising Stripe.js with an empty key.
+    if (!config.publishableKey) {
+      return NextResponse.json({ error: 'Online payments are temporarily unavailable. Please try again shortly.' }, { status: 503 });
+    }
+
     const provider = getPaymentProvider();
     const capabilities = resolvePaymentCapabilities(order.country, order.currency);
     const amountMinor = toMinorUnit(order.total, order.currency);
@@ -48,7 +55,16 @@ export async function POST(req: NextRequest) {
       try { intent = await provider.retrievePaymentIntent(existing.paymentIntentId); } catch { intent = null; }
       if (intent && intent.amountMinor === amountMinor && REUSABLE.includes(intent.status)) {
         await db.payment.update({ where: { id: existing.id }, data: { status: intent.status, provider: provider.name, providerAccount: intent.xpaymentsTransactionId ?? existing.providerAccount } });
-        return NextResponse.json({ paymentIntentId: intent.id, xpaymentsTransactionId: intent.xpaymentsTransactionId ?? existing.providerAccount, clientSecret: intent.clientSecret, amountMinor, currency: order.currency, environment: provider.getPaymentCapabilities().environment, methods: capabilities.methods.filter((m) => m.enabled) });
+        return NextResponse.json({
+          publishableKey: config.publishableKey,
+          paymentIntentId: intent.id,
+          xpaymentsTransactionId: intent.xpaymentsTransactionId ?? existing.providerAccount,
+          clientSecret: intent.clientSecret,
+          amountMinor,
+          currency: order.currency,
+          environment: provider.getPaymentCapabilities().environment,
+          methods: capabilities.methods.filter((m) => m.enabled),
+        });
       }
     }
 
@@ -66,7 +82,16 @@ export async function POST(req: NextRequest) {
       db.paymentAttempt.create({ data: { paymentId: payment.id, provider: provider.name, providerReference: intent.id, status: intent.status, amount: order.total, currency: order.currency } }),
     ]);
 
-    return NextResponse.json({ paymentIntentId: intent.id, xpaymentsTransactionId: intent.xpaymentsTransactionId ?? payment.providerAccount, clientSecret: intent.clientSecret, amountMinor, currency: order.currency, environment: provider.getPaymentCapabilities().environment, methods: capabilities.methods.filter((m) => m.enabled) });
+    return NextResponse.json({
+      publishableKey: config.publishableKey,
+      paymentIntentId: intent.id,
+      xpaymentsTransactionId: intent.xpaymentsTransactionId ?? payment.providerAccount,
+      clientSecret: intent.clientSecret,
+      amountMinor,
+      currency: order.currency,
+      environment: provider.getPaymentCapabilities().environment,
+      methods: capabilities.methods.filter((m) => m.enabled),
+    });
   } catch (error) {
     const perr = error instanceof PaymentError ? error : null;
     console.error('POST /api/payments/create-intent error', perr?.code ?? error);
