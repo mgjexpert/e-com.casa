@@ -44,7 +44,7 @@ jobs:
 
       - name: Commit refreshed snapshot
         run: |
-          if git diff --quiet -- data/catalog/generated-supplier-products.json; then
+          if [ -z "$(git status --porcelain -- data/catalog/generated-supplier-products.json)" ]; then
             echo 'Supplier snapshot is unchanged.'
             exit 0
           fi
