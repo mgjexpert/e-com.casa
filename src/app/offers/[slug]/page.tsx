@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { OfferPageV2 } from '@/components/offers/offer-page-v2';
+import { OfferPageV3 } from '@/components/offers/offer-page-v3';
 import { getOfferSlugs } from '@/lib/offers/registry';
 import { resolveOffer } from '@/lib/offers/resolver';
 import { resolveOfferMarket } from '@/lib/offers/geo';
@@ -61,9 +61,8 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
   const seo = offer.translations?.[market.language]?.seo ?? offer.seo;
   const image = product.image?.startsWith('http') ? product.image : `${COMPANY.domain}${product.image}`;
 
-  // No AggregateRating, Review, price Offer or availability schema is emitted
-  // unless verified source data exists. The visual review layer may still show
-  // clearly-labelled staging/demo UI without presenting it as factual SEO data.
+  // Keep campaign social proof separate from factual SEO markup. Ratings/reviews
+  // are only added to schema when a verified customer-review source is wired in.
   const structuredData = {
     '@context': 'https://schema.org',
     '@type': 'WebPage',
@@ -84,7 +83,7 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
 
   return (
     <>
-      <OfferPageV2 offer={offer} product={product} market={market} />
+      <OfferPageV3 offer={offer} product={product} market={market} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
