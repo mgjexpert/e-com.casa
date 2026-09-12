@@ -6,6 +6,32 @@ import { cache } from 'react';
 import type { OfferConfig, OfferReviewItem } from './types';
 import type { CatalogProduct } from '@/lib/catalog/types';
 export interface ResolvedOffer { offer: OfferConfig; product: CatalogProduct }
+
+async function getVerifiedReviews(productSlug: string): Promise<OfferReviewItem[]> {
+  try {
+    const reviews = await db.review.findMany({
+      where: { productSlug, status: 'APPROVED', verified: true },
+      orderBy: { createdAt: 'desc' },
+      take: 50,
+    });
+
+    return reviews.map((review) => ({
+      author: review.author,
+      location: review.country,
+      date: review.createdAt.toISOString().slice(0, 10),
+      rating: review.rating,
+      body: review.body,
+      verified: true,
+    }));
+  } catch (error) {
+    // Reviews are an enhancement, never a dependency for selling the product.
+    // Production instances created before the Review migration must continue
+    // to render the approved funnel without inventing social proof.
+    console.warn('[offers] Verified reviews unavailable; rendering without reviews.', error);
+    return [];
+  }
+}
+
 export function configForProduct(product: CatalogProduct, slug: string, reviews: OfferReviewItem[] = []): OfferConfig {
   return {
     slug, productSlug: product.slug,
@@ -33,24 +59,13 @@ export const resolveOffer = cache(async (slug: string): Promise<ResolvedOffer | 
   if (!isOfferActive(offer)) return null;
   const product = await getProduct(offer.productSlug);
   if (!product || !product.offerSlug) return null;
-  const reviews = await db.review.findMany({
-    where: { productSlug: product.slug, status: 'APPROVED', verified: true },
-    orderBy: { createdAt: 'desc' },
-    take: 50,
-  });
+  const reviews = await getVerifiedReviews(product.slug);
   // Preserve the public alias requested by the customer (notably
   // /offers/painel-ripado) while the underlying DB offer keeps its stable
   // product-based slug. This keeps canonical/share links and attribution on
   // the URL that was actually opened.
   return {
-    offer: configForProduct(product, slug, reviews.map((review) => ({
-      author: review.author,
-      location: review.country,
-      date: review.createdAt.toISOString().slice(0, 10),
-      rating: review.rating,
-      body: review.body,
-      verified: true,
-    }))),
+    offer: configForProduct(product, slug, reviews),
     product,
   };
 });
