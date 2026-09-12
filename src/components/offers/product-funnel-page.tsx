@@ -12,6 +12,14 @@ import { trackOfferEvent } from '@/lib/offers/analytics';
 import type { CatalogProduct } from '@/lib/catalog/types';
 import type { OfferConfig, OfferMarketContext, OfferReviewItem } from '@/lib/offers/types';
 
+type DetailRow = [string, string];
+type DetailGroup = {
+  number: string;
+  title: string;
+  subtitle: string;
+  rows: DetailRow[];
+};
+
 function uniqueImages(product: CatalogProduct, offer: OfferConfig): string[] {
   return [...new Set([
     product.image,
@@ -93,10 +101,10 @@ function OfferTransformation({ product, offer, image }: { product: CatalogProduc
 
 function OfferProductDetails({ product, offer }: { product: CatalogProduct; offer: OfferConfig }) {
   const [open, setOpen] = useState(0);
-  const installation = offer.installation.length
-    ? offer.installation.map((step, index) => [`${index + 1}. ${step.title}`, step.body] as const)
-    : [['Instalação', 'Consulte as instruções do fabricante antes da aplicação.'] as const];
-  const groups = [
+  const installation: DetailRow[] = offer.installation.length
+    ? offer.installation.map((step, index): DetailRow => [`${index + 1}. ${step.title}`, step.body])
+    : [['Instalação', 'Consulte as instruções do fabricante antes da aplicação.']];
+  const groups: DetailGroup[] = [
     {
       number: '01',
       title: 'Medidas e configuração',
