@@ -525,6 +525,7 @@ async function main() {
   sourceCounts['woodupp:products'] = woodUppRows.length;
   for (const row of woodUppRows) {
     const category = woodUppCategory(row);
+    if (category.slug === 'amostras') continue;
     if (!categoryMap.has(category.slug)) {
       categoryMap.set(category.slug, {
         id: `category-shop-${category.slug}`,
@@ -556,6 +557,14 @@ async function main() {
   }
 
   const deduped = [...new Map(products.map((product) => [`${product.supplierKey}:${product.supplierProductId}`, product])).values()];
+  for (const product of deduped) {
+    if (['acessorios', 'produtos-instalacao', 'acessorios-divisorias'].includes(product.categorySlug)) {
+      product.subcategorySlugs = [product.subcategorySlugs, product.categorySlug].filter(Boolean).join(',');
+      product.categorySlug = 'acessorios-instalacao';
+    }
+  }
+  for (const slug of ['amostras', 'acessorios', 'produtos-instalacao', 'acessorios-divisorias']) categoryMap.delete(slug);
+  categoryMap.set('acessorios-instalacao', { id: 'category-shop-acessorios-instalacao', slug: 'acessorios-instalacao', name: 'Acessórios e instalação', type: 'shop', image: null, subtitle: 'Complementos e produtos de instalação', sortOrder: 20 });
   const odemCount = deduped.filter((product) => product.supplierKey === 'odem').length;
   const woodUppCount = deduped.filter((product) => product.supplierKey === 'woodupp').length;
 
@@ -586,7 +595,7 @@ async function main() {
     woodUppCategoryCounts,
     sourceCounts,
     exactStockAvailable: false,
-    saleability: 'BLOCKED_PENDING_STOCK_AND_COMPLIANCE',
+    saleability: 'MERCHANT_RELEASE_POLICY_WITH_DOCUMENTARY_STATUS_RETAINED',
     media: {
       odem: 'PARTNER_CONFIRMED_BY_MERCHANT',
       woodupp: 'UNCONFIRMED_PLACEHOLDER_ONLY',

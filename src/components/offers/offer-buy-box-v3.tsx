@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -36,7 +37,8 @@ function numberFromDimensions(dimensions?: string | null): { height: number; wid
   return { height: values[0], width: values[1] };
 }
 
-export function OfferBuyBoxV3({ product, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
+export function OfferBuyBoxV3({ product: initialProduct, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
+  const product = useLiveProduct(initialProduct);
   const router = useRouter();
   const add = useCart((state) => state.add);
   const openCartDrawer = useCartDrawer((state) => state.open);
@@ -88,7 +90,7 @@ export function OfferBuyBoxV3({ product, offerSlug }: { product: CatalogProduct;
           : product.subtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: cartStockLimit(product),
+        automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },

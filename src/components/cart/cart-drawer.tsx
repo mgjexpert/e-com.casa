@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { AccessoryUpsell } from './accessory-upsell';
 import Image from 'next/image';
 import { Minus, Plus, ShoppingBag, Trash2, Truck, Lock } from 'lucide-react';
 import {
@@ -60,32 +61,11 @@ export function CartDrawer() {
           </div>
         ) : (
           <>
-            {/* Free shipping progress */}
-            <div className="border-b border-border/70 bg-cream/60 px-5 py-3">
-              <p className="flex items-center gap-1.5 text-[12.5px] text-foreground/80">
-                <Truck className="h-4 w-4 shrink-0 text-olive" strokeWidth={1.5} />
-                {remaining > 0 ? (
-                  <>
-                    {t('drawer.freeShippingRemaining', { amount: formatPrice(remaining.toFixed(2)) }).split(formatPrice(remaining.toFixed(2)))[0]}
-                    <strong className="font-semibold">{formatPrice(remaining.toFixed(2))}</strong>
-                    {t('drawer.freeShippingRemaining', { amount: formatPrice(remaining.toFixed(2)) }).split(formatPrice(remaining.toFixed(2)))[1]}
-                  </>
-                ) : (
-                  <><strong className="font-semibold text-olive">{t('drawer.freeShippingDone')}</strong> {t('drawer.freeShippingDoneSuffix')}</>
-                )}
-              </p>
-              <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-border/70" role="progressbar" aria-valuenow={Math.round(progress)} aria-valuemin={0} aria-valuemax={100} aria-label="Progress towards free shipping">
-                <div
-                  className="h-full rounded-full bg-olive transition-all duration-500"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
-            </div>
-
+            <div className="px-5"><p className="text-xs text-olive">Portes grátis: PT e ES · Europa acima de 50 €</p><AccessoryUpsell /></div>
             {/* Line items */}
             <ul className="flex-1 divide-y divide-border/60 overflow-y-auto px-5 thin-scrollbar" aria-label="Cart items">
               {lines.map((line) => (
-                <li key={line.slug} className="flex gap-4 py-4">
+                <li key={`${line.slug}|${line.variantId ?? ''}`} className="flex gap-4 py-4">
                   <Link href={`/product/${line.slug}`} onClick={() => setOpen(false)} className="relative h-20 w-20 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted/40">
                     <Image src={line.image} alt={line.name} fill sizes="80px" className="object-cover" />
                   </Link>
@@ -105,7 +85,7 @@ export function CartDrawer() {
                       <div className="flex h-8 items-center rounded-md border border-input">
                         <button
                           type="button"
-                          onClick={() => setQty(line.slug, line.quantity - 1)}
+                          onClick={() => setQty(`${line.slug}|${line.variantId ?? ''}`, line.quantity - 1)}
                           className="flex h-full w-8 items-center justify-center transition-colors hover:bg-accent"
                           aria-label={t('drawer.decrease', { name: line.name })}
                         >
@@ -114,7 +94,7 @@ export function CartDrawer() {
                         <span className="w-8 text-center text-[13px] font-medium tabular-nums" aria-live="polite">{line.quantity}</span>
                         <button
                           type="button"
-                          onClick={() => setQty(line.slug, line.quantity + 1)}
+                          onClick={() => setQty(`${line.slug}|${line.variantId ?? ''}`, line.quantity + 1)}
                           disabled={line.quantity >= (line.maxStock ?? Number.MAX_SAFE_INTEGER)}
                           className="flex h-full w-8 items-center justify-center transition-colors hover:bg-accent disabled:opacity-40"
                           aria-label={t('drawer.increase', { name: line.name })}
@@ -124,7 +104,7 @@ export function CartDrawer() {
                       </div>
                       <button
                         type="button"
-                        onClick={() => remove(line.slug)}
+                        onClick={() => remove(`${line.slug}|${line.variantId ?? ''}`)}
                         className="flex items-center gap-1 text-[12px] text-muted-foreground transition-colors hover:text-terracotta"
                         aria-label={t('drawer.remove', { name: line.name })}
                       >

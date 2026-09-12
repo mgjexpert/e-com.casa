@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useEffect, useRef, useState } from 'react';
 import Image from 'next/image';
@@ -13,7 +14,8 @@ import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
-export function StickyAddToCart({ product }: { product: Product }) {
+export function StickyAddToCart({ product: initialProduct }: { product: Product }) {
+  const product = useLiveProduct(initialProduct);
   const t = useT();
   const add = useCart((s) => s.add);
   const openCartDrawer = useCartDrawer((s) => s.open);
@@ -45,7 +47,7 @@ export function StickyAddToCart({ product }: { product: Product }) {
         subtitle: product.subtitle,
         price: product.price,
         image: product.image,
-        maxStock: cartStockLimit(product),
+        automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
       },
       qty,
     );

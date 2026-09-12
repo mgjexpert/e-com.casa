@@ -48,24 +48,6 @@
       "sortOrder": 5
     },
     {
-      "id": "category-shop-amostras",
-      "slug": "amostras",
-      "name": "Amostras",
-      "type": "shop",
-      "image": null,
-      "subtitle": "Amostras de cor e acabamento WoodUpp.",
-      "sortOrder": 6
-    },
-    {
-      "id": "category-shop-produtos-instalacao",
-      "slug": "produtos-instalacao",
-      "name": "Produtos de Instalação",
-      "type": "shop",
-      "image": null,
-      "subtitle": "Fixação, remates e consumíveis de instalação.",
-      "sortOrder": 7
-    },
-    {
       "id": "category-shop-paineis-exterior",
       "slug": "paineis-exterior",
       "name": "Painéis de Exterior",
@@ -82,24 +64,6 @@
       "image": null,
       "subtitle": "Akupanel, Akupixel e sistemas acústicos WoodUpp.",
       "sortOrder": 9
-    },
-    {
-      "id": "category-shop-acessorios",
-      "slug": "acessorios",
-      "name": "Acessórios",
-      "type": "shop",
-      "image": null,
-      "subtitle": "Acessórios funcionais e decorativos para sistemas WoodUpp.",
-      "sortOrder": 10
-    },
-    {
-      "id": "category-shop-acessorios-divisorias",
-      "slug": "acessorios-divisorias",
-      "name": "Acessórios para Divisórias",
-      "type": "shop",
-      "image": null,
-      "subtitle": "Acessórios e complementos do sistema Embrace.",
-      "sortOrder": 11
     },
     {
       "id": "category-shop-divisorias",
@@ -172,6 +136,15 @@
       "image": null,
       "subtitle": "Categoria preparada; ainda sem produtos de fornecedor aprovados.",
       "sortOrder": 118
+    },
+    {
+      "id": "category-shop-acessorios-instalacao",
+      "slug": "acessorios-instalacao",
+      "name": "Acessórios e instalação",
+      "type": "shop",
+      "image": null,
+      "subtitle": "Complementos e produtos de instalação",
+      "sortOrder": 20
     }
   ],
   "subcategories": [],
@@ -183,5 +156,5 @@
     "odem:sancas": 6,
     "woodupp:products": 363
   },
-  "note": "Real ODEM/WoodUpp supplier catalogue snapshot. Historic mock products are not mixed into this snapshot. Exact inventory and compliance/documentation must be approved before checkout."
+  "note": "Supplier base prices retained. Samples excluded. Direct manufacture inventory and merchant commercial release; documentary status retained."
 }

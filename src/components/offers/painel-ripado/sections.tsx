@@ -32,7 +32,7 @@ export function PanelCampaignStory() {
             <video ref={video} src={`${PANEL_ASSET_ROOT}/videos/nuralta-hist.mp4`} poster={`${PANEL_ASSET_ROOT}/videos/nuralta-hist-poster.webp`} loop playsInline preload="metadata" className="h-full w-full object-cover" onClick={toggle} />
             <button type="button" onClick={toggle} aria-label={playing ? 'Pausar vídeo' : 'Reproduzir vídeo'} className="absolute left-1/2 top-1/2 grid h-12 w-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border border-white/40 bg-[#201a17]/70 text-white"><Play className="h-5 w-5" fill="currentColor" /></button>
           </div>
-          <p className="mt-5 text-[15px] leading-7 text-[#f7f3ef]">Preço promocional exclusivo desta offer, aplicado no checkout E-com.casa através de uma regra comercial validada no servidor.</p>
+          <p className="mt-5 text-[15px] leading-7 text-[#f7f3ef]">O preço e as opções apresentados correspondem ao catálogo ODEM. Quando existir uma promoção, o prazo e as condições são indicados junto ao preço.</p>
         </div>
         <a href="#configurar-painel" className="inline-flex min-h-12 items-center gap-3 rounded-full bg-[#c79a68] px-5 text-sm font-bold text-[#201a17]">Escolher cor e tamanho<ArrowRight className="h-4 w-4" /></a>
       </div>

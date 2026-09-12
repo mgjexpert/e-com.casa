@@ -1,5 +1,6 @@
 import type { CatalogProduct } from './types';
 import { hasStock } from './inventory';
+import { merchantReleased } from './commerce';
 
 const BLOCKED_COMPLIANCE = new Set([
   'DEMO',
@@ -20,14 +21,16 @@ const BLOCKED_DOCUMENTATION = new Set([
 type SaleabilityProduct = Pick<
   CatalogProduct,
   'isDemo' | 'requiresComplianceReview' | 'complianceStatus' | 'documentationStatus' | 'availability' | 'stock' | 'stockKnown' | 'stockUnlimited'
-> & Pick<CatalogProduct, 'canPurchase'>;
+> & Pick<CatalogProduct, 'canPurchase'> & Partial<Pick<CatalogProduct, 'supplierKey' | 'priceCents'>>;
 
 export function isCatalogProductSaleable(product: SaleabilityProduct): boolean {
   // Once a product has crossed the server -> browser boundary, the internal
   // hold reasons are intentionally stripped. In that case the server-computed
   // customer-safe purchase decision is authoritative.
   if (typeof product.canPurchase === 'boolean') return product.canPurchase;
+  if (product.priceCents !== undefined && product.priceCents <= 0) return false;
 
+  if (merchantReleased(product)) return hasStock(product);
   if (product.isDemo || product.requiresComplianceReview) return false;
 
   if (BLOCKED_COMPLIANCE.has(String(product.complianceStatus || '').toUpperCase())) return false;
@@ -49,6 +52,7 @@ export function getCatalogSaleabilityLabel(product: SaleabilityProduct): string 
     return 'Temporarily unavailable';
   }
 
+  if (merchantReleased(product) && hasStock(product)) return product.stockUnlimited ? 'Made to order' : 'Available';
   if (product.isDemo) return 'Preview';
   if (!product.stockUnlimited && product.stockKnown === false && product.availability !== 'outOfStock') return 'Availability to confirm';
   if (

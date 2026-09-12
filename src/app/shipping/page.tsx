@@ -28,7 +28,7 @@ const SUMMARY = [
   },
   {
     icon: Euro,
-    title: `Free standard over ${formatPrice(FREE_SHIPPING_THRESHOLD)}`,
+    title: `Free PT & ES · Europe over ${formatPrice(FREE_SHIPPING_THRESHOLD)}`,
     label: 'Free shipping threshold',
     sub: 'automatically applied at checkout',
   },
@@ -92,9 +92,8 @@ export default function ShippingPage() {
           <div className="flex gap-3">
             <Info className="mt-0.5 h-4.5 w-4.5 shrink-0 text-amber-star" strokeWidth={1.5} />
             <p className="text-[13px] leading-relaxed text-foreground/75">
-              <span className="font-medium text-foreground">Draft configuration.</span>{' '}
-              FREE_SHIPPING_THRESHOLD and delivery times are placeholders pending logistics configuration. The
-              costs and estimates below reflect the current checkout settings and may change before go-live.
+              <span className="font-medium text-foreground">Delivery conditions.</span>{' '}
+              Delivery is free to Portugal and Spain with no minimum spend, and to other supported European destinations on orders strictly above €50 after discounts. Delivery dates for made-to-order products must be confirmed for your order.
             </p>
           </div>
         </div>
@@ -215,7 +214,7 @@ export default function ShippingPage() {
               <li className="flex gap-3">
                 <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-olive" aria-hidden="true" />
                 <span>
-                  <strong className="font-semibold text-foreground">Free standard shipping</strong> on orders
+                  <strong className="font-semibold text-foreground">Free shipping to Portugal and Spain at any order value.</strong> Other supported European destinations: orders
                   over {formatPrice(FREE_SHIPPING_THRESHOLD)} — applied automatically at checkout.
                 </span>
               </li>

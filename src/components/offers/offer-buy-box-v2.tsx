@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -24,7 +25,8 @@ const BUY_COPY: Record<OfferLanguage, { current: string; reference: string; inSt
   nl: { current: 'Huidige prijs', reference: 'Referentieprijs uit catalogus', inStock: 'Op voorraad', finish: 'Afwerking', decrease: 'Aantal verlagen', increase: 'Aantal verhogen', buyNow: 'Nu kopen', validating: 'Aankoop wordt gevalideerd', add: 'In winkelwagen', wait: 'Wacht op productvalidatie', note: 'Deze Offer hergebruikt de bestaande catalogus, winkelwagen, checkout en XPayments. Er wordt geen parallel prijs- of betaalsysteem gemaakt.' },
 };
 
-export function OfferBuyBoxV2({ product, offerSlug, initialLanguage }: { product: CatalogProduct; offerSlug: string; initialLanguage: OfferLanguage }) {
+export function OfferBuyBoxV2({ product: initialProduct, offerSlug, initialLanguage }: { product: CatalogProduct; offerSlug: string; initialLanguage: OfferLanguage }) {
+  const product = useLiveProduct(initialProduct);
   const router = useRouter();
   const langStore = useLanguage((state) => state.lang);
   const lang = (['en', 'pt', 'fr', 'de', 'es', 'it', 'nl'].includes(langStore) ? langStore : initialLanguage) as OfferLanguage;
@@ -50,7 +52,7 @@ export function OfferBuyBoxV2({ product, offerSlug, initialLanguage }: { product
   };
   const addLine = () => {
     if (!saleable) return;
-    add({ slug: product.slug, name: product.name, subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle, price: unitPrice, image: product.image, maxStock: cartStockLimit(product), variantId: selectedVariant?.id, variantLabel: selectedVariant?.name }, quantity);
+    add({ slug: product.slug, name: product.name, subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle, price: unitPrice, image: product.image, automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product), variantId: selectedVariant?.id, variantLabel: selectedVariant?.name }, quantity);
   };
   const addToCart = () => {
     if (!saleable) return;

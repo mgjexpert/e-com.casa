@@ -11,8 +11,9 @@
 // ============================================================
 
 import { db } from '@/lib/db';
+import { applyCommerce } from './commerce';
 import { PrismaCatalogAdapter } from './prisma-adapter';
-import { DemoCatalogAdapter } from './demo-adapter';
+import { DemoCatalogAdapter, matchesCatalogProduct, sortCatalogProducts } from './demo-adapter';
 import { getCompleteTheLook as computeCompleteTheLook, getRelatedProducts as computeRelated, getCrossSell as computeCrossSell } from './recommendations';
 import type {
   CatalogAdapter,
@@ -76,17 +77,24 @@ export async function catalogStatus(): Promise<{ adapter: string; products: numb
   };
 }
 
+let rawCache: { adapter: string; at: number; products: CatalogProduct[] } | null = null;
 export async function getProducts(query: ProductQuery = {}): Promise<ProductListResult> {
-  const result = await (await activeAdapter()).list(query);
-  return {
-    ...result,
-    products: result.products,
-  };
+  const adapter = await activeAdapter();
+  if (!rawCache || rawCache.adapter !== adapter.name || Date.now() - rawCache.at > 30000) {
+    const first = await adapter.list({ perPage: 48 });
+    const rest = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, i) => adapter.list({ perPage: 48, page: i + 2 })));
+    rawCache = { adapter: adapter.name, at: Date.now(), products: [first, ...rest].flatMap(r => r.products) };
+  }
+  const priced = rawCache.products.map(p => applyCommerce(p)).filter(p => matchesCatalogProduct(p, query));
+  const sorted = sortCatalogProducts(priced, query.sort);
+  const page = Math.max(1, query.page ?? 1);
+  const perPage = Math.min(48, Math.max(1, query.perPage ?? 24));
+  return { products: sorted.slice((page - 1) * perPage, page * perPage), total: sorted.length, page, perPage, totalPages: Math.max(1, Math.ceil(sorted.length / perPage)) };
 }
 
 export async function getProduct(slug: string): Promise<CatalogProduct | null> {
   const product = await (await activeAdapter()).getBySlug(slug);
-  return product;
+  return product ? applyCommerce(product) : null;
 }
 
 export async function getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {

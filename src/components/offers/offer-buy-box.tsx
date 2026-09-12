@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -12,7 +13,8 @@ import { trackOfferEvent } from '@/lib/offers/analytics';
 import type { CatalogProduct } from '@/lib/catalog/types';
 import { cn } from '@/lib/utils';
 
-export function OfferBuyBox({ product, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
+export function OfferBuyBox({ product: initialProduct, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
+  const product = useLiveProduct(initialProduct);
   const router = useRouter();
   const add = useCart((state) => state.add);
   const openCartDrawer = useCartDrawer((state) => state.open);
@@ -47,7 +49,7 @@ export function OfferBuyBox({ product, offerSlug }: { product: CatalogProduct; o
         subtitle: selectedVariant ? `${product.subtitle ? `${product.subtitle} · ` : ''}${selectedVariant.name}` : product.subtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: cartStockLimit(product),
+        automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },

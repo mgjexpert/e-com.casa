@@ -1,5 +1,8 @@
 'use client';
 
+import { calculatePromoDiscount } from '@/lib/constants';
+import { shippingPrice, freeShipping as qualifiesForFreeShipping } from '@/lib/shipping';
+import { AccessoryUpsell } from '@/components/cart/accessory-upsell';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Minus, Plus, Trash2, Heart, ShoppingBag, ShieldCheck, RotateCcw, Truck, Tag } from 'lucide-react';
@@ -33,9 +36,9 @@ export default function CartPage() {
   const lines = mounted ? cart.lines : [];
   const subtotal = mounted ? toNumber(cart.subtotal().toFixed(2)) : 0;
   const promo = cart.promoCode ? PROMO_CODES[cart.promoCode] : null;
-  const discount = promo ? (subtotal * promo.value) / 100 : 0;
-  const freeShipping = subtotal - discount >= FREE_SHIPPING_THRESHOLD;
-  const shippingEstimate = freeShipping ? 0 : SHIPPING_OPTIONS[0].price;
+  const discount = calculatePromoDiscount(lines, promo);
+  const freeShipping = qualifiesForFreeShipping('PT', subtotal - discount);
+  const shippingEstimate = shippingPrice('PT', subtotal - discount);
   const total = Math.max(0, subtotal - discount + shippingEstimate);
   const progress = Math.min(100, ((subtotal - discount) / FREE_SHIPPING_THRESHOLD) * 100);
 
@@ -60,9 +63,9 @@ export default function CartPage() {
   };
 
   const moveToWishlist = (slug: string) => {
-    const line = lines.find((l) => l.slug === slug);
+    const line = lines.find((l) => `${l.slug}|${l.variantId ?? ''}` === slug);
     if (!line) return;
-    wishlist.toggle(slug);
+    wishlist.toggle(line.slug);
     cart.remove(slug);
     toast({ title: t('cart.movedToast'), description: line.name });
   };
@@ -95,7 +98,7 @@ export default function CartPage() {
       <div className="mt-6 rounded-lg border border-border bg-cream/60 p-4">
         <p className="text-[13px]">
           {freeShipping ? (
-            <span className="font-medium text-olive">{t('cart.freeShippingUnlockedFull')}</span>
+            <span className="font-medium text-olive">Portes grátis para Portugal e Espanha. Outros destinos europeus: compras superiores a 50 €.</span>
           ) : (
             <>
               {t('cart.freeShippingAway', { amount: formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)) }).split(formatPrice(FREE_SHIPPING_THRESHOLD - (subtotal - discount)))[0]}
@@ -122,7 +125,7 @@ export default function CartPage() {
         <section aria-label={t('cart.itemsRegion')}>
           <ul className="divide-y divide-border border-y border-border">
             {lines.map((line) => (
-              <li key={line.slug} className="flex gap-4 py-5">
+              <li key={`${line.slug}|${line.variantId ?? ''}`} className="flex gap-4 py-5">
                 <Link href={`/product/${line.slug}`} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-md border border-border/60 bg-muted/40 sm:h-28 sm:w-28">
                   <Image src={line.image} alt={line.name} fill sizes="112px" className="object-cover" />
                 </Link>
@@ -140,7 +143,7 @@ export default function CartPage() {
                     <div className="flex h-9 items-center rounded-md border border-input">
                       <button
                         type="button"
-                        onClick={() => cart.setQty(line.slug, line.quantity - 1)}
+                        onClick={() => cart.setQty(`${line.slug}|${line.variantId ?? ''}`, line.quantity - 1)}
                         className="flex h-full w-9 items-center justify-center hover:bg-accent"
                         aria-label={t('cart.decrease', { name: line.name })}
                       >
@@ -149,7 +152,7 @@ export default function CartPage() {
                       <span className="w-8 text-center text-[13px] font-medium tabular-nums">{line.quantity}</span>
                       <button
                         type="button"
-                        onClick={() => cart.setQty(line.slug, line.quantity + 1)}
+                        onClick={() => cart.setQty(`${line.slug}|${line.variantId ?? ''}`, line.quantity + 1)}
                         className="flex h-full w-9 items-center justify-center hover:bg-accent"
                         aria-label={t('cart.increase', { name: line.name })}
                       >
@@ -159,14 +162,14 @@ export default function CartPage() {
                     <div className="flex items-center gap-4">
                       <button
                         type="button"
-                        onClick={() => moveToWishlist(line.slug)}
+                        onClick={() => moveToWishlist(`${line.slug}|${line.variantId ?? ''}`)}
                         className="flex items-center gap-1.5 text-[12px] text-muted-foreground transition-colors hover:text-foreground"
                       >
                         <Heart className="h-3.5 w-3.5" strokeWidth={1.75} /> {t('cart.saveForLater')}
                       </button>
                       <button
                         type="button"
-                        onClick={() => cart.remove(line.slug)}
+                        onClick={() => cart.remove(`${line.slug}|${line.variantId ?? ''}`)}
                         className="flex items-center gap-1.5 text-[12px] text-muted-foreground transition-colors hover:text-destructive"
                         aria-label={t('cart.removeFor', { name: line.name })}
                       >
@@ -230,6 +233,7 @@ export default function CartPage() {
               )}
             </div>
 
+            <AccessoryUpsell />
             <Separator className="my-5" />
             <dl className="space-y-3 text-[13.5px]">
               <div className="flex justify-between">

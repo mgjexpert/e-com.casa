@@ -35,6 +35,7 @@ export function toStorefrontProduct(product: CatalogProduct): CatalogProduct {
     name: variant.name,
     value: variant.value,
     priceDeltaCents: variant.priceDeltaCents,
+    regularPriceDeltaCents: variant.regularPriceDeltaCents,
     image: variant.image,
     availability: variant.availability,
   }));

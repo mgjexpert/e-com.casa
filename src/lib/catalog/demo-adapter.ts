@@ -135,7 +135,7 @@ export class DemoCatalogAdapter implements CatalogAdapter {
   readonly name = 'partner-file-catalog';
 
   getAllProducts(): CatalogProduct[] {
-    return load().products.filter((product) => !product.isDemo && ['odem', 'woodupp'].includes(product.supplierKey ?? '') && product.complianceStatus !== 'BLOCKED');
+    return load().products.filter((product) => product.categorySlug !== 'amostras' && !product.isDemo && ['odem', 'woodupp'].includes(product.supplierKey ?? '') && product.complianceStatus !== 'BLOCKED');
   }
 
   getSource(): string {

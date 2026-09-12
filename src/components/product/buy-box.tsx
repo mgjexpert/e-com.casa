@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
@@ -23,7 +24,8 @@ const VARIANT_LABELS: Record<string, string> = {
   material: 'Material',
 };
 
-export function BuyBox({ product }: { product: Product }) {
+export function BuyBox({ product: initialProduct }: { product: Product }) {
+  const product = useLiveProduct(initialProduct);
   const t = useT();
   const router = useRouter();
   const [qty, setQty] = useState(1);
@@ -94,7 +96,7 @@ export function BuyBox({ product }: { product: Product }) {
         subtitle: variantSubtitle,
         price: unitPrice,
         image: product.image,
-        maxStock: cartStockLimit(product),
+        automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
         variantId: selectedVariant?.id,
         variantLabel: selectedVariant?.name,
       },
@@ -122,10 +124,10 @@ export function BuyBox({ product }: { product: Product }) {
         <span className="text-[12px] text-muted-foreground">{t('buy.inclVat')}</span>
       </div>
 
-      {product.promoDiscountPct === 30 && product.marketReferencePrice && product.promoEndsAt && (
+      {Boolean(product.promoDiscountPct) && product.promoEndsAt && (
         <div className="mt-2">
           <p className="text-[12px] font-medium text-terracotta">
-            30% below the observed market reference of {formatPrice(product.marketReferencePrice)}
+            −{product.promoDiscountPct}% sobre catálogo fornecedor: {formatPrice(((product.regularPriceCents ?? product.priceCents) / 100).toFixed(2))}
           </p>
           <OfferCountdown endsAt={product.promoEndsAt} />
         </div>

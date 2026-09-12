@@ -9,9 +9,10 @@
 import { createHash, randomBytes, timingSafeEqual } from 'crypto';
 import { getProduct } from '@/lib/catalog';
 import { hasStock } from '@/lib/catalog/inventory';
+import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
+import { shippingPrice } from '@/lib/shipping';
 import {
   SHIPPING_OPTIONS,
-  FREE_SHIPPING_THRESHOLD,
   PROMO_CODES,
   GIFT_WRAP_PRICE,
   ORDER_NOTES_MAX,
@@ -85,14 +86,7 @@ export async function repriceCart(input: {
     throw new CheckoutValidationError('One or more products are unavailable');
   }
 
-  const blockedCompliance = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'SUPPLIER_PENDING']);
-  const blockedDocumentation = new Set(['DEMO', 'BLOCKED', 'PENDING', 'PENDING_REVIEW', 'MISSING']);
-  const nonSaleable = products.find((product) =>
-    product.isDemo
-    || product.requiresComplianceReview
-    || blockedCompliance.has(String(product.complianceStatus || '').toUpperCase())
-    || blockedDocumentation.has(String(product.documentationStatus || '').toUpperCase()),
-  );
+  const nonSaleable = products.find(product => !isCatalogProductSaleable(product));
   if (nonSaleable) {
     throw new CheckoutValidationError(
       `“${nonSaleable.name}” is still being validated for sale and is not available for purchase yet.`,
@@ -135,6 +129,7 @@ export async function repriceCart(input: {
     const price = (priceCents / 100).toFixed(2);
     subtotal += (priceCents / 100) * item.quantity;
     return {
+      automaticDiscountPct: product.promoDiscountPct,
       slug: product.slug,
       name: product.name,
       subtitle: product.subtitle,
@@ -155,8 +150,7 @@ export async function repriceCart(input: {
   }
 
   const option = SHIPPING_OPTIONS.find((o) => o.id === input.shippingMethod) ?? SHIPPING_OPTIONS[0];
-  const shippingCost =
-    subtotal - discount >= FREE_SHIPPING_THRESHOLD && option.id === 'standard' ? 0 : option.price;
+  const shippingCost = shippingPrice(input.country, subtotal - discount, option.id);
   const giftWrapFee = input.giftWrap ? GIFT_WRAP_PRICE : 0;
   const total = subtotal - discount + shippingCost + giftWrapFee;
 

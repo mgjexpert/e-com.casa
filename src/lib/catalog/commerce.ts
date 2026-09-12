@@ -1,0 +1,38 @@
+import campaign from '../../../data/catalog/commerce-campaign.json';
+import type { CatalogProduct } from './types';
+export const ACCESSORY_CATEGORIES = ['acessorios', 'produtos-instalacao', 'acessorios-divisorias', 'acessorios-instalacao'];
+export const isAccessory = (p: Pick<CatalogProduct, 'categorySlug'>) => ACCESSORY_CATEGORIES.includes(p.categorySlug);
+export const isSample = (p: Pick<CatalogProduct, 'categorySlug'>) => p.categorySlug === 'amostras';
+function hash(value: string) { let h = 2166136261; for (const c of value) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; }
+
+/** One fixed campaign; neither visits nor daily supplier sync restart its deadlines. */
+export function applyCommerce(product: CatalogProduct, now = Date.now()): CatalogProduct {
+  const seed = hash(`${campaign.id}:${product.slug}`);
+  const accessory = isAccessory(product);
+  const starts = Date.parse(campaign.startsAt);
+  const ends = accessory ? Date.parse(campaign.accessoriesEndsAt) : starts + (1 + seed % 3) * 3600000;
+  const pct = accessory ? 70 : seed % 4 === 0 ? 0 : [10, 15, 20][seed % 3];
+  const base = product.regularPriceCents ?? product.priceCents;
+  const active = base > 0 && pct > 0 && now >= starts && now < ends;
+  const factor = active ? (100 - pct) / 100 : 1;
+  const cents = Math.round(base * factor);
+  return {
+    ...product,
+    regularPriceCents: base,
+    priceCents: cents, price: (cents / 100).toFixed(2),
+    comparePrice: null,
+    promoDiscountPct: active ? pct : null,
+    promoEndsAt: active ? new Date(ends).toISOString() : null,
+    variants: product.variants.map(v => {
+      const delta = v.regularPriceDeltaCents ?? v.priceDeltaCents ?? 0;
+      return { ...v, regularPriceDeltaCents: delta, priceDeltaCents: Math.round((base + delta) * factor) - cents };
+    }),
+  };
+}
+
+export function merchantReleased(product: { supplierKey?: string | null; priceCents?: number; complianceStatus?: string; documentationStatus?: string; isDemo?: boolean }): boolean {
+  return !product.isDemo && campaign.merchantRelease.suppliers.includes(product.supplierKey ?? '')
+    && (product.priceCents ?? 0) > 0
+    && !['BLOCKED', 'DEMO'].includes(String(product.complianceStatus).toUpperCase())
+    && !['BLOCKED', 'DEMO'].includes(String(product.documentationStatus).toUpperCase());
+}

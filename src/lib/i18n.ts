@@ -26,7 +26,7 @@ export const LANGUAGES_UI: { code: Lang; label: string; native: string }[] = [
 
 const EN: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Free shipping across Europe',
+  'ann.freeShipping': 'Free PT & ES delivery · Europe over €50',
   'ann.returns': '14-day easy returns',
   'ann.secure': 'Secure payment methods',
   'ann.newIn': 'New in: Garden Glow collection',
@@ -113,7 +113,7 @@ const EN: Record<string, string> = {
   'buy.lowStock': 'Low stock — only {n} left',
   'buy.inStock': 'In stock — ready to ship',
   'buy.remainingStock': 'Remaining stock',
-  'buy.trustFreeShipping': 'Free shipping over €50',
+  'buy.trustFreeShipping': 'Free PT & ES delivery · Europe over €50',
   'buy.trustReturns': '14-day returns',
   'buy.trustSecure': 'Secure checkout',
   'buy.trustDispatch': 'Dispatch in 24–48h',
@@ -166,7 +166,7 @@ const EN: Record<string, string> = {
   'account.wishlist': 'Wishlist',
   'account.savedAddresses': 'Saved Addresses',
   'footer.copyright': '© 2026 {brand}. All rights reserved.',
-  'footer.vatNote': 'Prices include VAT. Free shipping across Europe.',
+  'footer.vatNote': 'Free PT & ES delivery · Europe over €50',
   'footer.telephone': 'Telephone: {n}',
   'footer.weAccept': 'We accept',
   'footer.securePaymentNote': 'Secure payment methods',
@@ -463,7 +463,7 @@ const EN: Record<string, string> = {
 
 const PT: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Envio grátis em toda a Europa',
+  'ann.freeShipping': 'Portes grátis PT e ES · Europa acima de 50 €',
   'ann.returns': 'Devoluções fáceis em 14 dias',
   'ann.secure': 'Métodos de pagamento seguros',
   'ann.newIn': 'Novidade: coleção Garden Glow',
@@ -550,7 +550,7 @@ const PT: Record<string, string> = {
   'buy.lowStock': 'Pouco stock — apenas {n}',
   'buy.inStock': 'Em stock — pronto a enviar',
   'buy.remainingStock': 'Stock restante',
-  'buy.trustFreeShipping': 'Envio grátis acima de 50 €',
+  'buy.trustFreeShipping': 'Portes grátis PT e ES · Europa acima de 50 €',
   'buy.trustReturns': 'Devoluções em 14 dias',
   'buy.trustSecure': 'Pagamento seguro',
   'buy.trustDispatch': 'Envio em 24–48h',
@@ -603,7 +603,7 @@ const PT: Record<string, string> = {
   'account.wishlist': 'Favoritos',
   'account.savedAddresses': 'Moradas guardadas',
   'footer.copyright': '© 2026 {brand}. Todos os direitos reservados.',
-  'footer.vatNote': 'Preços com IVA incluído. Envio grátis em toda a Europa.',
+  'footer.vatNote': 'Portes grátis PT e ES · Europa acima de 50 €',
   'footer.telephone': 'Telefone: {n}',
   'footer.weAccept': 'Aceitamos',
   'footer.securePaymentNote': 'Métodos de pagamento seguros',
@@ -900,7 +900,7 @@ const PT: Record<string, string> = {
 
 const FR: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Livraison offerte partout en Europe',
+  'ann.freeShipping': 'Livraison offerte PT et ES · Europe au-delà de 50 €',
   'ann.returns': 'Retours faciles sous 14 jours',
   'ann.secure': 'Moyens de paiement sécurisés',
   'ann.newIn': 'Nouveauté : la collection Garden Glow',
@@ -987,7 +987,7 @@ const FR: Record<string, string> = {
   'buy.lowStock': 'Stock faible — plus que {n}',
   'buy.inStock': 'En stock — prêt à partir',
   'buy.remainingStock': 'Stock restant',
-  'buy.trustFreeShipping': 'Livraison offerte dès 50 €',
+  'buy.trustFreeShipping': 'Livraison offerte PT et ES · Europe au-delà de 50 €',
   'buy.trustReturns': 'Retours sous 14 jours',
   'buy.trustSecure': 'Paiement sécurisé',
   'buy.trustDispatch': 'Expédition en 24–48 h',
@@ -1040,7 +1040,7 @@ const FR: Record<string, string> = {
   'account.wishlist': 'Favoris',
   'account.savedAddresses': 'Adresses enregistrées',
   'footer.copyright': '© 2026 {brand}. Tous droits réservés.',
-  'footer.vatNote': 'Prix TTC. Livraison offerte partout en Europe.',
+  'footer.vatNote': 'Livraison offerte PT et ES · Europe au-delà de 50 €',
   'footer.telephone': 'Téléphone : {n}',
   'footer.weAccept': 'Nous acceptons',
   'footer.securePaymentNote': 'Moyens de paiement sécurisés',
@@ -1337,7 +1337,7 @@ const FR: Record<string, string> = {
 
 const DE: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Kostenloser Versand in ganz Europa',
+  'ann.freeShipping': 'Gratisversand PT und ES · Europa über 50 €',
   'ann.returns': 'Einfache Rückgabe innerhalb von 14 Tagen',
   'ann.secure': 'Sichere Zahlungsmethoden',
   'ann.newIn': 'Neu: die Kollektion Garden Glow',
@@ -1424,7 +1424,7 @@ const DE: Record<string, string> = {
   'buy.lowStock': 'Wenig Bestand — nur noch {n}',
   'buy.inStock': 'Auf Lager — versandbereit',
   'buy.remainingStock': 'Verbleibender Bestand',
-  'buy.trustFreeShipping': 'Versandkostenfrei ab 50 €',
+  'buy.trustFreeShipping': 'Gratisversand PT und ES · Europa über 50 €',
   'buy.trustReturns': '14 Tage Rückgabe',
   'buy.trustSecure': 'Sicher bezahlen',
   'buy.trustDispatch': 'Versand in 24–48 h',
@@ -1477,7 +1477,7 @@ const DE: Record<string, string> = {
   'account.wishlist': 'Merkliste',
   'account.savedAddresses': 'Gespeicherte Adressen',
   'footer.copyright': '© 2026 {brand}. Alle Rechte vorbehalten.',
-  'footer.vatNote': 'Preise inkl. MwSt. Kostenloser Versand in ganz Europa.',
+  'footer.vatNote': 'Gratisversand PT und ES · Europa über 50 €',
   'footer.telephone': 'Telefon: {n}',
   'footer.weAccept': 'Wir akzeptieren',
   'footer.securePaymentNote': 'Sichere Zahlungsmethoden',
@@ -1774,7 +1774,7 @@ const DE: Record<string, string> = {
 
 const ES: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Envío gratis en toda Europa',
+  'ann.freeShipping': 'Envío gratis PT y ES · Europa por encima de 50 €',
   'ann.returns': 'Devoluciones fáciles en 14 días',
   'ann.secure': 'Métodos de pago seguros',
   'ann.newIn': 'Novedad: la colección Garden Glow',
@@ -1861,7 +1861,7 @@ const ES: Record<string, string> = {
   'buy.lowStock': 'Pocas unidades — solo quedan {n}',
   'buy.inStock': 'En stock — listo para enviar',
   'buy.remainingStock': 'Stock disponible',
-  'buy.trustFreeShipping': 'Envío gratis a partir de 50 €',
+  'buy.trustFreeShipping': 'Envío gratis PT y ES · Europa por encima de 50 €',
   'buy.trustReturns': 'Devoluciones en 14 días',
   'buy.trustSecure': 'Pago seguro',
   'buy.trustDispatch': 'Envío en 24–48 h',
@@ -1914,7 +1914,7 @@ const ES: Record<string, string> = {
   'account.wishlist': 'Favoritos',
   'account.savedAddresses': 'Direcciones guardadas',
   'footer.copyright': '© 2026 {brand}. Todos los derechos reservados.',
-  'footer.vatNote': 'Precios con IVA incluido. Envío gratis en toda Europa.',
+  'footer.vatNote': 'Envío gratis PT y ES · Europa por encima de 50 €',
   'footer.telephone': 'Teléfono: {n}',
   'footer.weAccept': 'Aceptamos',
   'footer.securePaymentNote': 'Métodos de pago seguros',
@@ -2211,7 +2211,7 @@ const ES: Record<string, string> = {
 
 const IT: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Spedizione gratuita in tutta Europa',
+  'ann.freeShipping': 'Spedizione gratuita PT e ES · Europa oltre 50 €',
   'ann.returns': 'Resi facili entro 14 giorni',
   'ann.secure': 'Metodi di pagamento sicuri',
   'ann.newIn': 'Novità: la collezione Garden Glow',
@@ -2298,7 +2298,7 @@ const IT: Record<string, string> = {
   'buy.lowStock': 'Scorte basse — solo {n}',
   'buy.inStock': 'Disponibile — pronto da spedire',
   'buy.remainingStock': 'Scorte rimanenti',
-  'buy.trustFreeShipping': 'Spedizione gratuita oltre 50 €',
+  'buy.trustFreeShipping': 'Spedizione gratuita PT e ES · Europa oltre 50 €',
   'buy.trustReturns': 'Resi entro 14 giorni',
   'buy.trustSecure': 'Pagamento sicuro',
   'buy.trustDispatch': 'Spedizione in 24–48 h',
@@ -2351,7 +2351,7 @@ const IT: Record<string, string> = {
   'account.wishlist': 'Preferiti',
   'account.savedAddresses': 'Indirizzi salvati',
   'footer.copyright': '© 2026 {brand}. Tutti i diritti riservati.',
-  'footer.vatNote': 'Prezzi IVA inclusa. Spedizione gratuita in tutta Europa.',
+  'footer.vatNote': 'Spedizione gratuita PT e ES · Europa oltre 50 €',
   'footer.telephone': 'Telefono: {n}',
   'footer.weAccept': 'Accettiamo',
   'footer.securePaymentNote': 'Metodi di pagamento sicuri',
@@ -2648,7 +2648,7 @@ const IT: Record<string, string> = {
 
 const NL: Record<string, string> = {
   // Header — announcement bar & utility
-  'ann.freeShipping': 'Gratis verzending in heel Europa',
+  'ann.freeShipping': 'Gratis verzending PT en ES · Europa boven €50',
   'ann.returns': 'Eenvoudig retourneren binnen 14 dagen',
   'ann.secure': 'Veilige betaalmethoden',
   'ann.newIn': 'Nieuw: de Garden Glow collectie',
@@ -2735,7 +2735,7 @@ const NL: Record<string, string> = {
   'buy.lowStock': 'Weinig voorraad — nog {n}',
   'buy.inStock': 'Op voorraad — klaar om te verzenden',
   'buy.remainingStock': 'Resterende voorraad',
-  'buy.trustFreeShipping': 'Gratis verzending vanaf € 50',
+  'buy.trustFreeShipping': 'Gratis verzending PT en ES · Europa boven €50',
   'buy.trustReturns': 'Retourneren binnen 14 dagen',
   'buy.trustSecure': 'Veilig afrekenen',
   'buy.trustDispatch': 'Verzending binnen 24–48 uur',
@@ -2788,7 +2788,7 @@ const NL: Record<string, string> = {
   'account.wishlist': 'Favorieten',
   'account.savedAddresses': 'Opgeslagen adressen',
   'footer.copyright': '© 2026 {brand}. Alle rechten voorbehouden.',
-  'footer.vatNote': 'Prijzen incl. btw. Gratis verzending in heel Europa.',
+  'footer.vatNote': 'Gratis verzending PT en ES · Europa boven €50',
   'footer.telephone': 'Telefoon: {n}',
   'footer.weAccept': 'We accepteren',
   'footer.securePaymentNote': 'Veilige betaalmethoden',

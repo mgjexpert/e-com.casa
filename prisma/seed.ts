@@ -71,7 +71,7 @@ async function main() {
   console.log('E-com.casa seed — idempotent partner catalogue import');
 
   const catalog = readArtifact('generated-provider-catalog.json') as { categories?: Array<{ slug: string; name: string; type: string; image: string; subtitle?: string }> } | null;
-  const products = readArtifact('generated-provider-products.json') as ArtifactProduct[] | null;
+  const products = (readArtifact('generated-provider-products.json') as ArtifactProduct[] | null)?.filter(p => p.categorySlug !== 'amostras') ?? null;
 
   if (!products || !Array.isArray(products) || products.length === 0) {
     console.error('No /data/catalog/generated-provider-products.json found. Run `npm run catalog:sync:partners` first.');
@@ -178,9 +178,11 @@ async function main() {
   // Keep an internal recoverable copy of mock catalogue rows, then remove them.
   // Orders/reviews are separate records and are never rewritten or deleted.
   await tx.$executeRawUnsafe('CREATE TABLE IF NOT EXISTS "CatalogMockArchive" ("id" TEXT PRIMARY KEY, "row" JSONB NOT NULL, "archivedAt" TIMESTAMPTZ NOT NULL DEFAULT now())');
-  await tx.$executeRaw`INSERT INTO "CatalogMockArchive" ("id", "row") SELECT "id", to_jsonb(p) FROM "Product" p WHERE "isDemo" = true OR "sku" = 'EC-WAL-001' ON CONFLICT ("id") DO NOTHING`;
-  const removed = await tx.product.deleteMany({ where: { OR: [{ isDemo: true }, { sku: 'EC-WAL-001' }] } });
+  await tx.$executeRaw`INSERT INTO "CatalogMockArchive" ("id", "row") SELECT "id", to_jsonb(p) FROM "Product" p WHERE "isDemo" = true OR "sku" = 'EC-WAL-001' OR "categorySlug" = 'amostras' ON CONFLICT ("id") DO NOTHING`;
+  const removed = await tx.product.deleteMany({ where: { OR: [{ isDemo: true }, { sku: 'EC-WAL-001' }, { categorySlug: 'amostras' }] } });
   console.log(`Removed ${removed.count} mock products (recoverable archive retained)`);
+
+  await tx.category.deleteMany({ where: { type: 'shop', slug: { in: ['amostras', 'acessorios', 'produtos-instalacao', 'acessorios-divisorias'] } } });
 
   // ---- Integrity checks (idempotency + data quality) ----
   const total = await tx.product.count();

@@ -17,6 +17,7 @@ export interface ProductVariant {
   value: string;
   /** Added cost in cents (0 = no delta) */
   priceDeltaCents: number;
+  regularPriceDeltaCents?: number;
   /** Optional per-variant image override */
   image?: string;
   availability?: 'inStock' | 'lowStock' | 'outOfStock';
@@ -51,6 +52,7 @@ export interface CatalogProduct {
   description: string;
   price: string;
   priceCents: number;
+  regularPriceCents?: number;
   comparePrice: string | null;
   currency: string;
   /** Observed EU retail benchmark. This is NOT a statutory previous price. */

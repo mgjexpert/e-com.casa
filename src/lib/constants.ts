@@ -56,21 +56,16 @@ export interface PromoCodeConfig {
 export const PROMO_CODES: Record<string, PromoCodeConfig> = {
   WELCOME10: { type: 'percent', value: 10, label: '10% welcome discount' },
   HOME5: { type: 'percent', value: 5, label: '5% off your order' },
-  PAINEL75: {
-    type: 'percent',
-    value: 75,
-    label: 'Oferta Painel Ripado — 75%',
-    eligibleSlugs: ['warm-oak-slatted-wall-panel'],
-    campaign: true,
-  },
+
 };
 
 export function calculatePromoDiscount(
-  lines: Array<{ slug: string; price: string | number; quantity: number }>,
+  lines: Array<{ slug: string; price: string | number; quantity: number; automaticDiscountPct?: number | null }>,
   promo: PromoCodeConfig | null | undefined,
 ): number {
   if (!promo) return 0;
   const eligibleSubtotal = lines.reduce((sum, line) => {
+    if (line.automaticDiscountPct) return sum;
     if (promo.eligibleSlugs?.length && !promo.eligibleSlugs.includes(line.slug)) return sum;
     const price = typeof line.price === 'number' ? line.price : Number.parseFloat(line.price);
     if (!Number.isFinite(price)) return sum;

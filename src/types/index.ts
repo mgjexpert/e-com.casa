@@ -66,6 +66,9 @@ export interface CartLine {
   price: string;
   image: string;
   quantity: number;
+  automaticDiscountPct?: number | null;
+  promoEndsAt?: string | null;
+  regularUnitPrice?: string;
   maxStock: number | null; // null: manufacture on demand, no inventory ceiling
   /** Optional selected variant (cart identity = slug + variantId) */
   variantId?: string;

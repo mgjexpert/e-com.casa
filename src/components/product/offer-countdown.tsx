@@ -31,7 +31,7 @@ export function OfferCountdown({
   compact?: boolean;
   className?: string;
 }) {
-  const [remaining, setRemaining] = useState(() => (endsAt ? remainingMs(endsAt) : 0));
+  const [remaining, setRemaining] = useState<number | null>(null);
 
   useEffect(() => {
     if (!endsAt) return;
@@ -41,8 +41,8 @@ export function OfferCountdown({
     return () => window.clearInterval(timer);
   }, [endsAt]);
 
-  const value = useMemo(() => parts(remaining), [remaining]);
-  if (!endsAt || remaining <= 0) return null;
+  const value = useMemo(() => parts(remaining ?? 0), [remaining]);
+  if (!endsAt || remaining === null || remaining <= 0) return null;
 
   const clock = value.days > 0
     ? `${value.days}d ${pad(value.hours)}:${pad(value.minutes)}:${pad(value.seconds)}`

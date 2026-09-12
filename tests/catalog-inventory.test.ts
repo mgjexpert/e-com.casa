@@ -4,7 +4,7 @@ import { isCatalogProductSaleable } from '../src/lib/catalog/saleability';
 import { DemoCatalogAdapter } from '../src/lib/catalog/demo-adapter';
 import { readFileSync } from 'node:fs';
 const snapshot = JSON.parse(readFileSync('data/catalog/generated-provider-products.json', 'utf8'));
-const unlimited = { ...snapshot[0], stockUnlimited: true, stock: 0, stockKnown: false, availability: 'inStock', isDemo: false, requiresComplianceReview: false, complianceStatus: 'APPROVED', documentationStatus: 'APPROVED' };
+const unlimited = { ...snapshot[0], supplierKey: null, stockUnlimited: true, stock: 0, stockKnown: false, availability: 'inStock', isDemo: false, requiresComplianceReview: false, complianceStatus: 'APPROVED', documentationStatus: 'APPROVED' };
 mock.module('@/lib/catalog', () => ({ getProduct: async (slug: string) => slug === 'tracked' ? { ...unlimited, slug, stockUnlimited: false, stockKnown: true, stock: 5 } : { ...unlimited, slug } }));
 const { repriceCart } = await import('../src/lib/checkout');
 describe('direct manufacture', () => {

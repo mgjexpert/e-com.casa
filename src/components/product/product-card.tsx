@@ -1,5 +1,6 @@
 'use client';
 
+import { useLiveProduct } from '@/hooks/use-live-product';
 import { cartStockLimit } from '@/lib/catalog/inventory';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -36,7 +37,8 @@ export function Stars({ rating, className }: { rating: number; className?: strin
   );
 }
 
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard({ product: initialProduct, priority = false }: { product: Product; priority?: boolean }) {
+  const product = useLiveProduct(initialProduct);
   const t = useT();
   const add = useCart((s) => s.add);
   const wishlist = useWishlist();
@@ -60,7 +62,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
       subtitle: product.subtitle,
       price: product.price,
       image: product.image,
-      maxStock: cartStockLimit(product),
+      automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
     });
     openCartDrawer();
   };
@@ -108,9 +110,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
               {product.badge}
             </span>
           )}
-          {saleable && product.promoDiscountPct === 30 && product.promoEndsAt && (
+          {saleable && Boolean(product.promoDiscountPct) && product.promoEndsAt && (
             <span className="absolute left-2.5 top-2.5 rounded-full bg-terracotta px-2.5 py-1 text-[10px] font-semibold uppercase tracking-[0.10em] text-white shadow-sm">
-              30% launch offer
+              −{product.promoDiscountPct}%
             </span>
           )}
           <div className="absolute inset-x-2.5 bottom-2.5 translate-y-2 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden">
@@ -149,9 +151,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
                   </>
                 )}
               </div>
-              {product.promoDiscountPct === 30 && marketReference && product.promoEndsAt && (
+              {Boolean(product.promoDiscountPct) && product.promoEndsAt && (
                 <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-1">
-                  <span className="text-[10.5px] font-medium text-terracotta">30% below market reference</span>
+                  <span className="text-[10.5px] font-medium text-terracotta">−{product.promoDiscountPct}% · catálogo fornecedor</span>
                   <OfferCountdown endsAt={product.promoEndsAt} compact />
                 </div>
               )}

@@ -1,5 +1,8 @@
 'use client';
 
+import { calculatePromoDiscount } from '@/lib/constants';
+import { shippingPrice, freeShipping as qualifiesForFreeShipping } from '@/lib/shipping';
+import { AccessoryUpsell } from '@/components/cart/accessory-upsell';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -62,9 +65,9 @@ export default function CheckoutPage() {
   const displayLines = mounted ? cart.lines : [];
   const subtotal = mounted ? toNumber(cart.subtotal().toFixed(2)) : 0;
   const promo = mounted && cart.promoCode ? PROMO_CODES[cart.promoCode] : null;
-  const discount = promo ? (subtotal * promo.value) / 100 : 0;
+  const discount = calculatePromoDiscount(displayLines, promo);
   const option = SHIPPING_OPTIONS.find((o) => o.id === form.shippingMethod) ?? SHIPPING_OPTIONS[0];
-  const shipping = option.id === 'standard' && subtotal - discount >= FREE_SHIPPING_THRESHOLD ? 0 : option.price;
+  const shipping = shippingPrice(form.country, subtotal - discount, option.id);
   const giftWrapFee = form.giftWrap ? GIFT_WRAP_PRICE : 0;
   const total = Math.max(0, subtotal - discount + shipping + giftWrapFee);
 
@@ -259,7 +262,7 @@ export default function CheckoutPage() {
               className="mt-4 gap-3"
             >
               {SHIPPING_OPTIONS.map((opt) => {
-                const free = opt.id === 'standard' && subtotal - discount >= FREE_SHIPPING_THRESHOLD;
+                const free = qualifiesForFreeShipping(form.country, subtotal - discount);
                 const optName = opt.id === 'standard' ? t('ship.standard') : t('ship.express');
                 const optDesc = opt.id === 'standard' ? t('ship.standardDesc') : t('ship.expressDesc');
                 return (
@@ -456,6 +459,7 @@ export default function CheckoutPage() {
                 </li>
               ))}
             </ul>
+            <AccessoryUpsell />
             <Separator className="my-5" />
             <dl className="space-y-2.5 text-[13.5px]">
               <div className="flex justify-between">

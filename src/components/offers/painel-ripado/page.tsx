@@ -1,6 +1,8 @@
 'use client';
 
 import Link from 'next/link';
+import { useLiveProduct } from '@/hooks/use-live-product';
+import { campaignEuro } from './data';
 import { useEffect, useState } from 'react';
 import { House, Menu, PackageSearch, ShoppingCart, X } from 'lucide-react';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
@@ -12,7 +14,7 @@ import { PanelConfigurator } from './configurator';
 import { PanelCampaignStory, PanelFaq, PanelFooter, PanelInspiration, PanelProductDetails, PanelReviews } from './sections';
 
 function TopTicker() {
-  const items = ['Envio gratuito em campanhas selecionadas', 'Pagamento seguro com Cartão · Apple Pay · MB WAY · Multibanco', 'Entrega acompanhada', 'E-com.casa'];
+  const items = ['Portes grátis PT e ES · Europa acima de 50 €', 'Pagamento seguro com Cartão · Apple Pay · MB WAY · Multibanco', 'Entrega acompanhada', 'E-com.casa'];
   const group = <div className="flex shrink-0 items-center gap-6 px-3 sm:gap-8 sm:px-4">{items.map((item) => <span key={item} className="flex items-center gap-6 whitespace-nowrap sm:gap-8"><span>{item}</span><span className="opacity-40">◆</span></span>)}</div>;
   return <div className="overflow-hidden bg-[#201a17] py-1 text-[#e9dfd5] sm:py-2"><div className="ecom-panel-ticker flex w-max text-[9px] uppercase tracking-[.12em] sm:text-[11px]">{group}{group}</div></div>;
 }
@@ -45,7 +47,8 @@ function FloatingHeader() {
   </>;
 }
 
-export function PainelRipadoOfferPage({ offer, product, market }: { offer: OfferConfig; product: CatalogProduct; market: OfferMarketContext }) {
+export function PainelRipadoOfferPage({ offer, product: initialProduct, market }: { offer: OfferConfig; product: CatalogProduct; market: OfferMarketContext }) {
+  const product = useLiveProduct(initialProduct);
   useEffect(() => {
     captureOfferAttribution(offer.slug);
     trackOfferEvent('offer_view', { offerSlug: offer.slug, productSlug: product.slug, country: market.countryCode, locale: market.locale });
@@ -64,9 +67,8 @@ export function PainelRipadoOfferPage({ offer, product, market }: { offer: Offer
     <PanelCampaignStory />
     <PanelProductDetails product={product} />
     <PanelInspiration />
-    <PanelReviews />
     <PanelFaq offer={offer} />
     <PanelFooter />
-    <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#d8cec2] bg-[#f7f3ef]/95 px-4 py-3 shadow-[0_-8px_24px_rgba(32,26,23,.14)] backdrop-blur sm:hidden"><div><span className="block text-[10px] text-[#7d6f64]">Oferta desde</span><strong>5,00 €</strong></div><a href="#configurar-painel" className="rounded-full bg-[#201a17] px-6 py-3 text-sm font-semibold text-white">Comprar agora</a></div>
+    <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#d8cec2] bg-[#f7f3ef]/95 px-4 py-3 shadow-[0_-8px_24px_rgba(32,26,23,.14)] backdrop-blur sm:hidden"><div><span className="block text-[10px] text-[#7d6f64]">Oferta desde</span><strong>{campaignEuro(product.priceCents)}</strong></div><a href="#configurar-painel" className="rounded-full bg-[#201a17] px-6 py-3 text-sm font-semibold text-white">Comprar agora</a></div>
   </main>;
 }

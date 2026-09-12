@@ -1,3 +1,4 @@
+import { CartPriceSync } from '@/components/cart/cart-price-sync';
 import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Inter } from 'next/font/google';
 import './globals.css';
@@ -41,7 +42,7 @@ export const metadata: Metadata = {
   authors: [{ name: COMPANY.legalName }],
   openGraph: {
     title: 'E-com.casa — Make Your Space Yours.',
-    description: 'Curated pieces for interiors, gardens and everyday living. Free shipping across Europe.',
+    description: 'Curated pieces for interiors, gardens and everyday living. Free delivery to Portugal and Spain; other supported European destinations on orders over €50.',
     url: COMPANY.domain,
     siteName: 'E-com.casa',
     type: 'website',
@@ -83,6 +84,7 @@ export default function RootLayout({
         <CookieConsent />
         <ChatWidget />
         <CartDrawer />
+        <CartPriceSync />
         <LanguageBoot />
         <Toaster />
         <script
