@@ -60,7 +60,7 @@ export function OfferCountdown({
   return (
     <div className={cn('mt-3 flex items-center gap-2 rounded-md bg-terracotta/8 px-3 py-2 text-[12.5px] text-foreground/80', className)}>
       <Clock3 className="h-4 w-4 shrink-0 text-terracotta" strokeWidth={1.7} aria-hidden />
-      <span>Limited offer ends in</span>
+      <span>A oferta termina em</span>
       <strong className="ml-auto tabular-nums text-terracotta">{clock}</strong>
     </div>
   );

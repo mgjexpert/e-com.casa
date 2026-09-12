@@ -63,13 +63,13 @@ export function PainelRipadoOfferPage({ offer, product: initialProduct, market }
     `}</style>
     <TopTicker />
     <FloatingHeader />
-    <PanelConfigurator product={product} offerSlug={offer.slug} />
+    <PanelConfigurator product={product} offer={offer} market={market} />
     <PanelCampaignStory product={product} />
     <PanelProductDetails product={product} />
     <PanelInspiration product={product} />
     <PanelReviews offer={offer} product={product} />
     <PanelFaq offer={offer} />
-    <PanelFooter />
+    <PanelFooter market={market} />
     <div className="fixed inset-x-0 bottom-0 z-40 flex items-center justify-between gap-3 border-t border-[#d8cec2] bg-[#f7f3ef]/95 px-4 py-3 shadow-[0_-8px_24px_rgba(32,26,23,.14)] backdrop-blur sm:hidden"><div><span className="block text-[10px] text-[#7d6f64]">Oferta desde</span><strong>{campaignEuro(product.priceCents)}</strong></div><a href="#configurar-painel" className="rounded-full bg-[#201a17] px-6 py-3 text-sm font-semibold text-white">Comprar agora</a></div>
   </main>;
 }

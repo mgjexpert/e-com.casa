@@ -5,20 +5,23 @@ import { OfferCountdown } from '@/components/product/offer-countdown';
 import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 import { cartStockLimit, quantityLimit } from '@/lib/catalog/inventory';
 import { useMemo, useState } from 'react';
-import { ChevronLeft, ChevronRight, Maximize2, Minus, Plus, Ruler } from 'lucide-react';
+import { BadgeCheck, ChevronLeft, ChevronRight, Headphones, Maximize2, Minus, PackageCheck, Plus, Ruler, ShieldCheck, Truck } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/lib/cart-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { trackOfferEvent } from '@/lib/offers/analytics';
 import type { CatalogProduct } from '@/lib/catalog/types';
+import type { OfferConfig, OfferMarketContext } from '@/lib/offers/types';
+import { PaymentBrandStrip } from '@/components/payments/payment-brand-strip';
 import { campaignEuro } from './data';
 
 function StarRow({ value = 5, size = 14 }: { value?: number; size?: number }) {
   return <span className="inline-flex gap-0.5" aria-label={`${value} de 5 estrelas`}>{[1,2,3,4,5].map((star) => <span key={star} style={{ color: '#f2b01e', fontSize: size }}>{star <= Math.round(value) ? '★' : '☆'}</span>)}</span>;
 }
 
-export function PanelConfigurator({ product: initialProduct, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
+export function PanelConfigurator({ product: initialProduct, offer, market }: { product: CatalogProduct; offer: OfferConfig; market: OfferMarketContext }) {
   const product = useLiveProduct(initialProduct);
+  const offerSlug = offer.slug;
   const gallery = [...new Set([product.image, ...product.gallery.split(',').filter(Boolean)])];
   const router = useRouter();
   const add = useCart((state) => state.add);
@@ -83,6 +86,8 @@ export function PanelConfigurator({ product: initialProduct, offerSlug }: { prod
       <div className="flex flex-col gap-6">
         <div><h1 className="font-display text-3xl leading-none sm:text-5xl">{product.name}</h1><p className="mt-3 text-base leading-relaxed text-[#5c5049]">{product.shortDescription}</p></div>
 
+        {offer.reviews.mode === 'verified' && offer.reviews.count ? <a href="#avaliacoes" className="flex w-fit items-center gap-2 text-sm"><StarRow value={offer.reviews.rating ?? 5} /><strong>{(offer.reviews.rating ?? 5).toFixed(1).replace('.', ',')}</strong><span className="text-[#7d6f64] underline underline-offset-4">{offer.reviews.count} avaliações verificadas</span></a> : <p className="inline-flex w-fit items-center gap-2 text-xs font-medium text-[#5c5049]"><BadgeCheck className="h-4 w-4 text-[#597057]" />Produto e preço ligados ao catálogo do fabricante</p>}
+
         <div id="configurar-painel" className="flex flex-col gap-6" style={{ scrollMarginTop: 72 }}>
           <div className="border-y border-[#e6ded4] py-4">
             <div className="flex items-baseline gap-2"><strong className="font-display text-4xl font-normal">{campaignEuro(offerCents)}</strong><span className="text-sm text-[#7d6f64]">por painel</span></div>
@@ -104,13 +109,20 @@ export function PanelConfigurator({ product: initialProduct, offerSlug }: { prod
             {calculatorOpen && <div className="mt-3 rounded-lg border border-[#e0d6cb] bg-[#fdfbf9] p-4"><p className="text-sm font-semibold">Calculadora rápida</p><p className="mt-1 text-xs text-[#7d6f64]">Introduza as medidas aproximadas da parede em centímetros.</p><div className="mt-3 grid grid-cols-2 gap-2"><input value={wallWidth} onChange={(event) => setWallWidth(event.target.value)} placeholder="Largura cm" inputMode="decimal" className="h-10 rounded-md border border-[#d9cec2] bg-white px-3 text-sm" /><input value={wallHeight} onChange={(event) => setWallHeight(event.target.value)} placeholder="Altura cm" inputMode="decimal" className="h-10 rounded-md border border-[#d9cec2] bg-white px-3 text-sm" /></div>{estimate && <p className="mt-3 text-sm">Estimativa inicial: <strong>{estimate} {estimate === 1 ? 'painel' : 'painéis'}</strong></p>}</div>}
           </div>
 
-          <div><span className="mb-2 block text-base font-semibold text-[#3d342e]">Quantidade</span><div className="flex h-12 items-center justify-between rounded-xl bg-[#f1ece6] px-1"><button type="button" onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-10 w-10 place-items-center"><Minus className="h-4 w-4" /></button><strong className="text-base tabular-nums">{qty} {qty === 1 ? 'painel' : 'painéis'}</strong><button type="button" onClick={() => setQty(Math.min(quantityLimit(product), qty + 1))} className="grid h-10 w-10 place-items-center rounded-lg bg-[#201a17] text-white"><Plus className="h-4 w-4" /></button></div></div>
+          <div><span className="mb-2 block text-base font-semibold text-[#3d342e]">Quantidade</span><div className="flex h-12 items-center justify-between rounded-xl bg-[#f1ece6] px-1"><button type="button" aria-label="Diminuir quantidade" onClick={() => setQty(Math.max(1, qty - 1))} className="grid h-10 w-10 place-items-center"><Minus className="h-4 w-4" /></button><strong className="text-base tabular-nums">{qty} {qty === 1 ? 'painel' : 'painéis'}</strong><button type="button" aria-label="Aumentar quantidade" onClick={() => setQty(Math.min(quantityLimit(product), qty + 1))} className="grid h-10 w-10 place-items-center rounded-lg bg-[#201a17] text-white"><Plus className="h-4 w-4" /></button></div></div>
 
           <div className="space-y-3">
             <div className="flex items-baseline justify-between"><span className="text-sm text-[#7d6f64]">Total promocional</span><strong className="text-xl">{campaignEuro(offerCents * qty)}</strong></div>
             <button type="button" disabled={!isCatalogProductSaleable(product)} onClick={() => addCampaignLine(true)} className="w-full rounded-full bg-[#201a17] py-4 text-base font-semibold text-[#f7f3ef] transition hover:bg-[#8a5a2b]">Comprar agora</button>
             <button type="button" disabled={!isCatalogProductSaleable(product)} onClick={() => addCampaignLine(false)} className="w-full rounded-full border border-[#201a17] py-3.5 text-sm font-semibold transition hover:bg-[#efe7de]">Adicionar ao carrinho</button>
-            <p className="text-xs leading-relaxed text-[#7d6f64]">Pagamento protegido · Oferta aplicada automaticamente · Entrega e acompanhamento confirmados no checkout</p>
+            <div className="pt-1">
+              <PaymentBrandStrip country={market.countryCode} currency={market.currency} variant="compact" caption="Pague como preferir" />
+              <p className="mt-2 text-[11px] leading-5 text-[#7d6f64]">Cartão, MB WAY e Multibanco quando disponíveis para o país selecionado. Apple Pay surge no checkout em dispositivos compatíveis.</p>
+            </div>
+            <div className="border-t border-[#e6ded4] pt-4">
+              <div className="flex items-start gap-3"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#efe7de]"><Truck className="h-4 w-4 text-[#8a5a2b]" /></span><div><p className="text-sm font-semibold">Entrega acompanhada</p><p className="mt-1 text-xs leading-5 text-[#7d6f64]">Portes grátis em Portugal e Espanha. Restante Europa disponível: portes grátis em encomendas superiores a 50 € após descontos.</p></div></div>
+              <div className="mt-4 grid grid-cols-3 gap-2 border-t border-[#e6ded4] pt-4 text-center text-[10px] text-[#6f635b]"><span className="inline-flex flex-col items-center gap-1.5"><ShieldCheck className="h-4 w-4 text-[#8a5a2b]" />Pagamento protegido</span><span className="inline-flex flex-col items-center gap-1.5"><PackageCheck className="h-4 w-4 text-[#8a5a2b]" />Encomenda acompanhada</span><span className="inline-flex flex-col items-center gap-1.5"><Headphones className="h-4 w-4 text-[#8a5a2b]" />Apoio pós-venda</span></div>
+            </div>
           </div>
         </div>
       </div>
