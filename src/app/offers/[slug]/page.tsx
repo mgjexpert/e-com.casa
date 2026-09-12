@@ -70,10 +70,10 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
     primaryImageOfPage: image ? { '@type': 'ImageObject', url: image } : undefined,
     mainEntity: {
       '@type': 'Product',
-      name: product.name,
+      name: product.name.trim(),
       sku: product.sku,
       image: image ? [image] : undefined,
-      description: product.shortDescription || product.description,
+      description: offer.subheadline || product.description,
       brand: { '@type': 'Brand', name: product.brand ?? COMPANY.brand },
     },
   };
