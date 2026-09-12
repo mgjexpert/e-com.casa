@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-12T04:23:59.924Z",
+  "generatedAt": "2026-09-12T06:17:13.970Z",
   "mode": "partner-production-staging",
   "categories": [
     {
@@ -54,7 +54,7 @@
       "type": "shop",
       "image": null,
       "subtitle": "Sistemas WoodUpp para aplicação exterior.",
-      "sortOrder": 8
+      "sortOrder": 7
     },
     {
       "id": "category-shop-paineis-acusticos",
@@ -63,7 +63,7 @@
       "type": "shop",
       "image": null,
       "subtitle": "Akupanel, Akupixel e sistemas acústicos WoodUpp.",
-      "sortOrder": 9
+      "sortOrder": 8
     },
     {
       "id": "category-shop-divisorias",
@@ -72,7 +72,16 @@
       "type": "shop",
       "image": null,
       "subtitle": "Sistemas modulares WoodUpp Embrace.",
-      "sortOrder": 12
+      "sortOrder": 11
+    },
+    {
+      "id": "category-shop-acessorios-instalacao",
+      "slug": "acessorios-instalacao",
+      "name": "Acessórios e instalação",
+      "type": "shop",
+      "image": "https://cdn.shopify.com/s/files/1/0332/1711/8340/files/OUTDOORLIVING-mofidify-11_web.jpg?v=1772099071",
+      "subtitle": "Complementos e produtos de instalação",
+      "sortOrder": 20
     },
     {
       "id": "category-shop-woodupp-outros",
@@ -136,15 +145,6 @@
       "image": null,
       "subtitle": "Categoria preparada; ainda sem produtos de fornecedor aprovados.",
       "sortOrder": 118
-    },
-    {
-      "id": "category-shop-acessorios-instalacao",
-      "slug": "acessorios-instalacao",
-      "name": "Acessórios e instalação",
-      "type": "shop",
-      "image": null,
-      "subtitle": "Complementos e produtos de instalação",
-      "sortOrder": 20
     }
   ],
   "subcategories": [],
@@ -156,5 +156,5 @@
     "odem:sancas": 6,
     "woodupp:products": 363
   },
-  "note": "Supplier base prices retained. Samples excluded. Direct manufacture inventory and merchant commercial release; documentary status retained."
+  "note": "Real ODEM/WoodUpp supplier catalogue snapshot. Historic mock products are not mixed into this snapshot. Exact inventory and compliance/documentation must be approved before checkout."
 }

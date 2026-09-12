@@ -1,21 +1,24 @@
 {
-  "generatedAt": "2026-09-12T04:23:59.924Z",
+  "generatedAt": "2026-09-12T06:17:13.970Z",
   "totalProducts": 352,
   "odemProducts": 50,
   "woodUppProducts": 302,
   "odemCategoryCounts": {
     "painel-ripado": 14,
     "revestimento-exterior-wpc": 8,
-    "acessorios-instalacao": 2,
     "revestimento-spc": 8,
     "rodapes": 12,
     "sancas": 6
   },
   "woodUppCategoryCounts": {
-    "acessorios-instalacao": 199,
-    "paineis-exterior": 24,
     "paineis-acusticos": 75,
-    "divisorias": 4
+    "acessorios": 0,
+    "produtos-instalacao": 0,
+    "divisorias": 4,
+    "acessorios-divisorias": 0,
+    "paineis-exterior": 24,
+    "amostras": 0,
+    "woodupp-outros": 0
   },
   "sourceCounts": {
     "odem:painel-ripado": 16,
@@ -30,17 +33,5 @@
   "media": {
     "odem": "PARTNER_CONFIRMED_BY_MERCHANT",
     "woodupp": "UNCONFIRMED_PLACEHOLDER_ONLY"
-  },
-  "excludedSamples": 63,
-  "categoryCounts": {
-    "painel-ripado": 14,
-    "revestimento-exterior-wpc": 8,
-    "acessorios-instalacao": 201,
-    "revestimento-spc": 8,
-    "rodapes": 12,
-    "sancas": 6,
-    "paineis-exterior": 24,
-    "paineis-acusticos": 75,
-    "divisorias": 4
   }
 }

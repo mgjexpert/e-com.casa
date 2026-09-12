@@ -1552,7 +1552,7 @@
     "comparePrice": null,
     "currency": "EUR",
     "categorySlug": "acessorios-instalacao",
-    "subcategorySlugs": "empresas10,new,pedido-orcamento,revestimento-exterior-wpc",
+    "subcategorySlugs": "empresas10,new,pedido-orcamento,revestimento-exterior-wpc,revestimento-exterior-wpc",
     "spaceSlugs": "",
     "styleSlugs": "",
     "collectionSlugs": "odem,odem-catalogue",
@@ -1988,7 +1988,7 @@
     "comparePrice": null,
     "currency": "EUR",
     "categorySlug": "acessorios-instalacao",
-    "subcategorySlugs": "empresas10,new,pedido-orcamento,revestimento-exterior-wpc",
+    "subcategorySlugs": "empresas10,new,pedido-orcamento,revestimento-exterior-wpc,revestimento-exterior-wpc",
     "spaceSlugs": "",
     "styleSlugs": "",
     "collectionSlugs": "odem,odem-catalogue",
@@ -4409,7 +4409,7 @@
     "sourceImageUrls": [
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/admin-ajax.php.png?v=1788010809"
     ],
-    "sortOrder": 54,
+    "sortOrder": 53,
     "createdAt": "2026-08-28T16:32:30+02:00"
   },
   {
@@ -4473,7 +4473,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Aluwood_RAL7039_Wetterschutzfarbe_03.jpg?v=1787314451",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Aluwood_RAL7039_Wetterschutzfarbe_02.jpg?v=1787314450"
     ],
-    "sortOrder": 67,
+    "sortOrder": 54,
     "createdAt": "2026-08-21T10:52:41+02:00"
   },
   {
@@ -4536,7 +4536,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Aluwood_RAL9005_Wetterschutzfarbe_04.jpg?v=1787314451",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Aluwood_RAL9005_Wetterschutzfarbe_03.jpg?v=1787314451"
     ],
-    "sortOrder": 68,
+    "sortOrder": 55,
     "createdAt": "2026-08-21T10:22:10+02:00"
   },
   {
@@ -4597,7 +4597,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/fischer-duebel.png?v=1787065329",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Duebel_fischer_50x-Kopie.png?v=1787065331"
     ],
-    "sortOrder": 72,
+    "sortOrder": 56,
     "createdAt": "2026-08-18T14:24:55+02:00"
   },
   {
@@ -4660,7 +4660,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/white-pigmented-wood-oil_before-after_1.png?v=1787065331",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/image_7.png?v=1787065329"
     ],
-    "sortOrder": 73,
+    "sortOrder": 57,
     "createdAt": "2026-08-18T13:57:31+02:00"
   },
   {
@@ -4721,7 +4721,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/wood-cleaner.png?v=1787065330",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Olfleck.png?v=1787065332"
     ],
-    "sortOrder": 74,
+    "sortOrder": 58,
     "createdAt": "2026-08-18T13:42:23+02:00"
   },
   {
@@ -4784,7 +4784,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/wood-oil_before_after.png?v=1787065330",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/image_6.png?v=1787065330"
     ],
-    "sortOrder": 75,
+    "sortOrder": 59,
     "createdAt": "2026-08-18T13:42:06+02:00"
   },
   {
@@ -4860,7 +4860,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupixel_carolinaoak_darkbeige3.jpg?v=1786982591",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupixel_carolinaoak_darkbeige2.jpg?v=1786982590"
     ],
-    "sortOrder": 76,
+    "sortOrder": 60,
     "createdAt": "2026-08-17T08:51:43+02:00"
   },
   {
@@ -4923,7 +4923,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Kartuschenpistole_3-scaled.jpg?v=1786651572",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Kartuschenpistole_2-scaled.jpg?v=1786651571"
     ],
-    "sortOrder": 77,
+    "sortOrder": 61,
     "createdAt": "2026-08-13T14:11:58+02:00"
   },
   {
@@ -4997,7 +4997,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/panel-240-classic-oak-grey-felt-black-mdf-copy.png?v=1786568234",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Classic-Oak-grey-felt-black-MDF-side.jpg?v=1786568233"
     ],
-    "sortOrder": 78,
+    "sortOrder": 62,
     "createdAt": "2026-08-13T10:03:57+02:00"
   },
   {
@@ -5070,7 +5070,7 @@
     "sourceImageUrls": [
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/EicheRustikal_Natur_Filtgrau300.png?v=1786651573"
     ],
-    "sortOrder": 79,
+    "sortOrder": 63,
     "createdAt": "2026-08-13T08:50:42+02:00"
   },
   {
@@ -5143,7 +5143,7 @@
     "sourceImageUrls": [
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/EicheRustikal_Natur_Filzschwarz_MDFNatur300.png?v=1786651572"
     ],
-    "sortOrder": 80,
+    "sortOrder": 64,
     "createdAt": "2026-08-13T08:22:56+02:00"
   },
   {
@@ -5216,7 +5216,7 @@
     "sourceImageUrls": [
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/EicheRustikal_Natur_Filzbeige_300.png?v=1786568233"
     ],
-    "sortOrder": 81,
+    "sortOrder": 65,
     "createdAt": "2026-08-12T15:01:59+02:00"
   },
   {
@@ -5290,7 +5290,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/panel-concrete-industrial.png?v=1786568233",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/BETON-CONCRETE-DETAIL.jpg?v=1786536355"
     ],
-    "sortOrder": 82,
+    "sortOrder": 66,
     "createdAt": "2026-08-12T14:10:51+02:00"
   },
   {
@@ -5364,7 +5364,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/panel-240-snow-beige-felt-copy_013cbe2e-0ca5-42d8-a4df-58488c2a21ae.png?v=1786568233",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Snow-beige-felt-side_ebb547dc-4847-4460-9572-eda9531c0e58.jpg?v=1786568232"
     ],
-    "sortOrder": 83,
+    "sortOrder": 67,
     "createdAt": "2026-08-12T13:55:16+02:00"
   },
   {
@@ -5443,7 +5443,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1021_akupanel_tonal_classicoak_beigefelt_03_1.jpg?v=1779960181",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1021_akupanel_tonal_classicoak_beigefelt_04_1.jpg?v=1779959978"
     ],
-    "sortOrder": 84,
+    "sortOrder": 68,
     "createdAt": "2026-06-23T13:53:45+02:00"
   },
   {
@@ -5504,7 +5504,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1205_akupanel_endlamella_22mm_walnut_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1205_akupanel_endlamella_22mm_walnut_02.jpg?v=1777062142"
     ],
-    "sortOrder": 91,
+    "sortOrder": 69,
     "createdAt": "2026-06-04T16:15:44+02:00"
   },
   {
@@ -5578,7 +5578,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1329_akupanel_individual_lamella_black_foil_01.jpg?v=1780567730",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1279_1229_1329_akupanel_lamella_black_foil_03.jpg?v=1780568138"
     ],
-    "sortOrder": 92,
+    "sortOrder": 70,
     "createdAt": "2026-06-04T14:48:32+02:00"
   },
   {
@@ -5652,7 +5652,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1327_akupanel_individual_lamella_black_oak_01.jpg?v=1780630327",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1228_akupanel_end_lamella_22_cm_black_oak_03.jpg?v=1780630329"
     ],
-    "sortOrder": 93,
+    "sortOrder": 71,
     "createdAt": "2026-06-04T14:48:32+02:00"
   },
   {
@@ -5726,7 +5726,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1326_akupanel_individual_lamella_southern_oak_01.jpg?v=1780630328",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1226_akupanel_end_lamella_22_cm_southern_oak_03.jpg?v=1780630329"
     ],
-    "sortOrder": 94,
+    "sortOrder": 72,
     "createdAt": "2026-06-04T14:48:31+02:00"
   },
   {
@@ -5800,7 +5800,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1325_akupanel_individual_lamella_english_oak_01.jpg?v=1780630330",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1225_akupanel_end_lamella_22_cm_english_oak_03.jpg?v=1780630331"
     ],
-    "sortOrder": 95,
+    "sortOrder": 73,
     "createdAt": "2026-06-04T14:48:31+02:00"
   },
   {
@@ -5874,7 +5874,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1324_akupanel_individual_lamella_english_walnut_01.jpg?v=1780630328",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1224_akupanel_end_lamella_22_cm_english_walnut_03.jpg?v=1780630330"
     ],
-    "sortOrder": 96,
+    "sortOrder": 74,
     "createdAt": "2026-06-04T14:48:30+02:00"
   },
   {
@@ -5948,7 +5948,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1323_akupanel_individual_lamella_weathered_oak_01.jpg?v=1780630328",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1223_akupanel_end_lamella_22_mm_weathered_oak_03.jpg?v=1780630330"
     ],
-    "sortOrder": 97,
+    "sortOrder": 75,
     "createdAt": "2026-06-04T14:48:30+02:00"
   },
   {
@@ -6023,7 +6023,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1229_akupanel_end_lamella_22_cm_black_oak_02.jpg?v=1780567731",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1279_1229_1329_akupanel_lamella_black_foil_03.jpg?v=1780568138"
     ],
-    "sortOrder": 98,
+    "sortOrder": 76,
     "createdAt": "2026-06-04T14:48:30+02:00"
   },
   {
@@ -6098,7 +6098,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1279_akupanel_end_lamella_67_mm_black_foil_02.jpg?v=1780567731",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1279_1229_1329_akupanel_lamella_black_foil_03.jpg?v=1780568138"
     ],
-    "sortOrder": 99,
+    "sortOrder": 77,
     "createdAt": "2026-06-04T14:48:29+02:00"
   },
   {
@@ -6176,7 +6176,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1278_akupanel_endlamella_67cm_blackoak_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1278_akupanel_endlamella_67cm_blackoak_02.jpg?v=1777062079"
     ],
-    "sortOrder": 100,
+    "sortOrder": 78,
     "createdAt": "2026-06-03T13:10:45+02:00"
   },
   {
@@ -6254,7 +6254,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1276_akupanel_endlamella_67cm_southernoak_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1276_akupanel_endlamella_67cm_southernoak_02.jpg?v=1777062079"
     ],
-    "sortOrder": 101,
+    "sortOrder": 79,
     "createdAt": "2026-06-03T13:10:44+02:00"
   },
   {
@@ -6332,7 +6332,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1275_akupanel_endlamella_67cm_englishoak_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1275_akupanel_endlamella_67cm_englishoak_02.jpg?v=1777062080"
     ],
-    "sortOrder": 102,
+    "sortOrder": 80,
     "createdAt": "2026-06-03T13:10:43+02:00"
   },
   {
@@ -6410,7 +6410,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1274_akupanel_endlamella_67cm_englishwalnut_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1274_akupanel_endlamella_67cm_englishwalnut_02.jpg?v=1777062080"
     ],
-    "sortOrder": 103,
+    "sortOrder": 81,
     "createdAt": "2026-06-03T13:10:42+02:00"
   },
   {
@@ -6488,7 +6488,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1273_akupanel_endlamella_67mm_weatheredoak_01.jpg?v=1777062082",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1273_akupanel_endlamella_67mm_weatheredoak_02.jpg?v=1777062083"
     ],
-    "sortOrder": 104,
+    "sortOrder": 82,
     "createdAt": "2026-06-03T13:10:41+02:00"
   },
   {
@@ -6549,7 +6549,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1270_akupanel_endlamella_67cm_alpspanel_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1270_akupanel_endlamella_67cm_alpspanel_02.jpg?v=1777062081"
     ],
-    "sortOrder": 105,
+    "sortOrder": 83,
     "createdAt": "2026-06-03T13:10:41+02:00"
   },
   {
@@ -6627,7 +6627,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1269_akupanel_endlamella_67cm_snow_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1269_akupanel_endlamella_67cm_snow_02.jpg?v=1777062080"
     ],
-    "sortOrder": 106,
+    "sortOrder": 84,
     "createdAt": "2026-06-03T13:10:40+02:00"
   },
   {
@@ -6705,7 +6705,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1268_akupanel_endlamella_67cm_cloud_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1268_akupanel_endlamella_67cm_cloud_02.jpg?v=1777062080"
     ],
-    "sortOrder": 107,
+    "sortOrder": 85,
     "createdAt": "2026-06-03T13:10:39+02:00"
   },
   {
@@ -6783,7 +6783,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1267_akupanel_endlamella_67cm_moss_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1267_akupanel_endlamella_67cm_moss_02.jpg?v=1777062079"
     ],
-    "sortOrder": 108,
+    "sortOrder": 86,
     "createdAt": "2026-06-03T13:10:38+02:00"
   },
   {
@@ -6861,7 +6861,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1266_akupanel_endlamella_67cm_stone_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1266_akupanel_endlamella_67cm_stone_02.jpg?v=1777062079"
     ],
-    "sortOrder": 109,
+    "sortOrder": 87,
     "createdAt": "2026-06-03T13:10:38+02:00"
   },
   {
@@ -6922,7 +6922,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1265_akupanel_endlamella_67cm_clay_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1265_akupanel_endlamella_67cm_clay_02.jpg?v=1777062080"
     ],
-    "sortOrder": 110,
+    "sortOrder": 88,
     "createdAt": "2026-06-03T13:10:37+02:00"
   },
   {
@@ -7000,7 +7000,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1263_akupanel_endlamella_67cm_tonalblackash_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1263_akupanel_endlamella_67cm_tonalblackash_02.jpg?v=1777062081"
     ],
-    "sortOrder": 111,
+    "sortOrder": 89,
     "createdAt": "2026-06-03T13:10:36+02:00"
   },
   {
@@ -7078,7 +7078,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1262_akupanel_endlamella_67cm_oxidewhite_01.jpg?v=1777316350",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1262_akupanel_endlamella_67cm_oxidewhite_02.jpg?v=1777316350"
     ],
-    "sortOrder": 112,
+    "sortOrder": 90,
     "createdAt": "2026-06-03T13:10:36+02:00"
   },
   {
@@ -7156,7 +7156,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1261_akupanel_endlamella_67cm_oxidegrey_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1261_akupanel_endlamella_67cm_oxidegrey_02.jpg?v=1777062081"
     ],
-    "sortOrder": 113,
+    "sortOrder": 91,
     "createdAt": "2026-06-03T13:10:35+02:00"
   },
   {
@@ -7234,7 +7234,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1260_akupanel_endlamella_67cm_oxidecopper_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1260_akupanel_endlamella_67cm_oxidecopper_02.jpg?v=1777062080"
     ],
-    "sortOrder": 114,
+    "sortOrder": 92,
     "createdAt": "2026-06-03T13:10:35+02:00"
   },
   {
@@ -7312,7 +7312,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1259_akupanel_endlamella_67cm_oxideblue_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1259_akupanel_endlamella_67cm_oxideblue_02.jpg?v=1777062080"
     ],
-    "sortOrder": 115,
+    "sortOrder": 93,
     "createdAt": "2026-06-03T13:10:34+02:00"
   },
   {
@@ -7390,7 +7390,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1258_akupanel_endlamella_67cm_charcoal_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1258_akupanel_endlamella_67cm_charcoal_02.jpg?v=1777062080"
     ],
-    "sortOrder": 116,
+    "sortOrder": 94,
     "createdAt": "2026-06-03T13:10:33+02:00"
   },
   {
@@ -7451,7 +7451,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1220_akupanel_endlamella_22cm_alpspanel_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1220_akupanel_endlamella_22cm_alpspanel_02.jpg?v=1777062139"
     ],
-    "sortOrder": 117,
+    "sortOrder": 95,
     "createdAt": "2026-06-03T13:10:33+02:00"
   },
   {
@@ -7512,7 +7512,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1215_akupanel_endlamella_22cm_clay_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1215_akupanel_endlamella_22cm_clay_02.jpg?v=1777062140"
     ],
-    "sortOrder": 118,
+    "sortOrder": 96,
     "createdAt": "2026-06-03T13:10:32+02:00"
   },
   {
@@ -7590,7 +7590,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1212_akupanel_endlamella_22cm_oxidewhite_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1212_akupanel_end_lamella_22_cm_oxide_white_03.jpg?v=1777813416"
     ],
-    "sortOrder": 119,
+    "sortOrder": 97,
     "createdAt": "2026-06-03T13:10:32+02:00"
   },
   {
@@ -7668,7 +7668,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1211_akupanel_endlamella_22cm_oxidegrey_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1211_akupanel_endlamella_22cm_oxidegrey_02.jpg?v=1777062141"
     ],
-    "sortOrder": 120,
+    "sortOrder": 98,
     "createdAt": "2026-06-03T13:10:31+02:00"
   },
   {
@@ -7746,7 +7746,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1209_akupanel_endlamella_22cm_oxideblue_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1209_akupanel_endlamella_22cm_oxideblue_02.jpg?v=1777062140"
     ],
-    "sortOrder": 121,
+    "sortOrder": 99,
     "createdAt": "2026-06-03T13:10:30+02:00"
   },
   {
@@ -7824,7 +7824,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1208_akupanel_endlamella_22cm_charcoal_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1208_akupanel_endlamella_22cm_charcoal_02.jpg?v=1777062140"
     ],
-    "sortOrder": 122,
+    "sortOrder": 100,
     "createdAt": "2026-06-03T13:10:29+02:00"
   },
   {
@@ -7887,7 +7887,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1020_akupanel_alps_panel_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_alps_panel_black_felt_1_AI.png?v=1784533106"
     ],
-    "sortOrder": 123,
+    "sortOrder": 101,
     "createdAt": "2026-06-03T13:10:29+02:00"
   },
   {
@@ -7963,7 +7963,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1030_akupanel_tonal_carolinaoak_beigefelt_03.jpg?v=1779273062",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1030_akupanel_tonal_carolinaoak_beigefelt_04.jpg?v=1779273062"
     ],
-    "sortOrder": 124,
+    "sortOrder": 102,
     "createdAt": "2026-06-03T13:10:27+02:00"
   },
   {
@@ -8039,7 +8039,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1029_akupanel_colours_blackwrapped_blackfelt_03_AI.jpg?v=1784533404",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1029_akupanel_colours_blackwrapped_blackfelt_04_AI.jpg?v=1784533414"
     ],
-    "sortOrder": 125,
+    "sortOrder": 103,
     "createdAt": "2026-06-03T13:10:27+02:00"
   },
   {
@@ -8102,7 +8102,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1015_akupanel_colours_clay_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_clay_black_felt_1_AI.png?v=1784533691"
     ],
-    "sortOrder": 126,
+    "sortOrder": 104,
     "createdAt": "2026-06-03T13:10:26+02:00"
   },
   {
@@ -8181,7 +8181,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1012_akupanel_oxide_white_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1012_akupanel_oxide_white_black_felt_04.jpg?v=1777062143"
     ],
-    "sortOrder": 127,
+    "sortOrder": 105,
     "createdAt": "2026-06-03T13:10:26+02:00"
   },
   {
@@ -8260,7 +8260,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1011_akupanel_oxide_grey_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1011_akupanel_oxide_grey_black_felt_04.jpg?v=1777062144"
     ],
-    "sortOrder": 128,
+    "sortOrder": 106,
     "createdAt": "2026-06-03T13:10:25+02:00"
   },
   {
@@ -8339,7 +8339,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1009_akupanel_oxide_blue_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1009_akupanel_oxide_blue_black_felt_04.jpg?v=1777062145"
     ],
-    "sortOrder": 129,
+    "sortOrder": 107,
     "createdAt": "2026-06-03T13:10:25+02:00"
   },
   {
@@ -8418,7 +8418,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1008_akupanel_charcoal_black_felt_03.jpg?v=1777062205",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_charcoal_black_felt_1_AI.png?v=1784533790"
     ],
-    "sortOrder": 130,
+    "sortOrder": 108,
     "createdAt": "2026-06-03T13:10:24+02:00"
   },
   {
@@ -8492,7 +8492,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_southern_oak_grey_felt_1.jpg?v=1780305609",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_southernoak_greyfelt_2_1.png?v=1780305610"
     ],
-    "sortOrder": 131,
+    "sortOrder": 109,
     "createdAt": "2026-06-03T09:58:06+02:00"
   },
   {
@@ -8568,7 +8568,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1009_akupanel_oxide_blue_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/oxideblue1.jpg?v=1780133349"
     ],
-    "sortOrder": 132,
+    "sortOrder": 110,
     "createdAt": "2026-06-03T09:58:05+02:00"
   },
   {
@@ -8644,7 +8644,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1012_akupanel_oxide_white_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/oxidewhite1.jpg?v=1780133349"
     ],
-    "sortOrder": 133,
+    "sortOrder": 111,
     "createdAt": "2026-06-03T09:58:05+02:00"
   },
   {
@@ -8720,7 +8720,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1011_akupanel_oxide_grey_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/oxidegrey1.jpg?v=1780133349"
     ],
-    "sortOrder": 134,
+    "sortOrder": 112,
     "createdAt": "2026-06-03T09:58:04+02:00"
   },
   {
@@ -8796,7 +8796,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1030_akupanel_tonal_carolinaoak_beigefelt_03.jpg?v=1779273062",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/carolina_oak_beige_felt1.jpg?v=1780133349"
     ],
-    "sortOrder": 135,
+    "sortOrder": 113,
     "createdAt": "2026-06-03T09:58:03+02:00"
   },
   {
@@ -8870,7 +8870,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1251_akupanel_endlamella_67cm_classicoak_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1251_akupanel_endlamella_67cm_classicoak_02.jpg?v=1777062139"
     ],
-    "sortOrder": 136,
+    "sortOrder": 114,
     "createdAt": "2026-06-03T09:58:03+02:00"
   },
   {
@@ -8944,7 +8944,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 137,
+    "sortOrder": 115,
     "createdAt": "2026-06-03T09:58:02+02:00"
   },
   {
@@ -9020,7 +9020,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1037_akupanel_tonal_classic_oak_dark_beige_felt_03_1.jpg?v=1778856598",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1037_akupanel_tonal_classic_oak_dark_beige_felt_04_1.jpg?v=1778856598"
     ],
-    "sortOrder": 139,
+    "sortOrder": 116,
     "createdAt": "2026-06-03T09:58:01+02:00"
   },
   {
@@ -9098,7 +9098,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1222_akupanel_endlamella_22cm_rusticsmokedlarch_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1222_akupanel_endlamella_22cm_rusticsmokedlarch_02.jpg?v=1777062140"
     ],
-    "sortOrder": 141,
+    "sortOrder": 117,
     "createdAt": "2026-06-03T09:57:59+02:00"
   },
   {
@@ -9176,7 +9176,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1213_akupanel_endlamella_22cm_tonalblackash_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1213_akupanel_endlamella_22cm_tonalblackash_02.jpg?v=1777062140"
     ],
-    "sortOrder": 142,
+    "sortOrder": 118,
     "createdAt": "2026-06-03T09:57:58+02:00"
   },
   {
@@ -9254,7 +9254,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1207_akupanel_endlamella_22cm_rusticsmokedoak_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1207_akupanel_endlamella_22cm_rusticsmokedoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 143,
+    "sortOrder": 119,
     "createdAt": "2026-06-03T09:57:58+02:00"
   },
   {
@@ -9332,7 +9332,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1206_akupanel_endlamella_22cm_rusticgreyoak_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1206_akupanel_endlamella_22cm_rusticgreyoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 144,
+    "sortOrder": 120,
     "createdAt": "2026-06-03T09:57:57+02:00"
   },
   {
@@ -9410,7 +9410,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1204_akupanel_endlamella_22cm_rusticbrownoak_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1204_akupanel_endlamella_22cm_rusticbrownoak_02.jpg?v=1777062142"
     ],
-    "sortOrder": 145,
+    "sortOrder": 121,
     "createdAt": "2026-06-03T09:57:56+02:00"
   },
   {
@@ -9488,7 +9488,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1203_akupanel_endlamella_22cm_rusticnaturaloak_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1203_akupanel_endlamella_22cm_rusticnaturaloak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 146,
+    "sortOrder": 122,
     "createdAt": "2026-06-03T09:57:55+02:00"
   },
   {
@@ -9566,7 +9566,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 147,
+    "sortOrder": 123,
     "createdAt": "2026-06-03T09:57:54+02:00"
   },
   {
@@ -9645,7 +9645,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1038_akupanel_tonal_classic_oak_light_beige_felt_03_1.jpg?v=1778855494",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1038_akupanel_tonal_classicoak_lightbeigefelt_04_1.jpg?v=1779959800"
     ],
-    "sortOrder": 150,
+    "sortOrder": 124,
     "createdAt": "2026-06-03T09:57:52+02:00"
   },
   {
@@ -9719,7 +9719,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_english_oak_beige_felt_1.jpg?v=1780381868",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_englishoak_beigefelt2_1.png?v=1780382350"
     ],
-    "sortOrder": 154,
+    "sortOrder": 125,
     "createdAt": "2026-05-31T12:26:31+02:00"
   },
   {
@@ -9793,7 +9793,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_southern_oak_beige_felt_1.jpg?v=1780305608",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_southernoak_beigefelt_2_1.png?v=1780382350"
     ],
-    "sortOrder": 155,
+    "sortOrder": 126,
     "createdAt": "2026-05-31T12:26:09+02:00"
   },
   {
@@ -9869,7 +9869,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1002_akupanel_classic_oak_grey_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/carolina_oak_beige_felt1.jpg?v=1780133349"
     ],
-    "sortOrder": 156,
+    "sortOrder": 127,
     "createdAt": "2026-05-30T00:02:50+02:00"
   },
   {
@@ -9945,7 +9945,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1010_akupanel_oxide_copper_black_felt_03.jpg?v=1777062205",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/oxidecopper1.jpg?v=1780133348"
     ],
-    "sortOrder": 157,
+    "sortOrder": 128,
     "createdAt": "2026-05-30T00:00:40+02:00"
   },
   {
@@ -10021,7 +10021,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1046_akupanel_tonal_rustic_grey_oak_brown_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/tonal_rustic_grey_oak_1.jpg?v=1780133348"
     ],
-    "sortOrder": 158,
+    "sortOrder": 129,
     "createdAt": "2026-05-29T23:58:49+02:00"
   },
   {
@@ -10097,7 +10097,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1047_akupanel_tonal_rustic_smoked_oak_brown_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/tonal_rustic_smoked_oak1.jpg?v=1780133348"
     ],
-    "sortOrder": 159,
+    "sortOrder": 130,
     "createdAt": "2026-05-29T23:57:57+02:00"
   },
   {
@@ -10173,7 +10173,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1022_akupanel_rustic_rustic_smoked_larch_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/smokedlarch1.jpg?v=1780133349"
     ],
-    "sortOrder": 160,
+    "sortOrder": 131,
     "createdAt": "2026-05-29T16:52:32+02:00"
   },
   {
@@ -10250,7 +10250,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1407_mounting_acousticpanelscrews100pcs_lightbeige_04.jpg?v=1780381869",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1407_mounting_acousticpanelscrews100pcs_lightbeige_02.jpg?v=1780381868"
     ],
-    "sortOrder": 161,
+    "sortOrder": 132,
     "createdAt": "2026-05-21T07:38:18+02:00"
   },
   {
@@ -10386,7 +10386,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3102_lumiled_240cm_beige_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3100_lumileddriver100w_05.jpg?v=1777061892"
     ],
-    "sortOrder": 162,
+    "sortOrder": 133,
     "createdAt": "2026-05-12T21:09:47+02:00"
   },
   {
@@ -10465,7 +10465,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-84.jpg?v=1777062014",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3720_embrace_vigg_felt_box_ox_red_06.jpg?v=1777062016"
     ],
-    "sortOrder": 163,
+    "sortOrder": 134,
     "createdAt": "2026-05-12T20:51:28+02:00"
   },
   {
@@ -10543,7 +10543,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-26.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3719_embrace_vigg_felt_box_beige_06.jpg?v=1777062016"
     ],
-    "sortOrder": 164,
+    "sortOrder": 135,
     "createdAt": "2026-05-12T20:51:13+02:00"
   },
   {
@@ -10621,7 +10621,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3530_3531_3532_3533_environmental_create_norr_plant_box_06.jpg?v=1778577392",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3531_create_norr_plant_box_239_mm_black_04.jpg?v=1778642770"
     ],
-    "sortOrder": 165,
+    "sortOrder": 136,
     "createdAt": "2026-05-12T13:05:41+02:00"
   },
   {
@@ -10701,7 +10701,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_3405_3406_3530_3531_3532_3533_wide_shelf_plant_box_environmental_05.jpg?v=1778575872",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_3405_3406_3530_3531_3532_3533_wide_shelf_plant_box_environmental_19.jpg?v=1778575871"
     ],
-    "sortOrder": 166,
+    "sortOrder": 137,
     "createdAt": "2026-05-12T13:05:41+02:00"
   },
   {
@@ -10781,7 +10781,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3537_create_feya_lamp_beige_beige_environmental_01.jpg?v=1778642770",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3537_create_feya_lamp_beige_beige_environmental_02.jpg?v=1778577131"
     ],
-    "sortOrder": 167,
+    "sortOrder": 138,
     "createdAt": "2026-05-12T13:05:40+02:00"
   },
   {
@@ -10860,7 +10860,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3536_create_feya_lamp_black_beige_05.jpg?v=1778642770",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3536_create_feya_lamp_black_beige_environmental_10.jpg?v=1778575941"
     ],
-    "sortOrder": 168,
+    "sortOrder": 139,
     "createdAt": "2026-05-12T13:05:40+02:00"
   },
   {
@@ -10940,7 +10940,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3530_3531_3532_3533_environmental_create_norr_plant_box_03.jpg?v=1778577393",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3530_3531_3532_3533_environmental_create_norr_plant_box_04.jpg?v=1778577393"
     ],
-    "sortOrder": 169,
+    "sortOrder": 140,
     "createdAt": "2026-05-12T13:05:40+02:00"
   },
   {
@@ -11020,7 +11020,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3530_3531_3532_3533_environmental_create_norr_plant_box_08.jpg?v=1778577393",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3530_3531_3532_3533_environmental_create_norr_plant_box_01.jpg?v=1778577393"
     ],
-    "sortOrder": 170,
+    "sortOrder": 141,
     "createdAt": "2026-05-12T13:05:40+02:00"
   },
   {
@@ -11085,7 +11085,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3765_3764_embrace_nell_shoe_storage_beige_magazine_storage_beige_environmental_15.jpg?v=1778832586",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3764_embrace_nell_magazinestorage_beige_04.jpg?v=1778642770"
     ],
-    "sortOrder": 171,
+    "sortOrder": 142,
     "createdAt": "2026-05-12T13:05:39+02:00"
   },
   {
@@ -11164,7 +11164,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3622_create_norr_coat_hook_rack_x7_black_stainless_steel_environmental_01_AI.jpg?v=1784533976",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3622_create_norr_coathookrackx7_black_stainlesssteel_09.jpg?v=1778642769"
     ],
-    "sortOrder": 172,
+    "sortOrder": 143,
     "createdAt": "2026-05-12T13:05:39+02:00"
   },
   {
@@ -11243,7 +11243,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3621_create_norr_coat_hook_rack_x5_black_stainless_steel_environmental_02.jpg?v=1778642771",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3621_create_norr_coathookrackx5_black_stainlesssteel_08.jpg?v=1778642769"
     ],
-    "sortOrder": 173,
+    "sortOrder": 144,
     "createdAt": "2026-05-12T13:05:39+02:00"
   },
   {
@@ -11321,7 +11321,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3620_create_norr_coat_hook_rack_x1_black_stainless_steel_environmental_03.jpg?v=1778575941",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3620_create_norr_coat_hook_rack_x1_black_stainless_steel_04.jpg?v=1778642769"
     ],
-    "sortOrder": 174,
+    "sortOrder": 145,
     "createdAt": "2026-05-12T13:05:39+02:00"
   },
   {
@@ -11387,7 +11387,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3765_embrace_nell_shoe_storage_beige_environmental_24.jpg?v=1778832394",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3765_embrace_nell_shoestorage_beige_03.jpg?v=1778570676"
     ],
-    "sortOrder": 175,
+    "sortOrder": 146,
     "createdAt": "2026-05-12T12:58:09+02:00"
   },
   {
@@ -11493,7 +11493,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3032_create_liva_cover_polished_steel_120_cm_01.jpg?v=1775051133",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3030_create_liva_cover_polishedsteel_20cm_01.jpg?v=1777062014"
     ],
-    "sortOrder": 176,
+    "sortOrder": 147,
     "createdAt": "2026-05-06T15:19:21+02:00"
   },
   {
@@ -11599,7 +11599,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3027_create_liva_cover_blackaluminum_20cm_01.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3029_create_liva_cover_blackaluminum_120cm_01.jpg?v=1774384534"
     ],
-    "sortOrder": 177,
+    "sortOrder": 148,
     "createdAt": "2026-05-06T15:12:06+02:00"
   },
   {
@@ -11705,7 +11705,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3024_create_liva_cover_brass_20cm_01.jpg?v=1777061892",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3026_create_liva_cover_brass_120cm_01.jpg?v=1774384459"
     ],
-    "sortOrder": 178,
+    "sortOrder": 149,
     "createdAt": "2026-05-06T15:08:04+02:00"
   },
   {
@@ -11796,7 +11796,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3413_environmental_create_norr_wide_shelf_359_mm_beige_stainless_steel_02.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3412_create_norr_wide_shelf_519_mm_beige_stainless_steel_01.jpg?v=1774859397"
     ],
-    "sortOrder": 179,
+    "sortOrder": 150,
     "createdAt": "2026-05-06T15:01:17+02:00"
   },
   {
@@ -11902,7 +11902,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3405_create_norr_wideshelf519mm_black_brass_01.jpg?v=1777061892",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_create_norr_wideshelf759mm_black_brass_01.jpg?v=1777061893"
     ],
-    "sortOrder": 180,
+    "sortOrder": 151,
     "createdAt": "2026-05-06T14:59:37+02:00"
   },
   {
@@ -12023,7 +12023,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3403_create_norr_narrowshelf359mm_black_brass_01.jpg?v=1777061892",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3402_create_norr_narrowshelf519mm_black_brass_01.jpg?v=1777061892"
     ],
-    "sortOrder": 181,
+    "sortOrder": 152,
     "createdAt": "2026-05-06T14:53:33+02:00"
   },
   {
@@ -12131,7 +12131,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3021_3022_3023_create_liva_cover_copper_environmental_02.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3022_create_liva_cover_copper_60cm_02.jpg?v=1778145069"
     ],
-    "sortOrder": 182,
+    "sortOrder": 153,
     "createdAt": "2026-05-06T12:20:14+02:00"
   },
   {
@@ -12363,7 +12363,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3103_lumi_led_300_cm_black_03.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3101_lumiled_240cm_black_01_b9f2d725-e7dd-4ff3-bf89-34668b8f51db.jpg?v=1777061953"
     ],
-    "sortOrder": 183,
+    "sortOrder": 154,
     "createdAt": "2026-05-04T09:40:29+02:00"
   },
   {
@@ -12427,7 +12427,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3721_embrace_alva_s_hook_stainless_steel_03.jpg?v=1777062013",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-59.jpg?v=1777062016"
     ],
-    "sortOrder": 184,
+    "sortOrder": 155,
     "createdAt": "2026-04-29T15:52:03+02:00"
   },
   {
@@ -12505,7 +12505,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-95.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3710_embrace_nell_doublemetalshelf_beige_02_143f199d-5e3d-413e-8128-f0ce179cda4b.jpg?v=1777062015"
     ],
-    "sortOrder": 185,
+    "sortOrder": 156,
     "createdAt": "2026-04-29T15:52:02+02:00"
   },
   {
@@ -12584,7 +12584,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-56.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3713_embrace_gro_soft_pocket_light_beige_03.jpg?v=1777062014"
     ],
-    "sortOrder": 186,
+    "sortOrder": 157,
     "createdAt": "2026-04-29T15:52:02+02:00"
   },
   {
@@ -12662,7 +12662,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3714_embrace_gro_softpocket_oxred_02.jpg?v=1777062014",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3714_embrace_gro_soft_pocket_ox_red_03_235f21b0-e2d3-47ee-a41c-ea7279a9447b.jpg?v=1777062014"
     ],
-    "sortOrder": 187,
+    "sortOrder": 158,
     "createdAt": "2026-04-29T15:52:02+02:00"
   },
   {
@@ -12740,7 +12740,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3715_embrace_alva_wirehook_long_stainlesssteel_02.jpg?v=1777062014",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-65.jpg?v=1777062016"
     ],
-    "sortOrder": 188,
+    "sortOrder": 159,
     "createdAt": "2026-04-29T15:52:02+02:00"
   },
   {
@@ -12818,7 +12818,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3716_embrace_alva_wirehook_short_stainlesssteel_02.jpg?v=1777062014",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-69.jpg?v=1777062016"
     ],
-    "sortOrder": 189,
+    "sortOrder": 160,
     "createdAt": "2026-04-29T15:52:02+02:00"
   },
   {
@@ -12881,7 +12881,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-75.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3707_embrace_lova_woodenshelf_02.jpg?v=1777062014"
     ],
-    "sortOrder": 190,
+    "sortOrder": 161,
     "createdAt": "2026-04-29T15:52:01+02:00"
   },
   {
@@ -12944,7 +12944,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-108.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3709_embrace_nell_coathookrack_beige_02.jpg?v=1777062015"
     ],
-    "sortOrder": 191,
+    "sortOrder": 162,
     "createdAt": "2026-04-29T15:52:01+02:00"
   },
   {
@@ -13022,7 +13022,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7925_aluwood_screws_100pcs_front_02.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7925_aluwood_screws_100_pcs_front_03.jpg?v=1777061893"
     ],
-    "sortOrder": 198,
+    "sortOrder": 163,
     "createdAt": "2026-04-29T14:53:15+02:00"
   },
   {
@@ -13100,7 +13100,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7926_aluwood_screws_100pcs_back_02.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7926_aluwood_screws_100_pcs_back_03.jpg?v=1776155458"
     ],
-    "sortOrder": 199,
+    "sortOrder": 164,
     "createdAt": "2026-04-29T14:53:15+02:00"
   },
   {
@@ -13163,7 +13163,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6253_aluwood_inside_corner_03.jpg?v=1781854868",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6253_aluwood_inside_corner_04.png?v=1782435006"
     ],
-    "sortOrder": 200,
+    "sortOrder": 165,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13226,7 +13226,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6255_aluwood_coverage_03.jpg?v=1781854868",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6255_aluwood_coverage_04.png?v=1782435405"
     ],
-    "sortOrder": 201,
+    "sortOrder": 166,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13289,7 +13289,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6251_aluwood_bottom_03.jpg?v=1781854870",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6251_aluwood_bottom_04.png?v=1782435006"
     ],
-    "sortOrder": 202,
+    "sortOrder": 167,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13366,7 +13366,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6306_aluwood_lamella_oiledbrown_02.jpg?v=1777481830",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6206_aluwood_panel_oiled_brown_04.jpg?v=1777061895"
     ],
-    "sortOrder": 203,
+    "sortOrder": 168,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13443,7 +13443,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6303_aluwood_lamella_black_02.jpg?v=1777481830",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6203_aluwood_panel_black_04_08f79e74-3b2c-47ee-b87b-62d3eeb6d5f3.jpg?v=1777061895"
     ],
-    "sortOrder": 204,
+    "sortOrder": 169,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13520,7 +13520,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6302_aluwood_lamella_grey_02.jpg?v=1777481831",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6202_aluwood_panel_grey_04_7bf82db9-02ba-4999-9287-5a51440b41b3.jpg?v=1777061895"
     ],
-    "sortOrder": 205,
+    "sortOrder": 170,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13597,7 +13597,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6301_aluwood_lamella_brown_02.jpg?v=1777481830",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6201_aluwood_panel_brown_04_795b1d62-061d-486c-9e8f-c731217e929e.jpg?v=1777061895"
     ],
-    "sortOrder": 206,
+    "sortOrder": 171,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13673,7 +13673,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7925_aluwood_screws_100_pcs_front_environmental_6f393ab6-7e12-4983-9bc2-7c22816ad84d.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7925_aluwood_screws_100_pcs_front_03.jpg?v=1777061893"
     ],
-    "sortOrder": 207,
+    "sortOrder": 172,
     "createdAt": "2026-04-29T14:53:14+02:00"
   },
   {
@@ -13736,7 +13736,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6257_aluwood_endcorner_03.jpg?v=1781854867",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6257_aluwood_end_corner_04.png?v=1782435006"
     ],
-    "sortOrder": 208,
+    "sortOrder": 173,
     "createdAt": "2026-04-29T14:53:13+02:00"
   },
   {
@@ -13799,7 +13799,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6254_aluwood_window_sill_03.jpg?v=1781854867",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6254_aluwood_window_sill_04.png?v=1782435402"
     ],
-    "sortOrder": 209,
+    "sortOrder": 174,
     "createdAt": "2026-04-29T14:53:13+02:00"
   },
   {
@@ -13862,7 +13862,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6252_aluwood__outside_corner_03.jpg?v=1781854868",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6252_aluwood__outside_corner_04.png?v=1782435007"
     ],
-    "sortOrder": 210,
+    "sortOrder": 175,
     "createdAt": "2026-04-29T14:53:13+02:00"
   },
   {
@@ -13924,7 +13924,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6256_aluwood_insect_screen_x.jpg?v=1782766390",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6256_aluwood_insect_screen_03.jpg?v=1781854867"
     ],
-    "sortOrder": 211,
+    "sortOrder": 176,
     "createdAt": "2026-04-29T14:53:13+02:00"
   },
   {
@@ -14007,7 +14007,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6204_aluwood_panel_plain_aluminium_03.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6204_aluwood_panel_plain_aluminium_environmental_01.jpg?v=1777061894"
     ],
-    "sortOrder": 212,
+    "sortOrder": 177,
     "createdAt": "2026-04-29T14:53:12+02:00"
   },
   {
@@ -14070,7 +14070,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6259_aluwood_top_side_finishing_03.jpg?v=1781854868",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6259_aluwood_top_side_finishing_04.png?v=1782435007"
     ],
-    "sortOrder": 213,
+    "sortOrder": 178,
     "createdAt": "2026-04-29T14:53:12+02:00"
   },
   {
@@ -14148,7 +14148,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6260_6261_aluwood_levelwallcapping_03.jpg?v=1781854867",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6260_6261_aluwood_level_wall_capping_04.png?v=1782435402"
     ],
-    "sortOrder": 214,
+    "sortOrder": 179,
     "createdAt": "2026-04-29T14:53:12+02:00"
   },
   {
@@ -14226,7 +14226,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6260_6261_aluwood_levelwallcapping_03.jpg?v=1781854867",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6260_6261_aluwood_level_wall_capping_05.png?v=1782435405"
     ],
-    "sortOrder": 215,
+    "sortOrder": 180,
     "createdAt": "2026-04-29T14:53:12+02:00"
   },
   {
@@ -14309,7 +14309,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6206_aluwood_panel_oiled_brown_03.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6206_aluwood_panel_oiled_brown_environmental_8_AI.png?v=1784532643"
     ],
-    "sortOrder": 216,
+    "sortOrder": 181,
     "createdAt": "2026-04-29T14:53:11+02:00"
   },
   {
@@ -14392,7 +14392,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6203_aluwood_panel_black_environmental_3_AI.png?v=1784532692",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6203_aluwood_panel_black_03.jpg?v=1777061895"
     ],
-    "sortOrder": 217,
+    "sortOrder": 182,
     "createdAt": "2026-04-29T14:53:11+02:00"
   },
   {
@@ -14473,7 +14473,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6202_aluwood_panel_grey_environmental_5_AI.png?v=1784532727",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6202_aluwood_panel_grey_03.jpg?v=1777061894"
     ],
-    "sortOrder": 218,
+    "sortOrder": 183,
     "createdAt": "2026-04-29T14:53:11+02:00"
   },
   {
@@ -14553,7 +14553,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6201_aluwood_panel_brown_environmental_1_AI.png?v=1784532752",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/6201_aluwood_panel_brown_03.jpg?v=1777061895"
     ],
-    "sortOrder": 219,
+    "sortOrder": 184,
     "createdAt": "2026-04-29T14:53:11+02:00"
   },
   {
@@ -14631,7 +14631,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1205_akupanel_endlamella_22mm_walnut_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1205_akupanel_endlamella_22mm_walnut_02.jpg?v=1777062142"
     ],
-    "sortOrder": 220,
+    "sortOrder": 185,
     "createdAt": "2026-04-29T14:20:20+02:00"
   },
   {
@@ -14709,7 +14709,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1204_akupanel_endlamella_22cm_rusticbrownoak_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1204_akupanel_endlamella_22cm_rusticbrownoak_02.jpg?v=1777062142"
     ],
-    "sortOrder": 221,
+    "sortOrder": 186,
     "createdAt": "2026-04-29T14:20:20+02:00"
   },
   {
@@ -14787,7 +14787,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1203_akupanel_endlamella_22cm_rusticnaturaloak_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1203_akupanel_endlamella_22cm_rusticnaturaloak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 222,
+    "sortOrder": 187,
     "createdAt": "2026-04-29T14:20:20+02:00"
   },
   {
@@ -14865,7 +14865,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_01.jpg?v=1777062141",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1201_akupanel_endlamella_22cm_classicoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 223,
+    "sortOrder": 188,
     "createdAt": "2026-04-29T14:20:20+02:00"
   },
   {
@@ -14943,7 +14943,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1207_akupanel_endlamella_22cm_rusticsmokedoak_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1207_akupanel_endlamella_22cm_rusticsmokedoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 224,
+    "sortOrder": 189,
     "createdAt": "2026-04-29T14:20:19+02:00"
   },
   {
@@ -15021,7 +15021,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1206_akupanel_endlamella_22cm_rusticgreyoak_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1206_akupanel_endlamella_22cm_rusticgreyoak_02.jpg?v=1777062141"
     ],
-    "sortOrder": 225,
+    "sortOrder": 190,
     "createdAt": "2026-04-29T14:20:19+02:00"
   },
   {
@@ -15099,7 +15099,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1213_akupanel_endlamella_22cm_tonalblackash_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1213_akupanel_endlamella_22cm_tonalblackash_02.jpg?v=1777062140"
     ],
-    "sortOrder": 226,
+    "sortOrder": 191,
     "createdAt": "2026-04-29T14:20:18+02:00"
   },
   {
@@ -15177,7 +15177,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1218_akupanel_endlamella_22cm_cloud_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1218_akupanel_endlamella_22cm_cloud_02.jpg?v=1777062140"
     ],
-    "sortOrder": 227,
+    "sortOrder": 192,
     "createdAt": "2026-04-29T14:20:17+02:00"
   },
   {
@@ -15255,7 +15255,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1217_akupanel_endlamella_22cm_moss_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1217_akupanel_endlamella_22cm_moss_02.jpg?v=1777062142"
     ],
-    "sortOrder": 228,
+    "sortOrder": 193,
     "createdAt": "2026-04-29T14:20:17+02:00"
   },
   {
@@ -15329,7 +15329,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1223_akupanel_endlamella_22mm_weatheredoak_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1223_akupanel_endlamella_22mm_weatheredoak_02.jpg?v=1777062140"
     ],
-    "sortOrder": 229,
+    "sortOrder": 194,
     "createdAt": "2026-04-29T14:20:16+02:00"
   },
   {
@@ -15407,7 +15407,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1222_akupanel_endlamella_22cm_rusticsmokedlarch_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1222_akupanel_endlamella_22cm_rusticsmokedlarch_02.jpg?v=1777062140"
     ],
-    "sortOrder": 230,
+    "sortOrder": 195,
     "createdAt": "2026-04-29T14:20:16+02:00"
   },
   {
@@ -15485,7 +15485,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1219_akupanel_endlamella_22cm_snow_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1219_akupanel_endlamella_22cm_snow_02.jpg?v=1777062140"
     ],
-    "sortOrder": 231,
+    "sortOrder": 196,
     "createdAt": "2026-04-29T14:20:16+02:00"
   },
   {
@@ -15563,7 +15563,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1228_akupanel_endlamella_22cm_blackoak_01.jpg?v=1777062137",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1228_akupanel_endlamella_22cm_blackoak_02.jpg?v=1777062139"
     ],
-    "sortOrder": 232,
+    "sortOrder": 197,
     "createdAt": "2026-04-29T14:20:15+02:00"
   },
   {
@@ -15641,7 +15641,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1226_akupanel_endlamella_22cm_southernoak_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1226_akupanel_endlamella_22cm_southernoak_02.jpg?v=1777062138"
     ],
-    "sortOrder": 233,
+    "sortOrder": 198,
     "createdAt": "2026-04-29T14:20:15+02:00"
   },
   {
@@ -15719,7 +15719,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1225_akupanel_endlamella_22cm_englishoak_01.jpg?v=1777062139",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1225_akupanel_endlamella_22cm_englishoak_02.jpg?v=1777062139"
     ],
-    "sortOrder": 234,
+    "sortOrder": 199,
     "createdAt": "2026-04-29T14:20:15+02:00"
   },
   {
@@ -15797,7 +15797,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1224_akupanel_endlamella_22cm_englishwalnut_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1224_akupanel_endlamella_22cm_englishwalnut_02.jpg?v=1777062140"
     ],
-    "sortOrder": 235,
+    "sortOrder": 200,
     "createdAt": "2026-04-29T14:20:15+02:00"
   },
   {
@@ -15875,7 +15875,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1255_akupanel_endlamella_67mm_walnut_01.jpg?v=1777062083",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1255_akupanel_endlamella_67mm_walnut_02.jpg?v=1777062081"
     ],
-    "sortOrder": 236,
+    "sortOrder": 201,
     "createdAt": "2026-04-29T14:20:14+02:00"
   },
   {
@@ -15953,7 +15953,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1254_akupanel_endlamella_67cm_rusticbrownoak_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1254_akupanel_endlamella_67cm_rusticbrownoak_02.jpg?v=1777062081"
     ],
-    "sortOrder": 237,
+    "sortOrder": 202,
     "createdAt": "2026-04-29T14:20:14+02:00"
   },
   {
@@ -16031,7 +16031,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1253_akupanel_endlamella_67cm_rusticnaturaloak_01.jpg?v=1777062137",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1253_akupanel_endlamella_67cm_rusticnaturaloak_02.jpg?v=1777062139"
     ],
-    "sortOrder": 238,
+    "sortOrder": 203,
     "createdAt": "2026-04-29T14:20:14+02:00"
   },
   {
@@ -16109,7 +16109,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1251_akupanel_endlamella_67cm_classicoak_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1251_akupanel_endlamella_67cm_classicoak_02.jpg?v=1777062139"
     ],
-    "sortOrder": 239,
+    "sortOrder": 204,
     "createdAt": "2026-04-29T14:20:14+02:00"
   },
   {
@@ -16187,7 +16187,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1257_akupanel_endlamella_67cm_rusticsmokedoak_01_b98131fd-eddd-44ab-9e31-1efaf257ca9b.jpg?v=1787148310",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1257_akupanel_endlamella_67cm_rusticsmokedoak_02.jpg?v=1777062081"
     ],
-    "sortOrder": 240,
+    "sortOrder": 205,
     "createdAt": "2026-04-29T14:20:13+02:00"
   },
   {
@@ -16263,7 +16263,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1386_akupanel_individuallamella_rusticgreyoak_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1386_akupanel_individuallamella_rusticgreyoak_02.jpg?v=1777062079"
     ],
-    "sortOrder": 241,
+    "sortOrder": 206,
     "createdAt": "2026-04-29T14:08:12+02:00"
   },
   {
@@ -16339,7 +16339,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1311_akupanel_individuallamella_oxidegrey_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1311_akupanel_individuallamella_oxidegrey_02.jpg?v=1777062079"
     ],
-    "sortOrder": 242,
+    "sortOrder": 207,
     "createdAt": "2026-04-29T14:08:11+02:00"
   },
   {
@@ -16415,7 +16415,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1311_akupanel_individuallamella_oxidecopper_01.jpg?v=1777062077",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1311_akupanel_individuallamella_oxidecopper_02.jpg?v=1777062079"
     ],
-    "sortOrder": 243,
+    "sortOrder": 208,
     "createdAt": "2026-04-29T14:08:11+02:00"
   },
   {
@@ -16491,7 +16491,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1309_akupanel_individuallamella_oxideblue_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1309_akupanel_individuallamella_oxideblue_02.jpg?v=1777062079"
     ],
-    "sortOrder": 244,
+    "sortOrder": 209,
     "createdAt": "2026-04-29T14:08:11+02:00"
   },
   {
@@ -16567,7 +16567,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1308_akupanel_individuallamella_charcoal_01.jpg?v=1777062077",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1308_akupanel_individuallamella_charcoal_02.jpg?v=1777062079"
     ],
-    "sortOrder": 245,
+    "sortOrder": 210,
     "createdAt": "2026-04-29T14:08:11+02:00"
   },
   {
@@ -16643,7 +16643,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1360_akupanel_individuallamella_stone_01.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1360_akupanel_individuallamella_stone_02.jpg?v=1777062017"
     ],
-    "sortOrder": 246,
+    "sortOrder": 211,
     "createdAt": "2026-04-29T14:08:10+02:00"
   },
   {
@@ -16719,7 +16719,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1315_akupanel_individuallamella_clay_01.jpg?v=1777062076",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1315_akupanel_individuallamella_clay_02.jpg?v=1777062078"
     ],
-    "sortOrder": 247,
+    "sortOrder": 212,
     "createdAt": "2026-04-29T14:08:10+02:00"
   },
   {
@@ -16795,7 +16795,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1313_akupanel_individuallamella_tonalblackash_01.jpg?v=1777062077",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1313_akupanel_individuallamella_tonalblackash_02.jpg?v=1777062078"
     ],
-    "sortOrder": 248,
+    "sortOrder": 213,
     "createdAt": "2026-04-29T14:08:10+02:00"
   },
   {
@@ -16871,7 +16871,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1312_akupanel_individuallamella_oxidewhite_01.jpg?v=1777062077",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1312_akupanel_individuallamella_oxidewhite_02.jpg?v=1777062078"
     ],
-    "sortOrder": 249,
+    "sortOrder": 214,
     "createdAt": "2026-04-29T14:08:10+02:00"
   },
   {
@@ -16947,7 +16947,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1319_akupanel_individuallamella_snow_01.jpg?v=1774519654",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1319_akupanel_individuallamella_snow_02.jpg?v=1777062016"
     ],
-    "sortOrder": 250,
+    "sortOrder": 215,
     "createdAt": "2026-04-29T14:08:09+02:00"
   },
   {
@@ -17023,7 +17023,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1318_akupanel_individuallamella_cloud_01.jpg?v=1774519702",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1318_akupanel_individuallamella_cloud_02.jpg?v=1777062017"
     ],
-    "sortOrder": 251,
+    "sortOrder": 216,
     "createdAt": "2026-04-29T14:08:09+02:00"
   },
   {
@@ -17099,7 +17099,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1317_akupanel_individuallamella_moss_01.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1317_akupanel_individuallamella_moss_02.jpg?v=1777062017"
     ],
-    "sortOrder": 252,
+    "sortOrder": 217,
     "createdAt": "2026-04-29T14:08:09+02:00"
   },
   {
@@ -17176,7 +17176,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7006_akupanel_felt_beige_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7006_akupanel_felt_beige_02.jpg?v=1777061892"
     ],
-    "sortOrder": 253,
+    "sortOrder": 218,
     "createdAt": "2026-04-29T14:08:08+02:00"
   },
   {
@@ -17253,7 +17253,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7002_akupanel_felt_grey_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7002_akupanel_felt_grey_02.jpg?v=1777061892"
     ],
-    "sortOrder": 254,
+    "sortOrder": 219,
     "createdAt": "2026-04-29T14:08:08+02:00"
   },
   {
@@ -17330,7 +17330,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7001_akupanel_felt_black_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7001_akupanel_felt_black_02.jpg?v=1777061891"
     ],
-    "sortOrder": 255,
+    "sortOrder": 220,
     "createdAt": "2026-04-29T14:08:08+02:00"
   },
   {
@@ -17407,7 +17407,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1406_mounting_acoustic_panel_screws_100_pcs_bronzed_brown_04.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1406_mounting_acousticpanelscrews100pcs_bronzedbrown_02.jpg?v=1777062016"
     ],
-    "sortOrder": 256,
+    "sortOrder": 221,
     "createdAt": "2026-04-29T13:48:45+02:00"
   },
   {
@@ -17484,7 +17484,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1405_mounting_acoustic_panel_screws_100_pcs_warm_grey_04.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1405_mounting_acousticpanelscrews100pcs_warmgrey_02.jpg?v=1777062016"
     ],
-    "sortOrder": 257,
+    "sortOrder": 222,
     "createdAt": "2026-04-29T13:48:45+02:00"
   },
   {
@@ -17561,7 +17561,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1403_mounting_acoustic_panel_screws_100_pcs_beige_04.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1403_mounting_acousticpanelscrews100pcs_beige_02.jpg?v=1777062016"
     ],
-    "sortOrder": 258,
+    "sortOrder": 223,
     "createdAt": "2026-04-29T13:48:45+02:00"
   },
   {
@@ -17624,7 +17624,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1440_1430_mounting_mounting_glue_grout_gun_environmental_10.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1440_mounting_mounting_glue_03.jpg?v=1775753326"
     ],
-    "sortOrder": 259,
+    "sortOrder": 224,
     "createdAt": "2026-04-29T13:45:09+02:00"
   },
   {
@@ -17689,7 +17689,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1430_mounting_grout_gun_06.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1430_mounting_groutgun_02.jpg?v=1777062016"
     ],
-    "sortOrder": 260,
+    "sortOrder": 225,
     "createdAt": "2026-04-29T13:45:09+02:00"
   },
   {
@@ -17766,7 +17766,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2201_akupanel_60_moss_mossgreen_environmental_01_AI.jpg?v=1784532836",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2201_akupanel_60_moss_mossgreen_02.jpg?v=1777062016"
     ],
-    "sortOrder": 261,
+    "sortOrder": 226,
     "createdAt": "2026-04-29T13:36:13+02:00"
   },
   {
@@ -17845,7 +17845,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2200_akupanel_60_moss_applegreen_environmental_02_AI.jpg?v=1784532860",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2200_akupanel_60_moss_applegreen_02.jpg?v=1777062016"
     ],
-    "sortOrder": 262,
+    "sortOrder": 227,
     "createdAt": "2026-04-29T13:36:13+02:00"
   },
   {
@@ -17923,7 +17923,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1013_akupanel_tonal_black_ash_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2013_akupanel_60_tonal_blackash_02.jpg?v=1777062016"
     ],
-    "sortOrder": 263,
+    "sortOrder": 228,
     "createdAt": "2026-04-29T13:36:13+02:00"
   },
   {
@@ -18002,7 +18002,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1003_akupanel_rustic_natural_oak_black_felt_03.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_rustic_natural_oak_black_felt_1_AI.png?v=1784533203"
     ],
-    "sortOrder": 264,
+    "sortOrder": 229,
     "createdAt": "2026-04-29T13:30:44+02:00"
   },
   {
@@ -18081,7 +18081,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1006_akupanel_rustic_grey_oak_black_felt_03.jpg?v=1777062019",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_rustic_grey_oak_black_felt_1_AI.png?v=1784533307"
     ],
-    "sortOrder": 265,
+    "sortOrder": 230,
     "createdAt": "2026-04-29T13:30:44+02:00"
   },
   {
@@ -18160,7 +18160,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1022_akupanel_rustic_rustic_smoked_larch_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_reading_corner_rustic_smoked_larch_black_felt_1_AI.png?v=1784533084"
     ],
-    "sortOrder": 266,
+    "sortOrder": 231,
     "createdAt": "2026-04-29T13:30:43+02:00"
   },
   {
@@ -18239,7 +18239,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1007_akupanel_rustic_smoked_oak_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_rustic_smoked_oak_black_felt_1_AI.png?v=1784533133"
     ],
-    "sortOrder": 267,
+    "sortOrder": 232,
     "createdAt": "2026-04-29T13:30:43+02:00"
   },
   {
@@ -18318,7 +18318,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1004_akupanel_rustic_brown_oak_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_rustic_brown_oak_black_felt_1_AI.png?v=1784533178"
     ],
-    "sortOrder": 268,
+    "sortOrder": 233,
     "createdAt": "2026-04-29T13:30:43+02:00"
   },
   {
@@ -18395,7 +18395,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2007_akupanel_60_rustic_rusticsmokedoak_blackfelt_02.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1007_akupanel_rustic_smoked_oak_black_felt_03.jpg?v=1777062017"
     ],
-    "sortOrder": 269,
+    "sortOrder": 234,
     "createdAt": "2026-04-29T13:30:42+02:00"
   },
   {
@@ -18473,7 +18473,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1004_akupanel_rustic_brown_oak_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2004_akupanel_60_rustic_rusticbrownoak_blackfelt_02.jpg?v=1777062016"
     ],
-    "sortOrder": 270,
+    "sortOrder": 235,
     "createdAt": "2026-04-29T13:30:42+02:00"
   },
   {
@@ -18552,7 +18552,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1013_akupanel_tonal_black_ash_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_reading_corner_black_ash_black_felt_1_AI.png?v=1784532992"
     ],
-    "sortOrder": 272,
+    "sortOrder": 236,
     "createdAt": "2026-04-29T13:19:50+02:00"
   },
   {
@@ -18631,7 +18631,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1021_akupanel_tonal_classic_oak_beige_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_classic_oak_beige_felt_1_AI.png?v=1784533016"
     ],
-    "sortOrder": 273,
+    "sortOrder": 237,
     "createdAt": "2026-04-29T13:19:50+02:00"
   },
   {
@@ -18710,7 +18710,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1047_akupanel_tonal_rustic_smoked_oak_brown_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_tonal_rustic_smoked_oak_black_felt_1_AI.png?v=1784533249"
     ],
-    "sortOrder": 282,
+    "sortOrder": 238,
     "createdAt": "2026-04-29T13:06:44+02:00"
   },
   {
@@ -18789,7 +18789,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1005_akupanel_walnut_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_walnut_black_felt_1_AI.png?v=1784533146"
     ],
-    "sortOrder": 283,
+    "sortOrder": 239,
     "createdAt": "2026-04-29T12:56:53+02:00"
   },
   {
@@ -18868,7 +18868,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1004_akupanel_rustic_brown_oak_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_rustic_brown_oak_black_felt_1_AI.png?v=1784196995"
     ],
-    "sortOrder": 284,
+    "sortOrder": 240,
     "createdAt": "2026-04-29T12:56:53+02:00"
   },
   {
@@ -18947,7 +18947,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1003_akupanel_rustic_natural_oak_black_felt_03.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_rustic_natural_oak_black_felt_1_AI.png?v=1784533860"
     ],
-    "sortOrder": 285,
+    "sortOrder": 241,
     "createdAt": "2026-04-29T12:56:53+02:00"
   },
   {
@@ -19026,7 +19026,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1028_akupanel_black_oak_black_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_black_oak_black_felt_1_AI.png?v=1784533367"
     ],
-    "sortOrder": 286,
+    "sortOrder": 242,
     "createdAt": "2026-04-29T12:56:48+02:00"
   },
   {
@@ -19104,7 +19104,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_english_oak_black_felt_1_AI.png?v=1784533452",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1025_akupanel_english_oak_black_felt_03.jpg?v=1777062204"
     ],
-    "sortOrder": 287,
+    "sortOrder": 243,
     "createdAt": "2026-04-29T12:56:48+02:00"
   },
   {
@@ -19183,7 +19183,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1024_akupanel_english_walnut_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_english_walnut_black_felt_1_AI.png?v=1784533475"
     ],
-    "sortOrder": 288,
+    "sortOrder": 244,
     "createdAt": "2026-04-29T12:56:48+02:00"
   },
   {
@@ -19261,7 +19261,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3519_create_pop_on_cable_cover_beige_enviromental_02.jpg?v=1777061951",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3519_create_poponcablecover_beige_03.jpg?v=1777061950"
     ],
-    "sortOrder": 289,
+    "sortOrder": 245,
     "createdAt": "2026-04-29T12:24:49+02:00"
   },
   {
@@ -19339,7 +19339,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3509_create_pop_on_cable_cover_black_environmental_02.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3509_create_poponcablecover_black_02_6a53bdcb-700c-4d14-931f-0e3b2d20fcbb.jpg?v=1777061951"
     ],
-    "sortOrder": 290,
+    "sortOrder": 246,
     "createdAt": "2026-04-29T12:24:49+02:00"
   },
   {
@@ -19419,7 +19419,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7480_7481_create_dupps_environmental_04.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7481_create_dupps7pcs_1tool_04.jpg?v=1777061893"
     ],
-    "sortOrder": 291,
+    "sortOrder": 247,
     "createdAt": "2026-04-29T12:24:48+02:00"
   },
   {
@@ -19499,7 +19499,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7480_7481_create_dupps_environmental_04.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/7480_create_dupps3pcs_1tool_03.jpg?v=1777061893"
     ],
-    "sortOrder": 292,
+    "sortOrder": 248,
     "createdAt": "2026-04-29T12:24:48+02:00"
   },
   {
@@ -19578,7 +19578,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/heavy_dupp_cable_cover_1x1-3.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3520_create_heavydupps2pcs_blackaluminium_03.jpg?v=1777061896"
     ],
-    "sortOrder": 293,
+    "sortOrder": 249,
     "createdAt": "2026-04-29T12:24:48+02:00"
   },
   {
@@ -19656,7 +19656,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3518_create_pop_on_cable_cover_grey_environmental_02.jpg?v=1777061897",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3518_create_poponcablecover_grey_03.jpg?v=1777061896"
     ],
-    "sortOrder": 294,
+    "sortOrder": 250,
     "createdAt": "2026-04-29T12:24:48+02:00"
   },
   {
@@ -19734,7 +19734,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3605_create_linn_singlehanger_blackoak_05.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3601_3603_3605_create_linn_hanger_environmental_14.jpg?v=1777061894"
     ],
-    "sortOrder": 295,
+    "sortOrder": 251,
     "createdAt": "2026-04-29T11:17:11+02:00"
   },
   {
@@ -19813,7 +19813,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1010_akupanel_oxide_copper_black_felt_03.jpg?v=1777062205",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1010_akupanel_oxide_copper_black_felt_04.jpg?v=1777062144"
     ],
-    "sortOrder": 296,
+    "sortOrder": 252,
     "createdAt": "2026-04-29T09:11:41+02:00"
   },
   {
@@ -19892,7 +19892,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1007_akupanel_rustic_smoked_oak_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_rustic_smoked_oak_black_felt_1_AI.png?v=1784533810"
     ],
-    "sortOrder": 297,
+    "sortOrder": 253,
     "createdAt": "2026-04-29T09:11:41+02:00"
   },
   {
@@ -19955,7 +19955,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1020_akupanel_alps_panel_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_alps_panel_black_felt_1_AI.png?v=1784533097"
     ],
-    "sortOrder": 298,
+    "sortOrder": 254,
     "createdAt": "2026-04-29T09:11:40+02:00"
   },
   {
@@ -20034,7 +20034,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1013_akupanel_tonal_black_ash_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_black_ash_black_felt_1_AI.png?v=1784533711"
     ],
-    "sortOrder": 299,
+    "sortOrder": 255,
     "createdAt": "2026-04-29T09:11:40+02:00"
   },
   {
@@ -20113,7 +20113,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1046_akupanel_tonal_rustic_grey_oak_brown_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_tonal_rustic_grey_oak_black_felt_1_AI.png?v=1784533281"
     ],
-    "sortOrder": 300,
+    "sortOrder": 256,
     "createdAt": "2026-04-29T09:11:39+02:00"
   },
   {
@@ -20192,7 +20192,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1006_akupanel_rustic_grey_oak_black_felt_03.jpg?v=1777062019",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_rustic_grey_oak_black_felt_1_AI.png?v=1784533307"
     ],
-    "sortOrder": 301,
+    "sortOrder": 257,
     "createdAt": "2026-04-29T09:11:39+02:00"
   },
   {
@@ -20271,7 +20271,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1022_akupanel_rustic_rustic_smoked_larch_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_rustic_smoked_larch_black_felt_1_AI.png?v=1784533525"
     ],
-    "sortOrder": 302,
+    "sortOrder": 258,
     "createdAt": "2026-04-29T09:11:39+02:00"
   },
   {
@@ -20350,7 +20350,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1021_akupanel_tonal_classic_oak_beige_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_reading_corner_classic_oak_beige_felt_1_AI.png?v=1784533547"
     ],
-    "sortOrder": 303,
+    "sortOrder": 259,
     "createdAt": "2026-04-29T09:11:39+02:00"
   },
   {
@@ -20429,7 +20429,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1016_akupanel_colours_stone_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_reading_corner_stone_black_felt_1_AI.png?v=1784533669"
     ],
-    "sortOrder": 304,
+    "sortOrder": 260,
     "createdAt": "2026-04-29T09:09:40+02:00"
   },
   {
@@ -20508,7 +20508,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1019_akupanel_colours_snow_grey_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_snow_grey_felt_1_AI.png?v=1784533592"
     ],
-    "sortOrder": 306,
+    "sortOrder": 261,
     "createdAt": "2026-04-29T09:09:39+02:00"
   },
   {
@@ -20587,7 +20587,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1018_akupanel_colours_cloud_black_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_reading_corner_cloud_bla_felt_1_AI.png?v=1784533616"
     ],
-    "sortOrder": 307,
+    "sortOrder": 262,
     "createdAt": "2026-04-29T09:09:39+02:00"
   },
   {
@@ -20666,7 +20666,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1017_akupanel_colours_moss_black_felt_03.jpg?v=1777062204",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_moss_black_felt_1_AI.png?v=1784533648"
     ],
-    "sortOrder": 308,
+    "sortOrder": 263,
     "createdAt": "2026-04-29T09:09:39+02:00"
   },
   {
@@ -20745,7 +20745,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1027_akupanel_southern_oak_black_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_southern_oak_black_felt_1_AI.png?v=1784533439"
     ],
-    "sortOrder": 314,
+    "sortOrder": 264,
     "createdAt": "2026-04-29T09:02:50+02:00"
   },
   {
@@ -20824,7 +20824,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1023_akupanel_weathered_oak_black_felt_03.jpg?v=1777062203",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_weathered_oak_black_felt_1_AI.png?v=1784533503"
     ],
-    "sortOrder": 315,
+    "sortOrder": 265,
     "createdAt": "2026-04-29T09:02:50+02:00"
   },
   {
@@ -20903,7 +20903,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1002_akupanel_classic_oak_grey_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_kitchen_classic_oak_grey_felt_1_AI.png?v=1784533039"
     ],
-    "sortOrder": 324,
+    "sortOrder": 266,
     "createdAt": "2026-04-29T08:56:59+02:00"
   },
   {
@@ -20982,7 +20982,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1001_akupanel_classic_oak_black_felt_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_classic_oak_black_felt_1_AI.png?v=1784532580"
     ],
-    "sortOrder": 325,
+    "sortOrder": 267,
     "createdAt": "2026-04-29T08:56:59+02:00"
   },
   {
@@ -21061,7 +21061,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1005_akupanel_walnut_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_walnut_black_felt_1_AI.png?v=1784533156"
     ],
-    "sortOrder": 326,
+    "sortOrder": 268,
     "createdAt": "2026-04-29T08:56:59+02:00"
   },
   {
@@ -21140,7 +21140,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1000_akupanel_classic_oak_black_mdf_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_kitchen_classic_oak_black_felt_1_AI.png?v=1784532566"
     ],
-    "sortOrder": 327,
+    "sortOrder": 269,
     "createdAt": "2026-04-29T08:56:59+02:00"
   },
   {
@@ -21218,7 +21218,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1005_akupanel_walnut_black_felt_03.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2005_akupanel_60_original_walnut_blackfelt_02.jpg?v=1777062016"
     ],
-    "sortOrder": 328,
+    "sortOrder": 270,
     "createdAt": "2026-04-29T08:56:58+02:00"
   },
   {
@@ -21282,7 +21282,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3015_remote_control_for_led_black_environmental_04.jpg?v=1777062017",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3015_remotecontrolforled_black_05.jpg?v=1777062016"
     ],
-    "sortOrder": 329,
+    "sortOrder": 271,
     "createdAt": "2026-04-29T08:55:09+02:00"
   },
   {
@@ -21361,7 +21361,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1002_akupanel_classic_oak_grey_felt_03.jpg?v=1777062202",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_livingroom_classic_oak_grey_felt_1_AI.png?v=1784533881"
     ],
-    "sortOrder": 330,
+    "sortOrder": 272,
     "createdAt": "2026-04-29T08:45:31+02:00"
   },
   {
@@ -21437,7 +21437,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3514_create_finger_screws_2_pcs_brass_environmental_02_bf50d54d-38fa-44dd-9854-eaf9e28d4906.jpg?v=1777061897",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3514_create_fingerscrews2pcs_brass_02.jpg?v=1777061893"
     ],
-    "sortOrder": 331,
+    "sortOrder": 273,
     "createdAt": "2026-04-29T08:41:15+02:00"
   },
   {
@@ -21515,7 +21515,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3500_create_finger_screws_2_pcs_black_environmental_02_8e01e218-03c4-4e3a-aaa6-65d5017cc3bc.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3500_create_fingerscrews2pcs_black_02.jpg?v=1777061894"
     ],
-    "sortOrder": 332,
+    "sortOrder": 274,
     "createdAt": "2026-04-29T08:41:15+02:00"
   },
   {
@@ -21579,7 +21579,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3507_create_vindar_gallerystring_03.jpg?v=1777481830",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3507_create_vindar_gallerystring_02.jpg?v=1777481829"
     ],
-    "sortOrder": 333,
+    "sortOrder": 275,
     "createdAt": "2026-04-29T08:38:47+02:00"
   },
   {
@@ -21656,7 +21656,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3505_create_fjell_tv_mount_large_environmental_01.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3505_create_fjell_tvmountlarge_03.jpg?v=1777061896"
     ],
-    "sortOrder": 334,
+    "sortOrder": 276,
     "createdAt": "2026-04-29T08:38:30+02:00"
   },
   {
@@ -21734,7 +21734,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3504_create_fjell_tv_mount_small_environmental_02_Kopie.jpg?v=1777061897",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3504_create_fjell_tvmountsmall_05.jpg?v=1777061896"
     ],
-    "sortOrder": 335,
+    "sortOrder": 277,
     "createdAt": "2026-04-29T08:38:30+02:00"
   },
   {
@@ -21813,7 +21813,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3617_create_linn_coat_rail_1159_mm_black_black_environmental_03.jpg?v=1777061955",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3617_create_linn_coatrail1159mm_black_black_06.jpg?v=1777061953"
     ],
-    "sortOrder": 336,
+    "sortOrder": 278,
     "createdAt": "2026-04-29T08:38:00+02:00"
   },
   {
@@ -21892,7 +21892,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3411_create_linn_bookshelfsmall_blackoak_04.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3411_create_linn_bookshelf_small_black_oak_environmental_03_1.jpg?v=1777062016"
     ],
-    "sortOrder": 337,
+    "sortOrder": 279,
     "createdAt": "2026-04-29T08:38:00+02:00"
   },
   {
@@ -21972,7 +21972,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3410_create_linn_bookshelf_small_natural_oak_environmental_03_Kopie1.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3410_create_linn_bookshelf_small_natural_oak_environmental_06_Kopie1.jpg?v=1777062015"
     ],
-    "sortOrder": 338,
+    "sortOrder": 280,
     "createdAt": "2026-04-29T08:38:00+02:00"
   },
   {
@@ -22051,7 +22051,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3408_create_linn_bookshelf_large_natural_oak_environmental_07.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3408_create_linn_bookshelflarge_naturaloak_05.jpg?v=1777062016"
     ],
-    "sortOrder": 339,
+    "sortOrder": 281,
     "createdAt": "2026-04-29T08:38:00+02:00"
   },
   {
@@ -22130,7 +22130,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3600_3602_3604_create_linn_hanger_environmental_01.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3600_create_linn_verticalhanger_naturaloak_03.jpg?v=1777061893"
     ],
-    "sortOrder": 340,
+    "sortOrder": 282,
     "createdAt": "2026-04-29T08:37:59+02:00"
   },
   {
@@ -22208,7 +22208,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3604_create_linn_singlehanger_naturaloak_05.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3600_3602_3604_create_linn_hanger_environmental_02.jpg?v=1777061897"
     ],
-    "sortOrder": 341,
+    "sortOrder": 283,
     "createdAt": "2026-04-29T08:37:59+02:00"
   },
   {
@@ -22287,7 +22287,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3513_create_linn_mirror_blackoak_04.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3513_create_linn_mirror_blackoak_03.jpg?v=1777061952"
     ],
-    "sortOrder": 342,
+    "sortOrder": 284,
     "createdAt": "2026-04-29T08:37:59+02:00"
   },
   {
@@ -22366,7 +22366,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3523_create_candleholder_black_brass_03.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3523_create_candle_holder_black_brass_lifestyle2_04.jpg?v=1777062016"
     ],
-    "sortOrder": 343,
+    "sortOrder": 285,
     "createdAt": "2026-04-29T08:37:27+02:00"
   },
   {
@@ -22444,7 +22444,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3400_3401_create_norr_narrow_shelf_black_brass_environmental_05.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3400_create_norr_narrowshelf1159mm_black_brass_03.jpg?v=1777062015"
     ],
-    "sortOrder": 344,
+    "sortOrder": 286,
     "createdAt": "2026-04-29T08:37:27+02:00"
   },
   {
@@ -22523,7 +22523,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3612_3614_create_norr_hanger_black_brass_environmental_02_Kopie1.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3612_create_norr_singlehanger_black_brass_04.jpg?v=1777061952"
     ],
-    "sortOrder": 345,
+    "sortOrder": 287,
     "createdAt": "2026-04-29T08:37:26+02:00"
   },
   {
@@ -22602,7 +22602,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3615_environmental_create_norr_single_hanger_beige_stainless_steel02.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3615_create_norr_doublehanger_beige_stainlesssteel_03.jpg?v=1777061953"
     ],
-    "sortOrder": 346,
+    "sortOrder": 288,
     "createdAt": "2026-04-29T08:37:26+02:00"
   },
   {
@@ -22681,7 +22681,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3612_3614_create_norr_hanger_black_brass_environmental_01_Kopie1.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3614_create_norr_doublehanger_black_brass_03.jpg?v=1777061953"
     ],
-    "sortOrder": 347,
+    "sortOrder": 289,
     "createdAt": "2026-04-29T08:37:26+02:00"
   },
   {
@@ -22759,7 +22759,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3524_environmental_create_candle_holder_beige_stainless_steel_03.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3524_create_candle_holder_beige_stainless_steel_04.jpg?v=1777062014"
     ],
-    "sortOrder": 348,
+    "sortOrder": 290,
     "createdAt": "2026-04-29T08:37:26+02:00"
   },
   {
@@ -22838,7 +22838,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3503_create_norr_magneticboardlarge_black_brass_0005_Ebene9.jpg?v=1777061898",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3503_create_norr_magnetic_board_large_black_brass_environmental_03.jpg?v=1777061896"
     ],
-    "sortOrder": 349,
+    "sortOrder": 291,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -22917,7 +22917,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3502_create_norr_magneticboardsmall_black_brass_02.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3502_create_norr_magnetic_board_small_black_brass_environmental_03.jpg?v=1777061896"
     ],
-    "sortOrder": 350,
+    "sortOrder": 292,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -22980,7 +22980,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3407_create_norr_key_tray_smoked_oak_environmental_02.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3407_create_norr_keytray_smokedoak_09.jpg?v=1777061952"
     ],
-    "sortOrder": 351,
+    "sortOrder": 293,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23059,7 +23059,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3610_create_norr_coat_hook_rack_x1_black_brass_environmental_03.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3620_create_norr_coathookrackx1_black_brass_04.jpg?v=1777061953"
     ],
-    "sortOrder": 352,
+    "sortOrder": 294,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23138,7 +23138,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3611_create_norr_coat_hook_rack_x1_beige_stainless_steel_05.jpg?v=1777316170",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3611_create_norr_coat_hook_rack_x1_beige_stainless_steel_environmental_01.jpg?v=1777061953"
     ],
-    "sortOrder": 353,
+    "sortOrder": 295,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23217,7 +23217,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3607_create_norr_coat_hook_rack_x7_beige_stainless_steel_environmental_06.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3607_create_norr_coathookrackx7_beige_stainlesssteel_02.jpg?v=1777061953"
     ],
-    "sortOrder": 354,
+    "sortOrder": 296,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23296,7 +23296,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3609_environmetal_create_norr_coat_hook_rack_x5_beige_stainless_steel_06.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3609_create_norr_coathookrackx5_beige_stainlesssteel_02.jpg?v=1777061952"
     ],
-    "sortOrder": 355,
+    "sortOrder": 297,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23376,7 +23376,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3608_create_norr_coathookrackx5_black_brass_04.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3608_create_norr_coat_hook_rack_x5_black_brass_environmental_04.jpg?v=1777061952"
     ],
-    "sortOrder": 356,
+    "sortOrder": 298,
     "createdAt": "2026-04-29T08:37:25+02:00"
   },
   {
@@ -23454,7 +23454,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3400_3401_create_norr_narrow_shelf_black_brass_environmental_04.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3401_create_norr_narrowshelf759mm_black_brass_02.jpg?v=1777061893"
     ],
-    "sortOrder": 357,
+    "sortOrder": 299,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23532,7 +23532,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3402_3403_create_norr_narrow_shelf_black_brass_environmental_05.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3402_create_norr_narrowshelf519mm_black_brass_04.jpg?v=1777061893"
     ],
-    "sortOrder": 358,
+    "sortOrder": 300,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23610,7 +23610,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3402_3403_create_norr_narrow_shelf_black_brass_environmental_04.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3403_create_norr_narrowshelf359mm_black_brass_04.jpg?v=1777061894"
     ],
-    "sortOrder": 359,
+    "sortOrder": 301,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23688,7 +23688,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3412_environmental_create_norr_wide_shelf_519_mm_beige_stainless_steel_02.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3412_create_norr_wide_shelf_519_mm_beige_stainless_steel_05.jpg?v=1777061894"
     ],
-    "sortOrder": 360,
+    "sortOrder": 302,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23766,7 +23766,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3413_environmental_create_norr_wide_shelf_359_mm_beige_stainless_steel_06.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3412_create_norr_wide_shelf_519_mm_beige_stainless_steel_05.jpg?v=1777061894"
     ],
-    "sortOrder": 361,
+    "sortOrder": 303,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23844,7 +23844,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_3405_3406_create_norr_wide_shelf_black_brass_environmental_04.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_create_norr_wideshelf759mm_black_brass_03.jpg?v=1777061893"
     ],
-    "sortOrder": 362,
+    "sortOrder": 304,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -23922,7 +23922,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_3405_3406_create_norr_wide_shelf_black_brass_environmental_01.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3405_create_norr_wideshelf519mm_black_brass_02.jpg?v=1777061893"
     ],
-    "sortOrder": 363,
+    "sortOrder": 305,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -24000,7 +24000,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3404_3405_3406_create_norr_wide_shelf_black_brass_environmental_01.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3406_create_norr_wideshelf359mm_black_brass_04_0c7d9807-0d92-4bff-aacf-13b1d8bf3d0b.jpg?v=1777061893"
     ],
-    "sortOrder": 364,
+    "sortOrder": 306,
     "createdAt": "2026-04-29T08:37:23+02:00"
   },
   {
@@ -24063,7 +24063,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-35.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3717_embrace_vala_mirror_02.jpg?v=1777062014"
     ],
-    "sortOrder": 365,
+    "sortOrder": 307,
     "createdAt": "2026-04-29T08:22:40+02:00"
   },
   {
@@ -24127,7 +24127,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-30.jpg?v=1777062261",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3705_embrace_nell_tvmount_beige_02.jpg?v=1777062261"
     ],
-    "sortOrder": 366,
+    "sortOrder": 308,
     "createdAt": "2026-04-29T08:22:24+02:00"
   },
   {
@@ -24206,7 +24206,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1001_akupanel_classic_oak_black_felt_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_bedroom_classic_oak_black_felt_1.png?v=1779984243"
     ],
-    "sortOrder": 367,
+    "sortOrder": 309,
     "createdAt": "2026-04-22T14:19:49+02:00"
   },
   {
@@ -24285,7 +24285,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1000_akupanel_classic_oak_black_mdf_03.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupanel_environmental_dining_area_classic_oak_black_felt_1_AI.png?v=1784533054"
     ],
-    "sortOrder": 368,
+    "sortOrder": 310,
     "createdAt": "2026-04-22T14:02:04+02:00"
   },
   {
@@ -24363,7 +24363,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1210_akupanel_endlamella_22cm_oxidecopper_01.jpg?v=1777062140",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1210_akupanel_endlamella_22cm_oxidecopper_02.jpg?v=1777062140"
     ],
-    "sortOrder": 372,
+    "sortOrder": 311,
     "createdAt": "2026-04-18T15:56:34+02:00"
   },
   {
@@ -24441,7 +24441,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1216_akupanel_endlamella_22cm_stone_01.jpg?v=1777062138",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1216_akupanel_endlamella_22cm_stone_02.jpg?v=1777062142"
     ],
-    "sortOrder": 373,
+    "sortOrder": 312,
     "createdAt": "2026-04-18T15:56:32+02:00"
   },
   {
@@ -24519,7 +24519,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1256_akupanel_endlamella_67cm_rusticgreyoak_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1256_akupanel_endlamella_67cm_rusticgreyoak_02.jpg?v=1777062080"
     ],
-    "sortOrder": 374,
+    "sortOrder": 313,
     "createdAt": "2026-04-18T15:55:04+02:00"
   },
   {
@@ -24597,7 +24597,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1272_akupanel_endlamella_67cm_rusticsmokedlarch_01.jpg?v=1777062079",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1272_akupanel_endlamella_67cm_rusticsmokedlarch_02.jpg?v=1777062080"
     ],
-    "sortOrder": 375,
+    "sortOrder": 314,
     "createdAt": "2026-04-18T15:55:00+02:00"
   },
   {
@@ -24673,7 +24673,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1351_akupanel_individuallamella_classicoak_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1351_akupanel_individuallamella_classicoak_02.jpg?v=1777062080"
     ],
-    "sortOrder": 376,
+    "sortOrder": 315,
     "createdAt": "2026-04-18T15:54:59+02:00"
   },
   {
@@ -24749,7 +24749,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1350_akupanel_individuallamella_classicoak_blackmdf_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1350_akupanel_individuallamella_classicoak_blackmdf_02.jpg?v=1777062083"
     ],
-    "sortOrder": 377,
+    "sortOrder": 316,
     "createdAt": "2026-04-18T15:54:59+02:00"
   },
   {
@@ -24825,7 +24825,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1355_akupanel_individuallamella_walnut_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1355_akupanel_individuallamella_walnut_02.jpg?v=1777062080"
     ],
-    "sortOrder": 378,
+    "sortOrder": 317,
     "createdAt": "2026-04-18T15:54:58+02:00"
   },
   {
@@ -24901,7 +24901,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1354_akupanel_individuallamella_rusticbrownoak_01.jpg?v=1777062078",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1354_akupanel_individuallamella_rusticbrownoak_02.jpg?v=1777062080"
     ],
-    "sortOrder": 379,
+    "sortOrder": 318,
     "createdAt": "2026-04-18T15:54:58+02:00"
   },
   {
@@ -24977,7 +24977,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1383_akupanel_individuallamella_rusticnaturaloak_01.jpg?v=1777062080",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1383_akupanel_individuallamella_rusticnaturaloak_02.jpg?v=1777062078"
     ],
-    "sortOrder": 380,
+    "sortOrder": 319,
     "createdAt": "2026-04-18T15:54:58+02:00"
   },
   {
@@ -25053,7 +25053,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1357_akupanel_individuallamella_rusticsmokedoak_01.jpg?v=1777062077",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1357_akupanel_individuallamella_rusticsmokedoak_02.jpg?v=1777062079"
     ],
-    "sortOrder": 381,
+    "sortOrder": 320,
     "createdAt": "2026-04-18T15:54:57+02:00"
   },
   {
@@ -25127,7 +25127,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1370_akupanel_individuallamella_rusticsmokedlarch_01.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1370_akupanel_individuallamella_rusticsmokedlarch_02.jpg?v=1777062018"
     ],
-    "sortOrder": 382,
+    "sortOrder": 321,
     "createdAt": "2026-04-18T15:53:49+02:00"
   },
   {
@@ -25201,7 +25201,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1373_akupanel_individuallamella_alpspanel_01.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1373_akupanel_individuallamella_alpspanel_02.jpg?v=1777062017"
     ],
-    "sortOrder": 383,
+    "sortOrder": 322,
     "createdAt": "2026-04-18T15:53:49+02:00"
   },
   {
@@ -25278,7 +25278,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1402_mounting_acoustic_panel_screws_100_pcs_grey_Kopie.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1402_mounting_acousticpanelscrews100pcs_grey_02.jpg?v=1777062017"
     ],
-    "sortOrder": 384,
+    "sortOrder": 323,
     "createdAt": "2026-04-18T15:53:48+02:00"
   },
   {
@@ -25355,7 +25355,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1401_mounting_acoustic_panel_screws_100_pcs_black_04.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1401_mounting_acousticpanelscrews100pcs_black_02.jpg?v=1777062016"
     ],
-    "sortOrder": 385,
+    "sortOrder": 324,
     "createdAt": "2026-04-18T15:53:48+02:00"
   },
   {
@@ -25433,7 +25433,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1003_akupanel_rustic_natural_oak_black_felt_03.jpg?v=1777062018",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2003_akupanel_60_rustic_rusticnaturaloak_blackfelt_02.jpg?v=1777062016"
     ],
-    "sortOrder": 386,
+    "sortOrder": 325,
     "createdAt": "2026-04-18T15:53:47+02:00"
   },
   {
@@ -25511,7 +25511,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1006_akupanel_rustic_grey_oak_black_felt_03.jpg?v=1777062019",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2006_akupanel_60_rustic_rusticgreyoak_blackfelt_02.jpg?v=1777062016"
     ],
-    "sortOrder": 387,
+    "sortOrder": 326,
     "createdAt": "2026-04-18T15:53:46+02:00"
   },
   {
@@ -25573,7 +25573,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/woodupp_level-51_copy.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3501_mounting_spiritlevel_black_03.jpg?v=1777061895"
     ],
-    "sortOrder": 388,
+    "sortOrder": 327,
     "createdAt": "2026-04-18T15:53:43+02:00"
   },
   {
@@ -25650,7 +25650,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2001_akupanel_60_original_classicoak_blackfelt_02.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1001_akupanel_classic_oak_black_felt_03.jpg?v=1777061893"
     ],
-    "sortOrder": 389,
+    "sortOrder": 328,
     "createdAt": "2026-04-18T12:57:30+02:00"
   },
   {
@@ -25727,7 +25727,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/2000_akupanel_60_original_classicoak_blackfelt_blackmdf_02.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/1000_akupanel_classic_oak_black_mdf_03.jpg?v=1777061893"
     ],
-    "sortOrder": 390,
+    "sortOrder": 329,
     "createdAt": "2026-04-18T12:57:30+02:00"
   },
   {
@@ -25805,7 +25805,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3521_create_finger_screws_2_pcs_stainless_steel_environmental_01_3e288e64-303a-40ee-b6c4-52e8c6c2cc89.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3521_create_fingerscrews2pcs_stainlesssteel_01.jpg?v=1777061894"
     ],
-    "sortOrder": 391,
+    "sortOrder": 330,
     "createdAt": "2026-04-18T12:39:21+02:00"
   },
   {
@@ -25869,7 +25869,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3510_create_poponprofile4pcs_black_05.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3510_create_pop_on_profile_4_pcs_black_03.jpg?v=1777061952"
     ],
-    "sortOrder": 392,
+    "sortOrder": 331,
     "createdAt": "2026-04-18T12:38:13+02:00"
   },
   {
@@ -25949,7 +25949,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3409_create_linn_bookshelflarge_blackoak_02.jpg?v=1777062016",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3409_create_linn_bookshelf_large_black_oak_environmental_03.jpg?v=1777062016"
     ],
-    "sortOrder": 393,
+    "sortOrder": 332,
     "createdAt": "2026-04-18T12:34:07+02:00"
   },
   {
@@ -26028,7 +26028,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3616_create_linn_coatrail759mm_black_black_03.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3616_create_linn_coat_rail_759_mm_black_black_environmental_04.jpg?v=1777061953"
     ],
-    "sortOrder": 394,
+    "sortOrder": 333,
     "createdAt": "2026-04-18T12:34:06+02:00"
   },
   {
@@ -26107,7 +26107,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3619_create_linn_coat_rail_1159_mm_beige_stainless_steel_environmental_02.jpg?v=1777061953",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3619_create_linn_coatrail1159mm_beige_stainlesssteel_03.jpg?v=1777061953"
     ],
-    "sortOrder": 395,
+    "sortOrder": 334,
     "createdAt": "2026-04-18T12:34:06+02:00"
   },
   {
@@ -26186,7 +26186,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3618_create_linn_coat_rail_759_mm_beige_stainless_steel_environmental_05.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3618_create_linn_coatrail759mm_beige_stainlesssteel_03.jpg?v=1777061953"
     ],
-    "sortOrder": 396,
+    "sortOrder": 335,
     "createdAt": "2026-04-18T12:34:06+02:00"
   },
   {
@@ -26265,7 +26265,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3601_3603_3605_create_linn_hanger_environmental_02.jpg?v=1777061894",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3601_create_linn_verticalhanger_blackoak_03.jpg?v=1777061894"
     ],
-    "sortOrder": 397,
+    "sortOrder": 336,
     "createdAt": "2026-04-18T12:34:05+02:00"
   },
   {
@@ -26344,7 +26344,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3512_create_linn_mirror_naturaloak_04.jpg?v=1777061954",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3512_create_linn_mirror_natural_oak_environmental_02.jpg?v=1777061953"
     ],
-    "sortOrder": 398,
+    "sortOrder": 337,
     "createdAt": "2026-04-18T12:34:05+02:00"
   },
   {
@@ -26423,7 +26423,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3600_3602_3604_create_linn_hanger_environmental_02.jpg?v=1777061897",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3602_create_linn_horizontalhanger_naturaloak_04.jpg?v=1777061893"
     ],
-    "sortOrder": 399,
+    "sortOrder": 338,
     "createdAt": "2026-04-18T12:34:04+02:00"
   },
   {
@@ -26501,7 +26501,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-78.jpg?v=1777062262",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3703_embrace_bm2_2360-2520mm_02.jpg?v=1777062261"
     ],
-    "sortOrder": 400,
+    "sortOrder": 339,
     "createdAt": "2026-04-18T12:21:27+02:00"
   },
   {
@@ -26566,7 +26566,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-14.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3708_embrace_nell_metal_box_beige_05_dd947844-2fe6-4e56-bd78-ee20d0a96c0d.jpg?v=1777062014"
     ],
-    "sortOrder": 401,
+    "sortOrder": 340,
     "createdAt": "2026-04-18T12:21:26+02:00"
   },
   {
@@ -26645,7 +26645,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-11.jpg?v=1777062263",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3704_embrace_bm2_2860-3020mm_02.jpg?v=1777062261"
     ],
-    "sortOrder": 402,
+    "sortOrder": 341,
     "createdAt": "2026-04-18T12:21:26+02:00"
   },
   {
@@ -26724,7 +26724,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-8.jpg?v=1777062262",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3702_embrace_bm1_2860-3020mm_02.jpg?v=1777062261"
     ],
-    "sortOrder": 403,
+    "sortOrder": 342,
     "createdAt": "2026-04-18T12:20:03+02:00"
   },
   {
@@ -26787,7 +26787,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-105.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3712_embrace_nell_metalshelf_beige_02.jpg?v=1777062014"
     ],
-    "sortOrder": 404,
+    "sortOrder": 343,
     "createdAt": "2026-04-18T12:20:02+02:00"
   },
   {
@@ -26865,7 +26865,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3711_embrace_nell_doublemetalshelf_beige_02.jpg?v=1777062015",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental-102.jpg?v=1777062015"
     ],
-    "sortOrder": 405,
+    "sortOrder": 344,
     "createdAt": "2026-04-18T12:20:01+02:00"
   },
   {
@@ -26943,7 +26943,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3516_create_norr_poster_magnet_set_natural_oak_environmental_02.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3516_create_norr_postermagnetset_naturaloak_07.jpg?v=1777061895"
     ],
-    "sortOrder": 406,
+    "sortOrder": 345,
     "createdAt": "2026-04-17T20:42:59+02:00"
   },
   {
@@ -27021,7 +27021,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3517_create_norr_poster_magnet_set_black_oak_environmental_01.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3517_create_norr_postermagnetset_blackoak_10.jpg?v=1777061895"
     ],
-    "sortOrder": 407,
+    "sortOrder": 346,
     "createdAt": "2026-04-17T20:42:59+02:00"
   },
   {
@@ -27087,7 +27087,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3503_create_norr_magnetic_board_large_black_brass_environmental_05.jpg?v=1777061896",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3522_create_blackboard_set_environmental_02.jpg?v=1777061954"
     ],
-    "sortOrder": 408,
+    "sortOrder": 347,
     "createdAt": "2026-04-17T20:42:39+02:00"
   },
   {
@@ -27167,7 +27167,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3606_create_norr_coathookrackx7_black_brass_05.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3606_create_norr_coat_hook_rack_x7_black_brass_environmental_03.jpg?v=1777061952"
     ],
-    "sortOrder": 409,
+    "sortOrder": 348,
     "createdAt": "2026-04-17T20:42:38+02:00"
   },
   {
@@ -27246,7 +27246,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3506_create_norr_magneticset4pcs_naturaloak_03.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3506_create_norr_magnetic_set_4_pcs_natural_oak_environmental_02.jpg?v=1777061896"
     ],
-    "sortOrder": 410,
+    "sortOrder": 349,
     "createdAt": "2026-04-17T20:42:36+02:00"
   },
   {
@@ -27325,7 +27325,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3508_create_norr_magneticset4pcs_blackoak_04.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3508_create_norr_magnetic_set_4_pcs_black_oak_environmental_03.jpg?v=1777061895"
     ],
-    "sortOrder": 411,
+    "sortOrder": 350,
     "createdAt": "2026-04-17T20:42:36+02:00"
   },
   {
@@ -27404,7 +27404,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3601_3603_3605_create_linn_hanger_environmental_07.jpg?v=1777061893",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3603_create_linn_horizontalhanger_blackoak_07.jpg?v=1777061893"
     ],
-    "sortOrder": 412,
+    "sortOrder": 351,
     "createdAt": "2026-04-17T20:31:51+02:00"
   },
   {
@@ -27468,7 +27468,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3525_create_norr_magneticboardlarge_beige_stainlesssteel_02.jpg?v=1777061895",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3525_create_norr_magnetic_board_large_beige_stainless_steel_environmental_03.jpg?v=1777061896"
     ],
-    "sortOrder": 413,
+    "sortOrder": 352,
     "createdAt": "2026-04-17T18:08:00+02:00"
   },
   {
@@ -27547,7 +27547,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/embrace_environmental.jpg?v=1777062262",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3701_embrace_bm1_2360-2520mm_02.jpg?v=1777062261"
     ],
-    "sortOrder": 414,
+    "sortOrder": 353,
     "createdAt": "2026-03-26T13:53:13+01:00"
   },
   {
@@ -27626,7 +27626,7 @@
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3613_environmental_create_norr_single_hanger_beige_stainless_steel_02.jpg?v=1777061952",
       "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3613_create_norr_singlehanger_beige_stainlesssteel_03.jpg?v=1777061952"
     ],
-    "sortOrder": 415,
+    "sortOrder": 354,
     "createdAt": "2026-03-26T09:28:09+01:00"
   }
 ]
