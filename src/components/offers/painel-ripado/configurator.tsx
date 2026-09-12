@@ -11,7 +11,7 @@ import { useCart } from '@/lib/cart-store';
 import { useCartDrawer } from '@/lib/cart-drawer-store';
 import { trackOfferEvent } from '@/lib/offers/analytics';
 import type { CatalogProduct } from '@/lib/catalog/types';
-import { PANEL_CAMPAIGN_CODE, PANEL_COLORS, PANEL_GALLERY, campaignEuro } from './data';
+import { campaignEuro } from './data';
 
 function StarRow({ value = 5, size = 14 }: { value?: number; size?: number }) {
   return <span className="inline-flex gap-0.5" aria-label={`${value} de 5 estrelas`}>{[1,2,3,4,5].map((star) => <span key={star} style={{ color: '#f2b01e', fontSize: size }}>{star <= Math.round(value) ? '★' : '☆'}</span>)}</span>;
@@ -19,13 +19,11 @@ function StarRow({ value = 5, size = 14 }: { value?: number; size?: number }) {
 
 export function PanelConfigurator({ product: initialProduct, offerSlug }: { product: CatalogProduct; offerSlug: string }) {
   const product = useLiveProduct(initialProduct);
-  const gallery = [product.image, ...product.gallery.split(',').filter(Boolean)];
+  const gallery = [...new Set([product.image, ...product.gallery.split(',').filter(Boolean)])];
   const router = useRouter();
   const add = useCart((state) => state.add);
-  const setPromo = useCart((state) => state.setPromo);
   const openCart = useCartDrawer((state) => state.open);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [color, setColor] = useState<number | null>(null);
   const [variantId, setVariantId] = useState(product.variants.find((variant) => variant.availability !== 'outOfStock')?.id);
   const [qty, setQty] = useState(1);
   const [calculatorOpen, setCalculatorOpen] = useState(false);
@@ -34,14 +32,14 @@ export function PanelConfigurator({ product: initialProduct, offerSlug }: { prod
   const selected = product.variants.find((variant) => variant.id === variantId) ?? product.variants[0];
   const regularCents = product.priceCents + (selected?.priceDeltaCents ?? 0);
   const offerCents = regularCents;
-  const selectedColor = PANEL_COLORS[color ?? 0];
 
   const estimate = useMemo(() => {
     const width = Number(wallWidth.replace(',', '.'));
     const height = Number(wallHeight.replace(',', '.'));
-    const size = selected?.name.match(/(\d+)\s*×\s*(\d+)/);
+    const size = (selected?.name ?? product.dimensions ?? '').match(/(\d+(?:[.,]\d+)?)\s*[x×]\s*(\d+(?:[.,]\d+)?)/i);
     if (!width || !height || !size) return null;
-    return Math.max(1, Math.ceil((width * height) / (Number(size[1]) * Number(size[2]))));
+    const divisor = /mm/i.test(selected?.name ?? product.dimensions ?? '') ? 100 : 1;
+    return Math.max(1, Math.ceil((width * height) / (Number(size[1].replace(',', '.')) * Number(size[2].replace(',', '.')) / divisor)));
   }, [selected, wallHeight, wallWidth]);
 
   const addCampaignLine = (buyNow: boolean) => {
@@ -49,7 +47,7 @@ export function PanelConfigurator({ product: initialProduct, offerSlug }: { prod
     add({
       slug: product.slug,
       name: product.name,
-      subtitle: `${selectedColor.name} · ${selected.name}`,
+      subtitle: selected?.name ?? product.subtitle,
       price: (regularCents / 100).toFixed(2),
       image: product.image,
       automaticDiscountPct: product.promoDiscountPct, promoEndsAt: product.promoEndsAt, maxStock: cartStockLimit(product),
@@ -72,18 +70,18 @@ export function PanelConfigurator({ product: initialProduct, offerSlug }: { prod
     <div className="grid gap-9 lg:grid-cols-2 lg:gap-14">
       <div id="product-gallery" className="lg:sticky lg:top-24 lg:self-start">
         <div className="relative aspect-[4/5] overflow-hidden rounded-lg border border-[#e0d6cb] bg-[#e8e0d7] sm:aspect-square max-sm:-mx-4 max-sm:aspect-[4/3] max-sm:rounded-none max-sm:border-x-0">
-          <img src={gallery[activeIndex]} alt="Painel Ripado Decorativo" className="h-full w-full object-cover" />
+          <img src={gallery[activeIndex]} alt={product.name} className="h-full w-full object-cover" />
           <button type="button" aria-label="Imagem anterior" onClick={() => setActiveIndex((activeIndex - 1 + gallery.length) % gallery.length)} className="absolute left-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-sm"><ChevronLeft className="h-5 w-5" /></button>
           <button type="button" aria-label="Próxima imagem" onClick={() => setActiveIndex((activeIndex + 1) % gallery.length)} className="absolute right-3 top-1/2 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 shadow-sm"><ChevronRight className="h-5 w-5" /></button>
           <span className="absolute left-3 top-3 rounded-full bg-[#201a17]/80 px-3 py-1.5 text-[10px] uppercase tracking-[.12em] text-[#f2e9df]">Escolha uma cor</span>
           <span className="absolute bottom-3 left-3 rounded bg-[#201a17]/80 px-2.5 py-1.5 text-[10px] text-[#f2e9df]">{activeIndex + 1} / {gallery.length}</span>
           <button type="button" onClick={() => window.open(gallery[activeIndex], '_blank', 'noopener,noreferrer')} className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded bg-white/90 px-3 py-2 text-[10px] font-semibold shadow"><Maximize2 className="h-3.5 w-3.5" />Ampliar</button>
         </div>
-        <div className="mt-2 flex gap-2 overflow-x-auto pb-1 max-sm:hidden">{gallery.map((src, index) => <button key={src} type="button" onClick={() => setActiveIndex(index)} className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition ${index === activeIndex ? 'border-[#8a5a2b]' : 'border-transparent opacity-60'}`}><img src={src} alt="" className="h-full w-full object-cover" /></button>)}</div>
+        <div className="mt-2 flex gap-2 overflow-x-auto pb-1 max-sm:hidden">{gallery.map((src, index) => <button key={src} aria-label={`Ver imagem ${index + 1}`} type="button" onClick={() => setActiveIndex(index)} className={`relative h-16 w-16 shrink-0 overflow-hidden rounded-md border-2 transition ${index === activeIndex ? 'border-[#8a5a2b]' : 'border-transparent opacity-60'}`}><img src={src} alt="" className="h-full w-full object-cover" /></button>)}</div>
       </div>
 
       <div className="flex flex-col gap-6">
-        <div><h1 className="font-display text-3xl leading-none sm:text-5xl">Painel Ripado Decorativo</h1><p className="mt-3 text-base leading-relaxed text-[#5c5049]">Design que transforma. Instalação que simplifica.</p></div>
+        <div><h1 className="font-display text-3xl leading-none sm:text-5xl">{product.name}</h1><p className="mt-3 text-base leading-relaxed text-[#5c5049]">{product.shortDescription}</p></div>
 
         <div id="configurar-painel" className="flex flex-col gap-6" style={{ scrollMarginTop: 72 }}>
           <div className="border-y border-[#e6ded4] py-4">

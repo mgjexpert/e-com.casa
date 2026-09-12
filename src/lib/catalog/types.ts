@@ -1,3 +1,4 @@
+import type { ProductOffer } from '../offers/promotion';
 // ============================================================
 // E-com.casa — Catalog domain types
 // ------------------------------------------------------------
@@ -53,6 +54,8 @@ export interface CatalogProduct {
   price: string;
   priceCents: number;
   regularPriceCents?: number;
+  funnelOffer?: ProductOffer | null;
+  offerSlug?: string | null;
   comparePrice: string | null;
   currency: string;
   /** Observed EU retail benchmark. This is NOT a statutory previous price. */
@@ -128,6 +131,7 @@ export interface CatalogCategory {
 }
 
 export interface ProductQuery {
+  funnelOnly?: boolean;
   category?: string;
   subcategory?: string;
   space?: string;

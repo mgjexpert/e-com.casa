@@ -5,6 +5,7 @@ on:
     branches: [main]
     paths:
       - 'prisma/seed.ts'
+      - 'data/catalog/product-offers.json'
       - 'prisma/partner-catalog-schema.sql'
       - 'scripts/catalog-partners/provision-db.ts'
       - 'data/catalog/generated-provider-products.json'
@@ -31,3 +32,4 @@ jobs:
         run: test -n "$DATABASE_URL"
       - run: bun scripts/catalog-partners/provision-db.ts
       - run: bun prisma/seed.ts
+      - run: bun scripts/catalog-partners/verify-offers.ts

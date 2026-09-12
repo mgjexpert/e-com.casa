@@ -33,6 +33,6 @@ export async function GET(req: NextRequest) {
     });
   } catch (error) {
     console.error('Products API error:', error);
-    return NextResponse.json({ products: [], total: 0, page: 1, perPage: 24, totalPages: 1 }, { status: 200 });
+    return NextResponse.json({ products: [], total: 0, page: 1, perPage: 24, totalPages: 1 }, { status: 503 });
   }
 }

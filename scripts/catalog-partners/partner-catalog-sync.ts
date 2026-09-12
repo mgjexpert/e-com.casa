@@ -399,9 +399,9 @@ function normalize(
   const remoteImages = images(product);
   const odem = supplierKey === 'odem';
   const manufacturer = odem ? 'ODEM-PT' : 'WoodUpp';
-  const mediaRights = odem ? 'PARTNER_CONFIRMED_BY_MERCHANT' : 'UNCONFIRMED';
+  const mediaRights = 'PARTNER_CONFIRMED_BY_MERCHANT' as PartnerProduct['mediaRights'];
   const sourceOrigin = odem ? 'https://odem.pt' : 'https://woodupp.pt';
-  const publishImages = odem;
+  const publishImages = true;
   const sourceUrl = `${sourceOrigin}/products/${handle}`;
   const sku = uniqueSku(odem ? 'ODEM' : 'WOODUPP', product, usedSkus);
   const vType = variantType(product);
@@ -598,7 +598,7 @@ async function main() {
     saleability: 'MERCHANT_RELEASE_POLICY_WITH_DOCUMENTARY_STATUS_RETAINED',
     media: {
       odem: 'PARTNER_CONFIRMED_BY_MERCHANT',
-      woodupp: 'UNCONFIRMED_PLACEHOLDER_ONLY',
+      woodupp: 'PARTNER_CONFIRMED_BY_MERCHANT',
     },
   };
   const catalogue = {

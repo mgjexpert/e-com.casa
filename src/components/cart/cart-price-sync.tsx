@@ -1,4 +1,5 @@
 'use client';
+import { applyBundleOffer } from '@/lib/catalog/bundle';
 import { useEffect } from 'react';
 import { useCart } from '@/lib/cart-store';
 import type { CatalogProduct } from '@/lib/catalog/types';
@@ -16,9 +17,10 @@ export function CartPriceSync() {
       }));
       if (cancelled) return;
       useCart.setState(state => ({ lines: state.lines.map(line => {
-        const p = products.get(line.slug); if (!p) return line;
+        const raw = products.get(line.slug); if (!raw) return line;
+        const p = applyBundleOffer(raw, [...products.values()]);
         const v = p.variants.find(v => v.id === line.variantId);
-        return { ...line, price: ((p.priceCents + (v?.priceDeltaCents ?? 0)) / 100).toFixed(2), regularUnitPrice: (((p.regularPriceCents ?? p.priceCents) + (v?.regularPriceDeltaCents ?? v?.priceDeltaCents ?? 0)) / 100).toFixed(2), promoEndsAt: p.promoEndsAt, automaticDiscountPct: p.promoDiscountPct, maxStock: cartStockLimit(p) };
+        return { ...line, brand: p.brand, categorySlug: p.categorySlug, price: ((p.priceCents + (v?.priceDeltaCents ?? 0)) / 100).toFixed(2), regularUnitPrice: (((p.regularPriceCents ?? p.priceCents) + (v?.regularPriceDeltaCents ?? v?.priceDeltaCents ?? 0)) / 100).toFixed(2), promoEndsAt: p.promoEndsAt, automaticDiscountPct: p.promoDiscountPct, maxStock: cartStockLimit(p) };
       }) }));
     };
     void refresh(); const id = setInterval(refresh, 30000);

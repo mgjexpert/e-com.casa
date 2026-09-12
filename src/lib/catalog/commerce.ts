@@ -1,3 +1,4 @@
+import { isOfferActive } from '../offers/promotion';
 import campaign from '../../../data/catalog/commerce-campaign.json';
 import type { CatalogProduct } from './types';
 export const ACCESSORY_CATEGORIES = ['acessorios', 'produtos-instalacao', 'acessorios-divisorias', 'acessorios-instalacao'];
@@ -10,22 +11,26 @@ export function applyCommerce(product: CatalogProduct, now = Date.now()): Catalo
   const seed = hash(`${campaign.id}:${product.slug}`);
   const accessory = isAccessory(product);
   const starts = Date.parse(campaign.startsAt);
-  const ends = accessory ? Date.parse(campaign.accessoriesEndsAt) : starts + (1 + seed % 3) * 3600000;
-  const pct = accessory ? 70 : seed % 4 === 0 ? 0 : [10, 15, 20][seed % 3];
+  let ends = accessory ? Date.parse(campaign.accessoriesEndsAt) : starts + (1 + seed % 3) * 3600000;
+  let pct = accessory ? 70 : seed % 4 === 0 ? 0 : [10, 15, 20][seed % 3];
   const base = product.regularPriceCents ?? product.priceCents;
-  const active = base > 0 && pct > 0 && now >= starts && now < ends;
+  const funnel = isOfferActive(product.funnelOffer, now) ? product.funnelOffer : null;
+  const fixed = funnel?.fixedPriceCents ?? null;
+  if (funnel) { ends = Date.parse(funnel.endsAt); pct = funnel.discountPct ?? Math.round((1 - fixed! / base) * 100); }
+  const active = base > 0 && pct > 0 && (funnel !== null || now >= starts) && now < ends;
   const factor = active ? (100 - pct) / 100 : 1;
-  const cents = Math.round(base * factor);
+  const cents = active && fixed !== null ? fixed : Math.round(base * factor);
   return {
     ...product,
     regularPriceCents: base,
+    offerSlug: funnel?.slug ?? null,
     priceCents: cents, price: (cents / 100).toFixed(2),
     comparePrice: null,
     promoDiscountPct: active ? pct : null,
     promoEndsAt: active ? new Date(ends).toISOString() : null,
     variants: product.variants.map(v => {
       const delta = v.regularPriceDeltaCents ?? v.priceDeltaCents ?? 0;
-      return { ...v, regularPriceDeltaCents: delta, priceDeltaCents: Math.round((base + delta) * factor) - cents };
+      return { ...v, regularPriceDeltaCents: delta, priceDeltaCents: active && fixed !== null ? delta : Math.round((base + delta) * factor) - cents };
     }),
   };
 }

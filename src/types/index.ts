@@ -60,6 +60,8 @@ export interface Order {
 }
 
 export interface CartLine {
+  brand?: string | null;
+  categorySlug?: string;
   slug: string;
   name: string;
   subtitle: string | null;

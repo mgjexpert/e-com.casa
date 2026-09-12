@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { headers } from 'next/headers';
 import { notFound } from 'next/navigation';
-import { OfferPageZAI } from '@/components/offers/offer-page-zai';
-import { PainelRipadoOfferPage } from '@/components/offers/painel-ripado/page';
-import { getOfferSlugs } from '@/lib/offers/registry';
+import { ProductFunnelPage } from '@/components/offers/product-funnel-page';
 import { resolveOffer } from '@/lib/offers/resolver';
 import { resolveOfferMarket } from '@/lib/offers/geo';
 import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
@@ -11,10 +9,6 @@ import { toStorefrontProduct } from '@/lib/catalog/public-product';
 import { COMPANY } from '@/lib/company';
 
 export const dynamic = 'force-dynamic';
-
-export function generateStaticParams() {
-  return getOfferSlugs().map((slug) => ({ slug }));
-}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
@@ -80,13 +74,11 @@ export default async function OfferRoute({ params }: { params: Promise<{ slug: s
       sku: product.sku,
       image: image ? [image] : undefined,
       description: product.shortDescription || product.description,
-      brand: { '@type': 'Brand', name: COMPANY.brand },
+      brand: { '@type': 'Brand', name: product.brand ?? COMPANY.brand },
     },
   };
 
-  const page = offer.slug === 'painel-ripado'
-    ? <PainelRipadoOfferPage offer={offer} product={publicProduct} market={market} />
-    : <OfferPageZAI offer={offer} product={publicProduct} market={market} />;
+  const page = <ProductFunnelPage offer={offer} product={publicProduct} market={market} />;
 
   return (
     <>

@@ -1,3 +1,4 @@
+import { getProductOffers } from '../offers/store';
 // ============================================================
 // E-com.casa — Catalog service (the ONLY catalogue entrypoint)
 // ------------------------------------------------------------
@@ -85,7 +86,8 @@ export async function getProducts(query: ProductQuery = {}): Promise<ProductList
     const rest = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, i) => adapter.list({ perPage: 48, page: i + 2 })));
     rawCache = { adapter: adapter.name, at: Date.now(), products: [first, ...rest].flatMap(r => r.products) };
   }
-  const priced = rawCache.products.map(p => applyCommerce(p)).filter(p => matchesCatalogProduct(p, query));
+  const offers = await getProductOffers();
+  const priced = rawCache.products.map(p => applyCommerce({ ...p, funnelOffer: offers.find(o => o.productSlug === p.slug) ?? null })).filter(p => (!query.funnelOnly || Boolean(p.offerSlug)) && matchesCatalogProduct(p, query));
   const sorted = sortCatalogProducts(priced, query.sort);
   const page = Math.max(1, query.page ?? 1);
   const perPage = Math.min(48, Math.max(1, query.perPage ?? 24));
@@ -94,7 +96,9 @@ export async function getProducts(query: ProductQuery = {}): Promise<ProductList
 
 export async function getProduct(slug: string): Promise<CatalogProduct | null> {
   const product = await (await activeAdapter()).getBySlug(slug);
-  return product ? applyCommerce(product) : null;
+  if (!product) return null;
+  const offers = await getProductOffers();
+  return applyCommerce({ ...product, funnelOffer: offers.find(o => o.productSlug === product.slug) ?? null });
 }
 
 export async function getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {

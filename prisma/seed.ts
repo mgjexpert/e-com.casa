@@ -173,6 +173,11 @@ async function main() {
       created++;
     }
   }
+  const offerSeeds = readArtifact('product-offers.json') as Array<{ productSlug: string; slug: string; enabled: boolean; discountPct: number | null; fixedPriceCents: number | null; startsAt: string; endsAt: string; version: number }> | null;
+  if (offerSeeds) {
+    await tx.productOffer.createMany({ data: offerSeeds.map(o => ({ ...o, startsAt: new Date(o.startsAt), endsAt: new Date(o.endsAt) })), skipDuplicates: true });
+    console.log(`✔ offer configuration seeded without overwriting merchant settings`);
+  }
   console.log(`✔ products: ${products.length} processed (${created} created, ${updated} updated)`);
 
   // Keep an internal recoverable copy of mock catalogue rows, then remove them.

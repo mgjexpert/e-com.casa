@@ -23,7 +23,7 @@
     "build:standalone": "next build && cp -r .next/static .next/standalone/.next/ && cp -r public .next/standalone/",
     "catalog:sync:partners": "bun scripts/catalog-partners/partner-catalog-sync.ts",
     "catalog:import:partners": "bun prisma/seed.ts",
-    "test:catalog": "bun test tests/catalog-inventory.test.ts && bun test tests/catalog-payment.test.ts && bun test tests/commerce-policy.test.ts"
+    "test:catalog": "bun test tests/catalog-inventory.test.ts && bun test tests/catalog-payment.test.ts && bun test tests/commerce-policy.test.ts && bun test tests/product-offers.test.ts"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",

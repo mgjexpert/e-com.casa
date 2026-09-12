@@ -13,13 +13,13 @@ import type { OfferConfig, OfferMarketContext } from '@/lib/offers/types';
 import { PanelConfigurator } from './configurator';
 import { PanelCampaignStory, PanelFaq, PanelFooter, PanelInspiration, PanelProductDetails, PanelReviews } from './sections';
 
-function TopTicker() {
+export function TopTicker() {
   const items = ['Portes grátis PT e ES · Europa acima de 50 €', 'Pagamento seguro com Cartão · Apple Pay · MB WAY · Multibanco', 'Entrega acompanhada', 'E-com.casa'];
   const group = <div className="flex shrink-0 items-center gap-6 px-3 sm:gap-8 sm:px-4">{items.map((item) => <span key={item} className="flex items-center gap-6 whitespace-nowrap sm:gap-8"><span>{item}</span><span className="opacity-40">◆</span></span>)}</div>;
   return <div className="overflow-hidden bg-[#201a17] py-1 text-[#e9dfd5] sm:py-2"><div className="ecom-panel-ticker flex w-max text-[9px] uppercase tracking-[.12em] sm:text-[11px]">{group}{group}</div></div>;
 }
 
-function FloatingHeader() {
+export function FloatingHeader() {
   const [visible, setVisible] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const openCart = useCartDrawer((state) => state.open);

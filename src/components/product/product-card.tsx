@@ -79,7 +79,7 @@ export function ProductCard({ product: initialProduct, priority = false }: { pro
   return (
     <article className="group relative">
       <Link
-        href={`/product/${product.slug}`}
+        href={product.offerSlug ? `/offers/${product.offerSlug}` : `/product/${product.slug}`}
         className="block focus-visible:outline-ring rounded-md"
         aria-label={`${product.name}${saleable ? `, ${formatPrice(product.price)}` : ''}`}
       >

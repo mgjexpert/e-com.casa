@@ -1,3 +1,4 @@
+import { applyBundleOffer } from './catalog/bundle';
 // ============================================================
 // E-com.casa — Checkout server engine (§5, §11, §39)
 // ------------------------------------------------------------
@@ -114,7 +115,7 @@ export async function repriceCart(input: {
 
   let subtotal = 0;
   const lineItems = input.items.map((item) => {
-    const product = products.find((p) => p.slug === item.slug)!;
+    const product = applyBundleOffer(products.find((p) => p.slug === item.slug)!, products);
     let variantDeltaCents = 0;
     let variantLabel: string | undefined;
     if (item.variantId) {

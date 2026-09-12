@@ -1,37 +1,13 @@
-import { getBestSellers, getCategories } from '@/lib/catalog';
+import { getProducts, getCategories } from '@/lib/catalog';
+import { toStorefrontProduct } from '@/lib/catalog/public-product';
 import { Hero } from '@/components/home/hero';
-import { ShopBySpace } from '@/components/home/shop-by-space';
-import { ShopByStyle } from '@/components/home/shop-by-style';
-import { Collections } from '@/components/home/collections';
-import { BestSellers } from '@/components/home/best-sellers';
+import { CatalogShowcase } from '@/components/home/catalog-showcase';
+import { CatalogCategoryStrip } from '@/components/product/catalog-category-strip';
 import { JournalBanner } from '@/components/home/journal-banner';
-
 export const dynamic = 'force-dynamic';
-
-async function getHomeData() {
-  try {
-    const [spaces, styles, bestSellers] = await Promise.all([
-      getCategories('space'),
-      getCategories('style'),
-      getBestSellers(6),
-    ]);
-    return { spaces, styles, bestSellers };
-  } catch {
-    return { spaces: [], styles: [], bestSellers: [] };
-  }
-}
-
 export default async function HomePage() {
-  const { spaces, styles, bestSellers } = await getHomeData();
-
-  return (
-    <>
-      <Hero />
-      <ShopBySpace spaces={spaces} />
-      <ShopByStyle styles={styles} />
-      <Collections />
-      <BestSellers products={bestSellers} />
-      <JournalBanner />
-    </>
-  );
+  const [first,categories] = await Promise.all([getProducts({perPage:24}),getCategories('shop')]);
+  const { products: offers } = await getProducts({ perPage: 24, funnelOnly: true });
+  const featured=offers.length?offers:first.products.filter(p=>p.categorySlug!=='acessorios-instalacao').slice(0,10);
+  return <><Hero /><CatalogCategoryStrip categories={categories} /><CatalogShowcase featured={featured.map(toStorefrontProduct)} initial={first.products.map(toStorefrontProduct)} totalPages={first.totalPages} /><JournalBanner /></>;
 }

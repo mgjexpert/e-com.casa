@@ -108,3 +108,26 @@ ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "supplierKey" TEXT;
 ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "supplierProductId" TEXT;
 
 ALTER TABLE "Product" ADD COLUMN IF NOT EXISTS "mediaRights" TEXT;
+
+CREATE TABLE IF NOT EXISTS "ProductOffer" (
+ "productSlug" TEXT PRIMARY KEY REFERENCES "Product"("slug") ON UPDATE CASCADE ON DELETE CASCADE,
+ "slug" TEXT NOT NULL UNIQUE,
+ "enabled" BOOLEAN NOT NULL DEFAULT false,
+ "discountPct" INTEGER,
+ "fixedPriceCents" INTEGER,
+ "startsAt" TIMESTAMP(3) NOT NULL,
+ "endsAt" TIMESTAMP(3) NOT NULL,
+ "version" INTEGER NOT NULL DEFAULT 1,
+ "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+ CHECK (("discountPct" IS NOT NULL AND "discountPct" BETWEEN 1 AND 99 AND "fixedPriceCents" IS NULL) OR ("discountPct" IS NULL AND "fixedPriceCents" IS NOT NULL AND "fixedPriceCents" > 0)),
+ CHECK ("endsAt" > "startsAt")
+);
+CREATE TABLE IF NOT EXISTS "ProductOfferAudit" (
+ "id" TEXT PRIMARY KEY,
+ "productSlug" TEXT NOT NULL,
+ "actor" TEXT NOT NULL,
+ "beforeJson" TEXT NOT NULL,
+ "afterJson" TEXT NOT NULL,
+ "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS "ProductOfferAudit_productSlug_createdAt_idx" ON "ProductOfferAudit"("productSlug", "createdAt");

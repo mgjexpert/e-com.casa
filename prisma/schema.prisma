@@ -553,3 +553,26 @@ model ResearchError {
 
   @@index([researchRunId])
 }
+
+// Merchant promotions are independent of supplier sync: ON/OFF and prices survive refreshes.
+model ProductOffer {
+  productSlug String @id
+  slug String @unique
+  enabled Boolean @default(false)
+  discountPct Int?
+  fixedPriceCents Int?
+  startsAt DateTime
+  endsAt DateTime
+  version Int @default(1)
+  updatedAt DateTime @updatedAt
+}
+
+model ProductOfferAudit {
+  id String @id @default(cuid())
+  productSlug String
+  actor String
+  beforeJson String
+  afterJson String
+  createdAt DateTime @default(now())
+  @@index([productSlug, createdAt])
+}

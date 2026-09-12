@@ -52,7 +52,7 @@
       "slug": "paineis-exterior",
       "name": "Painéis de Exterior",
       "type": "shop",
-      "image": null,
+      "image": "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/Aluwood_RAL7039_Wetterschutzfarbe_01.jpg?v=1787314450",
       "subtitle": "Sistemas WoodUpp para aplicação exterior.",
       "sortOrder": 7
     },
@@ -61,7 +61,7 @@
       "slug": "paineis-acusticos",
       "name": "Painéis Acústicos",
       "type": "shop",
-      "image": null,
+      "image": "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/akupixel_carolinaoak_darkbeige_01.jpg?v=1786982590",
       "subtitle": "Akupanel, Akupixel e sistemas acústicos WoodUpp.",
       "sortOrder": 8
     },
@@ -70,7 +70,7 @@
       "slug": "divisorias",
       "name": "Divisórias de Ambiente",
       "type": "shop",
-      "image": null,
+      "image": "https://cdn.shopify.com/s/files/1/0956/1561/5323/files/3703_embrace_bm2_2360-2520mm_01.jpg?v=1777062261",
       "subtitle": "Sistemas modulares WoodUpp Embrace.",
       "sortOrder": 11
     },
