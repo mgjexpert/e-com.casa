@@ -8,13 +8,14 @@ on:
     branches: [main]
     paths:
       - 'scripts/catalog-partners/partner-catalog-sync.ts'
+      - 'scripts/catalog-partners/provision-db.ts'
       - '.github/workflows/catalog-partner-sync.yml'
 
 permissions:
   contents: write
 
 concurrency:
-  group: partner-catalogue-sync
+  group: partner-catalogue-db
   cancel-in-progress: false
 
 jobs:
