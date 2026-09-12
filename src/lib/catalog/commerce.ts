@@ -1,8 +1,8 @@
 import campaign from '../../../data/catalog/commerce-campaign.json';
 import type { CatalogProduct } from './types';
 export const ACCESSORY_CATEGORIES = ['acessorios', 'produtos-instalacao', 'acessorios-divisorias', 'acessorios-instalacao'];
-export const isAccessory = (p: Pick<CatalogProduct, 'categorySlug'>) => ACCESSORY_CATEGORIES.includes(p.categorySlug);
-export const isSample = (p: Pick<CatalogProduct, 'categorySlug'>) => p.categorySlug === 'amostras';
+export const isAccessory = (p: Pick<CatalogProduct, 'categorySlug'> & { name?: string; slug?: string }) => ACCESSORY_CATEGORIES.includes(p.categorySlug) || /acessórios|ripa de fixação/i.test(p.name ?? '');
+export const isSample = (p: Pick<CatalogProduct, 'categorySlug'> & { name?: string; slug?: string }) => p.categorySlug === 'amostras' || /\b(amostras?|samples?)\b/i.test(p.name ?? '');
 function hash(value: string) { let h = 2166136261; for (const c of value) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; }
 
 /** One fixed campaign; neither visits nor daily supplier sync restart its deadlines. */

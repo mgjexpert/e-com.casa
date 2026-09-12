@@ -38,7 +38,7 @@ export default async function ShopPage() {
           </div>
         }
       >
-        <ShopClient />
+        <ShopClient categories={categories} />
       </Suspense>
     </>
   );

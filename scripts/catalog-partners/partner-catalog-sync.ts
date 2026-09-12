@@ -556,9 +556,9 @@ async function main() {
     }
   }
 
-  const deduped = [...new Map(products.map((product) => [`${product.supplierKey}:${product.supplierProductId}`, product])).values()];
+  const deduped = [...new Map(products.filter(product => !/\b(amostras?|samples?)\b/i.test(product.name)).map((product) => [`${product.supplierKey}:${product.supplierProductId}`, product])).values()];
   for (const product of deduped) {
-    if (['acessorios', 'produtos-instalacao', 'acessorios-divisorias'].includes(product.categorySlug)) {
+    if (['acessorios', 'produtos-instalacao', 'acessorios-divisorias'].includes(product.categorySlug) || /acessórios|ripa de fixação/i.test(product.name)) {
       product.subcategorySlugs = [product.subcategorySlugs, product.categorySlug].filter(Boolean).join(',');
       product.categorySlug = 'acessorios-instalacao';
     }

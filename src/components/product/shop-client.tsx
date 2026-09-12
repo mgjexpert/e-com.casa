@@ -72,7 +72,7 @@ function activeTitle(
   return t('shop.all');
 }
 
-export function ShopClient() {
+export function ShopClient({ categories }: { categories: { slug: string; name: string }[] }) {
   const t = useT();
   const router = useRouter();
   const params = useSearchParams();
@@ -141,11 +141,11 @@ export function ShopClient() {
 
   const clearAll = () => router.replace('/shop');
 
-  const title = activeTitle(t, category, space, style, collection, q);
+  const title = categories.find(c => c.slug === category)?.name ?? activeTitle(t, category, space, style, collection, q);
 
   const filterGroup = (
     label: string,
-    options: { slug: string; labelKey: string }[],
+    options: { slug: string; labelKey?: string; name?: string }[],
     paramKey: string,
     current: string
   ) => (
@@ -163,7 +163,7 @@ export function ShopClient() {
               )}
               aria-pressed={current === opt.slug}
             >
-              {t(opt.labelKey)}
+              {opt.name ?? t(opt.labelKey ?? 'shop.all')}
             </button>
           </li>
         ))}
@@ -173,7 +173,7 @@ export function ShopClient() {
 
   const sidebar = (
     <div className="space-y-5">
-      {filterGroup(t('shopPage.category'), SHOP_CATEGORIES, 'category', category)}
+      {filterGroup(t('shopPage.category'), [{ slug: '', labelKey: 'shop.all' }, ...categories], 'category', category)}
       {filterGroup(t('shopPage.space'), SPACES, 'space', space)}
       {filterGroup(t('shopPage.style'), STYLES, 'style', style)}
       <div className="border-b border-border pb-5">

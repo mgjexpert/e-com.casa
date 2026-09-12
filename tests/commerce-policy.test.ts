@@ -9,9 +9,9 @@ import type { CatalogProduct } from '../src/lib/catalog/types';
 const products = rows as unknown as CatalogProduct[];
 const start = Date.parse(campaign.startsAt);
 test('sample removal and separate accessories', () => {
-  expect(products).toHaveLength(354);
-  expect(products.some(p => p.categorySlug === 'amostras')).toBe(false);
-  expect(products.filter(p => p.categorySlug === 'acessorios-instalacao')).toHaveLength(199);
+  expect(products).toHaveLength(352);
+  expect(products.some(p => p.categorySlug === 'amostras' || /amostra|sample/i.test(p.name))).toBe(false);
+  expect(products.filter(p => p.categorySlug === 'acessorios-instalacao')).toHaveLength(201);
 });
 test('fixed 1/2/3h deadlines with some products undiscounted, no timer reset', () => {
   const panels = products.filter(p => p.categorySlug !== 'acessorios-instalacao');
