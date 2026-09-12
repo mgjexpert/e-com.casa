@@ -18,12 +18,27 @@ function compact(value: string | null | undefined): string | null {
   return normalized ? normalized : null;
 }
 
+function firstSentence(value: string | null): string | null {
+  if (!value) return null;
+  const match = value.match(/^.*?[.!?…](?=\s|$)/);
+  return match?.[0]?.trim() || value;
+}
+
+function merchandisingSummary(product: CatalogProduct): string {
+  const short = compact(product.shortDescription);
+  const full = compact(product.description);
+  if (short && /[.!?…]$/.test(short)) return short;
+  if (full) return firstSentence(full) ?? full;
+  return short ?? compact(product.name) ?? product.name;
+}
+
 export function configForProduct(product: CatalogProduct, slug: string): OfferConfig {
+  const productName = compact(product.name) ?? product.name;
   const manufacturer = compact(product.manufacturer) ?? compact(product.brand) ?? 'E-com.casa';
   const brand = compact(product.brand) ?? manufacturer;
   const gallery = galleryFor(product);
   const panelLike = /painel|panel|akupanel|decowall|ripado|revestimento/i.test(
-    `${product.name} ${product.categorySlug} ${product.subcategorySlugs}`,
+    `${productName} ${product.categorySlug} ${product.subcategorySlugs}`,
   );
   const productKind = panelLike ? 'painel' : 'produto';
   const dimensions = compact(product.dimensions);
@@ -36,7 +51,8 @@ export function configForProduct(product: CatalogProduct, slug: string): OfferCo
       : 'A configuração comercial disponível é apresentada junto ao preço.';
 
   const benefitDetails = [materials, colour].filter(Boolean).join(' · ');
-  const description = compact(product.shortDescription) ?? compact(product.description) ?? product.name;
+  const description = merchandisingSummary(product);
+  const fullDescription = compact(product.description) ?? description;
 
   return {
     slug,
@@ -45,7 +61,7 @@ export function configForProduct(product: CatalogProduct, slug: string): OfferCo
       ? `Oferta temporária −${product.promoDiscountPct}% · preço aplicado automaticamente no carrinho e checkout`
       : 'Portes grátis Portugal e Espanha · Europa acima de 50 €',
     eyebrow: `${brand} · seleção E-com.casa`,
-    headline: product.name,
+    headline: productName,
     subheadline: description,
     valueProposition: {
       title: `Do catálogo ${manufacturer}. Para a sua casa.`,
@@ -55,7 +71,7 @@ export function configForProduct(product: CatalogProduct, slug: string): OfferCo
       title: panelLike
         ? 'Textura, ritmo e acabamento que mudam a leitura do espaço.'
         : 'Um detalhe que muda a forma de sentir o espaço.',
-      body: compact(product.description) ?? description,
+      body: fullDescription,
       image: gallery[1] ?? gallery[0],
     },
     benefits: [
@@ -137,8 +153,8 @@ export function configForProduct(product: CatalogProduct, slug: string): OfferCo
       button: 'Comprar agora',
     },
     seo: {
-      title: `${product.name} — Oferta | E-com.casa`,
-      description: `${description.slice(0, 130)} Oferta temporária E-com.casa.`,
+      title: `${productName} — Oferta`,
+      description: `${description} Oferta temporária E-com.casa.`,
     },
   };
 }
