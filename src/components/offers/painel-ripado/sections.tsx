@@ -50,7 +50,7 @@ export function PanelCampaignStory() {
 export function PanelProductDetails({ product }: { product: CatalogProduct }) {
   const [open, setOpen] = useState(0);
   const groups = [
-    { number:'01', title:'Medidas e cobertura', subtitle:'Dimensões, área e peso', rows:[['Dimensões','240 × 60 cm · 260 × 70 cm · 270 × 80 cm'],['Área por painel','1,44 a 2,16 m², consoante a medida'],['Espessura / formato',product.dimensions || 'Consultar ficha do produto'],['Peso',product.weight || 'Varia consoante a medida']] },
+    { number:'01', title:'Medidas e cobertura', subtitle:'Dimensões, área e peso', rows:[['Dimensões',product.dimensions || 'Consultar ficha do produto'],['Área por painel','1,62 m² (600 × 2700 mm)'],['Espessura / formato',product.dimensions || 'Consultar ficha do produto'],['Peso',product.weight || 'Varia consoante a medida']] },
     { number:'02', title:'Materiais e acabamento', subtitle:'Composição e presença visual', rows:[['Material',product.materials || 'MDF com revestimento decorativo'],['Acabamento','Mate, conforme a cor escolhida'],['Aplicação','Paredes interiores']] },
     { number:'03', title:'Instalação e acessórios', subtitle:'O que recebe e como aplicar', rows:[['Conteúdo','1 painel por unidade'],['Fixação','Método adequado à parede e ao material'],['Superfícies','Sólidas, limpas, secas e niveladas']] },
     { number:'04', title:'Cuidados e pós-venda', subtitle:'Utilização, entrega e devoluções', rows:[['Cuidados',product.care || 'Limpar com pano macio'],['Entrega','Prazo e transportadora confirmados no checkout'],['Devolução','Aplicam-se as condições E-com.casa e direitos legais do consumidor']] },

@@ -145,7 +145,7 @@ export const painelRipadoOffer: OfferConfig = {
     reviews: [],
   },
   faqs: [
-    { question: 'Porque é que o preço apresentado é apenas de referência?', answer: 'Enquanto o produto associado não estiver comercialmente aprovado, a E-com.casa apresenta o preço do catálogo apenas como referência e bloqueia qualquer cobrança real.' },
+    { question: 'Como é aplicado o desconto?', answer: 'O desconto ativo é aplicado automaticamente ao produto e ao carrinho durante o prazo indicado. O preço de referência é o catálogo do fornecedor. Ao terminar a campanha, o produto regressa ao preço regular.' },
     { question: 'Posso instalar apenas numa parte da parede?', answer: 'Sim. Uma faixa vertical atrás de uma TV, cama, aparador ou secretária pode funcionar como elemento de enquadramento sem revestir a parede inteira.' },
     { question: 'Os painéis podem ser cortados?', answer: 'Sim, desde que utilize ferramentas adequadas aos materiais do painel e faça o corte com suporte suficiente. Meça duas vezes antes de cortar.' },
     { question: 'É indicado para zonas molhadas?', answer: 'Não assumimos resistência à água sem documentação específica do produto. Evite contacto direto com água e confirme a ficha técnica antes de usar em cozinhas húmidas ou casas de banho.' },
@@ -158,7 +158,7 @@ export const painelRipadoOffer: OfferConfig = {
   ],
   finalCta: {
     title: 'Dê estrutura à parede que hoje passa despercebida.',
-    body: 'Escolha o acabamento, confirme as medidas e use o mesmo carrinho e checkout seguro da E-com.casa quando o produto estiver comercialmente aprovado.',
+    body: 'Escolha o acabamento, confirme as medidas e use o mesmo carrinho e checkout seguro da E-com.casa para concluir a encomenda.',
     button: 'Ver disponibilidade',
   },
   seo: {
