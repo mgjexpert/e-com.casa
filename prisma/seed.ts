@@ -79,7 +79,7 @@ async function main() {
   }
 
   if (products.length < 240 || products.filter(p => p.supplierKey === 'odem').length < 40 || products.filter(p => p.supplierKey === 'woodupp').length < 200) throw new Error('Incomplete partner snapshot');
-  if (products.some(p => p.isDemo || !p.stockUnlimited || !['odem', 'woodupp'].includes(p.supplierKey ?? '') || !p.supplierProductId || !p.sku || !p.slug)) throw new Error('Invalid partner identity or stock policy');
+  if (products.some(p => p.isDemo || !p.stockUnlimited || !['odem', 'woodupp', 'nuralta'].includes(p.supplierKey ?? '') || !p.supplierProductId || !p.sku || !p.slug)) throw new Error('Invalid partner identity or stock policy');
   if (new Set(products.map(p => p.sku)).size !== products.length || new Set(products.map(p => p.slug)).size !== products.length) throw new Error('Duplicate SKU/slug');
   if (!catalog?.categories?.length || products.some(p => !catalog.categories!.some(c => c.slug === p.categorySlug))) throw new Error('Missing categories');
   console.log(`Validated ${products.length} products`);

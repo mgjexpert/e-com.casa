@@ -1,6 +1,7 @@
 {
   "generatedAt": "2026-09-13T04:24:59.605Z",
-  "totalProducts": 352,
+  "totalProducts": 355,
+  "nuraltaProducts": 3,
   "odemProducts": 50,
   "woodUppProducts": 302,
   "odemCategoryCounts": {
@@ -21,6 +22,8 @@
     "woodupp-outros": 0
   },
   "sourceCounts": {
+    "nuralta:painel-ripado": 1,
+    "nuralta:acessorios": 2,
     "odem:painel-ripado": 16,
     "odem:revestimento-exterior-wpc": 10,
     "odem:revestimento-spc": 8,
@@ -32,6 +35,7 @@
   "saleability": "MERCHANT_RELEASE_POLICY_WITH_DOCUMENTARY_STATUS_RETAINED",
   "media": {
     "odem": "PARTNER_CONFIRMED_BY_MERCHANT",
-    "woodupp": "PARTNER_CONFIRMED_BY_MERCHANT"
+    "woodupp": "PARTNER_CONFIRMED_BY_MERCHANT",
+    "nuralta": "PARTNER_CONFIRMED_BY_MERCHANT"
   }
 }

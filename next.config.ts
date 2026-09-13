@@ -16,7 +16,20 @@ const nextConfig: NextConfig = {
         hostname: "cdn.shopify.com",
         pathname: "/s/files/**",
       },
+      {
+        protocol: "https",
+        hostname: "www.nuraltainteriores.online",
+        pathname: "/pt/**",
+      },
     ],
+  },
+  async rewrites() {
+    return [
+      {
+        source: "/pt/:path*",
+        destination: "https://www.nuraltainteriores.online/pt/:path*",
+      },
+    ];
   },
 };
 

@@ -17,6 +17,7 @@ import type {
 } from './types';
 
 type JsonProduct = Omit<CatalogProduct, 'variants'> & { variants?: ProductVariant[] };
+const PARTNER_SUPPLIERS = ['odem', 'woodupp', 'nuralta'];
 
 let cache: { products: CatalogProduct[]; categories: CatalogCategory[]; loadedAt: number } | null = null;
 const CACHE_TTL_MS = 30_000;
@@ -135,7 +136,7 @@ export class DemoCatalogAdapter implements CatalogAdapter {
   readonly name = 'partner-file-catalog';
 
   getAllProducts(): CatalogProduct[] {
-    return load().products.filter((product) => product.categorySlug !== 'amostras' && !product.isDemo && ['odem', 'woodupp'].includes(product.supplierKey ?? '') && product.complianceStatus !== 'BLOCKED');
+    return load().products.filter((product) => product.categorySlug !== 'amostras' && !product.isDemo && PARTNER_SUPPLIERS.includes(product.supplierKey ?? '') && product.complianceStatus !== 'BLOCKED');
   }
 
   getSource(): string {

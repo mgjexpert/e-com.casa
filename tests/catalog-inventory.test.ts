@@ -24,7 +24,7 @@ describe('direct manufacture', () => {
   test('partner adapter contains only supplier products and preserves the offer anchor', async () => {
     const adapter = new DemoCatalogAdapter();
     expect(await adapter.count()).toBe(snapshot.length);
-    expect(snapshot.every((p: any) => !p.isDemo && p.stockUnlimited && ['odem', 'woodupp'].includes(p.supplierKey))).toBe(true);
+    expect(snapshot.every((p: any) => !p.isDemo && p.stockUnlimited && ['odem', 'woodupp', 'nuralta'].includes(p.supplierKey))).toBe(true);
     expect((await adapter.getBySlug('odem-painel-ripado-acustico-carvalho'))?.stockUnlimited).toBe(true);
     expect(await adapter.getBySlug('warm-oak-slatted-wall-panel')).toBeNull();
   });

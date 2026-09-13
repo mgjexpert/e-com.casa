@@ -149,6 +149,8 @@
   ],
   "subcategories": [],
   "sourceCounts": {
+    "nuralta:painel-ripado": 1,
+    "nuralta:acessorios": 2,
     "odem:painel-ripado": 16,
     "odem:revestimento-exterior-wpc": 10,
     "odem:revestimento-spc": 8,
@@ -156,5 +158,5 @@
     "odem:sancas": 6,
     "woodupp:products": 363
   },
-  "note": "Real ODEM/WoodUpp supplier catalogue snapshot. Historic mock products are not mixed into this snapshot. Exact inventory and compliance/documentation must be approved before checkout."
+  "note": "Real Nuralta/ODEM/WoodUpp partner catalogue snapshot. Historic mock products and samples are not mixed into this snapshot. Direct-manufacture products use unlimited stock; merchant release is explicit and does not invent unpublished certification."
 }

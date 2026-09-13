@@ -5,6 +5,7 @@ import { db } from '@/lib/db';
 import { cache } from 'react';
 import type { OfferConfig, OfferReviewItem } from './types';
 import type { CatalogProduct } from '@/lib/catalog/types';
+import { isCatalogProductSaleable } from '@/lib/catalog/saleability';
 export interface ResolvedOffer { offer: OfferConfig; product: CatalogProduct }
 
 async function getVerifiedReviews(productSlug: string): Promise<OfferReviewItem[]> {
@@ -60,6 +61,25 @@ export function configForProduct(product: CatalogProduct, slug: string, reviews:
   };
 }
 export const resolveOffer = cache(async (slug: string): Promise<ResolvedOffer | null> => {
+  if (slug === 'nuralta-painel-ripado') {
+    const product = await getProduct('nuralta-painel-ripado-decorativo');
+    if (!product || !isCatalogProductSaleable(product)) return null;
+    const offer = configForProduct(product, slug);
+    return {
+      product,
+      offer: {
+        ...offer,
+        announcement: 'Envio gratuito para Portugal Continental',
+        eyebrow: 'Nuralta · Fabrico próprio',
+        headline: 'Painel Ripado Decorativo',
+        subheadline: 'Design que transforma. Instalação que simplifica.',
+        seo: {
+          title: 'Painel Ripado Decorativo Nuralta',
+          description: 'Painel Ripado Decorativo em MDF, fabricado pela Nuralta. Preço direto de fábrica desde 5,00 €. Entrega gratuita em Portugal Continental.',
+        },
+      },
+    };
+  }
   const offers = await getProductOffers();
   const offer = offers.find(o => o.slug === slug || (slug === 'painel-ripado' && o.productSlug === 'odem-painel-ripado-acustico-carvalho'));
   if (!isOfferActive(offer)) return null;

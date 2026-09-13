@@ -79,14 +79,29 @@ export async function catalogStatus(): Promise<{ adapter: string; products: numb
 }
 
 let rawCache: { adapter: string; at: number; products: CatalogProduct[] } | null = null;
+
+async function catalogOffers() {
+  try {
+    return await getProductOffers();
+  } catch (error) {
+    // Safe failure mode: keep products available from the validated snapshot,
+    // but never reactivate or synthesize a database-controlled promotion.
+    console.warn('[catalog] Product offers unavailable; serving regular catalogue prices.', error);
+    return [];
+  }
+}
+
 export async function getProducts(query: ProductQuery = {}): Promise<ProductListResult> {
   const adapter = await activeAdapter();
   if (!rawCache || rawCache.adapter !== adapter.name || Date.now() - rawCache.at > 30000) {
     const first = await adapter.list({ perPage: 48 });
     const rest = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, i) => adapter.list({ perPage: 48, page: i + 2 })));
-    rawCache = { adapter: adapter.name, at: Date.now(), products: [first, ...rest].flatMap(r => r.products) };
+    const primaryProducts = [first, ...rest].flatMap(r => r.products);
+    const stagedProducts = adapter === fileAdapter ? [] : fileAdapter.getAllProducts();
+    const mergedProducts = [...new Map([...primaryProducts, ...stagedProducts].map(product => [product.slug, product])).values()];
+    rawCache = { adapter: adapter.name, at: Date.now(), products: mergedProducts };
   }
-  const offers = await getProductOffers();
+  const offers = await catalogOffers();
   const priced = rawCache.products.map(p => applyCommerce({ ...p, funnelOffer: offers.find(o => o.productSlug === p.slug) ?? null })).filter(p => (!query.funnelOnly || Boolean(p.offerSlug)) && matchesCatalogProduct(p, query));
   const sorted = sortCatalogProducts(priced, query.sort);
   const page = Math.max(1, query.page ?? 1);
@@ -95,9 +110,14 @@ export async function getProducts(query: ProductQuery = {}): Promise<ProductList
 }
 
 export async function getProduct(slug: string): Promise<CatalogProduct | null> {
-  const product = await (await activeAdapter()).getBySlug(slug);
+  const adapter = await activeAdapter();
+  let product = await adapter.getBySlug(slug);
+  // Partner additions deploy with the validated snapshot before the next
+  // idempotent database import. Keep the individual PDP/offer available during
+  // that short synchronization window without replacing the active DB listing.
+  if (!product && adapter !== fileAdapter) product = await fileAdapter.getBySlug(slug);
   if (!product) return null;
-  const offers = await getProductOffers();
+  const offers = await catalogOffers();
   return applyCommerce({ ...product, funnelOffer: offers.find(o => o.productSlug === product.slug) ?? null });
 }
 

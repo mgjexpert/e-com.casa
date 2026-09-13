@@ -15,6 +15,8 @@ import type {
   ProductVariant,
 } from './types';
 
+const PARTNER_SUPPLIERS = ['odem', 'woodupp', 'nuralta'];
+
 function parseVariants(json: string): ProductVariant[] {
   try {
     const parsed = JSON.parse(json || '[]');
@@ -101,7 +103,7 @@ function mapCategory(row: CategoryRow): CatalogCategory {
 }
 
 function buildWhere(query: ProductQuery): Record<string, unknown> {
-  const where: Record<string, unknown> = { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: ['odem', 'woodupp'] }, complianceStatus: { not: 'BLOCKED' } };
+  const where: Record<string, unknown> = { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: PARTNER_SUPPLIERS }, complianceStatus: { not: 'BLOCKED' } };
   if (query.category) where.categorySlug = query.category;
   if (query.subcategory) where.subcategorySlugs = { contains: query.subcategory };
   if (query.space) where.spaceSlugs = { contains: query.space };
@@ -183,7 +185,7 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
 
   async getBySlug(slug: string): Promise<CatalogProduct | null> {
     const row = await this.client.product.findUnique({ where: { slug } });
-    if (!row || row.categorySlug === 'amostras' || row.isDemo || !['odem', 'woodupp'].includes(row.supplierKey ?? '') || row.complianceStatus === 'BLOCKED') return null;
+    if (!row || row.categorySlug === 'amostras' || row.isDemo || !PARTNER_SUPPLIERS.includes(row.supplierKey ?? '') || row.complianceStatus === 'BLOCKED') return null;
     return mapProduct(row);
   }
 
@@ -196,6 +198,6 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
   }
 
   async count(): Promise<number> {
-    return this.client.product.count({ where: { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: ['odem', 'woodupp'] }, complianceStatus: { not: 'BLOCKED' } } });
+    return this.client.product.count({ where: { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: PARTNER_SUPPLIERS }, complianceStatus: { not: 'BLOCKED' } } });
   }
 }

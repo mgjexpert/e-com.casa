@@ -1,6 +1,6 @@
 import { CartPriceSync } from '@/components/cart/cart-price-sync';
 import type { Metadata, Viewport } from 'next';
-import { Playfair_Display, Inter } from 'next/font/google';
+import { Playfair_Display, Inter, Manrope, Newsreader } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SiteChrome } from '@/components/layout/site-chrome';
@@ -19,6 +19,21 @@ const playfair = Playfair_Display({
 const inter = Inter({
   variable: '--font-sans-body',
   subsets: ['latin'],
+  display: 'swap',
+});
+
+const manrope = Manrope({
+  variable: '--font-manrope',
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+});
+
+const newsreader = Newsreader({
+  variable: '--font-newsreader',
+  subsets: ['latin'],
+  weight: ['300', '400', '500'],
+  style: ['normal'],
   display: 'swap',
 });
 
@@ -73,7 +88,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${playfair.variable} ${inter.variable} font-sans antialiased bg-background text-foreground`}>
+      <body className={`${playfair.variable} ${inter.variable} ${manrope.variable} ${newsreader.variable} font-sans antialiased bg-background text-foreground`}>
         <a
           href="#main-content"
           className="sr-only z-[100] bg-ink px-4 py-2 text-sm text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"

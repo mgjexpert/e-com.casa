@@ -8,6 +8,9 @@ const resolver = readFileSync(`${root}/src/lib/offers/resolver.ts`, 'utf8');
 const configurator = readFileSync(`${root}/src/components/offers/painel-ripado/configurator.tsx`, 'utf8');
 const sections = readFileSync(`${root}/src/components/offers/painel-ripado/sections.tsx`, 'utf8');
 const siteChrome = readFileSync(`${root}/src/components/layout/site-chrome.tsx`, 'utf8');
+const nuraltaTemplate = readFileSync(`${root}/src/components/offers/nuralta/page.tsx`, 'utf8');
+const nuraltaConfigurator = readFileSync(`${root}/src/components/offers/nuralta/product-configurator.tsx`, 'utf8');
+const nuraltaFooter = readFileSync(`${root}/src/components/offers/nuralta/footer.tsx`, 'utf8');
 
 test('every product offer reuses the approved complete funnel', () => {
   expect(sharedRoute).toContain('<PainelRipadoOfferPage {...props} />');
@@ -49,4 +52,15 @@ test('the funnel keeps the complete ten-question objection handling block', () =
 test('the painel-ripado public alias remains the canonical funnel slug', () => {
   expect(resolver).toContain("slug === 'painel-ripado'");
   expect(resolver).toContain('configForProduct(product, slug,');
+});
+
+test('the dedicated Nuralta offer preserves the complete approved source funnel and central checkout', () => {
+  expect(sharedRoute).toContain("props.offer.slug === 'nuralta-painel-ripado'");
+  for (const block of ['<TopTicker', '<Header', '<ProductConfigurator', '<FactoryPrice', '<Transformation', '<ProductDetails', '<Inspiration', '<Reviews', '<Faq', '<Footer', '<MobileBuyBar']) {
+    expect(nuraltaTemplate).toContain(block);
+  }
+  expect(nuraltaConfigurator).toContain('router.push("/cart")');
+  expect(nuraltaConfigurator).toContain('nuralta-panel-c${color}-s${size}');
+  expect(nuraltaFooter).toContain('Nuralta Interiores, Unipessoal Lda. · NIF 517 946 327');
+  expect(nuraltaFooter).toContain('Impulsionada pela marca @E-Com.Casa');
 });

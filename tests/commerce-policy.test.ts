@@ -9,9 +9,12 @@ import type { CatalogProduct } from '../src/lib/catalog/types';
 const products = rows as unknown as CatalogProduct[];
 const start = Date.parse(campaign.startsAt);
 test('sample removal and separate accessories', () => {
-  expect(products).toHaveLength(352);
+  expect(products).toHaveLength(355);
   expect(products.some(p => p.categorySlug === 'amostras' || /amostra|sample/i.test(p.name))).toBe(false);
-  expect(products.filter(p => p.categorySlug === 'acessorios-instalacao')).toHaveLength(201);
+  expect(products.filter(p => p.categorySlug === 'acessorios-instalacao')).toHaveLength(203);
+  const nuralta = products.filter(p => p.supplierKey === 'nuralta');
+  expect(nuralta).toHaveLength(3);
+  expect(nuralta.find(p => p.slug === 'nuralta-painel-ripado-decorativo')?.variants).toHaveLength(21);
 });
 test('fixed 1/2/3h deadlines with some products undiscounted, no timer reset', () => {
   const panels = products.filter(p => p.categorySlug !== 'acessorios-instalacao');
