@@ -11,6 +11,7 @@ const siteChrome = readFileSync(`${root}/src/components/layout/site-chrome.tsx`,
 const nuraltaTemplate = readFileSync(`${root}/src/components/offers/nuralta/page.tsx`, 'utf8');
 const nuraltaConfigurator = readFileSync(`${root}/src/components/offers/nuralta/product-configurator.tsx`, 'utf8');
 const nuraltaFooter = readFileSync(`${root}/src/components/offers/nuralta/footer.tsx`, 'utf8');
+const nuraltaCart = readFileSync(`${root}/src/components/offers/nuralta/cart-overlay.tsx`, 'utf8');
 
 test('every product offer reuses the approved complete funnel', () => {
   expect(sharedRoute).toContain('<PainelRipadoOfferPage {...props} />');
@@ -59,8 +60,13 @@ test('the dedicated Nuralta offer preserves the complete approved source funnel 
   for (const block of ['<TopTicker', '<Header', '<ProductConfigurator', '<FactoryPrice', '<Transformation', '<ProductDetails', '<Inspiration', '<Reviews', '<Faq', '<Footer', '<MobileBuyBar']) {
     expect(nuraltaTemplate).toContain(block);
   }
-  expect(nuraltaConfigurator).toContain('router.push("/cart")');
+  expect(nuraltaConfigurator).toContain('openNuraltaCart()');
   expect(nuraltaConfigurator).toContain('nuralta-panel-c${color}-s${size}');
+  expect(nuraltaCart).toContain('O meu carrinho');
+  expect(nuraltaCart).toContain('Finalizar encomenda');
+  expect(nuraltaCart).toContain('router.push("/checkout")');
+  expect(nuraltaCart).toContain('Kit de instalação completo');
+  expect(nuraltaCart).toContain('Fita LED Nuralta + Controlo RGB');
   expect(nuraltaFooter).toContain('Nuralta Interiores, Unipessoal Lda. · NIF 517 946 327');
   expect(nuraltaFooter).toContain('Impulsionada pela marca @E-Com.Casa');
 });

@@ -16,6 +16,7 @@ import { Reviews } from "./reviews";
 import { Faq } from "./faq";
 import { Footer } from "./footer";
 import { MobileBuyBar } from "./mobile-buy-bar";
+import { NuraltaCartProvider } from "./cart-overlay";
 
 export function NuraltaPainelRipadoOfferPage({
   offer,
@@ -42,18 +43,20 @@ export function NuraltaPainelRipadoOfferPage({
   }, [market.countryCode, market.locale, offer.slug, product.slug]);
 
   return (
-    <main id="top" className="nuralta-funnel min-h-screen overflow-x-hidden bg-[#f7f3ef] text-[#201a17]">
-      <TopTicker />
-      <Header />
-      <ProductConfigurator product={product} offer={offer} />
-      <FactoryPrice />
-      <Transformation />
-      <ProductDetails />
-      <Inspiration />
-      <Reviews />
-      <Faq />
-      <Footer />
-      <MobileBuyBar />
-    </main>
+    <NuraltaCartProvider>
+      <main id="top" className="nuralta-funnel min-h-screen overflow-x-hidden bg-[#f7f3ef] text-[#201a17]">
+        <TopTicker />
+        <Header />
+        <ProductConfigurator product={product} offer={offer} />
+        <FactoryPrice />
+        <Transformation />
+        <ProductDetails />
+        <Inspiration />
+        <Reviews />
+        <Faq />
+        <Footer />
+        <MobileBuyBar />
+      </main>
+    </NuraltaCartProvider>
   );
 }

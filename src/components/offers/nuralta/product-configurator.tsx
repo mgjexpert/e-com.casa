@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import {
   ChevronLeft,
   ChevronRight,
@@ -16,15 +15,14 @@ import { StarRow } from "./stars";
 import type { CatalogProduct } from "@/lib/catalog/types";
 import type { OfferConfig } from "@/lib/offers/types";
 import { useCart } from "@/lib/cart-store";
-import { useCartDrawer } from "@/lib/cart-drawer-store";
 import { cartStockLimit } from "@/lib/catalog/inventory";
 import { isCatalogProductSaleable } from "@/lib/catalog/saleability";
 import { trackOfferEvent } from "@/lib/offers/analytics";
+import { useNuraltaCart } from "./cart-overlay";
 
 export function ProductConfigurator({ product, offer }: { product: CatalogProduct; offer: OfferConfig }) {
-  const router = useRouter();
   const add = useCart((state) => state.add);
-  const openCart = useCartDrawer((state) => state.open);
+  const { openNuraltaCart } = useNuraltaCart();
   const [activeIndex, setActiveIndex] = useState(7); // img8 selected by default
   const [color, setColor] = useState<number | null>(null);
   const [size, setSize] = useState<number | null>(null);
@@ -66,8 +64,7 @@ export function ProductConfigurator({ product, offer }: { product: CatalogProduc
       currency: product.currency,
     });
     setSelectionError("");
-    if (buyNow) router.push("/cart");
-    else openCart();
+    openNuraltaCart();
   };
 
   return (

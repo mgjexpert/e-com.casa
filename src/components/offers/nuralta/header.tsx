@@ -3,11 +3,11 @@
 import { useEffect, useState } from "react";
 import { Menu, X, House, PackageSearch, ShoppingCart } from "lucide-react";
 import { useCart } from "@/lib/cart-store";
-import { useCartDrawer } from "@/lib/cart-drawer-store";
+import { useNuraltaCart } from "./cart-overlay";
 
 export function Header() {
   const cartCount = useCart((state) => state.lines.reduce((sum, line) => sum + line.quantity, 0));
-  const openCart = useCartDrawer((state) => state.open);
+  const { openNuraltaCart } = useNuraltaCart();
   const [visible, setVisible] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -55,7 +55,7 @@ export function Header() {
             type="button"
             aria-label="Carrinho"
             data-cart-target="true"
-            onClick={openCart}
+            onClick={openNuraltaCart}
             className="relative rounded-full p-1.5 text-zinc-900 transition hover:bg-zinc-100 active:scale-95"
           >
             <ShoppingCart className="h-4 w-4" />
