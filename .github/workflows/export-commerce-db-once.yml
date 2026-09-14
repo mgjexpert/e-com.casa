@@ -21,64 +21,80 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [ -z "${DATABASE_URL:-}" ]; then
-            echo '::error::DATABASE_URL GitHub Actions secret is missing.'
-            exit 2
-          fi
+          test -n "${DATABASE_URL:-}" || { echo '::error::DATABASE_URL GitHub Actions secret is missing.'; exit 2; }
 
-      - name: Export commerce data with PostgreSQL 18 client
+      - name: Export resolved commerce tables with PostgreSQL 18
         shell: bash
         run: |
           set -euo pipefail
-          docker pull postgres:18
-          docker run --rm \
-            -e DATABASE_URL="$DATABASE_URL" \
-            -v "$PWD:/work" \
-            postgres:18 \
-            bash -lc 'pg_dump "$DATABASE_URL" \
+          docker pull postgres:18 >/dev/null
+
+          cat > /tmp/export-commerce.sh <<'SCRIPT'
+          set -euo pipefail
+          wanted=(Product Review Category Order Payment PaymentAttempt Refund Invoice CreditNote TrackingEvent WebhookEvent NewsletterSubscriber ContactMessage ProductOffer ProductOfferAudit)
+          : > /work/commerce-data.sql
+          echo '{}' > /work/counts.json
+          found=0
+
+          for logical in "${wanted[@]}"; do
+            row="$(psql "$DATABASE_URL" -AtF '|' -c "
+              select table_schema, table_name
+              from information_schema.tables
+              where table_type='BASE TABLE'
+                and table_schema not in ('pg_catalog','information_schema','auth','storage','realtime','vault','extensions')
+                and lower(table_name)=lower('$logical')
+              order by case when table_schema='public' then 0 else 1 end, table_schema
+              limit 1;" | head -n1)"
+
+            if [ -z "$row" ]; then
+              echo "Missing source commerce table: $logical"
+              continue
+            fi
+
+            schema="${row%%|*}"
+            table="${row#*|}"
+            pattern="$(psql "$DATABASE_URL" -Atc "select format('%I.%I', '$schema', '$table');")"
+            count="$(psql "$DATABASE_URL" -Atc "select count(*) from $pattern;")"
+            echo "Resolved $logical -> $pattern ($count rows)"
+
+            pg_dump "$DATABASE_URL" \
               --data-only \
               --inserts \
               --column-inserts \
               --no-owner \
               --no-privileges \
-              --table='"'"'public."Product"'"'"' \
-              --table='"'"'public."Review"'"'"' \
-              --table='"'"'public."Category"'"'"' \
-              --table='"'"'public."Order"'"'"' \
-              --table='"'"'public."Payment"'"'"' \
-              --table='"'"'public."PaymentAttempt"'"'"' \
-              --table='"'"'public."Refund"'"'"' \
-              --table='"'"'public."Invoice"'"'"' \
-              --table='"'"'public."CreditNote"'"'"' \
-              --table='"'"'public."TrackingEvent"'"'"' \
-              --table='"'"'public."WebhookEvent"'"'"' \
-              --table='"'"'public."NewsletterSubscriber"'"'"' \
-              --table='"'"'public."ContactMessage"'"'"' \
-              --table='"'"'public."ProductOffer"'"'"' \
-              --table='"'"'public."ProductOfferAudit"'"'"' \
-              > /work/commerce-data.sql'
+              --table="$pattern" \
+              >> /work/commerce-data.sql
 
+            jq --arg key "$logical" --arg schema "$schema" --arg table "$table" --argjson count "$count" \
+              '. + {($key): {schema:$schema, table:$table, count:$count}}' \
+              /work/counts.json > /work/counts.tmp
+            mv /work/counts.tmp /work/counts.json
+            found=$((found+1))
+          done
+
+          if [ "$found" -eq 0 ]; then
+            echo 'No commerce tables could be resolved.' >&2
+            echo 'Available non-system tables:' >&2
+            psql "$DATABASE_URL" -AtF '.' -c "
+              select table_schema, table_name
+              from information_schema.tables
+              where table_type='BASE TABLE'
+                and table_schema not in ('pg_catalog','information_schema','auth','storage','realtime','vault','extensions')
+              order by table_schema, table_name;" >&2
+            exit 3
+          fi
+
+          echo "Resolved $found commerce tables."
+          SCRIPT
+
+          chmod +x /tmp/export-commerce.sh
           docker run --rm \
             -e DATABASE_URL="$DATABASE_URL" \
             -v "$PWD:/work" \
+            -v /tmp/export-commerce.sh:/export-commerce.sh:ro \
             postgres:18 \
-            bash -lc 'psql "$DATABASE_URL" -Atc "select json_build_object(
-              '\''Product'\'',(select count(*) from \"Product\"),
-              '\''Review'\'',(select count(*) from \"Review\"),
-              '\''Category'\'',(select count(*) from \"Category\"),
-              '\''Order'\'',(select count(*) from \"Order\"),
-              '\''Payment'\'',(select count(*) from \"Payment\"),
-              '\''PaymentAttempt'\'',(select count(*) from \"PaymentAttempt\"),
-              '\''Refund'\'',(select count(*) from \"Refund\"),
-              '\''Invoice'\'',(select count(*) from \"Invoice\"),
-              '\''CreditNote'\'',(select count(*) from \"CreditNote\"),
-              '\''TrackingEvent'\'',(select count(*) from \"TrackingEvent\"),
-              '\''WebhookEvent'\'',(select count(*) from \"WebhookEvent\"),
-              '\''NewsletterSubscriber'\'',(select count(*) from \"NewsletterSubscriber\"),
-              '\''ContactMessage'\'',(select count(*) from \"ContactMessage\"),
-              '\''ProductOffer'\'',(select count(*) from \"ProductOffer\"),
-              '\''ProductOfferAudit'\'',(select count(*) from \"ProductOfferAudit\")
-            );" > /work/counts.json'
+            bash /export-commerce.sh
 
       - name: Encrypt dump with temporary public key
         shell: bash
@@ -112,7 +128,7 @@ jobs:
             -pkeyopt rsa_oaep_md:sha256 \
             -in dump-passphrase.txt \
             -out dump-passphrase.enc
-          shred -u commerce-data.sql dump-passphrase.txt
+          shred -u commerce-data.sql dump-passphrase.txt migration-public.pem
 
       - name: Upload encrypted migration artifact
         uses: actions/upload-artifact@v4
