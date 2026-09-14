@@ -16,7 +16,7 @@
     "db:reset": "prisma migrate reset",
     "db:seed": "bun prisma/seed.ts",
     "catalog:bootstrap": "bun prisma/seed.ts",
-    "catalog:offers:verify": "bun scripts/catalog-partners/verify-offers.ts",
+    "offers:verify": "bun scripts/offers/verify-offers.ts",
     "test:catalog": "bun test tests/catalog-inventory.test.ts && bun test tests/catalog-payment.test.ts && bun test tests/commerce-policy.test.ts && bun test tests/product-offers.test.ts && bun test tests/offer-funnel-template.test.ts"
   },
   "dependencies": {
