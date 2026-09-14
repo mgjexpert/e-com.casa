@@ -72,13 +72,6 @@ jobs:
 
           if [ "$found" -eq 0 ]; then
             echo 'No commerce tables could be resolved.' >&2
-            echo 'Available non-system tables:' >&2
-            psql "$DATABASE_URL" -AtF '.' -c "
-              select table_schema, table_name
-              from information_schema.tables
-              where table_type='BASE TABLE'
-                and table_schema not in ('pg_catalog','information_schema','auth','storage','realtime','vault','extensions')
-              order by table_schema, table_name;" >&2
             exit 3
           fi
 
@@ -125,7 +118,7 @@ jobs:
             -pkeyopt rsa_oaep_md:sha256 \
             -in dump-passphrase.txt \
             -out dump-passphrase.enc
-          shred -u commerce-data.sql dump-passphrase.txt migration-public.pem
+          rm -f commerce-data.sql dump-passphrase.txt migration-public.pem
 
       - name: Upload encrypted migration artifact
         uses: actions/upload-artifact@v4
