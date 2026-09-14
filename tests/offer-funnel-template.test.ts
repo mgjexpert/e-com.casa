@@ -23,16 +23,20 @@ test('every product offer reuses the approved complete funnel', () => {
     '<PanelReviews',
     '<PanelFaq',
     '<PanelFooter',
-  ]) expect(template).toContain(block);
+  ]) {
+    expect(template).toContain(block);
+  }
 });
 
-test('the Nuralta reference conversion sequence remains present without duplicating global chrome', () => {
+test('offer and admin routes are self-contained and do not duplicate global chrome', () => {
   for (const copy of [
     'Pague como preferir',
     'Pagamento protegido',
     'Entrega acompanhada',
     'Apoio pós-venda',
-  ]) expect(configurator).toContain(copy);
+  ]) {
+    expect(configurator).toContain(copy);
+  }
 
   for (const copy of [
     'Do fabricante.',
@@ -40,10 +44,13 @@ test('the Nuralta reference conversion sequence remains present without duplicat
     'Espaços que ganharam outra vida.',
     'Galeria visual do produto',
     'Antes de decidir, tenha todas as respostas.',
-  ]) expect(sections).toContain(copy);
+  ]) {
+    expect(sections).toContain(copy);
+  }
 
-  expect(siteChrome).toContain('!isOfferRoute && <PromotionInfo />');
-  expect(siteChrome).toContain('!isOfferRoute && <SiteFooter />');
+  expect(siteChrome).toContain("pathname.startsWith('/offers/') || pathname.startsWith('/admin')");
+  expect(siteChrome).toContain('!selfContainedRoute && <PromotionInfo />');
+  expect(siteChrome).toContain('!selfContainedRoute && <SiteFooter />');
 });
 
 test('the funnel keeps the complete ten-question objection handling block', () => {
@@ -57,7 +64,19 @@ test('the painel-ripado public alias remains the canonical funnel slug', () => {
 
 test('the dedicated Nuralta offer preserves the complete approved source funnel and central checkout', () => {
   expect(sharedRoute).toContain("props.offer.slug === 'nuralta-painel-ripado'");
-  for (const block of ['<TopTicker', '<Header', '<ProductConfigurator', '<FactoryPrice', '<Transformation', '<ProductDetails', '<Inspiration', '<Reviews', '<Faq', '<Footer', '<MobileBuyBar']) {
+  for (const block of [
+    '<TopTicker',
+    '<Header',
+    '<ProductConfigurator',
+    '<FactoryPrice',
+    '<Transformation',
+    '<ProductDetails',
+    '<Inspiration',
+    '<Reviews',
+    '<Faq',
+    '<Footer',
+    '<MobileBuyBar',
+  ]) {
     expect(nuraltaTemplate).toContain(block);
   }
   expect(nuraltaConfigurator).toContain('openNuraltaCart()');
