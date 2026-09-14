@@ -57,9 +57,10 @@ test('the funnel keeps the complete ten-question objection handling block', () =
   expect((resolver.match(/question:/g) ?? []).length).toBe(10);
 });
 
-test('the painel-ripado public alias remains the canonical funnel slug', () => {
-  expect(resolver).toContain("slug === 'painel-ripado'");
-  expect(resolver).toContain('configForProduct(product, slug,');
+test('the painel-ripado public alias remains available for the ODEM funnel', () => {
+  expect(resolver).toContain("requestedSlug === 'painel-ripado'");
+  expect(resolver).toContain("candidate.productSlug === 'odem-painel-ripado-acustico-carvalho'");
+  expect(resolver).toContain('configForProduct(product, requestedSlug, reviews)');
 });
 
 test('the dedicated Nuralta offer preserves the complete approved source funnel and central checkout', () => {
