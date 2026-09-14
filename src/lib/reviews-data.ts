@@ -1,11 +1,8 @@
-// ============================================================
 // Reviews shared types
-// ------------------------------------------------------------
 // Only verified customer reviews are displayed anywhere on the
 // storefront. The former synthetic "sample feedback" generator
 // was removed — the reviews UI renders exclusively real
 // submissions (see ReviewsPanel).
-// ============================================================
 
 /** Normalised review shape used across the reviews UI. */
 export interface ReviewDTO {

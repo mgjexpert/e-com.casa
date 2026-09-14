@@ -1,14 +1,11 @@
 'use client';
 
-// ============================================================
-// Success / payment status view (§34, §35, §71)
-// ------------------------------------------------------------
+// Success / payment status view
 // Server-verified order data drives every state. Nothing here
 // trusts client input: an order shows "confirmed" only when the
 // database says the verified gateway event marked it PAID.
 // Async methods (Multibanco, MB WAY…) poll the server and the
 // view transitions automatically as the webhook lands.
-// ============================================================
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
@@ -109,7 +106,7 @@ export function SuccessView({ order, token }: { order: SuccessOrderData; token: 
   const t = useT();
   const waiting = ['PENDING_PAYMENT', 'PAYMENT_PROCESSING'].includes(order.status);
 
-  // ---------- header states ----------
+  // header states
   const header = (() => {
     switch (order.status) {
       case 'PAID':

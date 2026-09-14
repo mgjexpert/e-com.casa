@@ -1,17 +1,13 @@
 'use client';
 
-// ============================================================
-// <ExpressCheckout /> (§17, §25)
-// ------------------------------------------------------------
+// <ExpressCheckout />
 // Mounts the official Stripe Express Checkout Element — the only
 // place Apple Pay / Google Pay / Link / PayPal buttons come from.
 // Stripe decides which wallet buttons the visitor's browser,
 // device and merchant configuration actually support; unsupported
 // wallets are never shown (and we never draw fake buttons).
-//
 // Position: above the conventional Payment Element, followed by
 // the "or pay with card" separator.
-// ============================================================
 
 import { useEffect, useRef, useState } from 'react';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';

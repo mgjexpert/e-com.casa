@@ -1,10 +1,7 @@
-// ============================================================
 // E-com.casa — Payment domain types
-// ------------------------------------------------------------
 // XPayments is the production payment provider. The browser uses
 // the Stripe-compatible Payment Element; server confirmation comes
 // only from the verified XPayments merchant webhook.
-// ============================================================
 
 export type PaymentProviderName = 'xpayments_stripe';
 

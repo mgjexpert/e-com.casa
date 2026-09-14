@@ -1,17 +1,13 @@
 'use client';
 
-// ============================================================
-// usePaymentSession — checkout ↔ order ↔ PaymentIntent glue (§5)
-// ------------------------------------------------------------
+// usePaymentSession — checkout ↔ order ↔ PaymentIntent glue
 // Client orchestration of the real payment flow:
-//   1. cart valid → POST /api/checkout/create  (server-repriced
-//      PENDING_PAYMENT order, idempotent per checkout session)
-//   2. POST /api/payments/create-intent  (XPayments client_secret)
-//   3. Stripe Elements mount (Payment + Express Checkout)
-//   4. confirmPayment → return_url (success page verifies server-side)
-//
+// 1. cart valid → POST /api/checkout/create  (server-repriced
+// PENDING_PAYMENT order, idempotent per checkout session)
+// 2. POST /api/payments/create-intent  (XPayments client_secret)
+// 3. Stripe Elements mount (Payment + Express Checkout)
+// 4. confirmPayment → return_url (success page verifies server-side)
 // The browser NEVER sees xp_* keys — only the publishable key.
-// ============================================================
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import type { Stripe, StripeElements } from '@stripe/stripe-js';
@@ -221,7 +217,7 @@ export function usePaymentSession({ payload, signature, onComplete }: UsePayment
     if (error) {
       setPhase('ready');
       // Stripe-validated field errors surface inside the element; other
-      // errors map to a safe customer message (§68).
+      // errors map to a safe customer message.
       if (error.type === 'validation_error') {
         return { ok: false, errorCode: 'PAYMENT_REQUIRES_ACTION', errorMessage: error.message ?? undefined };
       }

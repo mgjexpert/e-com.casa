@@ -1,18 +1,14 @@
-// ============================================================
 // E-com.casa — Country / currency engine (data-driven)
-// ------------------------------------------------------------
 // Central market configuration. Nothing here is hardcoded inside
 // React components; UI reads configuration through these helpers.
-//
 // IMPORTANT:
-//  - VAT rates are REFERENCE values and must be validated per
-//    market before go-live.
-//  - Placeholders marked [TO BE CONFIRMED] must never be replaced
-//    with invented values (VAT numbers, EPR/WEEE registrations,
-//    ADR entities, mediator names, return warehouses).
-//  - Country-specific consumer protections EXTEND the EU/UK
-//    baseline; they never reduce mandatory rights.
-// ============================================================
+// - VAT rates are REFERENCE values and must be validated per
+// market before go-live.
+// - Placeholders marked [TO BE CONFIRMED] must never be replaced
+// with invented values (VAT numbers, EPR/WEEE registrations,
+// ADR entities, mediator names, return warehouses).
+// - Country-specific consumer protections EXTEND the EU/UK
+// baseline; they never reduce mandatory rights.
 
 export type Market = 'EU' | 'UK';
 
@@ -118,7 +114,7 @@ const EU_BASE_CONSUMER_RIGHTS = [
 ];
 
 /**
- * Capability candidates per market (§46, §48). Real availability is
+ * Capability candidates per market. Real availability is
  * resolved at checkout by /api/payments/capabilities (country +
  * currency + gateway configuration stay authoritative).
  */
@@ -200,9 +196,7 @@ function baseCountry(
   };
 }
 
-// ------------------------------------------------------------
 // EU — EUR area
-// ------------------------------------------------------------
 export const COUNTRIES: CountryConfiguration[] = [
   baseCountry({
     code: 'PT', name: 'Portugal', nativeName: 'Portugal', market: 'EU', locale: 'pt-PT', currency: 'EUR',
@@ -402,9 +396,7 @@ export const COUNTRIES: CountryConfiguration[] = [
     complaints: { provider: '[ADR ENTITY TO BE CONFIRMED]', url: null, note: 'Greek consumer ombudsman may be competent.' },
   }),
 
-  // ------------------------------------------------------------
   // EU — non-EUR
-  // ------------------------------------------------------------
   baseCountry({
     code: 'DK', name: 'Denmark', nativeName: 'Danmark', market: 'EU', locale: 'en-GB', currency: 'DKK',
     vat: { standardRate: 25, displayNote: 'Priserne er vist i DKK med moms (referencetakst: 25%) — currency conversion configured at checkout' },
@@ -469,9 +461,7 @@ export const COUNTRIES: CountryConfiguration[] = [
     complaints: { provider: '[ADR ENTITY TO BE CONFIRMED]', url: null, note: 'Bulgarian consumer protection commission may be competent.' },
   }),
 
-  // ------------------------------------------------------------
   // UK
-  // ------------------------------------------------------------
   baseCountry({
     code: 'GB', name: 'United Kingdom', nativeName: 'United Kingdom', market: 'UK', locale: 'en-GB', currency: 'GBP',
     vat: { standardRate: 20, displayNote: 'Prices shown in GBP incl. UK VAT (reference: 20%) — currency conversion configured at checkout' },

@@ -1,13 +1,10 @@
 'use client';
 
-// ============================================================
-// <PaymentMethodLogo /> (§92)
-// ------------------------------------------------------------
+// <PaymentMethodLogo />
 // Renders ONE payment brand asset (the user-supplied files under
 // /public/payment-methods — never redrawn or substituted).
 // Variants tune sizing/outline for footer, checkout and compact
 // contexts while preserving original brand proportions.
-// ============================================================
 
 import Image from 'next/image';
 

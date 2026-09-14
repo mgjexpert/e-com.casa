@@ -1,11 +1,8 @@
-// ============================================================
 // Vercel Cron — background XPayments reconciliation
-// ------------------------------------------------------------
 // Covers delayed/asynchronous methods when the shopper closes the
 // browser and no merchant webhook is configured. This job NEVER
 // creates/captures a payment; it only retrieves already-created
 // PaymentIntents and applies verified provider state idempotently.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';

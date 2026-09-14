@@ -2,19 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 import ZAI from 'z-ai-web-dev-sdk';
 import { getProducts } from '@/lib/catalog';
 
-// ============================================================
 // E-com.casa Concierge — AI shopping assistant
 // Backend-only: uses z-ai-web-dev-sdk (never expose client-side).
 // Product-aware: injects the live catalogue so recommendations
 // reference real slugs/prices only (no fabrication).
-// ============================================================
 
 interface IncomingMessage {
   role: 'user' | 'assistant';
   content: string;
 }
 
-// --- Simple in-memory rate limit: 20 requests / 5 min / IP ---
+// Simple in-memory rate limit: 20 requests / 5 min / IP
 const RATE_LIMIT = 20;
 const RATE_WINDOW_MS = 5 * 60 * 1000;
 const hits = new Map<string, { count: number; resetAt: number }>();
@@ -30,7 +28,7 @@ function rateLimited(ip: string): boolean {
   return entry.count > RATE_LIMIT;
 }
 
-// --- Catalogue context (cheap: tiny columns only) ---
+// Catalogue context (cheap: tiny columns only)
 let catalogCache: { lines: string; validSlugs: Set<string>; at: number } | null = null;
 const CATALOG_TTL_MS = 60 * 1000;
 

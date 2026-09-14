@@ -555,6 +555,8 @@ For Vercel runtime traffic, use the Supabase transaction pooler connection recom
 
 Use a direct/session connection for migrations when required.
 
+The current production database is already provisioned and the repository's Prisma migrations are incremental; they are not yet a complete fresh-database baseline. Before running `prisma migrate deploy` against a brand-new database, establish and review a baseline from `prisma/schema.prisma`. Do not treat the incremental migration directory as a complete bootstrap for an empty production database.
+
 Schema changes must be represented in `prisma/schema.prisma` and in the production migration process. Do not make undocumented structural changes directly in Supabase Studio.
 
 ## 18. Deployment to Vercel

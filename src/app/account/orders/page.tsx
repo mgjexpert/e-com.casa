@@ -1,13 +1,10 @@
 'use client';
 
-// ============================================================
-// Order history — secure device-scoped lookup (§60)
-// ------------------------------------------------------------
+// Order history — secure device-scoped lookup
 // Orders placed in this browser are listed from the locally saved
 // (orderNumber, accessToken) pairs. Every fetch is authenticated
 // with the random access token — there is no email-only lookup
 // anywhere in the app.
-// ============================================================
 
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';

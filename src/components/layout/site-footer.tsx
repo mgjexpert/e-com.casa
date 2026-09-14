@@ -93,7 +93,7 @@ export function SiteFooter() {
       return;
     }
     // Explicit marketing consent is REQUIRED — never inferred from
-    // the form submission itself (§61).
+    // the form submission itself.
     if (!consent) {
       toast({ title: t('footer.toastConsentRequired'), variant: 'destructive' });
       return;
@@ -207,7 +207,7 @@ export function SiteFooter() {
         ))}
       </div>
 
-      {/* Payment methods — configured, brand-correct, small + balanced (§27) */}
+      {/* Payment methods — configured, brand-correct, small + balanced */}
       <div className="border-t border-white/10">
         <div className="container-ecom flex flex-col items-start justify-between gap-4 py-8 md:flex-row md:items-center">
           <PaymentBrandStrip country="ALL" currency="ALL" variant="footer" caption={t('footer.weAccept')} />

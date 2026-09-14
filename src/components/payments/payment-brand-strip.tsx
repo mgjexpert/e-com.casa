@@ -1,20 +1,16 @@
 'use client';
 
-// ============================================================
-// <PaymentBrandStrip /> (§93)
-// ------------------------------------------------------------
+// <PaymentBrandStrip />
 // Small, balanced, brand-correct strip of the supplied payment
 // assets ("We accept"). Used in the footer, checkout and cart.
-//
-// Honesty rules (§27, §62, §94):
-//  - only methods whose configuration rules allow them for the
-//    given country/currency are shown;
-//  - a logo NEVER implies gateway availability — actual method
-//    selection happens inside Stripe Elements at checkout;
-//  - methods without a supplied asset (Apple Pay, Google Pay,
-//    PayPal, PIX…) are NOT faked with text/icons — the official
-//    buttons/flows render dynamically via Stripe.
-// ============================================================
+// Honesty rules:
+// - only methods whose configuration rules allow them for the
+// given country/currency are shown;
+// - a logo NEVER implies gateway availability — actual method
+// selection happens inside Stripe Elements at checkout;
+// - methods without a supplied asset (Apple Pay, Google Pay,
+// PayPal, PIX…) are NOT faked with text/icons — the official
+// buttons/flows render dynamically via Stripe.
 
 import { useEffect, useState } from 'react';
 import { PaymentMethodLogo } from './payment-method-logo';

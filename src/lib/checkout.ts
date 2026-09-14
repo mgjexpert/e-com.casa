@@ -1,11 +1,8 @@
 import { applyBundleOffer } from './catalog/bundle';
-// ============================================================
-// E-com.casa — Checkout server engine (§5, §11, §39)
-// ------------------------------------------------------------
+// E-com.casa — Checkout server engine
 // Server-side cart validation and repricing. Client totals are
 // NEVER trusted. Also owns the pricing fingerprint (pricingHash)
 // that keeps the PaymentIntent amount in sync with the order.
-// ============================================================
 
 import { createHash, randomBytes, timingSafeEqual } from 'crypto';
 import { getProduct } from '@/lib/catalog';

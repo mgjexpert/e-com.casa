@@ -1,12 +1,9 @@
-// ============================================================
-// GET /api/payments/capabilities?country=PT&currency=EUR  (§47)
-// ------------------------------------------------------------
+// GET /api/payments/capabilities?country=PT&currency=EUR
 // Public endpoint: returns the payment methods that are actually
 // configurable for a country/currency pair. Availability layers
 // (storefront config → country rules → provider capability) live
 // in the payment-methods registry; this endpoint exposes no
 // gateway internals.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { rateLimit } from '@/lib/rate-limit';

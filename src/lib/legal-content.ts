@@ -1,9 +1,7 @@
-// ============================================================
 // E-com.casa — legal document content (single source of truth)
 // Placeholders use [TO BE COMPLETED] and must NEVER be fabricated.
 // Content is deliberately cautious: no claims that cannot be
 // substantiated, no invented authorities/numbers/addresses.
-// ============================================================
 
 import { COMPANY } from './company';
 
@@ -30,7 +28,6 @@ const WAREHOUSE_LINES = COMPANY.warehouses.map(
 );
 
 export const legalDocuments: LegalDocument[] = [
-  // ---------------------------------------------------------------- 1
   {
     slug: 'notice',
     title: 'Legal Notice',
@@ -102,7 +99,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 2
   {
     slug: 'terms',
     title: 'Terms & Conditions',
@@ -188,7 +184,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 3
   {
     slug: 'privacy',
     title: 'Privacy Policy',
@@ -284,7 +279,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 4
   {
     slug: 'cookies',
     title: 'Cookie Policy',
@@ -328,7 +322,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 5
   {
     slug: 'cookie-settings',
     title: 'Cookie Settings',
@@ -351,7 +344,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 6
   {
     slug: 'returns',
     title: 'Returns & Right of Withdrawal',
@@ -409,7 +401,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 7
   {
     slug: 'shipping',
     title: 'Shipping Policy',
@@ -483,7 +474,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 8
   {
     slug: 'warranty',
     title: 'Warranty & Legal Guarantee',
@@ -524,7 +514,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 9
   {
     slug: 'product-safety',
     title: 'Product Safety / GPSR',
@@ -580,7 +569,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 10
   {
     slug: 'accessibility',
     title: 'Accessibility Statement',
@@ -621,7 +609,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 11
   {
     slug: 'complaints',
     title: 'Complaints',
@@ -667,7 +654,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 12
   {
     slug: 'dispute-resolution',
     title: 'Dispute Resolution',
@@ -714,7 +700,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 13
   {
     slug: 'impressum',
     title: 'Impressum',
@@ -764,7 +749,6 @@ export const legalDocuments: LegalDocument[] = [
     ],
   },
 
-  // ---------------------------------------------------------------- 14
   {
     slug: 'consumer-rights',
     title: 'Consumer Rights',

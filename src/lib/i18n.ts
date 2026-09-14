@@ -1,16 +1,12 @@
-// ============================================================
 // E-com.casa — lightweight UI translation layer (7 languages)
-// ------------------------------------------------------------
 // Scope: client-rendered chrome & commerce loop (header, footer,
 // product cards, cart drawer, buy box, chat, cookies, cart,
 // checkout, wishlist, shop filters). Server-rendered editorial,
 // legal and journal content remains English for now — moving it
 // behind locale routing is a documented next step.
-//
 // Usage:
-//   const t = useT();
-//   t('cart.title', { n: 2 })  →  "Your cart · 2 items"
-// ============================================================
+// const t = useT();
+// t('cart.title', { n: 2 })  →  "Your cart · 2 items"
 
 export type Lang = 'en' | 'pt' | 'fr' | 'de' | 'es' | 'it' | 'nl';
 

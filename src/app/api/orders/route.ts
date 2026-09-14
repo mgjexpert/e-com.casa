@@ -1,11 +1,8 @@
-// ============================================================
-// GET /api/orders?order=EC-…&token=…  (§59, §60)
-// ------------------------------------------------------------
+// GET /api/orders?order=EC-…&token=…
 // Secure single-order lookup. The historical email-only listing
 // endpoint was removed: arbitrary order histories can never be
 // enumerated. Access requires the order number plus the random
 // access token issued once at checkout.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';

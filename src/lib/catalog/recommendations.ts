@@ -1,13 +1,10 @@
-// ============================================================
 // E-com.casa — Product recommendations engine
-// ------------------------------------------------------------
 // Relational merchandising for the demo catalogue:
-//   COMPLETE_THE_LOOK / SAME_STYLE / SAME_SPACE / CROSS_SELL
+// COMPLETE_THE_LOOK / SAME_STYLE / SAME_SPACE / CROSS_SELL
 // Relationships are computed from catalogue metadata so they
 // work identically on the Prisma and demo adapters. The
 // research pipeline additionally writes generated-relations.json
 // as a reproducibility artifact of the curated relationships.
-// ============================================================
 
 import type { CatalogProduct } from './types';
 

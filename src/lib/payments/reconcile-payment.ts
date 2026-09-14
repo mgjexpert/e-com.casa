@@ -1,11 +1,8 @@
-// ============================================================
 // E-com.casa — server-side XPayments payment reconciliation
-// ------------------------------------------------------------
 // Keeps the order database authoritative even when the merchant
 // webhook is not enabled. Pending checkout status polls retrieve
 // the PaymentIntent from XPayments server-to-server and apply the
 // same monotonic payment side effects idempotently.
-// ============================================================
 
 import 'server-only';
 

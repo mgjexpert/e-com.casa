@@ -1,14 +1,11 @@
 'use client';
 
-// ============================================================
 // /track — public parcel tracking (3PL simulation engine)
-// ------------------------------------------------------------
 // The buyer enters the tracking number (ECC-YYMM-XXXXXX) from
 // the dispatch confirmation and sees the fulfilment timeline,
 // the origin warehouse, the destination and the estimated
 // delivery. Lookup is by tracking number only — order history
 // remains protected by per-order access tokens.
-// ============================================================
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';

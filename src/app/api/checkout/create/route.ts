@@ -1,14 +1,10 @@
-// ============================================================
-// POST /api/checkout/create  (§5, §6, §11, §59)
-// ------------------------------------------------------------
+// POST /api/checkout/create
 // Creates (or updates, same checkout session) an internal order
 // in PENDING_PAYMENT. Totals are repriced server-side; client
 // totals are never trusted. The order is NOT paid at creation —
 // it becomes PAID only after a verified gateway event.
-//
 // Response carries the order access token ONCE; the browser uses
 // (orderNumber, accessToken) for every later payment call.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -71,7 +67,7 @@ export async function POST(req: NextRequest) {
     }
     const data = parsed.data;
 
-    // Server-side repricing — the only totals we trust (§11)
+    // Server-side repricing — the only totals we trust
     let totals;
     try {
       totals = await repriceCart({
@@ -97,7 +93,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Idempotent per checkout session: same checkoutToken → update the
-    // still-pending order instead of creating a new one (§23, §69).
+    // still-pending order instead of creating a new one.
     const existing = data.checkoutToken
       ? await db.order.findUnique({ where: { checkoutToken: data.checkoutToken } })
       : null;
@@ -123,7 +119,7 @@ export async function POST(req: NextRequest) {
       shippingMethod: data.shippingMethod,
       subtotal: totals.subtotal.toFixed(2),
       shipping: totals.shipping.toFixed(2),
-      tax: '0.00', // VAT-inclusive pricing — country/tax engine owns any future VAT breakdown (§44)
+      tax: '0.00', // VAT-inclusive pricing — country/tax engine owns any future VAT breakdown
       discount: totals.discount.toFixed(2),
       total: totals.total.toFixed(2),
       promoCode: totals.promoCode,
@@ -158,7 +154,7 @@ export async function POST(req: NextRequest) {
     // will be cancelled by /api/payments/create-intent automatically.
     const payment = await db.payment.findUnique({ where: { orderId: order.id } });
 
-    // Explicit marketing consent captured at checkout (§61) — consent is
+    // Explicit marketing consent captured at checkout — consent is
     // never inferred from the order submission itself.
     if (data.marketingConsent) {
       await db.newsletterSubscriber.upsert({

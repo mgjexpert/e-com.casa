@@ -17,7 +17,7 @@ export type LegalPage = {
 };
 
 export const LEGAL_PAGES: LegalPage[] = [
-  // ---------------------------------------------------------------- ENVIO
+  // ENVIO
   {
     id: "envio",
     title: "Envio e entregas",
@@ -87,7 +87,7 @@ export const LEGAL_PAGES: LegalPage[] = [
       },
     ],
   },
-  // -------------------------------------------------------- TROCA E DEVOLUÇÃO
+  // TROCA E DEVOLUÇÃO
   {
     id: "troca-devolucao",
     title: "Troca e devolução",
@@ -158,7 +158,7 @@ export const LEGAL_PAGES: LegalPage[] = [
       },
     ],
   },
-  // ------------------------------------------------------------ PRIVACIDADE
+  // PRIVACIDADE
   {
     id: "privacidade",
     title: "Política de privacidade",
@@ -237,7 +237,7 @@ export const LEGAL_PAGES: LegalPage[] = [
       },
     ],
   },
-  // ----------------------------------------------------------- TERMOS DE USO
+  // TERMOS DE USO
   {
     id: "termos",
     title: "Termos e condições de uso",
@@ -295,7 +295,7 @@ export const LEGAL_PAGES: LegalPage[] = [
       },
     ],
   },
-  // ---------------------------------------------------------------- CONTACTO
+  // CONTACTO
   {
     id: "contacto",
     title: "Contacto",
@@ -333,7 +333,7 @@ export const LEGAL_PAGES: LegalPage[] = [
       },
     ],
   },
-  // -------------------------------------------------------- DADOS DA EMPRESA
+  // DADOS DA EMPRESA
   {
     id: "dados-empresa",
     title: "Dados da empresa",

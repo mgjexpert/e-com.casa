@@ -1,11 +1,8 @@
 import type { ProductOffer } from '../offers/promotion';
-// ============================================================
 // E-com.casa — Catalog domain types
-// ------------------------------------------------------------
 // The storefront UI NEVER talks to Prisma directly for catalogue
 // reads. It consumes these abstractions so supplier snapshots and
 // the future normalized production catalogue share one contract.
-// ============================================================
 
 export type VariantType = 'colour' | 'size' | 'material' | 'pack';
 

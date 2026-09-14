@@ -43,7 +43,7 @@ export function PanelConfigurator({ product: initialProduct, offer, market }: { 
     if (!width || !height || !size) return null;
     const divisor = /mm/i.test(selected?.name ?? product.dimensions ?? '') ? 100 : 1;
     return Math.max(1, Math.ceil((width * height) / (Number(size[1].replace(',', '.')) * Number(size[2].replace(',', '.')) / divisor)));
-  }, [selected, wallHeight, wallWidth]);
+  }, [product.dimensions, selected, wallHeight, wallWidth]);
 
   const addCampaignLine = (buyNow: boolean) => {
     if (!isCatalogProductSaleable(product) || selected?.availability === 'outOfStock') return;

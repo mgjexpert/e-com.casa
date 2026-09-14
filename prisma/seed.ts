@@ -86,7 +86,7 @@ async function main() {
   if (process.argv.includes('--dry-run')) return;
 
   await db.$transaction(async (tx) => {
-  // ---- Categories ----
+  // Categories
   const categories = catalog?.categories ?? [];
   for (const [i, c] of categories.entries()) {
     await tx.category.upsert({
@@ -104,7 +104,7 @@ async function main() {
   }
   console.log(`✔ categories: ${categories.length} upserted`);
 
-  // ---- Products (stable SKU identity — idempotent) ----
+  // Products (stable SKU identity — idempotent)
   let created = 0;
   let updated = 0;
   for (const [i, p] of products.entries()) {
@@ -189,7 +189,7 @@ async function main() {
 
   await tx.category.deleteMany({ where: { type: 'shop', slug: { in: ['amostras', 'acessorios', 'produtos-instalacao', 'acessorios-divisorias'] } } });
 
-  // ---- Integrity checks (idempotency + data quality) ----
+  // Integrity checks (idempotency + data quality)
   const total = await tx.product.count();
   const dupSkus = await tx.$queryRaw<Array<{ sku: string; n: number }>>`
     SELECT sku, COUNT(*)::int AS n FROM "Product" GROUP BY sku HAVING COUNT(*) > 1`;

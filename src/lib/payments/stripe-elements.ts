@@ -1,10 +1,7 @@
-// ============================================================
 // E-com.casa — Stripe.js loader (client)
-// ------------------------------------------------------------
 // Single entry point for Stripe.js on the storefront. The
 // publishable key is the only credential the browser ever sees.
 // The secret xp_* keys NEVER reach this module.
-// ============================================================
 
 import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
 
@@ -26,7 +23,7 @@ let stripePublishableKey: string | null = null;
 
 /**
  * Stripe Elements appearance themed to the E-com.casa visual
- * language (§81): warm neutrals, olive accent, soft radius and the
+ * language: warm neutrals, olive accent, soft radius and the
  * store font stack — while respecting Stripe brand rules.
  */
 export const ELEMENTS_APPEARANCE = {

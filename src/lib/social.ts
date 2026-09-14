@@ -1,15 +1,11 @@
-// ============================================================
-// E-com.casa — Social profile configuration (§51, §52, §91)
-// ------------------------------------------------------------
+// E-com.casa — Social profile configuration
 // Single source of truth for the store's social profiles.
-//
 // Rules:
-//  - A profile renders ONLY when `enabled` is true AND a real URL
-//    is configured. No fake profile URLs, no placeholder icons,
-//    no "coming soon" chips.
-//  - When E-com.casa's real profiles go live, add the URLs here —
-//    the footer renders them automatically.
-// ============================================================
+// - A profile renders ONLY when `enabled` is true AND a real URL
+// is configured. No fake profile URLs, no placeholder icons,
+// no "coming soon" chips.
+// - When E-com.casa's real profiles go live, add the URLs here —
+// the footer renders them automatically.
 
 export interface SocialLink {
   id: 'instagram' | 'facebook' | 'pinterest' | 'tiktok' | 'youtube' | 'linkedin';

@@ -73,7 +73,7 @@ export default function CheckoutPage() {
 
   const set = (key: keyof typeof form, value: string | boolean) => setForm((f) => ({ ...f, [key]: value }));
 
-  // ---- Real payment session (§5) ------------------------------------
+  // Real payment session
   // Contact + delivery must be complete before an order/intent is created.
   const detailsValid =
     form.email.includes('@') &&
@@ -346,7 +346,7 @@ export default function CheckoutPage() {
             </div>
           </section>
 
-          {/* Payment — real Stripe Elements flow (§57) */}
+          {/* Payment — real Stripe Elements flow */}
           <section aria-labelledby="co-payment" className="rounded-lg border border-border bg-card p-6">
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 id="co-payment" className="font-display text-[19px] font-medium">
@@ -415,7 +415,7 @@ export default function CheckoutPage() {
                     method UI (incl. MB WAY phone field, Multibanco flow) */}
                 <PaymentElement elements={session.elements} />
 
-                {/* Compact brand strip (§28) — informational only; the
+                {/* Compact brand strip — informational only; the
                     selectable methods are the Stripe Element's own */}
                 <PaymentBrandStrip country={form.country} currency="EUR" variant="compact" caption={t('checkout.weAccept')} className="mt-5" />
               </>
@@ -529,7 +529,7 @@ export default function CheckoutPage() {
 }
 
 /** Persist (orderNumber, token) so this browser can find the order
- *  later without any email-only lookup (§60). */
+ *  later without any email-only lookup. */
 function saveOrderReference(orderNumber: string, accessToken: string) {
   try {
     sessionStorage.setItem('ecom-last-order', JSON.stringify({ orderNumber, accessToken }));

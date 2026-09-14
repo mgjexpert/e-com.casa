@@ -1,13 +1,9 @@
-// ============================================================
 // E-com.casa — XPayments payment configuration (SERVER ONLY)
-// ------------------------------------------------------------
 // Exact names for the XPayments Stripe-compatible LIVE contract.
 // Secrets are server-only and are never returned to the browser.
-//
 // Merchant webhook verification is optional: when no merchant
 // callback secret is configured, pending orders are reconciled by
 // authenticated server-to-server PaymentIntent retrieval.
-// ============================================================
 
 import 'server-only';
 

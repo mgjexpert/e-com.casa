@@ -1,9 +1,7 @@
-// ============================================================
 // E-com.casa — central commerce configuration
 // Prices are VAT-inclusive for consumers (EU display rule).
 // VAT configuration object: rates are REFERENCE values and
 // must be validated per market before go-live.
-// ============================================================
 
 // Country configuration has moved to the data-driven country engine
 // (src/lib/countries.ts) per the international architecture. This file

@@ -1,5 +1,4 @@
 // Optional XPayments merchant webhook contract.
-// ------------------------------------------------------------
 // The E-com.casa checkout does NOT depend on this route: pending
 // orders are reconciled server-to-server through the PaymentIntent
 // API. If XPayments provides a merchant callback secret, this route

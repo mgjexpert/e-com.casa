@@ -1,10 +1,7 @@
-// ============================================================
 // E-com.casa — Payment capabilities resolver
-// ------------------------------------------------------------
 // XPayments Store ECOM-CASA is configured for EUR. Until the
 // merchant explicitly enables additional settlement currencies,
 // checkout must not create intents in unsupported currencies.
-// ============================================================
 
 import 'server-only';
 import { isPaymentConfigured, getPaymentConfig } from './payments-config';

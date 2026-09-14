@@ -1,10 +1,7 @@
-// ============================================================
-// E-com.casa — Money → smallest currency unit (§12)
-// ------------------------------------------------------------
+// E-com.casa — Money → smallest currency unit
 // Payment amounts are always integers in the smallest currency
 // unit. Floating-point amounts are never sent to the gateway.
 // Exponents per ISO 4217 / Stripe currency model.
-// ============================================================
 
 import { PaymentError } from './payment-errors';
 
@@ -47,7 +44,7 @@ export function fromMinorUnit(amountMinor: number, currency: string): string {
   return (amountMinor / 10 ** exp).toFixed(exp);
 }
 
-/** Currencies the payment account can process commercially (§45). */
+/** Currencies the payment account can process commercially. */
 export const PAYMENT_SUPPORTED_CURRENCIES = [
   'EUR', 'GBP', 'DKK', 'SEK', 'PLN', 'CZK', 'HUF', 'RON', 'BGN',
 ] as const;

@@ -1,10 +1,7 @@
-// ============================================================
 // E-com.casa — XPayments Stripe-compatible provider
-// ------------------------------------------------------------
 // Production payment provider. XPayments owns the Store, gateway
 // routing and Stripe credentials; E-com.casa only holds the
 // XPayments API key and merchant webhook secret.
-// ============================================================
 
 import 'server-only';
 import { createHmac, timingSafeEqual } from 'crypto';

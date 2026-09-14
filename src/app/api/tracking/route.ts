@@ -1,16 +1,12 @@
-// ============================================================
 // GET /api/tracking?code=ECC-YYMM-XXXXXX
-// ------------------------------------------------------------
 // Public tracking endpoint for buyers. Lookup is ONLY by the
 // generated tracking number — a high-entropy code handed to the
 // customer at dispatch (success page, order history, dispatch
 // email). Order numbers are never accepted here: that surface
-// stays protected by the per-order access token (§60).
-//
+// stays protected by the per-order access token.
 // The response is deliberately privacy-minimal: no email, no
 // name, no street address — city + country at most, plus the
 // items summary and the fulfilment timeline.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';

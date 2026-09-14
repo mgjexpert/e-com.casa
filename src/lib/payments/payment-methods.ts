@@ -1,22 +1,18 @@
-// ============================================================
 // E-com.casa — Payment method registry
-// ------------------------------------------------------------
 // Single source of truth for which payment methods exist, which
 // brand assets they use (ONLY the user-supplied files — never
 // redrawn or substituted), and where they may be offered.
-//
-// Rules encoded here (see prompts §14–§18, §48, §62, §94):
-//  - A logo asset is NOT availability. Availability = configured
-//    active (storefront) + country + currency + provider capability.
-//  - MB WAY / Multibanco: Portugal + EUR only.
-//  - Bizum: Spain + EUR. BLIK: Poland. Bancontact: Belgium.
-//  - PIX: configuration-gated, OFF unless explicitly enabled — it
-//    must never be shown to European customers just because an
-//    asset exists.
-//  - Apple Pay / Google Pay / Link / PayPal have no static logos:
-//    Stripe's Express Checkout Element renders the official
-//    buttons dynamically, so availability stays truthful.
-// ============================================================
+// Rules encoded here:
+// - A logo asset is NOT availability. Availability = configured
+// active (storefront) + country + currency + provider capability.
+// - MB WAY / Multibanco: Portugal + EUR only.
+// - Bizum: Spain + EUR. BLIK: Poland. Bancontact: Belgium.
+// - PIX: configuration-gated, OFF unless explicitly enabled — it
+// must never be shown to European customers just because an
+// asset exists.
+// - Apple Pay / Google Pay / Link / PayPal have no static logos:
+// Stripe's Express Checkout Element renders the official
+// buttons dynamically, so availability stays truthful.
 
 import type { PaymentMethodCapability, PaymentMethodType } from './payment-types';
 
@@ -40,7 +36,7 @@ export interface PaymentMethodDefinition {
 }
 
 /**
- * Storefront-level activation (§27: only show configured methods).
+ * Storefront-level activation (only show configured methods).
  * Driven by the PAYMENT_METHODS env var ("card,mb_way,…"); defaults
  * to the European retail set. PIX is always opt-in.
  */
@@ -223,11 +219,11 @@ export function getPaymentMethodsForCountry(
 
     const countryOk = all || def.countries.includes('*') || def.countries.includes(cc);
     const currencyOk = anyCurrency || def.currencies.includes(cur);
-    // With no gateway configured nothing is bookable (§102) — the
+    // With no gateway configured nothing is bookable — the
     // storefront must never imply payment support it cannot honour.
     const providerOk = options.providerConfigured;
 
-    // PIX hard gate (§16): never shown without explicit storefront config.
+    // PIX hard gate: never shown without explicit storefront config.
     if (def.method === 'pix' && !isPixEnabled()) continue;
 
     result.push({

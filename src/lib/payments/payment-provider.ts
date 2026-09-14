@@ -1,11 +1,8 @@
-// ============================================================
-// E-com.casa — Payment provider abstraction (§19)
-// ------------------------------------------------------------
+// E-com.casa — Payment provider abstraction
 // The storefront talks to this interface only. There is NO fake
 // provider: production checkout requires the real XPayments
 // Stripe-compatible provider. (Local unit tests may mock this
 // interface — but no mock ships as a selectable provider.)
-// ============================================================
 
 import type {
   CreatePaymentIntentInput,

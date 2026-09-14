@@ -3,13 +3,11 @@ import { db } from '@/lib/db';
 
 export const dynamic = 'force-dynamic';
 
-// ============================================================
 // Reviews API
 // GET  ?slug=xyz  → { reviews, avg, count } (APPROVED only, newest first, max 50)
-//                  — email is NEVER exposed in responses
+// — email is NEVER exposed in responses
 // POST { slug, author, country, rating, title, body, email? } → created review
-//      email (optional) enables verified-buyer matching against Orders
-// ============================================================
+// email (optional) enables verified-buyer matching against Orders
 
 // Basic in-memory rate limiter: max 5 submissions per IP per 10 minutes.
 const RATE_LIMIT_MAX = 5;

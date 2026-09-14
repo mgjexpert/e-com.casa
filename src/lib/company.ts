@@ -34,10 +34,8 @@ export const COMPANY = {
   ptComplaintsBook: 'https://www.livroreclamacoes.pt/',
   frMediator: '[MÉDIATEUR DE LA CONSOMMATION À DÉSIGNER]',
 
-  // ------------------------------------------------------------
   // EU 3PL logistics warehouses — fulfilment & returns network.
   // These are the operational hubs from which EU orders ship.
-  // ------------------------------------------------------------
   warehouses: [
     {
       id: 'venlo',

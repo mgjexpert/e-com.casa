@@ -1,9 +1,6 @@
-// ============================================================
-// E-com.casa — Payment error normalisation (§68)
-// ------------------------------------------------------------
+// E-com.casa — Payment error normalisation
 // Raw gateway responses are never shown to customers. Everything
 // is mapped into a small set of stable, customer-safe codes.
-// ============================================================
 
 import type { PaymentErrorCode } from './payment-types';
 

@@ -52,7 +52,7 @@ export interface Order {
   currency?: string;
   paidAt?: string | null;
   createdAt: string;
-  // ---- Tracking & fulfilment logistics (3PL simulation engine) ----
+  // Tracking & fulfilment logistics (3PL simulation engine)
   trackingNumber?: string | null;
   carrier?: string | null;
   originWarehouse?: string | null; // "venlo" | "zaragoza"

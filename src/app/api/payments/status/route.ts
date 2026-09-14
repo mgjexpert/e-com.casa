@@ -1,11 +1,8 @@
-// ============================================================
-// GET /api/payments/status?order=…&token=…  (§34, §60, §71)
-// ------------------------------------------------------------
+// GET /api/payments/status?order=…&token=…
 // Server-authoritative payment status for one order. Email-only
 // lookups are NOT allowed; the random access token issued at
 // checkout is required. Pending states are reconciled server-to-
 // server against XPayments, so a merchant webhook is optional.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/db';

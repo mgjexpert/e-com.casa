@@ -1,11 +1,8 @@
-// ============================================================
-// POST /api/newsletter  (§61)
-// ------------------------------------------------------------
+// POST /api/newsletter
 // Explicit marketing consent is REQUIRED for subscription.
 // Consent is never inferred from the form submission alone —
 // the request must carry marketingConsent=true, and the consent
 // metadata (version, country, locale, source) is persisted.
-// ============================================================
 
 import { NextRequest, NextResponse } from 'next/server';
 import { z } from 'zod';

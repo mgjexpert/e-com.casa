@@ -16,11 +16,9 @@ import { useT } from '@/hooks/use-t';
 import type { Product } from '@/types';
 import { cn } from '@/lib/utils';
 
-// ============================================================
 // E-com.casa Concierge — AI shopping assistant (live, /api/chat)
 // Suggestions reference real catalogue products, rendered as
 // mini cards fetched from /api/products/[slug].
-// ============================================================
 
 interface ChatMessage {
   id: string;

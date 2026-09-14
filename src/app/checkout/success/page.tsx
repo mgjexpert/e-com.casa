@@ -118,7 +118,7 @@ export default async function CheckoutSuccessPage({
           <OrderContent orderNumber={orderNumber} token={token} />
         </Suspense>
       ) : (
-        // No token → show nothing about any order (§60, §71)
+        // No token → show nothing about any order
         <div className="py-16 text-center">
           <h1 className="font-display text-[26px] font-medium">Order status</h1>
           <p className="mt-2 text-[14px] text-muted-foreground">

@@ -1,14 +1,11 @@
 'use client';
 
-// ============================================================
-// <PaymentElement /> (§4, §24)
-// ------------------------------------------------------------
+// <PaymentElement />
 // Mounts the official Stripe Payment Element into
 // #payment-element. No custom card fields are ever built — card
 // data is collected by Stripe's iframe, never by E-com.casa.
 // Visual alignment with the store theme comes from the shared
-// Elements Appearance configuration (§81).
-// ============================================================
+// Elements Appearance configuration.
 
 import { useEffect, useRef, useState } from 'react';
 import type { StripeElements } from '@stripe/stripe-js';

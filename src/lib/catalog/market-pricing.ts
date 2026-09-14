@@ -1,10 +1,9 @@
 // E-com.casa — internal market benchmark layer for supplier-backed research products.
-//
 // IMPORTANT:
 // - These values are merchandising benchmarks, not supplier cost or margin approval.
 // - `EXACT` means the benchmark was based on the same identified product/model in EU retail listings.
 // - `COMPARABLE` means exact multi-retailer coverage was not sufficient and a close category/material/size
-//   comparator basket was used. Low-confidence benchmarks must be refreshed before paid traffic.
+// comparator basket was used. Low-confidence benchmarks must be refreshed before paid traffic.
 // - Timed offers use absolute UTC timestamps and NEVER reset per visitor/session.
 // - A market reference is not the product's legally relevant "previous price" for EU price-reduction rules.
 
