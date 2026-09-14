@@ -1,9 +1,11 @@
 // ============================================================
-// E-com.casa — Prisma schema (PostgreSQL / Neon)
+// E-com.casa — Prisma schema (PostgreSQL, provider-neutral)
 // ------------------------------------------------------------
-// Datasource is PostgreSQL (Neon in production via DATABASE_URL).
-// Partner catalogue data is imported idempotently from the validated
-// ODEM/WoodUpp snapshot (npm run catalog:import:partners).
+// DATABASE_URL is the only runtime contract. It may point to Neon today and
+// Supabase PostgreSQL after the controlled cutover.
+// Supplier research/scraping tables were intentionally retired from the
+// application schema. Historical research tables may remain in the old DB but
+// are not part of the commerce database migrated to Supabase.
 // ============================================================
 
 generator client {
@@ -16,40 +18,36 @@ datasource db {
 }
 
 // ============================================================
-// E-com.casa — Catalogue
+// Catalogue
 // ============================================================
 
 model Product {
   id          String  @id @default(cuid())
   slug        String  @unique
-  sku         String  @unique // stable identity used by seed/import upserts
+  sku         String  @unique
   name        String
-  subtitle    String? // short variant line e.g. "Natural Oak · 240cm"
-  shortDescription String @default("") // 1–2 sentence merchandising summary
+  subtitle    String?
+  shortDescription String @default("")
   description String
 
-  // Pricing (VAT-inclusive display; price stays the human string, priceCents drives sorting/filtering)
-  price        String // "49.90"
-  priceCents   Int // 4990 — numeric twin of price for correct numeric ordering/filtering
-  comparePrice String? // previous price if valid (never fabricated by UI)
+  price        String
+  priceCents   Int
+  comparePrice String?
   currency     String  @default("EUR")
 
-  // Classification
-  categorySlug String // e.g. "wall-panels", "lighting", "garden"
-  subcategorySlugs String @default("") // comma separated: "wood-slat-panels,mirrors"
-  spaceSlugs   String @default("") // comma separated: "living-room,garden"
-  styleSlugs   String @default("") // comma separated: "warm-minimal,natural"
-  collectionSlugs String @default("") // e.g. "wall-makeover,mood-lighting"
+  categorySlug String
+  subcategorySlugs String @default("")
+  spaceSlugs   String @default("")
+  styleSlugs   String @default("")
+  collectionSlugs String @default("")
 
-  // Media — only own/demo imagery is ever served (never hotlinked source photography)
   image      String
   hoverImage String?
-  gallery    String @default("") // comma separated additional image paths
-  imageStatus String @default("PLACEHOLDER") // PLACEHOLDER | GENERATED | LICENSED | ORIGINAL
+  gallery    String @default("")
+  imageStatus String @default("PLACEHOLDER")
 
-  // Merchandising
-  badge       String? // "New" | "Featured" | "Popular" | "Editor's Pick" | "Best Seller" (demo merchandising label)
-  rating      Float   @default(4.5) // demo presentation value — reviews are demo-mode
+  badge       String?
+  rating      Float   @default(4.5)
   reviewCount Int     @default(0)
   stock       Int     @default(0)
   stockKnown Boolean @default(false)
@@ -60,38 +58,34 @@ model Product {
   supplierProductId String?
   mediaRights String?
 
-  availability String @default("inStock") // inStock | lowStock | outOfStock (demo — no false scarcity)
+  availability String @default("inStock")
   isBestSeller Boolean @default(false)
   isNew       Boolean @default(false)
   featured    Boolean @default(false)
 
-  // Details
-  materials  String? // comma separated normalized materials
+  materials  String?
   dimensions String?
-  weight     String? // e.g. "2.4 kg"
+  weight     String?
   care       String?
-  color      String? // normalized colour for filters
+  color      String?
 
-  // Logistics (demo classification — not final carrier data)
-  shippingClass String @default("STANDARD") // SMALL | STANDARD | FRAGILE | OVERSIZED | HEAVY | SPECIAL
-
-  // Variants (JSON array: [{ type: "colour"|"size"|"pack", name, value, priceDeltaCents?, image? }])
+  shippingClass String @default("STANDARD")
   variantsJson String @default("[]")
 
-  // GPSR / compliance scaffold (never fabricate: demo products stay DEMO)
   electrical        Boolean @default(false)
   battery           Boolean @default(false)
-  complianceStatus  String  @default("DEMO") // DEMO | PENDING_REVIEW | APPROVED | BLOCKED
-  reviewMode        String  @default("demo") // demo | live
-  documentationStatus String @default("DEMO") // DEMO | PENDING | REVIEW | APPROVED | BLOCKED
-  safetyJson        String? // JSON: manufacturer placeholder, warnings, euResponsiblePerson placeholders, etc.
+  complianceStatus  String  @default("DEMO")
+  reviewMode        String  @default("demo")
+  documentationStatus String @default("DEMO")
+  safetyJson        String?
   requiresComplianceReview Boolean @default(false)
 
-  // Demo identity & research traceability (internal, not exposed in storefront UI)
+  // Legacy provenance retained as plain metadata only. There is no runtime
+  // dependency on the retired Research* tables.
   isDemo           Boolean @default(true)
-  sourceResearchId String? // ResearchProduct/ResearchRun reference (internal)
-  sourceDomain     String? // internal research metadata
-  sourceUrl        String? // internal research metadata
+  sourceResearchId String?
+  sourceDomain     String?
+  sourceUrl        String?
 
   sortOrder Int     @default(0)
   createdAt DateTime @default(now())
@@ -107,12 +101,12 @@ model Review {
   productSlug String
   author      String
   country     String   @default("")
-  rating      Int // 1..5
+  rating      Int
   title       String   @default("")
   body        String
-  email       String? // optional, never exposed via API — used only for verified-buyer matching
-  verified    Boolean  @default(false) // true only when the submitted email matches an Order containing this product
-  status      String   @default("APPROVED") // APPROVED | PENDING | REJECTED (demo store auto-approves, but keep the scaffold)
+  email       String?
+  verified    Boolean  @default(false)
+  status      String   @default("APPROVED")
   createdAt   DateTime @default(now())
 
   @@index([productSlug, status])
@@ -122,7 +116,7 @@ model Category {
   id       String @id @default(cuid())
   slug     String
   name     String
-  type     String // "space" | "style" | "collection" | "shop"
+  type     String
   image    String?
   subtitle String?
   sortOrder Int    @default(0)
@@ -132,12 +126,12 @@ model Category {
 }
 
 // ============================================================
-// Orders (demo checkout — no real payment processing in V1)
+// Orders / checkout / fulfilment
 // ============================================================
 
 model Order {
   id          String   @id @default(cuid())
-  orderNumber String   @unique // EC-XXXXXX
+  orderNumber String   @unique
 
   email     String
   firstName String
@@ -149,8 +143,8 @@ model Order {
   country   String
   phone     String?
 
-  shippingMethod String @default("standard") // standard | express
-  paymentMethod  String?                    // card | mb_way | multibanco | bizum | blik | bancontact | … (from method registry)
+  shippingMethod String @default("standard")
+  paymentMethod  String?
 
   subtotal  String
   shipping  String
@@ -159,40 +153,31 @@ model Order {
   total     String
   promoCode String?
 
-  itemsJson String // JSON array of line items snapshot
-  giftWrap  Boolean @default(false) // gift wrap service (+ fixed fee)
-  notes     String? // customer delivery notes / gift message (max 500 chars)
+  itemsJson String
+  giftWrap  Boolean @default(false)
+  notes     String?
 
-  // Fulfilment state — CONFIRMED | PROCESSING | SHIPPED | DELIVERED | CANCELLED
   status String @default("PENDING")
 
-  // Payment state — server-authoritative; only a verified gateway event
-  // may move an order to PAID (webhook or server-confirmed intent).
-  paymentStatus String @default("PENDING_PAYMENT") // PENDING_PAYMENT | PAYMENT_PROCESSING | PAID | PAYMENT_FAILED | CANCELLED | REFUNDED | PARTIALLY_REFUNDED
-  paymentProvider      String?  // xpayments_stripe
-  paymentIntentId      String?  // provider PaymentIntent id (denormalised for lookup)
-  paymentMethodType    String?  // method used on the successful/failed attempt
+  paymentStatus String @default("PENDING_PAYMENT")
+  paymentProvider      String?
+  paymentIntentId      String?
+  paymentMethodType    String?
   paymentFailureReason String?
   currency             String   @default("EUR")
   paidAt               DateTime?
 
-  // Secret that authorises browser access to this order (never
-  // email-only lookups). Returned once at creation and stored with
-  // the customer's checkout session.
   accessToken   String @unique
-  checkoutToken String? @unique // client checkout-session idempotency token
-  pricingHash   String?        // fingerprint of the server-repriced totals used for the PaymentIntent
+  checkoutToken String? @unique
+  pricingHash   String?
 
-  // ---- Tracking & fulfilment logistics (3PL simulation engine) ----
-  // Assigned once when payment is verified (webhook PAID path) or
-  // lazily backfilled for legacy paid orders — never before payment.
-  trackingNumber      String?   @unique // ECC-YYMM-XXXXXX, buyer-facing on /track
-  carrier             String?   // fulfilment carrier partner display name
-  originWarehouse     String?   // warehouse id: "venlo" | "zaragoza"
+  trackingNumber      String?   @unique
+  carrier             String?
+  originWarehouse     String?
   estimatedDeliveryAt DateTime?
   trackingEvents      TrackingEvent[]
 
-  stockApplied Boolean @default(false) // final stock decrement applied after payment
+  stockApplied Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -207,13 +192,13 @@ model Payment {
   orderId           String    @unique
   order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
   provider          String    @default("xpayments_stripe")
-  providerAccount   String?   // store/mid identifier — never secrets
+  providerAccount   String?
   paymentIntentId   String    @unique
-  paymentMethodType String?   // card | mb_way | multibanco | …
-  amount            String    // major units (string) — matches Order money convention
-  amountMinor       Int?      // smallest currency unit actually charged
+  paymentMethodType String?
+  amount            String
+  amountMinor       Int?
   currency          String
-  status            String    @default("CREATED") // CREATED | REQUIRES_PAYMENT_METHOD | REQUIRES_ACTION | PROCESSING | SUCCEEDED | FAILED | CANCELLED | REFUNDED | PARTIALLY_REFUNDED
+  status            String    @default("CREATED")
   clientSecretCreatedAt DateTime?
   paidAt            DateTime?
   failedAt          DateTime?
@@ -232,8 +217,8 @@ model PaymentAttempt {
   paymentId         String
   payment           Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
   provider          String
-  paymentMethodType String? // card | mb_way | multibanco | apple_pay | google_pay | other
-  providerReference String? // intent/charge/reference id
+  paymentMethodType String?
+  providerReference String?
   status            String
   amount            String
   currency          String
@@ -248,11 +233,11 @@ model Refund {
   id          String   @id @default(cuid())
   paymentId   String
   payment     Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  refundId    String   @unique // provider refund id
+  refundId    String   @unique
   amount      String
   currency    String
   reason      String?
-  status      String   @default("PENDING") // PENDING | SUCCEEDED | FAILED
+  status      String   @default("PENDING")
   createdAt   DateTime @default(now())
 }
 
@@ -268,7 +253,7 @@ model Invoice {
   tax                  String
   discount             String
   total                String
-  status               String   @default("ISSUED") // DRAFT | ISSUED | CANCELLED — fiscal issuance stays adapter-ready
+  status               String   @default("ISSUED")
   pdfUrl               String?
   externalAccountingId String?
   issuedAt             DateTime @default(now())
@@ -290,14 +275,11 @@ model CreditNote {
   @@index([orderId])
 }
 
-/// Fulfilment tracking events (3PL demo simulation engine).
-/// One event per state per order — the (orderId, status) unique pair
-/// makes every insert idempotent, so lazy backfills never duplicate.
 model TrackingEvent {
   id          String   @id @default(cuid())
   orderId     String
   order       Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  status      String   // CONFIRMED | PROCESSING | SHIPPED | IN_TRANSIT | OUT_FOR_DELIVERY | DELIVERED | CANCELLED
+  status      String
   description String
   location    String?
   occurredAt  DateTime
@@ -307,10 +289,8 @@ model TrackingEvent {
   @@index([orderId, occurredAt])
 }
 
-/// Processed gateway webhook events — enforces exactly-once side
-/// effects (no double invoices, double stock decrements, double emails).
 model WebhookEvent {
-  id          String   @id // provider event id
+  id          String   @id
   provider    String   @default("xpayments_stripe")
   type        String
   payloadJson String
@@ -318,7 +298,7 @@ model WebhookEvent {
 }
 
 // ============================================================
-// Marketing / compliance records
+// Marketing / customer contact
 // ============================================================
 
 model NewsletterSubscriber {
@@ -327,7 +307,7 @@ model NewsletterSubscriber {
   source    String   @default("footer")
   country   String   @default("")
   locale    String   @default("")
-  marketingConsent Boolean @default(false) // explicit, never pre-checked
+  marketingConsent Boolean @default(false)
   consentAt DateTime @default(now())
   consentVersion String @default("1.0")
   privacyVersion  String @default("1.0")
@@ -345,216 +325,9 @@ model ContactMessage {
 }
 
 // ============================================================
-// One-shot catalog research layer (internal ONLY).
-// Never exposed via public routes, cron jobs or the storefront.
-// research data ≠ production product.
+// Promotions / funnels
 // ============================================================
 
-model ResearchSource {
-  id        String   @id @default(cuid())
-  key       String   @unique // stable key e.g. "kave-home"
-  name      String
-  domain    String
-  homepage  String
-  tier      Int      @default(2) // 1 | 2 | 3
-  enabled   Boolean  @default(true)
-  priority  Int      @default(50)
-  lastRunAt DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model ResearchRun {
-  id           String    @id @default(cuid())
-  startedAt    DateTime  @default(now())
-  completedAt  DateTime?
-  status       String    @default("RUNNING") // RUNNING | COMPLETED | FAILED
-  mode         String    @default("import") // import | dry-run
-  engine       String    @default("v2") // v1 | v2
-  sourceCount  Int       @default(0)
-  sourcesAttempted  Int  @default(0)
-  sourcesSuccessful Int  @default(0)
-  pagesVisited Int       @default(0)
-  productPagesVisited Int @default(0)
-  productsDiscovered Int @default(0)
-  productsParsed     Int @default(0)
-  productsNormalized Int @default(0)
-  productsRejected   Int @default(0)
-  productsImported   Int @default(0)
-  errorsJson   String    @default("[]")
-  configJson   String?   // bounded config snapshot of this run
-  notes        String?
-}
-
-model ResearchProduct {
-  id             String   @id @default(cuid())
-  researchRunId  String
-  sourceId       String?
-  pageId         String?  // ResearchPage that produced this record
-
-  sourceUrl      String
-  canonicalUrl   String?
-  sourceProductId String?
-  sourceProductName String
-  sourceBrand    String?
-
-  sourceCategory   String?
-  sourceSubcategory String?
-  sourceCollection String?
-
-  sourcePrice    String?
-  sourceCurrency String?
-  sourceSalePrice String?
-  rawPriceText   String?
-  observedAt     DateTime?
-
-  sourceAvailability String?
-
-  sourceSku  String?
-  sourceMpn  String?
-  sourceEan  String?
-  sourceGtin String?
-
-  sourceDescription String?
-
-  sourceMaterials  String?
-  sourceColours    String?
-  sourceDimensions String?
-  sourceWeight     String?
-
-  sourceAttributes String? // JSON
-  sourceImageUrls  String? // JSON array — internal research metadata only, never published
-
-  sourceDataJson String? // limited structured extract (no personal data, no full HTML)
-
-  productFingerprint String?
-  researchScore      Int?    // 0..100
-  scoreBreakdownJson String? // JSON per-criterion scores
-
-  // V2 deep-extraction fields
-  extractionMethod    String? // dominant extraction layer
-  extractionConfidence Int?   // 0..100
-  completenessScore   Int?    // 0..100
-  qualityScore        Int?    // 0..100
-  imageCount          Int     @default(0)
-  variantCount        Int     @default(0)
-  duplicateGroupId    String?
-  duplicateConfidence Float?
-  duplicateKind       String? // EXACT_DUPLICATE | LIKELY_DUPLICATE | VARIANT | RELATED | UNIQUE
-  selectionRank       Int?
-  generatedSku        String? // stable EC-XXX-### mapping for idempotent import
-  countryFitJson      String? // merchandising fit per market (LOW/MEDIUM/HIGH)
-
-  status String @default("DISCOVERED") // DISCOVERED | PARSED | NORMALIZED | DUPLICATE | REJECTED | SELECTED | IMPORTED | BLOCKED
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@index([researchRunId])
-  @@index([status])
-  @@index([productFingerprint])
-}
-
-// ---- V2 deep-extraction research layer (internal ONLY, never public) ----
-
-model ResearchPage {
-  id            String   @id @default(cuid())
-  researchRunId String
-  sourceKey     String
-  url           String
-  canonicalUrl  String?
-  pageType      String   @default("OTHER") // PRODUCT | CATEGORY | COLLECTION | EDITORIAL | BLOG | BRAND | SEARCH | SITEMAP | OTHER
-  httpStatus    Int?
-  contentType   String?
-  title         String?
-  contentHash   String?
-  bytes         Int?
-  fetchedAt     DateTime @default(now())
-  errorJson     String?
-
-  @@unique([researchRunId, url])
-  @@index([researchRunId])
-  @@index([pageType])
-}
-
-model ResearchVariant {
-  id                String @id @default(cuid())
-  researchProductId String
-  sourceVariantId   String?
-  name              String
-  optionsJson       String?
-  sku               String?
-  price             String?
-  currency          String?
-  availability      String?
-  attributesJson    String?
-  imageUrlsJson     String?
-
-  @@index([researchProductId])
-}
-
-model ResearchImage {
-  id                String @id @default(cuid())
-  researchProductId String?
-  sourceKey         String
-  sourceUrl         String
-  normalizedUrl     String?
-  position          Int    @default(0)
-  type              String? // primary | gallery | zoom | variant | thumbnail
-  status            String @default("DISCOVERED") // DISCOVERED | VALIDATED | DOWNLOADED | FAILED | REJECTED
-  mimeType          String?
-  width             Int?
-  height            Int?
-  fileSize          Int?
-  sha256            String?
-  localPath         String?
-  downloadedAt      DateTime?
-  errorJson         String?
-
-  @@index([researchProductId])
-  @@index([status])
-}
-
-model ResearchAttribute {
-  id                String @id @default(cuid())
-  researchProductId String
-  fieldKey          String
-  sourceValue       String
-  normalizedKey     String?
-  normalizedValue   String?
-  confidence        Float  @default(0.8)
-
-  @@index([researchProductId])
-}
-
-model ResearchEvidence {
-  id                String   @id @default(cuid())
-  researchProductId String
-  field             String
-  value             String
-  sourceUrl         String
-  method            String // json-ld | microdata | embedded-json | opengraph | meta | html | source-parser | text-fallback
-  selector          String?
-  confidence        Float    @default(0.8)
-  createdAt         DateTime @default(now())
-
-  @@index([researchProductId])
-}
-
-model ResearchError {
-  id             String   @id @default(cuid())
-  researchRunId  String
-  sourceKey      String?
-  url            String?
-  stage          String // discovery | fetch | extract | validate | dedupe | import
-  errorType      String
-  message        String
-  createdAt      DateTime @default(now())
-
-  @@index([researchRunId])
-}
-
-// Merchant promotions are independent of supplier sync: ON/OFF and prices survive refreshes.
 model ProductOffer {
   productSlug String @id
   slug String @unique
@@ -574,5 +347,6 @@ model ProductOfferAudit {
   beforeJson String
   afterJson String
   createdAt DateTime @default(now())
+
   @@index([productSlug, createdAt])
 }
