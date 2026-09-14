@@ -41,21 +41,21 @@ jobs:
               --column-inserts \
               --no-owner \
               --no-privileges \
-              --table="public.Product" \
-              --table="public.Review" \
-              --table="public.Category" \
-              --table="public.Order" \
-              --table="public.Payment" \
-              --table="public.PaymentAttempt" \
-              --table="public.Refund" \
-              --table="public.Invoice" \
-              --table="public.CreditNote" \
-              --table="public.TrackingEvent" \
-              --table="public.WebhookEvent" \
-              --table="public.NewsletterSubscriber" \
-              --table="public.ContactMessage" \
-              --table="public.ProductOffer" \
-              --table="public.ProductOfferAudit" \
+              --table='"'"'public."Product"'"'"' \
+              --table='"'"'public."Review"'"'"' \
+              --table='"'"'public."Category"'"'"' \
+              --table='"'"'public."Order"'"'"' \
+              --table='"'"'public."Payment"'"'"' \
+              --table='"'"'public."PaymentAttempt"'"'"' \
+              --table='"'"'public."Refund"'"'"' \
+              --table='"'"'public."Invoice"'"'"' \
+              --table='"'"'public."CreditNote"'"'"' \
+              --table='"'"'public."TrackingEvent"'"'"' \
+              --table='"'"'public."WebhookEvent"'"'"' \
+              --table='"'"'public."NewsletterSubscriber"'"'"' \
+              --table='"'"'public."ContactMessage"'"'"' \
+              --table='"'"'public."ProductOffer"'"'"' \
+              --table='"'"'public."ProductOfferAudit"'"'"' \
               > /work/commerce-data.sql'
 
           docker run --rm \
