@@ -1,27 +1,10 @@
-// ============================================================
-// E-com.casa — Tracking & fulfilment simulation engine (3PL)
-// ------------------------------------------------------------
-// Generates buyer-facing tracking numbers, derives the delivery
-// state machine from the verified payment moment, persists the
-// tracking event history (idempotent, one event per state) and
-// keeps the order fulfilment status monotonically in sync.
-//
-// Ground rules:
-//  - Tracking numbers are generated ONLY after verified payment
-//    (webhook PAID path) or lazily backfilled for legacy PAID
-//    orders — never for unpaid/cancelled baskets.
-//  - Event inserts are idempotent via @@unique([orderId, status]).
-//  - Fulfilment status only ever advances (monotonic §70).
-// ============================================================
+// Internal fulfilment timeline used until a production carrier integration replaces it.
+// Tracking is created only for verified paid orders and status progression is monotonic.
 
 import { createHash } from 'crypto';
 import { db } from '@/lib/db';
 import { warehouseForCountry, getWarehouseById, COMPANY } from '@/lib/company';
 import { COUNTRIES } from '@/lib/countries';
-
-// ------------------------------------------------------------
-// States
-// ------------------------------------------------------------
 
 export const TRACKING_STATES = [
   'CONFIRMED',
@@ -45,10 +28,6 @@ const STATE_RANK: Record<string, number> = {
   CANCELLED: 0,
 };
 
-// ------------------------------------------------------------
-// Timeline offsets (hours after verified payment)
-// ------------------------------------------------------------
-
 const HOUR = 3_600_000;
 
 const T_OFFSETS = {
@@ -56,25 +35,16 @@ const T_OFFSETS = {
   processing: 4,
   shippedStandard: 24,
   shippedExpress: 12,
-  inTransit: 6, // after SHIPPED
-  outForDeliveryStandard: 48, // after SHIPPED
+  inTransit: 6,
+  outForDeliveryStandard: 48,
   outForDeliveryExpress: 24,
-  deliveredStandard: 72, // after SHIPPED
+  deliveredStandard: 72,
   deliveredExpress: 36,
 } as const;
 
-// ------------------------------------------------------------
-// Tracking number
-// ------------------------------------------------------------
-
-/** Unambiguous alphabet — no I/O/0/1 confusion in customer support. */
 const TRACKING_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
 
-/**
- * Deterministic, buyer-facing tracking number: ECC-YYMM-XXXXXX.
- * Derived from the order number so repeated generation for the
- * same order never yields a different code.
- */
+/** Generate a deterministic buyer-facing tracking number for an order. */
 export function generateTrackingNumber(orderNumber: string, at: Date = new Date()): string {
   const hash = createHash('sha256').update(`ecom-3pl-tracking:${orderNumber}`).digest('hex');
   let code = '';
@@ -86,7 +56,7 @@ export function generateTrackingNumber(orderNumber: string, at: Date = new Date(
   return `ECC-${yy}${mm}-${code}`;
 }
 
-/** Accepts ECC-YYMM-XXXXXX in any spacing/casing the buyer types. */
+/** Normalize buyer-entered tracking codes before lookup. */
 export function normaliseTrackingCode(raw: string): string {
   return raw.trim().toUpperCase().replace(/\s+/g, '');
 }
@@ -95,15 +65,7 @@ export function isTrackingCode(code: string): boolean {
   return /^ECC-\d{4}-[A-HJ-NP-Z2-9]{6}$/.test(code);
 }
 
-// ------------------------------------------------------------
-// Carrier (neutral fulfilment partner — never a fabricated brand)
-// ------------------------------------------------------------
-
 export const FULFILMENT_CARRIER = '3PL EU Logistics Partner';
-
-// ------------------------------------------------------------
-// Pure helpers (no DB) — used by the webhook PAID path
-// ------------------------------------------------------------
 
 export interface TrackingFields {
   trackingNumber: string;
@@ -112,7 +74,7 @@ export interface TrackingFields {
   estimatedDeliveryAt: Date;
 }
 
-/** Assign tracking fields for an order at the moment payment is verified. */
+/** Assign the initial tracking fields when payment is verified. */
 export function assignTrackingFields(
   orderNumber: string,
   shippingMethod: string,
@@ -131,13 +93,9 @@ export function assignTrackingFields(
 }
 
 export function countryName(iso2: string): string {
-  const c = COUNTRIES.find((x) => x.code === iso2.toUpperCase());
-  return c?.name ?? iso2.toUpperCase();
+  const country = COUNTRIES.find((entry) => entry.code === iso2.toUpperCase());
+  return country?.name ?? iso2.toUpperCase();
 }
-
-// ------------------------------------------------------------
-// Timeline computation
-// ------------------------------------------------------------
 
 export interface ComputedEvent {
   status: TrackingState;
@@ -161,8 +119,7 @@ export function buildTimeline(input: {
   const warehouse = warehouseForCountry(input.countryIso2);
   const origin = `${warehouse.name}, ${warehouse.city}`;
   const destination = `${input.destinationCity || countryName(input.countryIso2)}, ${countryName(input.countryIso2)}`;
-
-  const at = (h: number) => new Date(input.paidAt.getTime() + h * HOUR);
+  const at = (hours: number) => new Date(input.paidAt.getTime() + hours * HOUR);
 
   return [
     {
@@ -206,17 +163,12 @@ export function buildTimeline(input: {
 
 export function computeCurrentState(events: ComputedEvent[], now: Date = new Date()): TrackingState {
   let current: TrackingState = 'CONFIRMED';
-  for (const ev of events) {
-    if (ev.occurredAt.getTime() <= now.getTime()) current = ev.status;
+  for (const event of events) {
+    if (event.occurredAt.getTime() <= now.getTime()) current = event.status;
   }
   return current;
 }
 
-// ------------------------------------------------------------
-// Persistence — idempotent ensure/backfill + monotonic sync
-// ------------------------------------------------------------
-
-/** Minimal Prisma Order shape the engine needs. */
 export interface TrackableOrder {
   id: string;
   orderNumber: string;
@@ -233,18 +185,13 @@ export interface TrackableOrder {
   estimatedDeliveryAt: Date | null;
 }
 
-/**
- * Ensure an order carries tracking fields and a persisted event
- * history up to "now". Idempotent: safe to call on every read.
- * Returns the (possibly updated) order plus the full computed view.
- */
+/** Ensure tracking fields, due events and fulfilment status are synchronized for a paid order. */
 export async function ensureTracking<T extends TrackableOrder>(order: T): Promise<{
   order: T;
   timeline: ComputedEvent[];
   currentState: TrackingState;
   cancelled: boolean;
 }> {
-  // Unpaid / cancelled payment → no tracking lifecycle exists.
   if (order.paymentStatus !== 'PAID') {
     return { order, timeline: [], currentState: 'CONFIRMED', cancelled: false };
   }
@@ -253,7 +200,6 @@ export async function ensureTracking<T extends TrackableOrder>(order: T): Promis
   const paidAt = order.paidAt ?? order.createdAt;
   let working = order;
 
-  // ---- 1. Backfill tracking fields for legacy PAID orders ----
   if (!order.trackingNumber || !order.carrier || !order.originWarehouse || !order.estimatedDeliveryAt) {
     const fields = assignTrackingFields(order.orderNumber, order.shippingMethod, order.country, paidAt);
     await db.order.update({
@@ -268,7 +214,6 @@ export async function ensureTracking<T extends TrackableOrder>(order: T): Promis
     working = { ...order, ...fields } as T;
   }
 
-  // ---- 2. Persist every event that has become due (idempotent) ----
   const timeline = buildTimeline({
     paidAt,
     shippingMethod: working.shippingMethod,
@@ -277,22 +222,21 @@ export async function ensureTracking<T extends TrackableOrder>(order: T): Promis
     carrier: working.carrier ?? FULFILMENT_CARRIER,
   });
 
-  const due = timeline.filter((ev) => ev.occurredAt.getTime() <= now.getTime());
-  for (const ev of due) {
+  const due = timeline.filter((event) => event.occurredAt.getTime() <= now.getTime());
+  for (const event of due) {
     await db.trackingEvent.upsert({
-      where: { orderId_status: { orderId: order.id, status: ev.status } },
+      where: { orderId_status: { orderId: order.id, status: event.status } },
       create: {
         orderId: order.id,
-        status: ev.status,
-        description: ev.description,
-        location: ev.location,
-        occurredAt: ev.occurredAt,
+        status: event.status,
+        description: event.description,
+        location: event.location,
+        occurredAt: event.occurredAt,
       },
       update: {},
     });
   }
 
-  // ---- 3. Monotonic fulfilment-status sync ----
   const currentState = computeCurrentState(timeline, now);
   let updated = working;
   if ((STATE_RANK[currentState] ?? 0) > (STATE_RANK[working.status] ?? 0)) {
@@ -306,7 +250,7 @@ export async function ensureTracking<T extends TrackableOrder>(order: T): Promis
   return { order: updated, timeline, currentState, cancelled: false };
 }
 
-/** Ensure a CANCELLED fulfilment event exists (customer-service cancellations). */
+/** Persist a cancelled fulfilment event once. */
 export async function ensureCancelledEvent(orderId: string, at: Date = new Date()): Promise<void> {
   await db.trackingEvent.upsert({
     where: { orderId_status: { orderId, status: 'CANCELLED' } },
@@ -321,24 +265,20 @@ export async function ensureCancelledEvent(orderId: string, at: Date = new Date(
   });
 }
 
-// ------------------------------------------------------------
-// Public API view builders
-// ------------------------------------------------------------
-
 export function warehouseView(id: string | null | undefined) {
-  const w = getWarehouseById(id) ?? warehouseForCountry('NL');
+  const warehouse = getWarehouseById(id) ?? warehouseForCountry('NL');
   return {
-    id: w.id,
-    name: w.name,
-    address: `${w.streets}, ${w.postalCode} ${w.city}, ${w.country}`,
-    city: w.city,
-    country: w.country,
+    id: warehouse.id,
+    name: warehouse.name,
+    address: `${warehouse.streets}, ${warehouse.postalCode} ${warehouse.city}, ${warehouse.country}`,
+    city: warehouse.city,
+    country: warehouse.country,
   };
 }
 
 export function warehouseDisplayName(id: string | null | undefined): string {
-  const w = getWarehouseById(id) ?? warehouseForCountry('NL');
-  return w.name;
+  const warehouse = getWarehouseById(id) ?? warehouseForCountry('NL');
+  return warehouse.name;
 }
 
 export const COMPANY_BRAND = COMPANY.brand;
