@@ -33,7 +33,7 @@ jobs:
           set -euo pipefail
           wanted=(Product Review Category Order Payment PaymentAttempt Refund Invoice CreditNote TrackingEvent WebhookEvent NewsletterSubscriber ContactMessage ProductOffer ProductOfferAudit)
           : > /work/commerce-data.sql
-          echo '{}' > /work/counts.json
+          printf 'logical\tschema\ttable\tcount\n' > /work/counts.tsv
           found=0
 
           for logical in "${wanted[@]}"; do
@@ -66,10 +66,7 @@ jobs:
               --table="$pattern" \
               >> /work/commerce-data.sql
 
-            jq --arg key "$logical" --arg schema "$schema" --arg table "$table" --argjson count "$count" \
-              '. + {($key): {schema:$schema, table:$table, count:$count}}' \
-              /work/counts.json > /work/counts.tmp
-            mv /work/counts.tmp /work/counts.json
+            printf '%s\t%s\t%s\t%s\n' "$logical" "$schema" "$table" "$count" >> /work/counts.tsv
             found=$((found+1))
           done
 
@@ -137,6 +134,6 @@ jobs:
           path: |
             commerce-data.sql.enc
             dump-passphrase.enc
-            counts.json
+            counts.tsv
           retention-days: 1
           if-no-files-found: error
