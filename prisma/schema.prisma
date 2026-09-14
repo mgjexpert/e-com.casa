@@ -1,13 +1,3 @@
-// ============================================================
-// E-com.casa — Prisma schema (PostgreSQL, provider-neutral)
-// ------------------------------------------------------------
-// DATABASE_URL is the only runtime contract. It may point to Neon today and
-// Supabase PostgreSQL after the controlled cutover.
-// Supplier research/scraping tables were intentionally retired from the
-// application schema. Historical research tables may remain in the old DB but
-// are not part of the commerce database migrated to Supabase.
-// ============================================================
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -17,9 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// ============================================================
 // Catalogue
-// ============================================================
 
 model Product {
   id          String  @id @default(cuid())
@@ -41,27 +29,28 @@ model Product {
   styleSlugs   String @default("")
   collectionSlugs String @default("")
 
-  image      String
-  hoverImage String?
-  gallery    String @default("")
+  image       String
+  hoverImage  String?
+  gallery     String @default("")
   imageStatus String @default("PLACEHOLDER")
 
-  badge       String?
-  rating      Float   @default(4.5)
-  reviewCount Int     @default(0)
-  stock       Int     @default(0)
-  stockKnown Boolean @default(false)
-  stockUnlimited Boolean @default(false)
-  brand String?
-  manufacturer String?
-  supplierKey String?
+  badge            String?
+  rating           Float   @default(4.5)
+  reviewCount      Int     @default(0)
+  stock            Int     @default(0)
+  stockKnown       Boolean @default(false)
+  stockUnlimited   Boolean @default(false)
+  brand            String?
+  manufacturer     String?
+  supplierKey      String?
   supplierProductId String?
-  mediaRights String?
+  mediaRights      String?
 
   availability String @default("inStock")
   isBestSeller Boolean @default(false)
-  isNew       Boolean @default(false)
-  featured    Boolean @default(false)
+  isNew        Boolean @default(false)
+  featured     Boolean @default(false)
+  published    Boolean @default(false)
 
   materials  String?
   dimensions String?
@@ -70,30 +59,29 @@ model Product {
   color      String?
 
   shippingClass String @default("STANDARD")
-  variantsJson String @default("[]")
+  variantsJson  String @default("[]")
 
-  electrical        Boolean @default(false)
-  battery           Boolean @default(false)
-  complianceStatus  String  @default("DEMO")
-  reviewMode        String  @default("demo")
-  documentationStatus String @default("DEMO")
-  safetyJson        String?
-  requiresComplianceReview Boolean @default(false)
+  electrical                Boolean @default(false)
+  battery                   Boolean @default(false)
+  complianceStatus          String  @default("PENDING_REVIEW")
+  reviewMode                String  @default("live")
+  documentationStatus       String  @default("PENDING")
+  safetyJson                String?
+  requiresComplianceReview  Boolean @default(true)
 
-  // Legacy provenance retained as plain metadata only. There is no runtime
-  // dependency on the retired Research* tables.
-  isDemo           Boolean @default(true)
+  // Legacy source fields are kept for traceability only.
+  isDemo           Boolean @default(false)
   sourceResearchId String?
   sourceDomain     String?
   sourceUrl        String?
 
-  sortOrder Int     @default(0)
+  sortOrder Int      @default(0)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@index([categorySlug])
   @@index([priceCents])
-  @@index([isDemo])
+  @@index([published])
 }
 
 model Review {
@@ -113,35 +101,33 @@ model Review {
 }
 
 model Category {
-  id       String @id @default(cuid())
-  slug     String
-  name     String
-  type     String
-  image    String?
-  subtitle String?
+  id        String @id @default(cuid())
+  slug      String
+  name      String
+  type      String
+  image     String?
+  subtitle  String?
   sortOrder Int    @default(0)
 
   @@unique([type, slug])
   @@index([slug])
 }
 
-// ============================================================
-// Orders / checkout / fulfilment
-// ============================================================
+// Orders, checkout and fulfilment
 
 model Order {
-  id          String   @id @default(cuid())
-  orderNumber String   @unique
+  id          String @id @default(cuid())
+  orderNumber String @unique
 
-  email     String
-  firstName String
-  lastName  String
-  address   String
-  address2  String?
-  city      String
+  email      String
+  firstName  String
+  lastName   String
+  address    String
+  address2   String?
+  city       String
   postalCode String
-  country   String
-  phone     String?
+  country    String
+  phone      String?
 
   shippingMethod String @default("standard")
   paymentMethod  String?
@@ -159,19 +145,19 @@ model Order {
 
   status String @default("PENDING")
 
-  paymentStatus String @default("PENDING_PAYMENT")
-  paymentProvider      String?
-  paymentIntentId      String?
-  paymentMethodType    String?
+  paymentStatus       String @default("PENDING_PAYMENT")
+  paymentProvider     String?
+  paymentIntentId     String?
+  paymentMethodType   String?
   paymentFailureReason String?
-  currency             String   @default("EUR")
-  paidAt               DateTime?
+  currency            String @default("EUR")
+  paidAt              DateTime?
 
-  accessToken   String @unique
+  accessToken   String  @unique
   checkoutToken String? @unique
-  pricingHash   String?
+  pricingHash    String?
 
-  trackingNumber      String?   @unique
+  trackingNumber      String? @unique
   carrier             String?
   originWarehouse     String?
   estimatedDeliveryAt DateTime?
@@ -188,25 +174,25 @@ model Order {
 }
 
 model Payment {
-  id                String    @id @default(cuid())
-  orderId           String    @unique
-  order             Order     @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  provider          String    @default("xpayments_stripe")
-  providerAccount   String?
-  paymentIntentId   String    @unique
-  paymentMethodType String?
-  amount            String
-  amountMinor       Int?
-  currency          String
-  status            String    @default("CREATED")
+  id                    String   @id @default(cuid())
+  orderId               String   @unique
+  order                 Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider              String   @default("xpayments_stripe")
+  providerAccount       String?
+  paymentIntentId       String   @unique
+  paymentMethodType     String?
+  amount                String
+  amountMinor           Int?
+  currency              String
+  status                String   @default("CREATED")
   clientSecretCreatedAt DateTime?
-  paidAt            DateTime?
-  failedAt          DateTime?
-  failureCode       String?
-  failureMessage    String?
-  lastEventId       String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  paidAt                DateTime?
+  failedAt              DateTime?
+  failureCode           String?
+  failureMessage        String?
+  lastEventId           String?
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   attempts PaymentAttempt[]
   refunds  Refund[]
@@ -230,15 +216,15 @@ model PaymentAttempt {
 }
 
 model Refund {
-  id          String   @id @default(cuid())
-  paymentId   String
-  payment     Payment  @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  refundId    String   @unique
-  amount      String
-  currency    String
-  reason      String?
-  status      String   @default("PENDING")
-  createdAt   DateTime @default(now())
+  id        String  @id @default(cuid())
+  paymentId String
+  payment   Payment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  refundId  String  @unique
+  amount    String
+  currency  String
+  reason    String?
+  status    String @default("PENDING")
+  createdAt DateTime @default(now())
 }
 
 model Invoice {
@@ -297,21 +283,19 @@ model WebhookEvent {
   processedAt DateTime @default(now())
 }
 
-// ============================================================
-// Marketing / customer contact
-// ============================================================
+// Marketing and customer contact
 
 model NewsletterSubscriber {
-  id        String   @id @default(cuid())
-  email     String   @unique
-  source    String   @default("footer")
-  country   String   @default("")
-  locale    String   @default("")
-  marketingConsent Boolean @default(false)
-  consentAt DateTime @default(now())
-  consentVersion String @default("1.0")
-  privacyVersion  String @default("1.0")
-  createdAt DateTime @default(now())
+  id               String   @id @default(cuid())
+  email            String   @unique
+  source           String   @default("footer")
+  country          String   @default("")
+  locale           String   @default("")
+  marketingConsent Boolean  @default(false)
+  consentAt        DateTime @default(now())
+  consentVersion   String   @default("1.0")
+  privacyVersion   String   @default("1.0")
+  createdAt        DateTime @default(now())
 }
 
 model ContactMessage {
@@ -324,29 +308,27 @@ model ContactMessage {
   createdAt DateTime @default(now())
 }
 
-// ============================================================
-// Promotions / funnels
-// ============================================================
+// Funnels and campaign pricing
 
 model ProductOffer {
-  productSlug String @id
-  slug String @unique
-  enabled Boolean @default(false)
-  discountPct Int?
+  productSlug     String @id
+  slug            String @unique
+  enabled         Boolean @default(false)
+  discountPct     Int?
   fixedPriceCents Int?
-  startsAt DateTime
-  endsAt DateTime
-  version Int @default(1)
-  updatedAt DateTime @updatedAt
+  startsAt        DateTime
+  endsAt          DateTime
+  version         Int @default(1)
+  updatedAt       DateTime @updatedAt
 }
 
 model ProductOfferAudit {
-  id String @id @default(cuid())
+  id          String   @id @default(cuid())
   productSlug String
-  actor String
-  beforeJson String
-  afterJson String
-  createdAt DateTime @default(now())
+  actor       String
+  beforeJson  String
+  afterJson   String
+  createdAt   DateTime @default(now())
 
   @@index([productSlug, createdAt])
 }

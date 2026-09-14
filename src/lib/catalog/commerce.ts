@@ -1,43 +1,52 @@
 import { isOfferActive } from '../offers/promotion';
-import campaign from '../../../data/catalog/commerce-campaign.json';
 import type { CatalogProduct } from './types';
-export const ACCESSORY_CATEGORIES = ['acessorios', 'produtos-instalacao', 'acessorios-divisorias', 'acessorios-instalacao'];
-export const isAccessory = (p: Pick<CatalogProduct, 'categorySlug'> & { name?: string; slug?: string }) => ACCESSORY_CATEGORIES.includes(p.categorySlug) || /acessórios|ripa de fixação/i.test(p.name ?? '');
-export const isSample = (p: Pick<CatalogProduct, 'categorySlug'> & { name?: string; slug?: string }) => p.categorySlug === 'amostras' || /\b(amostras?|samples?)\b/i.test(p.name ?? '');
-function hash(value: string) { let h = 2166136261; for (const c of value) h = Math.imul(h ^ c.charCodeAt(0), 16777619); return h >>> 0; }
 
-/** One fixed campaign; neither visits nor daily supplier sync restart its deadlines. */
+export const ACCESSORY_CATEGORIES = [
+  'acessorios',
+  'produtos-instalacao',
+  'acessorios-divisorias',
+  'acessorios-instalacao',
+];
+
+export const isAccessory = (product: Pick<CatalogProduct, 'categorySlug'> & { name?: string }) =>
+  ACCESSORY_CATEGORIES.includes(product.categorySlug) || /acessórios|ripa de fixação/i.test(product.name ?? '');
+
+export const isSample = (product: Pick<CatalogProduct, 'categorySlug'> & { name?: string }) =>
+  product.categorySlug === 'amostras' || /\b(amostras?|samples?)\b/i.test(product.name ?? '');
+
 export function applyCommerce(product: CatalogProduct, now = Date.now()): CatalogProduct {
-  const seed = hash(`${campaign.id}:${product.slug}`);
-  const accessory = isAccessory(product);
-  const starts = Date.parse(campaign.startsAt);
-  let ends = accessory ? Date.parse(campaign.accessoriesEndsAt) : starts + (1 + seed % 3) * 3600000;
-  let pct = accessory ? 70 : seed % 4 === 0 ? 0 : [10, 15, 20][seed % 3];
   const base = product.regularPriceCents ?? product.priceCents;
-  const funnel = isOfferActive(product.funnelOffer, now) ? product.funnelOffer : null;
-  const fixed = funnel?.fixedPriceCents ?? null;
-  if (funnel) { ends = Date.parse(funnel.endsAt); pct = funnel.discountPct ?? Math.round((1 - fixed! / base) * 100); }
-  const active = base > 0 && pct > 0 && (funnel !== null || now >= starts) && now < ends;
-  const factor = active ? (100 - pct) / 100 : 1;
-  const cents = active && fixed !== null ? fixed : Math.round(base * factor);
+  const offer = isOfferActive(product.funnelOffer, now) ? product.funnelOffer : null;
+  const fixed = offer?.fixedPriceCents ?? null;
+  const percentage = offer?.discountPct ?? null;
+
+  let cents = base;
+  if (fixed !== null) cents = fixed;
+  else if (percentage !== null) cents = Math.round(base * (100 - percentage) / 100);
+
   return {
     ...product,
     regularPriceCents: base,
-    offerSlug: funnel?.slug ?? null,
-    priceCents: cents, price: (cents / 100).toFixed(2),
+    offerSlug: offer?.slug ?? null,
+    priceCents: cents,
+    price: (cents / 100).toFixed(2),
     comparePrice: null,
-    promoDiscountPct: active ? pct : null,
-    promoEndsAt: active ? new Date(ends).toISOString() : null,
-    variants: product.variants.map(v => {
-      const delta = v.regularPriceDeltaCents ?? v.priceDeltaCents ?? 0;
-      return { ...v, regularPriceDeltaCents: delta, priceDeltaCents: active && fixed !== null ? delta : Math.round((base + delta) * factor) - cents };
+    promoDiscountPct: offer ? percentage ?? (fixed !== null && base > 0 ? Math.round((1 - fixed / base) * 100) : null) : null,
+    promoEndsAt: offer ? offer.endsAt : null,
+    variants: product.variants.map((variant) => {
+      const delta = variant.regularPriceDeltaCents ?? variant.priceDeltaCents ?? 0;
+      const regularVariantPrice = base + delta;
+      const campaignVariantPrice = fixed !== null
+        ? fixed + delta
+        : percentage !== null
+          ? Math.round(regularVariantPrice * (100 - percentage) / 100)
+          : regularVariantPrice;
+
+      return {
+        ...variant,
+        regularPriceDeltaCents: delta,
+        priceDeltaCents: campaignVariantPrice - cents,
+      };
     }),
   };
-}
-
-export function merchantReleased(product: { supplierKey?: string | null; priceCents?: number; complianceStatus?: string; documentationStatus?: string; isDemo?: boolean }): boolean {
-  return !product.isDemo && campaign.merchantRelease.suppliers.includes(product.supplierKey ?? '')
-    && (product.priceCents ?? 0) > 0
-    && !['BLOCKED', 'DEMO'].includes(String(product.complianceStatus).toUpperCase())
-    && !['BLOCKED', 'DEMO'].includes(String(product.documentationStatus).toUpperCase());
 }

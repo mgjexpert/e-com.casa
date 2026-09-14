@@ -1,13 +1,9 @@
-import { CartPriceSync } from '@/components/cart/cart-price-sync';
 import type { Metadata, Viewport } from 'next';
 import { Playfair_Display, Inter, Manrope, Newsreader } from 'next/font/google';
 import './globals.css';
 import { Toaster } from '@/components/ui/toaster';
 import { SiteChrome } from '@/components/layout/site-chrome';
-import { CookieConsent } from '@/components/cookie/cookie-consent';
-import { ChatWidget } from '@/components/chat/chat-widget';
-import { CartDrawer } from '@/components/cart/cart-drawer';
-import { LanguageBoot } from '@/hooks/use-t';
+import { RuntimeWidgets } from '@/components/layout/runtime-widgets';
 import { COMPANY } from '@/lib/company';
 
 const playfair = Playfair_Display({
@@ -43,21 +39,12 @@ export const metadata: Metadata = {
     default: 'E-com.casa — Make Your Space Yours. | Home & Garden',
     template: '%s | E-com.casa',
   },
-  description:
-    'Curated pieces for interiors, gardens and everyday living. Wall panels, lighting, garden and outdoor living — designed in Europe, delivered across Europe with free shipping and 14-day returns.',
-  keywords: [
-    'home and garden',
-    'wall panels',
-    'lighting',
-    'outdoor furniture',
-    'interior decoration',
-    'European design',
-    'E-com.casa',
-  ],
+  description: 'Curated pieces for interiors, gardens and everyday living. Wall panels, lighting, garden and outdoor living — delivered across Europe.',
+  keywords: ['home and garden', 'wall panels', 'lighting', 'outdoor furniture', 'interior decoration', 'European design', 'E-com.casa'],
   authors: [{ name: COMPANY.legalName }],
   openGraph: {
     title: 'E-com.casa — Make Your Space Yours.',
-    description: 'Curated pieces for interiors, gardens and everyday living. Free delivery to Portugal and Spain; other supported European destinations on orders over €50.',
+    description: 'Curated pieces for interiors, gardens and everyday living.',
     url: COMPANY.domain,
     siteName: 'E-com.casa',
     type: 'website',
@@ -81,26 +68,15 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${playfair.variable} ${inter.variable} ${manrope.variable} ${newsreader.variable} font-sans antialiased bg-background text-foreground`}>
-        <a
-          href="#main-content"
-          className="sr-only z-[100] bg-ink px-4 py-2 text-sm text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
-        >
+        <a href="#main-content" className="sr-only z-[100] bg-ink px-4 py-2 text-sm text-white focus:not-sr-only focus:fixed focus:left-4 focus:top-4">
           Skip to main content
         </a>
         <SiteChrome>{children}</SiteChrome>
-        <CookieConsent />
-        <ChatWidget />
-        <CartDrawer />
-        <CartPriceSync />
-        <LanguageBoot />
+        <RuntimeWidgets />
         <Toaster />
         <script
           type="application/ld+json"

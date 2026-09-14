@@ -1,273 +1,635 @@
-# E-com.casa — Make Your Space Yours.
+# E-com.casa
 
-**E-com.casa ecommerce application** — a polished, Vercel-ready **European home & garden store** built with **Next.js 16 (App Router) + TypeScript + Tailwind CSS 4 + Prisma (PostgreSQL / Neon)**, with **Stripe-compatible payment processing through XPayments**.
+E-com.casa is a Next.js commerce application for home and interior products sold across European markets. The application combines a product catalogue, product pages, campaign funnels, cart and checkout, payment processing, order lifecycle, tracking, customer contact tools and an internal operations panel.
 
-> E-com.casa is a trading brand operated by **MGJ EXPERT LTD** (Company No. 17422467, 71–75 Shelton Street, Covent Garden, London WC2H 9JQ, United Kingdom — institutional contact: contact@mgj.expert).
-> The storefront ships a research-derived catalogue, cart, real payment architecture (Stripe Elements + XPayments), orders with tracking & fulfilment states, editorial content, a full legal/compliance architecture and one-shot catalog import tooling (dev-only).
+This repository is intended to be maintained by the development, marketing and sales operations teams. Routine catalogue, price, campaign and order operations belong in the application database and `/admin`; Git should be reserved for application code, templates, infrastructure and reviewed configuration changes.
 
----
+## 1. Technology stack
 
-## ✨ What's inside
+| Area | Technology |
+| --- | --- |
+| Application | Next.js 16, App Router, React 19 |
+| Language | TypeScript |
+| Styling | Tailwind CSS 4, Radix UI / shadcn-style components |
+| Database | PostgreSQL on Supabase |
+| ORM | Prisma |
+| Hosting | Vercel |
+| Payments | XPayments Stripe-compatible API and Stripe Elements |
+| Transactional email | Resend |
+| Client state | Zustand |
+| Storefront concierge | Optional server-side `z-ai-web-dev-sdk` integration |
+
+Production architecture:
+
+```text
+GitHub
+  -> Vercel
+      -> Next.js application
+          -> Supabase PostgreSQL
+          -> XPayments payment API
+          -> Resend
+```
+
+The application uses `DATABASE_URL` as its runtime database contract. Vercel should use a Supabase pooled PostgreSQL connection. Direct or session connections should be reserved for database migrations and maintenance operations.
+
+## 2. Main application areas
 
 ### Storefront
-- **Editorial homepage** matching the approved visual mockup: announcement bar, mega-nav with search, cinematic hero ("Make Your Space Yours."), Shop by Space, Shop by Style, 4 Transformation Collections, Best Sellers, Journal banner, trust indicators
-- **Shop** (`/shop`) — filters for category / space / style / price (+ material, colour, availability via API), 6 sort options, mobile filter sheet, pagination
-- **Product pages** (`/product/[slug]`) — gallery, **interactive variants** (colour / size / pack with price deltas), quantity, add-to-cart, buy-now, wishlist, GPSR safety & compliance block, related products, **Complete the Look**, JSON-LD (aggregate rating suppressed for demo reviews)
-- **Relational catalogue** — Complete the Look, related products, cart cross-sell computed from category/space/style/collection metadata
-- **Cart** (`/cart`) — variant-aware line items, save-for-later, free-shipping progress, promo codes (`WELCOME10`, `HOME5`), gift wrap, delivery notes
-- **Real checkout** (`/checkout`) — 28 EU/UK countries, delivery options, **Stripe Payment Element + Express Checkout** (Apple Pay / Google Pay / Link / PayPal where supported) backed by the XPayments Stripe-compatible Direct API; totals are repriced **server-side** (incl. variant deltas from the catalogue model) and the amount is charged in the smallest currency unit
-- **Payment lifecycle** — PENDING_PAYMENT → PAYMENT_PROCESSING → PAID (only via verified gateway webhook), plus PAYMENT_FAILED / CANCELLED / REFUNDED; fulfilment stays a separate state machine; stock is finalised only after verified payment; idempotent PaymentIntent creation with persisted intent ids
-- **Tracking & fulfilment (3PL simulation engine)** — every paid order gets a buyer-facing tracking number (`ECC-YYMM-XXXXXX`) at the verified-payment moment; the fulfilment state machine advances through CONFIRMED → PROCESSING → SHIPPED → IN_TRANSIT → OUT_FOR_DELIVERY → DELIVERED with an idempotent persisted event history (`TrackingEvent`); public `/track` page where buyers enter the code to see the current state, journey, origin warehouse and estimated delivery; EU 3PL network — Greenport Venlo (NL) for Northern/Central Europe, PLAZA Zaragoza (ES) for Iberia/Mediterranean
-- **Order confirmation + order history** — status pages verify payment server-side; order access requires the per-order random token (no email-only lookups)
-- **Wishlist** (`/wishlist`) — persistent, shareable via URL
-- **Search** — global product search across name/description/category/style/space/materials
-- **Journal + Inspiration** — editorial content linked to the live catalogue
-- **Cookie consent** — Accept all / Reject non-essential / Manage preferences (Necessary, Preferences, Analytics, Marketing); nothing optional loads before consent; persistent settings page
-- **Live chat** — "E-com.casa Concierge" floating widget with topic routing and email fallback (provider abstraction: DemoChatProvider now, Intercom/Crisp/Zendesk later)
-- **Legal system** — 14 documents under `/legal/*` with country-aware hooks (PT Livro de Reclamações, FR médiateur `[MÉDIATEUR À DÉSIGNER]`, DE Impressum, UK Consumer Rights Act notes). The former EU ODR platform is correctly referenced as **discontinued** (20 July 2025)
 
-### Internationalization
-- **7 UI languages**: English, Português, Français, Deutsch, Español, Italiano, Nederlands — full dictionaries, language switcher in the header
-- **Country engine** (`src/lib/countries.ts`) — data-driven `getCountryConfiguration()` for 27 EU markets + UK: locale, currency, reference VAT, shipping, withdrawal/returns, consumer rights, legal documents, complaints/ADR, cookie rules, product requirements (GPSR/WEEE/battery), EPR placeholders, payment methods. Placeholders are never invented.
+Core routes:
 
-### Catalog architecture (migration-ready)
+```text
+/                         Home
+/shop                     Catalogue
+/product/[slug]            Product detail
+/search                    Product search
+/cart                      Cart
+/checkout                  Checkout
+/offers                    Active funnels
+/offers/[slug]              Sales funnel
+/track                     Order tracking
+/account/orders            Buyer order access
+/legal/*                   Legal information
+/admin                     Internal operations
 ```
-src/lib/catalog/
-  types.ts            # domain model (CatalogProduct, variants, safety, query)
-  service.ts          # the ONLY catalogue entrypoint used by the UI
-  prisma-adapter.ts   # PostgreSQL / Neon adapter
-  demo-adapter.ts     # JSON-artifact fallback (data/catalog/*.json)
-  recommendations.ts  # Complete the Look / related / cross-sell engine
+
+### Commerce flow
+
+The critical purchase path is:
+
+```text
+Catalogue / Funnel
+  -> Cart
+  -> Checkout creation
+  -> PaymentIntent creation
+  -> Payment provider
+  -> Verified webhook
+  -> Order becomes PAID
+  -> Stock / tracking / fulfilment
+  -> Transactional communication
 ```
-The UI never queries Prisma for catalogue reads. To connect the future **real** catalogue, implement a new adapter behind the same facade — no frontend redesign.
 
-### Internal catalogue lifecycle flags
-Catalogue rows carry internal lifecycle fields (`isDemo`, `complianceStatus`, `reviewMode`, `documentationStatus`) used **only inside the pipeline** — shoppers never see them. GPSR scaffold fields are **placeholders only** (nothing fabricated), `sourceResearchId` keeps research traceability internal, and there are no fake "was" prices. Only verified customer reviews are ever displayed, and AggregateRating schema is emitted solely from real customer reviews.
+An order must never be considered paid because of a browser redirect or a manual admin action. The payment status becomes `PAID` only through a verified provider event.
 
----
+## 3. Repository structure
 
-## 🧱 Tech stack
-
-| Layer | Choice |
-|---|---|
-| Framework | Next.js 16 (App Router, RSC) |
-| Language | TypeScript 5 (strict) |
-| Styling | Tailwind CSS 4 + shadcn/ui (New York) |
-| Fonts | Playfair Display (display serif) + Inter (sans) |
-| Database | Prisma ORM + **PostgreSQL (Neon)** |
-| State | Zustand (persisted cart / wishlist / cookie consent / language) |
-| Icons | Lucide |
-| Images | next/image + 60+ AI-generated editorial assets (own imagery only — no hotlinked third-party photography) |
-
----
-
-## 📁 Project structure
-
-```
+```text
 src/
-  app/                     # App Router pages + API routes
-    api/                   # products, search, orders, reviews, newsletter, contact, chat
-    shop/ product/ cart/ checkout/ wishlist/ search/ account/
-    journal/ inspiration/ about/ contact/ sustainability/ shipping/ returns/ legal/
-  components/              # layout, home, product, cart, chat, cookie, legal, ui
+  app/
+    api/                    Public and internal route handlers
+    admin/                  Internal operations panel
+    offers/[slug]/          Dynamic sales funnel route
+    product/[slug]/         Product detail
+    checkout/               Checkout UI
+    ...                     Storefront routes
+  components/
+    cart/
+    chat/
+    cookie/
+    home/
+    layout/
+    offers/
+    payments/
+    product/
+    ui/
   lib/
-    catalog/               # ★ catalogue service abstraction (see above)
-    countries.ts           # ★ country/currency/legal engine (27 EU + UK)
-    constants.ts           # commerce config (delegates to countries engine)
-    company.ts             # legal identity + email aliases
-    legal-content.ts       # 14 legal documents dataset
-    i18n.ts                # 7-language UI dictionaries
-    db.ts                  # Prisma client
-  types/                   # shared types (Product = CatalogProduct)
-data/catalog/              # reproducibility artifacts from the research run
-  generated-products.json  # the 120-product demo catalogue (seed input)
-  generated-catalog.json   # categories/spaces/styles/collections metadata
-  generated-relations.json # relational merchandising documentation
-  generated-bundles.json   # 6 demo bundles
+    admin/                  Admin authentication
+    catalog/                Catalogue domain and adapters
+    offers/                 Funnel resolution, pricing and audit
+    payments/               Payment provider and reconciliation
+    db.ts                   Prisma client
+    tracking.ts             Fulfilment and tracking logic
 prisma/
-  schema.prisma            # PostgreSQL + research layer models
-  seed.ts                  # ★ idempotent seed (safe to re-run)
-scripts/
-  catalog-research/        # legacy V1 research pipeline (dev-only)
-  catalog-research-v2/     # ★ CATALOG SCRAPER V2 — deep product extraction engine (dev-only)
-  generate-catalog-images.sh
-reports/
-  catalog-research-report.json / .md
+  schema.prisma             Application database model
+  migrations/               Prisma migration history
+  seed.ts                   Catalogue bootstrap utility
+data/catalog/
+  generated-provider-*.json Bundled emergency catalogue fallback
+tests/                      Commerce and funnel tests
 ```
 
----
+## 4. Database model
 
-## 🚀 Local development
+The primary application models are:
+
+### Catalogue
+
+- `Product`
+- `Category`
+- `Review`
+
+### Campaigns and funnels
+
+- `ProductOffer`
+- `ProductOfferAudit`
+
+### Orders and payments
+
+- `Order`
+- `Payment`
+- `PaymentAttempt`
+- `Refund`
+- `Invoice`
+- `CreditNote`
+- `WebhookEvent`
+
+### Fulfilment
+
+- `TrackingEvent`
+
+### Marketing and support
+
+- `NewsletterSubscriber`
+- `ContactMessage`
+
+Supabase PostgreSQL is the mutable source of truth. The JSON files under `data/catalog/` are a read-only fallback for storefront availability if the database cannot be reached. When PostgreSQL is healthy, the application does not merge those files into the live catalogue.
+
+## 5. Product lifecycle
+
+A product has two separate concepts that should not be confused:
+
+1. Operational information: supplier, stock, media, documentation, compliance and internal traceability.
+2. Publication: whether the product is intentionally available to the storefront.
+
+`Product.published` is the explicit merchant publication flag.
+
+A product is eligible for the storefront when it is published, is not a demo/sample record, has a valid price and is not explicitly blocked. Stock and availability rules are then applied normally.
+
+This design deliberately avoids a hardcoded supplier whitelist. Adding a new supplier does not require changing storefront code.
+
+## 6. Adding a product
+
+### Preferred workflow: Admin
+
+Open:
+
+```text
+/admin/products/new
+```
+
+Create the product as a draft first. At minimum confirm:
+
+- product name;
+- unique slug;
+- unique SKU;
+- base price and currency;
+- category;
+- main image;
+- description;
+- stock model;
+- supplier/manufacturer where applicable;
+- variants;
+- compliance/documentation status.
+
+After commercial and operational review, set `Published` and save.
+
+The storefront will then use the product directly from PostgreSQL. No Git commit or catalogue snapshot regeneration is required for normal product creation.
+
+### Variants
+
+Variants are stored in `variantsJson`. The value must be a JSON array. A typical variant is:
+
+```json
+[
+  {
+    "id": "oak-240",
+    "type": "colour",
+    "name": "Natural Oak",
+    "value": "natural-oak",
+    "priceDeltaCents": 0,
+    "availability": "inStock",
+    "image": "https://..."
+  }
+]
+```
+
+Keep variant IDs stable after orders have been created. Price deltas are expressed in cents.
+
+### Media
+
+`image` is the primary product image. `gallery` contains comma-separated image URLs. Remote hosts must also be allowed in `next.config.ts` if Next Image will optimize those assets.
+
+Do not commit credentials, signed private URLs or supplier back-office links as media references.
+
+### Direct database work
+
+Direct SQL or Prisma scripts may be used for controlled bulk imports, but the resulting records must follow the same field rules as the admin workflow. Bulk jobs should be idempotent and reviewed before production execution.
+
+## 7. Pricing
+
+`Product.price` and `Product.priceCents` hold the base selling price.
+
+Routine pricing should be changed in `/admin/products`.
+
+Campaign pricing belongs to `ProductOffer`, not to hidden code rules or generated JSON. An active offer can use:
+
+- the product base price;
+- one percentage discount; or
+- one fixed campaign price.
+
+The cart and checkout always reprice server-side before payment. Client-side displayed values are never authoritative for the amount charged.
+
+## 8. Sales funnels
+
+Public funnels use:
+
+```text
+/offers/[slug]
+```
+
+`ProductOffer` controls the commercial state:
+
+- `productSlug`: linked product;
+- `slug`: public funnel URL;
+- `enabled`: operational switch;
+- `discountPct`: optional percentage discount;
+- `fixedPriceCents`: optional fixed campaign price;
+- `startsAt` / `endsAt`: schedule;
+- `version`: optimistic locking for concurrent edits.
+
+Every write through the admin application creates a `ProductOfferAudit` record with the operator and before/after state.
+
+### Create or edit a funnel in Admin
+
+Use:
+
+```text
+/admin/funnels
+/admin/funnels/new
+```
+
+A funnel may be enabled while using the ordinary product price. Discounts are optional.
+
+Disabling or allowing a campaign to expire removes the public funnel without needing a deployment.
+
+### Funnel presentation templates
+
+The route is resolved in:
+
+```text
+src/app/offers/[slug]/page.tsx
+src/lib/offers/resolver.ts
+src/components/offers/product-funnel-page.tsx
+```
+
+The default product funnel uses the reusable panel funnel presentation. Nuralta has a dedicated presentation while still using `ProductOffer` for activation, schedule and price control.
+
+### Add another funnel with the existing template
+
+If the new campaign can use the current generic layout:
+
+1. publish the product;
+2. create a `ProductOffer` in Admin;
+3. choose the public slug and schedule;
+4. enable the funnel;
+5. validate `/offers/[slug]`, cart and checkout.
+
+No new page component is required.
+
+### Add a new visual funnel template
+
+When a campaign requires a materially different design:
+
+1. create a component under `src/components/offers/`;
+2. keep catalogue and price data supplied through `CatalogProduct` and `OfferConfig`;
+3. add a deterministic template selection rule in `product-funnel-page.tsx`;
+4. do not duplicate checkout, cart or payment logic inside the funnel;
+5. keep the funnel URL controlled by `ProductOffer`;
+6. add tests for rendering, price and cart behaviour.
+
+A funnel should be a presentation and conversion layer over the same commerce engine, not a separate ecommerce implementation.
+
+## 9. Admin operations
+
+`/admin` is intentionally separate from the storefront chrome and is not indexed.
+
+Authentication uses one fixed team password stored as a deployment secret:
+
+```text
+ADMIN_PASSWORD
+```
+
+Sessions are signed and stored in an HTTP-only cookie. Configure a separate signing secret:
+
+```text
+ADMIN_SESSION_SECRET
+```
+
+Use `ADMIN_OPERATOR` to identify the team/operator in funnel audit records.
+
+Current admin modules:
+
+```text
+/admin                  Dashboard
+/admin/products         Catalogue and pricing
+/admin/funnels          Funnels and campaign pricing
+/admin/orders           Orders and fulfilment
+/admin/payments         Payment and refund records
+/admin/customers        Customer summary from order history
+/admin/contacts         Contact messages and newsletter totals
+```
+
+### Product permissions
+
+Admin can:
+
+- create and edit products;
+- publish or archive products;
+- change base price;
+- update stock and availability;
+- manage media and variants;
+- maintain supplier and compliance metadata.
+
+### Orders
+
+Admin can:
+
+- inspect buyer and order details;
+- update fulfilment status after payment is verified;
+- manage tracking fields;
+- review tracking history.
+
+A paid order should be refunded before fulfilment is cancelled.
+
+### Payments
+
+Admin can inspect:
+
+- provider status;
+- PaymentIntent ID;
+- amount and payment method;
+- attempts;
+- refunds;
+- associated order.
+
+Admin cannot manually mark an order `PAID`. This is an intentional financial integrity rule.
+
+### Refunds
+
+Refunds are executed from the order detail page. The application calls the payment provider and persists the result in the same workflow. A successful refund also creates the internal credit-note record.
+
+Never implement a “refund” button that only changes database status without contacting the provider.
+
+## 10. Payment architecture
+
+Browser payment UI uses Stripe Elements while the server communicates with the XPayments Stripe-compatible API.
+
+Relevant routes:
+
+```text
+POST /api/checkout/create
+POST /api/payments/create-intent
+GET  /api/payments/status
+GET  /api/payments/capabilities
+GET  /api/payments/health
+POST /api/webhooks/xpayments
+```
+
+Payment lifecycle and fulfilment lifecycle are separate.
+
+Typical payment states include:
+
+```text
+PENDING_PAYMENT
+PAYMENT_PROCESSING
+PAID
+PAYMENT_FAILED
+CANCELLED
+REFUNDED
+PARTIALLY_REFUNDED
+```
+
+`PAID` is established by a verified webhook/reconciliation path. Webhook processing is idempotent through `WebhookEvent`.
+
+Amounts sent to the provider use integer minor units. Do not introduce floating-point gateway amounts.
+
+## 11. Tracking and fulfilment
+
+Tracking data is stored on `Order` and in `TrackingEvent`.
+
+The current implementation includes an internal fulfilment timeline that can assign tracking information after verified payment and advance delivery states. This is an integration boundary, not a substitute for a real carrier API.
+
+When a production 3PL/carrier integration is introduced:
+
+- keep `Order` and `TrackingEvent` as the application-facing contract;
+- replace simulated event generation with authenticated carrier events;
+- preserve idempotency;
+- preserve monotonic fulfilment transitions;
+- never create shipment lifecycle events for unpaid orders.
+
+## 12. Storefront catalogue service
+
+Storefront code should access products through:
+
+```text
+src/lib/catalog/service.ts
+```
+
+Do not scatter direct Prisma catalogue queries through UI components.
+
+The catalogue service chooses:
+
+1. PostgreSQL when the database is healthy and contains published products;
+2. the bundled provider snapshot only as an emergency read fallback.
+
+The fallback is intentionally read-only. Product operations belong in PostgreSQL/Admin.
+
+## 13. Storefront concierge
+
+`/api/chat` provides an optional catalogue-aware shopping concierge. The provider runs server-side and should never receive application secrets from the browser.
+
+The feature can be disabled with:
+
+```text
+NEXT_PUBLIC_CHAT_ENABLED=false
+```
+
+The concierge is advisory. It does not set prices, create products, publish catalogue records or alter orders.
+
+## 14. Working on the project manually or with coding assistants
+
+Normal engineering workflow:
+
+1. create a feature branch;
+2. make the smallest coherent code change;
+3. run lint, tests and build;
+4. review database and payment implications;
+5. open a pull request;
+6. validate the Vercel preview;
+7. merge after review.
+
+Coding assistants can be used for implementation, refactoring, test generation and documentation, but the repository should remain tool-neutral. Do not commit conversation transcripts, generated planning notes, assistant-specific filenames, temporary migration endpoints or prompts.
+
+When using an assistant, give it the same boundaries expected from a developer:
+
+- read this README first;
+- treat Supabase as the catalogue source of truth;
+- preserve the checkout/payment integrity rules;
+- do not invent product, legal, payment or supplier facts;
+- do not commit secrets;
+- do not change a live payment state manually;
+- use branch/PR workflow for code changes;
+- validate build and tests before merge.
+
+For a request such as “add a new product funnel”, specify whether the existing funnel layout should be reused or a new visual template is required. The assistant should not duplicate commerce infrastructure merely to produce a new landing page.
+
+## 15. Environment variables
+
+Copy `.env.example` for local setup. Production secrets belong in Vercel.
+
+Required groups:
+
+### Database
+
+```text
+DATABASE_URL
+DIRECT_URL                optional for maintenance/migrations
+```
+
+### Admin
+
+```text
+ADMIN_PASSWORD
+ADMIN_SESSION_SECRET
+ADMIN_OPERATOR
+```
+
+### Payments
+
+```text
+PAYMENT_ENVIRONMENT
+XPAYMENTS_STRIPE_BASE_URL
+XPAYMENTS_API_KEY
+XPAYMENTS_STORE_ID
+NEXT_PUBLIC_XPAYMENTS_STRIPE_PUBLISHABLE_KEY
+XPAYMENTS_WEBHOOK_SECRET
+STRIPE_API_VERSION
+```
+
+### Email
+
+```text
+RESEND_API_KEY
+```
+
+### Site and optional integrations
+
+```text
+NEXT_PUBLIC_SITE_URL
+NEXT_PUBLIC_INDEXING_ENABLED
+NEXT_PUBLIC_ANALYTICS_ENABLED
+NEXT_PUBLIC_CHAT_ENABLED
+NEXT_PUBLIC_GA_ID
+NEXT_PUBLIC_META_PIXEL_ID
+```
+
+Do not expose server secrets through `NEXT_PUBLIC_*` variables.
+
+## 16. Local development
+
+Bun is used by the project scripts and tests.
 
 ```bash
-npm install                     # or bun install
-cp .env.example .env            # then set DATABASE_URL (Neon or local Postgres)
-npx prisma generate
-npx prisma db push             # (or create/apply migrations for production)
-npm run db:seed                 # idempotent — imports the demo catalogue fixtures (fallback)
-npm run dev                     # http://localhost:3000
-npm run lint
-npm run build
+bun install
+cp .env.example .env
+bunx prisma generate
+bun run dev
 ```
 
-Seed integrity checks run automatically: unique SKUs, demo flags, required display fields. Running `db:seed` twice creates no duplicates.
-
-## 🔎 One-shot catalog research (dev-only utility)
+Useful commands:
 
 ```bash
-### CATALOG SCRAPER V2 (primary — deep product extraction)
-
-```bash
-npm run catalog:scrape-v2                              # full run: discover → extract → select → import
-npm run catalog:scrape-v2 -- --dry-run                 # no Product writes
-npm run catalog:scrape-v2 -- --source=viridian-bay     # single source
-npm run catalog:scrape-v2 -- --limit=60                # cap final selection
-npm run catalog:scrape-v2 -- --phase=crawl             # discovery+extraction only (resume later)
-npm run catalog:scrape-v2 -- --resume=<runId>[,<run2>] # rebuild/selection/import from persisted research
+bun run lint
+bun run build
+bun run test:catalog
+bun run db:status
+bun run db:migrate
+bun run db:migrate:deploy
 ```
 
-```bash
-# Populate Neon from the committed replay artifact (no crawling):
-DATABASE_URL="<neon-pooled>" bun scripts/catalog-research-v2/replay-import.ts
-# Regenerate the artifact from the current database:
-DATABASE_URL="<local>" bun scripts/catalog-research-v2/export-catalogue.ts
-# Post-import QA helpers:
-DATABASE_URL="<db>" bun scripts/catalog-research-v2/reclassify.ts       # evidence-weighted category pass
-DATABASE_URL="<db>" bun scripts/catalog-research-v2/retire-legacy.ts    # retire non-research-backed products (§82)
-DATABASE_URL="<db>" bun scripts/catalog-research-v2/final-report.ts     # regenerate honest reports
+Avoid `db:push` against production as a routine workflow. Production schema changes should be reviewed migrations.
+
+## 17. Supabase and Prisma
+
+For Vercel runtime traffic, use the Supabase transaction pooler connection recommended for serverless workloads. Prisma transaction-pooler connections should disable prepared statements according to the active Supabase/Prisma connection guidance.
+
+Use a direct/session connection for migrations when required.
+
+Schema changes must be represented in `prisma/schema.prisma` and in the production migration process. Do not make undocumented structural changes directly in Supabase Studio.
+
+## 18. Deployment to Vercel
+
+For a new environment:
+
+1. connect the target GitHub repository to a new Vercel project;
+2. configure all environment variables;
+3. keep indexing disabled while validating;
+4. deploy to the Vercel preview/temporary hostname;
+5. verify database connectivity and catalogue count;
+6. test at least one product, one funnel, cart and checkout;
+7. verify payment configuration and webhook destination;
+8. verify admin login and read/write operations;
+9. confirm email delivery configuration;
+10. move custom domains only after the new environment is accepted.
+
+Recommended cutover order:
+
+```text
+new GitHub
+  -> new Vercel
+  -> Supabase validation
+  -> checkout/payment validation
+  -> domain cutover
 ```
 
-V2 extracts REAL public product pages (JSON-LD → microdata → embedded JSON → OG/meta → DOM), full galleries, variants, specs with per-field evidence; scores completeness/quality; dedupes across sources; and imports idempotently with stable `EC-<CAT>-###` SKUs. Sources that block the research client are recorded as BLOCKED — never circumvented. See `reports/catalog-scrape-v2-report.md` for the actual run.
+Keep the previous environment available for rollback until the new production path is stable.
 
-### Legacy V1 pipeline (fallback reference)
+## 19. Release validation
 
-```bash
-npm run catalog:research                     # full run + import
-npm run catalog:research -- --dry-run        # crawl/normalize/score, no DB writes
-npm run catalog:research -- --source=kave-home
-npm run catalog:research -- --limit=50
+Before a production release, verify:
+
+```text
+bun run lint
+bun run test:catalog
+bun run build
 ```
 
-**What it is:** a one-time market/product research importer that discovers candidate products across 12 public retail references (Kave Home, Maisons du Monde, Lampenwelt, The Wall Panel Centre, Ferm Living, Nordic Nest, MoroDeco, Luxent, Lewpe, The Cozy Garden, Viridian Bay, Govee EU), normalizes/dedupes/scores them (100-point system), and generates the original E-com.casa demo catalogue into `data/catalog/*.json` + PostgreSQL + a full report (`reports/catalog-research-report.md`).
+Then smoke-test:
 
-**What it is NOT:** not a production crawler. There is **no** `/api/scrape`, no cron job, no background crawler, no live competitor sync. It runs manually in development only.
-
-**Ground rules honored by the pipeline:**
-- Publicly available pages only; robots.txt respected; fixed non-browser user agent; throttled (1.5 s default) with bounded pages per source
-- A blocked source is recorded and skipped — **no circumvention** of anti-bot protections
-- No logins, no private APIs, no personal/customer/payment data, no checkout scraping
-- Nothing third-party is published: source names/URLs/prices/images stay internal research metadata; public copy, names and imagery are original E-com.casa; no third-party reviews or ratings
-- Research data ≠ production product: nothing is auto-promoted; real products later require supplier + compliance review
-
-### From research → production catalogue (future path)
-```
-research product → supplier identified → supplier product → real cost
-→ real manufacturer → compliance review → real product → production
-```
-Each demo product keeps `sourceResearchId/sourceDomain/sourceUrl` internally so future sourcing teams can trace concepts back to their market references.
-
----
-
-## 💳 Payments — architecture (XPayments + Stripe Elements)
-
-```
-Browser → Stripe.js / Stripe Elements (Payment Element + Express Checkout)
-        → client_secret
-        → E-com.casa Next.js server (route handlers only)
-        → XPayments Stripe-compatible API  (POST {base}/payment_intents)
-        → configured gateway
-        → XPayments merchant webhook  (POST /api/webhooks/xpayments)
-        → order state (PAID only after verified event)
-        → invoice workflow → fulfilment → customer email
+```text
+/
+/shop
+/product/[known-product]
+/offers
+/offers/[active-funnel]
+/cart
+/checkout
+/api/products
+/api/payments/health
+/admin
 ```
 
-- **Server routes:** `POST /api/checkout/create` (server-repriced PENDING order + access token), `POST /api/payments/create-intent` (idempotent intent creation via XPayments), `GET /api/payments/status`, `GET /api/payments/capabilities`, `POST /api/webhooks/xpayments`
-- **Provider abstraction:** `src/lib/payments/payment-provider.ts` with the single production implementation `xpayments-provider.ts` — `application/x-www-form-urlencoded`, `Authorization: Bearer xp_*`, `Idempotency-Key` (`ecom-order-<num>-<hash>`) and `Stripe-Version` preserved on every request
-- **State machines:** payment (`PENDING_PAYMENT → PAYMENT_PROCESSING → PAID | PAYMENT_FAILED | CANCELLED | REFUNDED`) is strictly separate from fulfilment (`CONFIRMED → …`); webhook transitions are monotonic (a stale event can never un-PAID an order) and idempotent via persisted event ids (`WebhookEvent`)
-- **Money:** amounts are converted to the smallest currency unit with an exponent table; floating-point amounts never reach the gateway
-- **Security:** the browser only ever receives the publishable key and `client_secret`; webhook verification is fail-closed (timing-safe HMAC); no card data touches E-com.casa systems; rate limiting on checkout/payment/webhook/form routes; safe logging only (order number, intent id, event id, status)
-- **Payment models (Prisma):** `Payment`, `PaymentAttempt`, `Refund`, `Invoice`, `CreditNote`, `WebhookEvent` + payment fields on `Order` (`paymentStatus`, `paymentIntentId`, `accessToken`, `paidAt`, …)
+For payment releases also validate:
 
-### Payment methods availability
-Availability is layered: storefront configuration (`PAYMENT_METHODS`) → country/currency rules → gateway capability. Supplied brand assets live in `public/payment-methods/` and are shown only where the rules allow; a logo never implies gateway availability.
+- PaymentIntent creation;
+- webhook signature verification;
+- order transition to `PAID` only after provider verification;
+- refund path in a controlled environment;
+- no secrets in browser bundles or logs.
 
-| Method | Markets | Notes |
-|---|---|---|
-| Card (Visa · Mastercard · Amex) | all | via Payment Element |
-| MB WAY | PT · EUR | requires merchant activation at XPayments |
-| Multibanco | PT · EUR | async — success page polls server-verified state |
-| Bizum | ES · EUR | requires merchant activation |
-| BLIK | PL | requires merchant activation |
-| Bancontact | BE · EUR | requires merchant activation |
-| Apple Pay / Google Pay / Link / PayPal | dynamic | official buttons via Express Checkout Element (browser/device/merchant-dependent) |
-| PIX | BR · BRL only | configuration-gated (`PAYMENT_METHODS`); never shown in Europe |
+## 20. Operating principles
 
-### Webhook setup (merchant configuration required)
-1. Point the XPayments merchant webhook to `https://<your-domain>/api/webhooks/xpayments`
-2. Set `XPAYMENTS_WEBHOOK_SECRET` to the signing secret from the merchant account
-3. The handler is fail-closed: deliveries without a valid timing-safe HMAC signature are rejected (400)
+The following rules are architectural, not stylistic:
 
-### Apple Pay / Google Pay domain setup (merchant configuration required)
-Register the production domain for Apple Pay / Google Pay in the payment dashboard (Apple Pay domain verification file or dashboard setting, depending on the XPayments store configuration). The Express Checkout Element renders wallet buttons only for properly registered domains and capable browsers.
+- PostgreSQL is the source of truth for mutable commerce data.
+- Product publication is explicit and controlled in Admin.
+- Funnels do not duplicate checkout or payment infrastructure.
+- Campaign prices come from `ProductOffer`.
+- Checkout reprices server-side.
+- Payment success comes from the provider, not Admin or browser redirects.
+- Refunds must reach the provider before local financial state is changed.
+- Secrets are deployment configuration, never repository content.
+- Public product responses must not expose supplier or compliance internals.
+- Routine catalogue operations should not create Git commits or deployments.
 
-### Test / live mode
-`PAYMENT_ENVIRONMENT=test` uses `xp_test_*` / `pk_test_*` credentials — the storefront UI stays normal (there is no customer-facing "test" messaging). Switch to `live` with `xp_live_*` / `pk_live_*`; never mix environments.
-
-## ☁️ Deploy to Vercel (Neon PostgreSQL)
-
-1. Push this repository to GitHub
-2. Import into Vercel — framework auto-detected (Next.js)
-3. Attach the Neon Postgres integration (or set `DATABASE_URL` manually — use the **pooled** endpoint)
-4. Add the environment variables from `.env.example` — payments require `XPAYMENTS_SECRET_KEY`, `XPAYMENTS_WEBHOOK_SECRET`, `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY`, `PAYMENT_ENVIRONMENT` at minimum
-5. Apply the schema once against Neon: `npx prisma migrate deploy`, then seed the catalogue: `npm run db:seed`
-6. Deploy
-
-No local SQLite, no local filesystem database — the production runtime is PostgreSQL-only. If the database is briefly unreachable, the storefront degrades gracefully to the bundled JSON artifacts via the fallback adapter.
-
-## 🔐 Environment variables
-
-See `.env.example`. **Never commit `.env`.** Only `NEXT_PUBLIC_*` values reach the browser — the `xp_*` server keys never do.
-
-| Variable | Purpose |
-|---|---|
-| `DATABASE_URL` | Neon PostgreSQL connection string (pooled endpoint) |
-| `NEXT_PUBLIC_SITE_URL` | Canonical URL (https://e-com.casa) |
-| `PAYMENT_ENVIRONMENT` | `test` or `live` |
-| `XPAYMENTS_API_BASE_URL` | XPayments Stripe-compatible base URL |
-| `XPAYMENTS_SECRET_KEY` | **server-only** `xp_test_*` / `xp_live_*` credential |
-| `XPAYMENTS_WEBHOOK_SECRET` | merchant webhook signing secret |
-| `XPAYMENTS_STORE_ID` | optional store identifier (metadata) |
-| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | publishable `pk_*` key (browser) |
-| `STRIPE_API_VERSION` | Stripe-Version header preserved on XPayments requests |
-| `PAYMENT_METHODS` | storefront-active methods (PIX opt-in) |
-| `NEXT_PUBLIC_ANALYTICS_ENABLED` | analytics load only after cookie consent |
-| `NEXT_PUBLIC_INDEXING_ENABLED` | keep `false` until the real store goes live (noindex) |
-| `NEXT_PUBLIC_CHAT_ENABLED` | floating Concierge widget |
-
-## 🖥️ Scripts
-
-| Command | Purpose |
-|---|---|
-| `npm run dev` | dev server |
-| `npm run build` / `npm run start` | production build / serve |
-| `npm run lint` | ESLint |
-| `npm run db:push` / `db:migrate` / `db:generate` | Prisma schema sync / migrations / client |
-| `npx prisma migrate deploy` | apply committed migrations to Neon (production-safe, additive) |
-| `npm run db:seed` | idempotent demo-catalogue seed (from `data/catalog/*.json`) |
-| `npm run catalog:research` | one-shot market research + catalogue generation (dev only) |
-
-## 🧭 Legal & compliance notes
-
-- **Identity:** E-com.casa is presented as the storefront brand operated by MGJ EXPERT LTD (the two are never presented as different sellers). Institutional contact: contact@mgj.expert; customer & operational contacts: support@e-com.casa / +44 7451 214299. EU 3PL fulfilment warehouses: Greenport Venlo (NL) and Plataforma Logística de Zaragoza (ES).
-- **No invented compliance:** VAT numbers, phone numbers, EPR/WEEE registrations, mediators, ADR entities, return warehouses and certifications are `[TO BE CONFIRMED]` placeholders until real documents exist.
-- **EU/UK consumer baseline:** 14-day withdrawal, 2-year legal guarantee (EU), clear pre-contract information; country configs can extend (never reduce) mandatory rights.
-- **GPSR:** product safety data model exists (manufacturer, EU responsible person, warnings, product identifier); demo products are `DEMO` and require compliance review before any production listing.
-- **ODR:** the old EU ODR platform is explicitly described as discontinued — no dead links.
-- **Indexing:** `NEXT_PUBLIC_INDEXING_ENABLED=false` sets `noindex` while the catalogue is synthetic; flip to `true` for production.
-
-## 🗺️ Roadmap (prepared, not yet active)
-- Stripe (official SDK + payment elements) behind `NEXT_PUBLIC_STRIPE_ENABLED`
-- Real chat provider (Intercom / Crisp / Zendesk) behind the ChatProvider abstraction
-- Analytics providers (GA / Meta / TikTok / Pinterest / Merchant) behind consent-gated loading
-- Admin surfaces (`/admin/*` routes are intentionally NOT exposed in V1)
-- Locale-routed editorial & legal content (`/pt/...`, `/de/...` etc.) — dictionaries are already in place
+These boundaries allow development, marketing and sales operations to work on the same platform without coupling day-to-day commercial changes to software releases.

@@ -1,27 +1,20 @@
 'use client';
 
-import { PromotionInfo } from './promotion-info';
 import { usePathname } from 'next/navigation';
+import { PromotionInfo } from './promotion-info';
 import { SiteHeader } from '@/components/layout/site-header';
 import { SiteFooter } from '@/components/layout/site-footer';
 
-/**
- * Offers are self-contained campaign destinations. They keep all global
- * infrastructure (cookies, cart, chat, language boot) from RootLayout while
- * owning a minimal campaign header and compact institutional footer.
- */
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const isOfferRoute = pathname.startsWith('/offers/');
+  const selfContainedRoute = pathname.startsWith('/offers/') || pathname.startsWith('/admin');
 
   return (
     <div className="flex min-h-screen flex-col">
-      {!isOfferRoute && <SiteHeader />}
-      {!isOfferRoute && <PromotionInfo />}
-      <main id="main-content" className="flex-1">
-        {children}
-      </main>
-      {!isOfferRoute && <SiteFooter />}
+      {!selfContainedRoute && <SiteHeader />}
+      {!selfContainedRoute && <PromotionInfo />}
+      <main id="main-content" className="flex-1">{children}</main>
+      {!selfContainedRoute && <SiteFooter />}
     </div>
   );
 }

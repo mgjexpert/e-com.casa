@@ -1,21 +1,13 @@
-import { getProductOffers } from '../offers/store';
-// ============================================================
-// E-com.casa — Catalog service (the ONLY catalogue entrypoint)
-// ------------------------------------------------------------
-// The UI must call these abstractions, never Prisma queries scattered across
-// components. Adapter resolution:
-//   1. prisma        — PostgreSQL Product table when provisioned and populated
-//   2. file-catalog  — validated ODEM/WoodUpp partner snapshot
-//
-// ResearchProduct and historic demo datasets no longer participate in the
-// storefront adapter chain once the partner snapshot exists.
-// ============================================================
-
 import { db } from '@/lib/db';
+import { getProductOffers } from '../offers/store';
 import { applyCommerce } from './commerce';
 import { PrismaCatalogAdapter } from './prisma-adapter';
-import { DemoCatalogAdapter, matchesCatalogProduct, sortCatalogProducts } from './demo-adapter';
-import { getCompleteTheLook as computeCompleteTheLook, getRelatedProducts as computeRelated, getCrossSell as computeCrossSell } from './recommendations';
+import { FileCatalogAdapter, matchesCatalogProduct, sortCatalogProducts } from './file-adapter';
+import {
+  getCompleteTheLook as computeCompleteTheLook,
+  getRelatedProducts as computeRelated,
+  getCrossSell as computeCrossSell,
+} from './recommendations';
 import type {
   CatalogAdapter,
   CatalogCategory,
@@ -28,7 +20,7 @@ export type { CatalogProduct, CatalogCategory, ProductListResult, ProductQuery, 
 export { mapProduct } from './prisma-adapter';
 
 const prismaAdapter = new PrismaCatalogAdapter(db);
-const fileAdapter = new DemoCatalogAdapter();
+const fileAdapter = new FileCatalogAdapter();
 
 let databaseHealthy: boolean | null = null;
 let productTableReady: boolean | null = null;
@@ -50,9 +42,6 @@ async function activeAdapter(): Promise<CatalogAdapter> {
 
   if (!databaseHealthy) return fileAdapter;
 
-  // Use PostgreSQL only when the normalized Product table genuinely exists and
-  // is populated. A healthy connection alone is not enough: historically the
-  // production DB existed before the Product table was provisioned.
   if (productTableReady !== false) {
     try {
       if ((await prismaAdapter.count()) > 0) {
@@ -68,7 +57,6 @@ async function activeAdapter(): Promise<CatalogAdapter> {
   return fileAdapter;
 }
 
-/** Which adapter is currently serving the catalogue (for diagnostics). */
 export async function catalogStatus(): Promise<{ adapter: string; products: number; source?: string }> {
   const adapter = await activeAdapter();
   return {
@@ -84,41 +72,53 @@ async function catalogOffers() {
   try {
     return await getProductOffers();
   } catch (error) {
-    // Safe failure mode: keep products available from the validated snapshot,
-    // but never reactivate or synthesize a database-controlled promotion.
-    console.warn('[catalog] Product offers unavailable; serving regular catalogue prices.', error);
+    console.warn('[catalog] Product offers unavailable; using base prices.', error);
     return [];
   }
 }
 
 export async function getProducts(query: ProductQuery = {}): Promise<ProductListResult> {
   const adapter = await activeAdapter();
-  if (!rawCache || rawCache.adapter !== adapter.name || Date.now() - rawCache.at > 30000) {
+
+  if (!rawCache || rawCache.adapter !== adapter.name || Date.now() - rawCache.at > 30_000) {
     const first = await adapter.list({ perPage: 48 });
-    const rest = await Promise.all(Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, i) => adapter.list({ perPage: 48, page: i + 2 })));
-    const primaryProducts = [first, ...rest].flatMap(r => r.products);
-    const stagedProducts = adapter === fileAdapter ? [] : fileAdapter.getAllProducts();
-    const mergedProducts = [...new Map([...primaryProducts, ...stagedProducts].map(product => [product.slug, product])).values()];
-    rawCache = { adapter: adapter.name, at: Date.now(), products: mergedProducts };
+    const rest = await Promise.all(
+      Array.from({ length: Math.max(0, first.totalPages - 1) }, (_, index) => adapter.list({ perPage: 48, page: index + 2 })),
+    );
+    rawCache = {
+      adapter: adapter.name,
+      at: Date.now(),
+      products: [first, ...rest].flatMap((result) => result.products),
+    };
   }
+
   const offers = await catalogOffers();
-  const priced = rawCache.products.map(p => applyCommerce({ ...p, funnelOffer: offers.find(o => o.productSlug === p.slug) ?? null })).filter(p => (!query.funnelOnly || Boolean(p.offerSlug)) && matchesCatalogProduct(p, query));
+  const priced = rawCache.products
+    .map((product) => applyCommerce({
+      ...product,
+      funnelOffer: offers.find((offer) => offer.productSlug === product.slug) ?? null,
+    }))
+    .filter((product) => (!query.funnelOnly || Boolean(product.offerSlug)) && matchesCatalogProduct(product, query));
+
   const sorted = sortCatalogProducts(priced, query.sort);
   const page = Math.max(1, query.page ?? 1);
   const perPage = Math.min(48, Math.max(1, query.perPage ?? 24));
-  return { products: sorted.slice((page - 1) * perPage, page * perPage), total: sorted.length, page, perPage, totalPages: Math.max(1, Math.ceil(sorted.length / perPage)) };
+
+  return {
+    products: sorted.slice((page - 1) * perPage, page * perPage),
+    total: sorted.length,
+    page,
+    perPage,
+    totalPages: Math.max(1, Math.ceil(sorted.length / perPage)),
+  };
 }
 
 export async function getProduct(slug: string): Promise<CatalogProduct | null> {
   const adapter = await activeAdapter();
-  let product = await adapter.getBySlug(slug);
-  // Partner additions deploy with the validated snapshot before the next
-  // idempotent database import. Keep the individual PDP/offer available during
-  // that short synchronization window without replacing the active DB listing.
-  if (!product && adapter !== fileAdapter) product = await fileAdapter.getBySlug(slug);
+  const product = await adapter.getBySlug(slug);
   if (!product) return null;
   const offers = await catalogOffers();
-  return applyCommerce({ ...product, funnelOffer: offers.find(o => o.productSlug === product.slug) ?? null });
+  return applyCommerce({ ...product, funnelOffer: offers.find((offer) => offer.productSlug === product.slug) ?? null });
 }
 
 export async function getCategories(type?: CatalogCategory['type']): Promise<CatalogCategory[]> {
@@ -127,17 +127,17 @@ export async function getCategories(type?: CatalogCategory['type']): Promise<Cat
 
 export async function getFeaturedProducts(limit = 8): Promise<CatalogProduct[]> {
   const { products } = await getProducts({ sort: 'featured', perPage: 48 });
-  return products.filter((p) => p.featured).slice(0, limit);
+  return products.filter((product) => product.featured).slice(0, limit);
 }
 
 export async function getBestSellers(limit = 8): Promise<CatalogProduct[]> {
   const { products } = await getProducts({ sort: 'best', perPage: 48 });
-  return products.filter((p) => p.isBestSeller).slice(0, limit);
+  return products.filter((product) => product.isBestSeller).slice(0, limit);
 }
 
 export async function getNewArrivals(limit = 8): Promise<CatalogProduct[]> {
   const { products } = await getProducts({ sort: 'new', perPage: 48 });
-  return products.filter((p) => p.isNew).slice(0, limit);
+  return products.filter((product) => product.isNew).slice(0, limit);
 }
 
 export async function getProductsByCollection(collection: string, query: ProductQuery = {}): Promise<ProductListResult> {
@@ -160,16 +160,15 @@ export async function searchProducts(q: string, query: ProductQuery = {}): Promi
   return getProducts({ ...query, q });
 }
 
-/** Loads the full active catalogue (cap 500) for recommendation engines. */
 async function fullCatalogue(): Promise<CatalogProduct[]> {
   const { products } = await getProducts({ perPage: 48 });
   if (products.length < 48) return products;
   const { total } = await getProducts({ perPage: 1 });
   const pages = Math.ceil(Math.min(total, 500) / 48);
   const rest = await Promise.all(
-    Array.from({ length: pages - 1 }, (_, i) => getProducts({ perPage: 48, page: i + 2 })),
+    Array.from({ length: pages - 1 }, (_, index) => getProducts({ perPage: 48, page: index + 2 })),
   );
-  return [...products, ...rest.flatMap((r) => r.products)];
+  return [...products, ...rest.flatMap((result) => result.products)];
 }
 
 export async function getRelatedProducts(slug: string, limit = 6): Promise<CatalogProduct[]> {
@@ -186,7 +185,7 @@ export async function getCompleteTheLook(slug: string, limit = 4): Promise<Catal
 
 export async function getCrossSellForCart(slugs: string[], limit = 4): Promise<CatalogProduct[]> {
   const all = await fullCatalogue();
-  const items = all.filter((p) => slugs.includes(p.slug));
+  const items = all.filter((product) => slugs.includes(product.slug));
   if (!items.length) return [];
   return computeCrossSell(items, all, limit);
 }

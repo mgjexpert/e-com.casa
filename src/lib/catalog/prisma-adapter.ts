@@ -1,10 +1,3 @@
-// ============================================================
-// E-com.casa — Prisma catalog adapter (PostgreSQL / Neon)
-// ------------------------------------------------------------
-// Maps database rows to the catalog domain. Never exposes
-// internal research fields beyond sourceResearchId.
-// ============================================================
-
 import type { PrismaClient, Product as ProductRow, Category as CategoryRow } from '@prisma/client';
 import type {
   CatalogAdapter,
@@ -14,8 +7,6 @@ import type {
   ProductQuery,
   ProductVariant,
 } from './types';
-
-const PARTNER_SUPPLIERS = ['odem', 'woodupp', 'nuralta'];
 
 function parseVariants(json: string): ProductVariant[] {
   try {
@@ -31,7 +22,6 @@ function toCents(price: string): number {
   return Number.isFinite(n) ? Math.round(n * 100) : 0;
 }
 
-/** DB row → domain product (price/comparePrice remain display strings). */
 export function mapProduct(row: ProductRow): CatalogProduct {
   return {
     id: row.id,
@@ -65,7 +55,6 @@ export function mapProduct(row: ProductRow): CatalogProduct {
     supplierKey: row.supplierKey,
     supplierProductId: row.supplierProductId,
     mediaRights: row.mediaRights,
-
     availability: (row.availability as CatalogProduct['availability']) ?? 'inStock',
     isBestSeller: row.isBestSeller,
     isNew: row.isNew,
@@ -86,6 +75,9 @@ export function mapProduct(row: ProductRow): CatalogProduct {
     requiresComplianceReview: row.requiresComplianceReview,
     isDemo: row.isDemo,
     sourceResearchId: row.sourceResearchId,
+    sourceDomain: row.sourceDomain,
+    sourceUrl: row.sourceUrl,
+    sortOrder: row.sortOrder,
     createdAt: row.createdAt.toISOString(),
   };
 }
@@ -103,7 +95,13 @@ function mapCategory(row: CategoryRow): CatalogCategory {
 }
 
 function buildWhere(query: ProductQuery): Record<string, unknown> {
-  const where: Record<string, unknown> = { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: PARTNER_SUPPLIERS }, complianceStatus: { not: 'BLOCKED' } };
+  const where: Record<string, unknown> = {
+    published: true,
+    isDemo: false,
+    NOT: { categorySlug: 'amostras' },
+    complianceStatus: { notIn: ['BLOCKED', 'DEMO'] },
+  };
+
   if (query.category) where.categorySlug = query.category;
   if (query.subcategory) where.subcategorySlugs = { contains: query.subcategory };
   if (query.space) where.spaceSlugs = { contains: query.space };
@@ -112,48 +110,42 @@ function buildWhere(query: ProductQuery): Record<string, unknown> {
   if (query.material) where.materials = { contains: query.material };
   if (query.colour) where.color = { contains: query.colour };
   if (query.availability) where.availability = query.availability;
+
   if (query.q) {
-    // case-insensitive full-text-ish search across merchandising fields
-    const qi = { contains: query.q, mode: 'insensitive' as const };
+    const contains = { contains: query.q, mode: 'insensitive' as const };
     where.OR = [
-      { name: qi },
-      { description: qi },
-      { shortDescription: qi },
-      { subtitle: qi },
-      { categorySlug: qi },
-      { subcategorySlugs: qi },
-      { styleSlugs: qi },
-      { spaceSlugs: qi },
-      { collectionSlugs: qi },
-      { materials: qi },
-      { color: qi },
+      { name: contains },
+      { description: contains },
+      { shortDescription: contains },
+      { subtitle: contains },
+      { categorySlug: contains },
+      { subcategorySlugs: contains },
+      { styleSlugs: contains },
+      { spaceSlugs: contains },
+      { collectionSlugs: contains },
+      { materials: contains },
+      { color: contains },
     ];
   }
-  const min = query.minPrice;
-  const max = query.maxPrice;
-  if (min !== undefined || max !== undefined) {
+
+  if (query.minPrice !== undefined || query.maxPrice !== undefined) {
     const priceFilter: Record<string, number> = {};
-    if (min !== undefined) priceFilter.gte = Math.round(min * 100);
-    if (max !== undefined) priceFilter.lte = Math.round(max * 100);
+    if (query.minPrice !== undefined) priceFilter.gte = Math.round(query.minPrice * 100);
+    if (query.maxPrice !== undefined) priceFilter.lte = Math.round(query.maxPrice * 100);
     where.priceCents = priceFilter;
   }
+
   return where;
 }
 
 function buildOrder(sort: ProductQuery['sort']): Record<string, 'asc' | 'desc'> {
   switch (sort) {
-    case 'price-asc':
-      return { priceCents: 'asc' };
-    case 'price-desc':
-      return { priceCents: 'desc' };
-    case 'rating':
-      return { rating: 'desc' };
-    case 'best':
-      return { reviewCount: 'desc' };
-    case 'new':
-      return { createdAt: 'desc' };
-    default:
-      return { sortOrder: 'asc' };
+    case 'price-asc': return { priceCents: 'asc' };
+    case 'price-desc': return { priceCents: 'desc' };
+    case 'rating': return { rating: 'desc' };
+    case 'best': return { reviewCount: 'desc' };
+    case 'new': return { createdAt: 'desc' };
+    default: return { sortOrder: 'asc' };
   }
 }
 
@@ -174,6 +166,7 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
       }),
       this.client.product.count({ where }),
     ]);
+
     return {
       products: rows.map(mapProduct),
       total,
@@ -185,7 +178,7 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
 
   async getBySlug(slug: string): Promise<CatalogProduct | null> {
     const row = await this.client.product.findUnique({ where: { slug } });
-    if (!row || row.categorySlug === 'amostras' || row.isDemo || !PARTNER_SUPPLIERS.includes(row.supplierKey ?? '') || row.complianceStatus === 'BLOCKED') return null;
+    if (!row || !row.published || row.isDemo || row.categorySlug === 'amostras' || ['BLOCKED', 'DEMO'].includes(row.complianceStatus.toUpperCase())) return null;
     return mapProduct(row);
   }
 
@@ -198,6 +191,13 @@ export class PrismaCatalogAdapter implements CatalogAdapter {
   }
 
   async count(): Promise<number> {
-    return this.client.product.count({ where: { isDemo: false, NOT: { categorySlug: 'amostras' }, supplierKey: { in: PARTNER_SUPPLIERS }, complianceStatus: { not: 'BLOCKED' } } });
+    return this.client.product.count({
+      where: {
+        published: true,
+        isDemo: false,
+        NOT: { categorySlug: 'amostras' },
+        complianceStatus: { notIn: ['BLOCKED', 'DEMO'] },
+      },
+    });
   }
 }
