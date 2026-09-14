@@ -26,56 +26,59 @@ jobs:
             exit 2
           fi
 
-      - name: Install PostgreSQL client
-        shell: bash
-        run: |
-          sudo apt-get update -y
-          sudo apt-get install -y postgresql-client
-
-      - name: Export commerce data only
+      - name: Export commerce data with PostgreSQL 18 client
         shell: bash
         run: |
           set -euo pipefail
-          pg_dump "$DATABASE_URL" \
-            --data-only \
-            --inserts \
-            --column-inserts \
-            --no-owner \
-            --no-privileges \
-            --table='public.Product' \
-            --table='public.Review' \
-            --table='public.Category' \
-            --table='public.Order' \
-            --table='public.Payment' \
-            --table='public.PaymentAttempt' \
-            --table='public.Refund' \
-            --table='public.Invoice' \
-            --table='public.CreditNote' \
-            --table='public.TrackingEvent' \
-            --table='public.WebhookEvent' \
-            --table='public.NewsletterSubscriber' \
-            --table='public.ContactMessage' \
-            --table='public.ProductOffer' \
-            --table='public.ProductOfferAudit' \
-            > commerce-data.sql
+          docker pull postgres:18
+          docker run --rm \
+            -e DATABASE_URL="$DATABASE_URL" \
+            -v "$PWD:/work" \
+            postgres:18 \
+            bash -lc 'pg_dump "$DATABASE_URL" \
+              --data-only \
+              --inserts \
+              --column-inserts \
+              --no-owner \
+              --no-privileges \
+              --table="public.Product" \
+              --table="public.Review" \
+              --table="public.Category" \
+              --table="public.Order" \
+              --table="public.Payment" \
+              --table="public.PaymentAttempt" \
+              --table="public.Refund" \
+              --table="public.Invoice" \
+              --table="public.CreditNote" \
+              --table="public.TrackingEvent" \
+              --table="public.WebhookEvent" \
+              --table="public.NewsletterSubscriber" \
+              --table="public.ContactMessage" \
+              --table="public.ProductOffer" \
+              --table="public.ProductOfferAudit" \
+              > /work/commerce-data.sql'
 
-          psql "$DATABASE_URL" -Atc "select json_build_object(
-            'Product',(select count(*) from \"Product\"),
-            'Review',(select count(*) from \"Review\"),
-            'Category',(select count(*) from \"Category\"),
-            'Order',(select count(*) from \"Order\"),
-            'Payment',(select count(*) from \"Payment\"),
-            'PaymentAttempt',(select count(*) from \"PaymentAttempt\"),
-            'Refund',(select count(*) from \"Refund\"),
-            'Invoice',(select count(*) from \"Invoice\"),
-            'CreditNote',(select count(*) from \"CreditNote\"),
-            'TrackingEvent',(select count(*) from \"TrackingEvent\"),
-            'WebhookEvent',(select count(*) from \"WebhookEvent\"),
-            'NewsletterSubscriber',(select count(*) from \"NewsletterSubscriber\"),
-            'ContactMessage',(select count(*) from \"ContactMessage\"),
-            'ProductOffer',(select count(*) from \"ProductOffer\"),
-            'ProductOfferAudit',(select count(*) from \"ProductOfferAudit\")
-          );" > counts.json
+          docker run --rm \
+            -e DATABASE_URL="$DATABASE_URL" \
+            -v "$PWD:/work" \
+            postgres:18 \
+            bash -lc 'psql "$DATABASE_URL" -Atc "select json_build_object(
+              '\''Product'\'',(select count(*) from \"Product\"),
+              '\''Review'\'',(select count(*) from \"Review\"),
+              '\''Category'\'',(select count(*) from \"Category\"),
+              '\''Order'\'',(select count(*) from \"Order\"),
+              '\''Payment'\'',(select count(*) from \"Payment\"),
+              '\''PaymentAttempt'\'',(select count(*) from \"PaymentAttempt\"),
+              '\''Refund'\'',(select count(*) from \"Refund\"),
+              '\''Invoice'\'',(select count(*) from \"Invoice\"),
+              '\''CreditNote'\'',(select count(*) from \"CreditNote\"),
+              '\''TrackingEvent'\'',(select count(*) from \"TrackingEvent\"),
+              '\''WebhookEvent'\'',(select count(*) from \"WebhookEvent\"),
+              '\''NewsletterSubscriber'\'',(select count(*) from \"NewsletterSubscriber\"),
+              '\''ContactMessage'\'',(select count(*) from \"ContactMessage\"),
+              '\''ProductOffer'\'',(select count(*) from \"ProductOffer\"),
+              '\''ProductOfferAudit'\'',(select count(*) from \"ProductOfferAudit\")
+            );" > /work/counts.json'
 
       - name: Encrypt dump with temporary public key
         shell: bash
