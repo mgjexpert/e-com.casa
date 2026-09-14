@@ -1,4 +1,4 @@
-name: Handoff verification final
+name: Handoff verification final pass
 
 on:
   push:
