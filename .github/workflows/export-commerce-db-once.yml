@@ -1,0 +1,123 @@
+name: One-shot encrypted commerce DB export
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/export-commerce-db-once.yml'
+
+permissions:
+  contents: read
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+jobs:
+  export:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Validate source DB secret
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -z "${DATABASE_URL:-}" ]; then
+            echo '::error::DATABASE_URL GitHub Actions secret is missing.'
+            exit 2
+          fi
+
+      - name: Install PostgreSQL client
+        shell: bash
+        run: |
+          sudo apt-get update -y
+          sudo apt-get install -y postgresql-client
+
+      - name: Export commerce data only
+        shell: bash
+        run: |
+          set -euo pipefail
+          pg_dump "$DATABASE_URL" \
+            --data-only \
+            --inserts \
+            --column-inserts \
+            --no-owner \
+            --no-privileges \
+            --table='public.Product' \
+            --table='public.Review' \
+            --table='public.Category' \
+            --table='public.Order' \
+            --table='public.Payment' \
+            --table='public.PaymentAttempt' \
+            --table='public.Refund' \
+            --table='public.Invoice' \
+            --table='public.CreditNote' \
+            --table='public.TrackingEvent' \
+            --table='public.WebhookEvent' \
+            --table='public.NewsletterSubscriber' \
+            --table='public.ContactMessage' \
+            --table='public.ProductOffer' \
+            --table='public.ProductOfferAudit' \
+            > commerce-data.sql
+
+          psql "$DATABASE_URL" -Atc "select json_build_object(
+            'Product',(select count(*) from \"Product\"),
+            'Review',(select count(*) from \"Review\"),
+            'Category',(select count(*) from \"Category\"),
+            'Order',(select count(*) from \"Order\"),
+            'Payment',(select count(*) from \"Payment\"),
+            'PaymentAttempt',(select count(*) from \"PaymentAttempt\"),
+            'Refund',(select count(*) from \"Refund\"),
+            'Invoice',(select count(*) from \"Invoice\"),
+            'CreditNote',(select count(*) from \"CreditNote\"),
+            'TrackingEvent',(select count(*) from \"TrackingEvent\"),
+            'WebhookEvent',(select count(*) from \"WebhookEvent\"),
+            'NewsletterSubscriber',(select count(*) from \"NewsletterSubscriber\"),
+            'ContactMessage',(select count(*) from \"ContactMessage\"),
+            'ProductOffer',(select count(*) from \"ProductOffer\"),
+            'ProductOfferAudit',(select count(*) from \"ProductOfferAudit\")
+          );" > counts.json
+
+      - name: Encrypt dump with temporary public key
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > migration-public.pem <<'PEM'
+          -----BEGIN PUBLIC KEY-----
+          MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAsiwjXIxRXqR8tNS7GJi7
+          2g/icb1RJOBaCYN0bjTJa1eOeEaSvaASDS7qM1H45yozXQ4aRQnT9i+cMs4DjVzN
+          rG5GA0EsInYKUavh2QeyBweVqQ3/SGOOshSQejsdVGQsKMe/L4I5pE46cTUd1wIR
+          06IS+n3Oodjlc5h1KkK2et+B3USf/PI7ouuE9SeFmtvngCnNRAT49u6yHgl8lR7X
+          kbEJ2jh47zKlk9frsY2OvTMA1xq7Bx0bQtq/SGn8A2+9YRxRPAGTKesCTuM1UeGD
+          LBcB1DBBMryK4DQb/M3MwX1S1eopVJr+NCw2Zl79RiqJWSzCQ5uSI3udPppaBoE4
+          ZCjj8GfMOx5IgknWU+nHjhWIRJ9wBs9GwgJGE72lRCTg172GapOXzfBEEv7XqbNR
+          isMBokBrizzYIRmNLo0Kg3Q0wvZ59lp6M+jko5ubJRw9dWLw6TmKaRU9cds9xqaw
+          5oq/ZgBcc6ewFUsK7TC6oTASecdwMRD4C31oWYppM4XqvA9E5wYcngLPp0Kzi5LQ
+          AfRQIBuVrjFcPKEfZ3Kn30woD42tsbxVSYj1eSZj/XeYqb4sHfx9J3oE3tHbtiUD
+          2nfysqpIUw+Ly/DBvkGB3LWQ0qe6cAIQQgW2/rcd/uxRyX6ZmXSnJIyo9irS5CjX
+          fARNcTnxfREd+lFuWCXpLp8CAwEAAQ==
+          -----END PUBLIC KEY-----
+          PEM
+
+          openssl rand -hex 32 > dump-passphrase.txt
+          openssl enc -aes-256-cbc -salt -pbkdf2 \
+            -in commerce-data.sql \
+            -out commerce-data.sql.enc \
+            -pass file:dump-passphrase.txt
+          openssl pkeyutl -encrypt \
+            -pubin -inkey migration-public.pem \
+            -pkeyopt rsa_padding_mode:oaep \
+            -pkeyopt rsa_oaep_md:sha256 \
+            -in dump-passphrase.txt \
+            -out dump-passphrase.enc
+          shred -u commerce-data.sql dump-passphrase.txt
+
+      - name: Upload encrypted migration artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ecomcasa-commerce-db-encrypted
+          path: |
+            commerce-data.sql.enc
+            dump-passphrase.enc
+            counts.json
+          retention-days: 1
+          if-no-files-found: error
