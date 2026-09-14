@@ -85,7 +85,7 @@ test('bundle helpers never introduce hidden discounts and still prioritize match
   const bundled = applyBundleOffer(accessory, [panel], now);
   expect(standalone.priceCents).toBe(accessory.priceCents);
   expect(bundled.priceCents).toBe(accessory.priceCents);
-  expect(bundled.promoDiscountPct).toBe(0);
+  expect(bundled.promoDiscountPct).toBeNull();
 
   const odem = products.find(
     (product) => product.brand === 'ODEM' && product.categorySlug === 'acessorios-instalacao',
