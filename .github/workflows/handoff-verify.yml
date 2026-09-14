@@ -44,6 +44,7 @@ jobs:
 
           section_group = re.compile(r'\s*\((?:see prompts\s+)?§\s*\d+(?:\s*[–—-]\s*§?\s*\d+)?(?:\s*,\s*§?\s*\d+)*\)', re.IGNORECASE)
           section_single = re.compile(r'\s+§\s*\d+(?:\s*[–—-]\s*§?\s*\d+)?(?:\s*,\s*§?\s*\d+)*')
+          section_label = re.compile(r'§\s*\d+\s*:\s*')
           allowed_suffixes = {'.ts', '.tsx', '.js', '.jsx', '.mjs', '.cjs'}
 
           def clean_comment_line(line: str) -> str:
@@ -57,6 +58,7 @@ jobs:
                   body = re.sub(r'^[=-]{3,}\s*', '', body)
                   body = re.sub(r'\s*[=-]{3,}$', '', body)
                   body = section_group.sub('', body)
+                  body = section_label.sub('', body)
                   body = section_single.sub('', body)
                   body = body.replace('Rules encoded here (see prompts):', 'Rules encoded here:')
                   body = body.replace('Rules encoded here (see prompts', 'Rules encoded here')
@@ -66,11 +68,12 @@ jobs:
 
               section_pos = raw.find('§')
               if section_pos >= 0:
-                  markers = [pos for pos in (raw.find('/*'), raw.find('{/*')) if pos >= 0]
+                  markers = [pos for pos in (raw.find('//'), raw.find('/*'), raw.find('{/*')) if pos >= 0]
                   if stripped.startswith('*'):
                       markers.append(len(indent))
                   if markers and min(markers) < section_pos:
                       raw = section_group.sub('', raw)
+                      raw = section_label.sub('', raw)
                       raw = section_single.sub('', raw)
               return raw + newline
 
