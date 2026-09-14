@@ -1,0 +1,33 @@
+name: Handoff verification
+
+on:
+  push:
+    branches: [handoff/admin-cleanroom]
+    paths:
+      - '.github/workflows/handoff-verify.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.3.14
+      - name: Install dependencies and refresh lockfile
+        run: bun install
+      - name: Lint
+        run: bun run lint
+      - name: Commerce tests
+        run: bun run test:catalog
+      - name: Upload refreshed lockfile
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: handoff-bun-lock
+          path: bun.lock
+          retention-days: 1
