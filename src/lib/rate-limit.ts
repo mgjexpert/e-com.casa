@@ -1,13 +1,7 @@
-// ============================================================
-// E-com.casa — Lightweight in-memory rate limiter (§87)
-// ------------------------------------------------------------
-// Sliding-window limiter for the checkout, payment and form
-// endpoints. Local-memory per Vercel instance is acceptable for
-// the current traffic profile; swap for a shared store (e.g.
-// Upstash) if abuse becomes distributed. No external middleware.
-// ============================================================
+// Lightweight in-memory limiter for checkout, payment and form endpoints.
+// Buckets are local to each Vercel instance; use a shared store if distributed abuse becomes a concern.
 
-type Bucket = { hits: number[]; };
+type Bucket = { hits: number[] };
 
 const buckets = new Map<string, Bucket>();
 let lastSweep = Date.now();
@@ -16,7 +10,7 @@ function sweep(now: number) {
   if (now - lastSweep < 60_000) return;
   lastSweep = now;
   for (const [key, bucket] of buckets) {
-    bucket.hits = bucket.hits.filter((t) => now - t < 600_000);
+    bucket.hits = bucket.hits.filter((timestamp) => now - timestamp < 600_000);
     if (bucket.hits.length === 0) buckets.delete(key);
   }
 }
@@ -27,10 +21,7 @@ export interface RateLimitResult {
   retryAfterSeconds: number;
 }
 
-/**
- * Fixed-window limiter. Example: limit(req, 'checkout-create', 10, 60_000)
- * → max 10 requests/minute per IP for that route.
- */
+/** Apply a fixed-window request limit per client IP and scope. */
 export function rateLimit(
   req: Request,
   scope: string,
@@ -46,7 +37,7 @@ export function rateLimit(
   sweep(now);
 
   const bucket = buckets.get(key) ?? { hits: [] };
-  bucket.hits = bucket.hits.filter((t) => now - t < windowMs);
+  bucket.hits = bucket.hits.filter((timestamp) => now - timestamp < windowMs);
 
   if (bucket.hits.length >= max) {
     const oldest = bucket.hits[0] ?? now;
@@ -63,7 +54,7 @@ export function rateLimit(
   return { ok: true, remaining: max - bucket.hits.length, retryAfterSeconds: 0 };
 }
 
-/** Extract client IP for webhook logging (safe fields only). */
+/** Extract the client IP for server-side logging. */
 export function clientIp(req: Request): string {
   return (
     req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() ||
